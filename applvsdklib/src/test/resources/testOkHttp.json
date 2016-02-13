@@ -1,0 +1,83 @@
+{
+  "status": true,
+  "response": {
+    "_id": "56223854758e7c87556b5932",
+    "name": "SDK Demo App",
+    "owner": {
+      "_id": "54c512a1ec672ffc2dbf9d0e",
+      "fullname": "César Trigo",
+      "name": "CesarTrigo",
+      "limits": {
+        "downloads": 100,
+        "teams": 10,
+        "sites": 10,
+        "builds": 10,
+        "apps": 10
+      }
+    },
+    "creator": {
+      "_id": "54c512a1ec672ffc2dbf9d0e",
+      "fullname": "César Trigo",
+      "name": "CesarTrigo"
+    },
+    "sdk": {
+      "ios": {
+        "lastBuildVersion": "3.0.7",
+        "lastBuildId": "56223966758e7c87556b5935",
+        "minVersion": "1.0.0"
+      },
+      "android": {
+        "lastBuildVersion": "3.1.7",
+        "lastBuildId": "56223942758e7c87556b5933",
+        "minVersion": "1.0.0"
+      },
+      "updateMsg": "There is a new version available for download!",
+      "mustUpdateMsg": "Sorry, you must update the App to continue.",
+      "forceUpdate": true,
+      "storeRelease": false,
+      "ota": true,
+      "active": false
+    },
+    "crashesCount": 0,
+    "feedbackCount": 0,
+    "sitesCount": 0,
+    "totalDownloads": 0,
+    "buildsCount": 2,
+    "invited": [],
+    "teams": [
+      {
+        "_id": "5622398f758e7c87556b5936",
+        "name": "SDK Team",
+        "members": [
+          {
+            "member": {
+              "_id": "54c7cfd24dcfba9d40159388",
+              "fullname": "Alejandro Jiménez",
+              "name": "Alesete",
+              "email": "a.j.agudo@gmail.com"
+            },
+            "role": "admin"
+          },
+          {
+            "member": {
+              "_id": "561fdbed03d8795a6b90681c",
+              "fullname": "Sergio Martínez Rodríguez",
+              "name": "sergio_martinez",
+              "email": "ser.mar.rod.smr@gmail.com"
+            },
+            "role": "admin"
+          }
+        ]
+      }
+    ],
+    "members": [],
+    "active": true,
+    "modified": "2015-10-17T12:00:20.252Z",
+    "created": "2015-10-17T12:00:20.252Z",
+    "so": [
+      "android",
+      "ios"
+    ],
+    "description": ""
+  }
+}

@@ -1,0 +1,28 @@
+<resources>
+  <string name="app_name">Applivery Sdk</string>
+  <string name="update">Update</string>
+  <string name="cancel">Cancel</string>
+  <string name="download_message">Application download started...</string>
+  <string name="download_title">Downloading</string>
+
+  <string name="continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>
+  <string name="continueRequestPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="continueRequestPermissionDeniedFeedback">Permissions denied are necessary for doing some tasks</string>
+  <string name="continueRequestPermissionRationaleMessage">Permissions denied are necessary for doing some tasks, allow it!</string>
+  <string name="continueRequestPermissionRationaleTitle">Permission Request</string>
+
+  <string name="writeOnExternalPermissionAllowedFeedback">Write on external Storage has been allowed</string>
+  <string name="writeOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="writeOnExternalPermissionDeniedFeedback">Write on external Storage Permission is necessary for downloading new app</string>
+  <string name="writeOnExternalPermissionRationaleMessage">Write on external Storage Permission is necessary for downloading new app version, allow it!</string>
+  <string name="writeOnExternalPermissionRationaleTitle">Permission Request</string>
+
+  <string name="readOnExternalPermissionAllowedFeedback">Read from external Storage has been allowed</string>
+  <string name="readOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="readOnExternalPermissionDeniedFeedback">Read from external Storage Permission is necessary for installing downloaded app</string>
+  <string name="readOnExternalPermissionRationaleMessage">Read from external Storage Permission is necessary for installing downloaded app, allow it!</string>
+  <string name="readOnExternalPermissionRationaleTitle">Permission Request</string>
+
+  <string name="appliveryError">Error info</string>
+  <string name="appliveryAcceptButton">Aceptar</string>
+</resources>
