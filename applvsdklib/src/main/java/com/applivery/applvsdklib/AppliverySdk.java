@@ -72,7 +72,7 @@ public class AppliverySdk {
 
     AppliverySdk.applicationContext = applicationContext;
 
-    AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance();
+    AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance(new AndroidCurrentAppInfo(applicationContext));
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager = new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
 

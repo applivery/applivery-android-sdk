@@ -25,4 +25,13 @@ public class AndroidCurrentAppInfo implements CurrentAppInfo {
       return -1;
     }
   }
+
+  public String getVersionName() {
+    try {
+      PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+      return pInfo.versionName;
+    } catch (PackageManager.NameNotFoundException e) {
+      return "0.0";
+    }
+  }
 }

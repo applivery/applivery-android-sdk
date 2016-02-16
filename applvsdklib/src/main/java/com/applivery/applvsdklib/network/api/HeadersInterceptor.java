@@ -1,6 +1,7 @@
 package com.applivery.applvsdklib.network.api;
 
 import com.applivery.applvsdklib.AppliverySdk;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -13,6 +14,12 @@ import java.util.Locale;
  */
 public class HeadersInterceptor implements Interceptor {
 
+  private final AndroidCurrentAppInfo androidCurrentAppInfo;
+
+  public HeadersInterceptor(AndroidCurrentAppInfo androidCurrentAppInfo) {
+    this.androidCurrentAppInfo = androidCurrentAppInfo;
+  }
+
   @Override public Response intercept(Chain chain) throws IOException {
     return chain.proceed(composeRequest(chain));
   }
@@ -22,7 +29,8 @@ public class HeadersInterceptor implements Interceptor {
     return original.newBuilder()
         .url(chain.request().httpUrl())
         .header("Authorization", AppliverySdk.getToken())
-        .header("Locale", Locale.getDefault().getLanguage())
+        .header("Accept-Language", Locale.getDefault().getLanguage())
+        .header("x_sdk_version", "ANDROID_" + androidCurrentAppInfo.getVersionName() )
         .method(original.method(), original.body())
         .build();
   }

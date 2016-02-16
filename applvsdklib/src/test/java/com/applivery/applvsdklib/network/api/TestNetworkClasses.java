@@ -30,7 +30,9 @@ public class TestNetworkClasses {
 
   @Test
   public void apiServiceBuilderTest(){
-    AppliveryApiService appliveryApi = AppliveryApiServiceBuilder.getAppliveryApiInstance();
+    Context applicationContext = null;
+    AppliveryApiService appliveryApi = AppliveryApiServiceBuilder.getAppliveryApiInstance(
+        new AndroidCurrentAppInfo(applicationContext));
     assertNotNull(appliveryApi);
   }
 
