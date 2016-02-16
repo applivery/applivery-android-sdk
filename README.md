@@ -32,13 +32,29 @@ Sdk installation is quite simple, and you can follow one of this three methods, 
 
 ## Downloading source and use the project as a project module
 
-In proccess
+Dowload the zip called "applvsdklib.zip" from downloads folder. Unzip all the content at the same level than your "app" folder. Go to settings.gradle file and include your new module as follow: "include ':app', ':applvsdklib' ". Now include this line into your app folder buld.gradle dependencies 
+
+compile project(":applvsdklib")
+
+And that's all, applivery SDK is now ready to use in your project
 
 ## Downloading aar package as a lib
 
-In proccess
+Dowload the zip aar called "applvsdklib.aar" from downloads folder. Now you can import a local aar file via the File>New>New Module>Import .JAR/.AAR Package option in Android Studio 
+
+And that's all.
+
+compile project(":applvsdklib")
+
+And that's all, applivery SDK is now ready to use in your project
 
 ## using gradle for building SDK
+
+add the following dependency to gradle:
+
+compile ‘com.applivery.applivery-android-sdk:1.0-RC1'
+
+
 
 In proccess
 
