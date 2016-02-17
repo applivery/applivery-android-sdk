@@ -2,7 +2,6 @@
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=master)](https://travis-ci.org/applivery/applivery-android-sdk) 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=master)](https://codecov.io/github/applivery/applivery-android-sdk)  ![Language](https://img.shields.io/badge/Language-Java-orange.svg)  ![Version](https://img.shields.io/badge/version-1.0 RC1-blue.svg)
 
-
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android Apps.
 
 ## Overview
@@ -12,7 +11,6 @@ With Applivery you can massively distribute your Android Apps (both Ad-hoc or In
 # Getting Started
 
 First of all, you should create an account on [Applivery.com](https://dashboard.applivery.com/register) and then add a new Application.
-
 
 ### Get your credentials
 
@@ -32,15 +30,34 @@ Sdk installation is quite simple, and you can follow one of this three methods, 
 
 ## Downloading source and use the project as a project module
 
-Dowload the zip called "applvsdklib.zip" from downloads folder. Unzip all the content at the same level than your "app" folder. Go to settings.gradle file and include your new module as follow: "include ':app', ':applvsdklib' ". Now include this line into your app folder buld.gradle dependencies 
+Dowload the zip called [Zipped SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.zip "applvsdklib.zip") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads")
+ folder. 
+ 
+ Unzip all the content at the same level than your "app" folder.  
+ 
+ ![FILES](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/project_files.png)
+ 
+ Go to settings.gradle file: 
+ 
+ ![Settings](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/project_files.png)
+ 
+ And include your new module as follow:
+ 
+ ```groovy
+ include ':app', ':applvsdklib'
+ ```
+ Now include this line into your app folder buld.gradle dependencies 
 
-compile project(":applvsdklib")
+ ```groovy
+ compile project(":applvsdklib")
+ ```
 
 And that's all, applivery SDK is now ready to use in your project
 
 ## Downloading aar package as a lib
 
-Dowload the zip aar called "applvsdklib.aar" from downloads folder. Now you can import a local aar file via the File>New>New Module>Import .JAR/.AAR Package option in Android Studio 
+Dowload the zip aar called [aar SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.aar "applvsdklib.aar") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads") folder. 
+Now you can import a local aar file using the File --> New --> New Module -->Import .JAR/.AAR Package option in Android Studio 
 
 And that's all.
 
@@ -50,13 +67,38 @@ And that's all, applivery SDK is now ready to use in your project
 
 ## using gradle for building SDK
 
-add the following dependency to gradle:
+add the following dependency to your's app gradle:
 
-compile ‘com.applivery.applivery-android-sdk:1.0-RC1'
+ ```groovy
+  compile ‘com.applivery.applivery-android-sdk:1.0-RC1'
+ ```
+### Ok! Let's go!
 
+At your application start up, in a class extending from Application, you must call the init method:
 
+ ```java
+ public class AppliveryApplication extends Application{
+ @Override public void onCreate() {
+   super.onCreate();
+   Applivery.init(this, BuildConfig.APP_KEY, BuildConfig.APP_SECRET, false);
+ }
+ }
+ ```
+ 
+**IMPORTANT I:** As you can suspect, you should replace the strings `APP_KEY` and `APP_SECRET` with you api key and your app id respectively. Easy! Don't you think so?, they look like this in my build.gradle:
 
-In proccess
+ ```groovy
+ buildConfigField "String", "APP_KEY", '"569bf0f4a81d1598273a2bd1"'
+ buildConfigField "String", "APP_SECRET", '"f0e46ebc297e6e9a8fa427e15e42336d4d24a33b"'
+ ```
+
+## About params
+- **app**: Your app instance.
+- **apiKey**: Your developer's Api Key
+- **appId**: Your application's ID
+- **isPlayStoreRelease**: is the last param and the aim of this flag is to mark if the build will be submitted to Play Store. This is needed to prevent unwanted behavior like prompt to a final user that a new version is available on Applivery.com.
+	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
+	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
 License
 =======
