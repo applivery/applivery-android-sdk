@@ -39,7 +39,7 @@ Dowload the zip called [Zipped SDK](https://github.com/applivery/applivery-andro
  
  Go to settings.gradle file: 
  
- ![Settings](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/project_files.png)
+ ![Settings](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/setting_gradle.png)
  
  And include your new module as follow:
  
@@ -57,15 +57,15 @@ And that's all, applivery SDK is now ready to use in your project
 ## Downloading aar package as a lib
 
 Dowload the zip aar called [aar SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.aar "applvsdklib.aar") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads") folder. 
-Now you can import a local aar file using the File --> New --> New Module -->Import .JAR/.AAR Package option in Android Studio 
+Now you can import a local aar file using the File --> New --> New Module -->Import .JAR/.AAR Package option in Android Studio and add this dependency to your app build.gradle in this way:
 
-And that's all.
-
-compile project(":applvsdklib")
+ ```groovy
+  compile project(":applvsdklib")
+ ```
 
 And that's all, applivery SDK is now ready to use in your project
 
-## using gradle for building SDK
+## Using gradle with nexus dependency
 
 add the following dependency to your's app gradle:
 
@@ -99,6 +99,9 @@ At your application start up, in a class extending from Application, you must ca
 - **isPlayStoreRelease**: is the last param and the aim of this flag is to mark if the build will be submitted to Play Store. This is needed to prevent unwanted behavior like prompt to a final user that a new version is available on Applivery.com.
 	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
+
+** NOTE :: Readme is under manteinace**
+** NOTE :: Gradle dependency is not available on nexus repo yet **
 
 License
 =======
