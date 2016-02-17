@@ -23,7 +23,7 @@ before_install:
   - sudo pip install codecov
 
 script:
-  - ./gradlew check test
+  - ./gradlew build
 
 after_success:
   - ./gradlew jacocoFullReport
