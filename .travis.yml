@@ -5,6 +5,9 @@ env:
   - ANDROID_TARGET=android-15
   - ANDROID_ABI=armeabi-v7a
 
+notifications:
+  slack: applivery:KX1jJ5dWdGbw0xXOXImfKgSD#ci
+
 android:
   components:
     - tools
@@ -17,7 +20,7 @@ android:
     - extra-android-m2repository
 
 before_install:
-  - pip install --user codecov
+  - sudo pip install codecov
 
 script:
   - ./gradlew check test
