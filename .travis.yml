@@ -20,13 +20,14 @@ android:
     - extra-android-m2repository
 
 before_install:
-  - sudo pip install codecov
+   - pip install --user codecov
 
 script:
   - ./gradlew build
 
 after_success:
   - ./gradlew jacocoFullReport
-  - bash <(curl -s https://codecov.io/bash)
   - codecov
+  - bash <(curl -s https://codecov.io/bash)
+
 
