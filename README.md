@@ -93,6 +93,7 @@ At your application start up, in a class extending from Application, you must ca
  ```
 
 ## About params
+
 - **app**: Your app instance.
 - **apiKey**: Your developer's Api Key
 - **appId**: Your application's ID
@@ -101,6 +102,7 @@ At your application start up, in a class extending from Application, you must ca
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
 ** NOTE :: Readme is under manteinace**
+
 ** NOTE :: Gradle dependency is not available on nexus repo yet **
 
 License
