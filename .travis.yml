@@ -23,7 +23,8 @@ before_install:
    - pip install --user codecov
 
 script:
-  - ./gradlew build
+  - ./gradlew build jacocoTestReport assembleAndroidTest
+  - ./gradlew connectedCheck
 
 after_success:
   - ./gradlew jacocoFullReport
