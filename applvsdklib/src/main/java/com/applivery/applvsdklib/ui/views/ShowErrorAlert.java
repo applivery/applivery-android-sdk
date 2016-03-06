@@ -13,17 +13,21 @@ import com.applivery.applvsdklib.domain.model.ErrorObject;
  */
 public class ShowErrorAlert {
   public void showError(ErrorObject error) {
-    if (AppliverySdk.isContextAvailable()){
+    if (AppliverySdk.isContextAvailable()) {
       AlertDialog.Builder builder = new AlertDialog.Builder(AppliverySdk.getCurrentActivity());
-      builder.setTitle(R.string.appliveryError).setCancelable(true).setMessage(error.getMessage())
-          .setPositiveButton((R.string.appliveryAcceptButton), new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-              dialog.dismiss();
-            }
-          }).show();
-    }else{
-      Toast.makeText(AppliverySdk.getApplicationContext(),
-          error.getMessage(), Toast.LENGTH_LONG).show();
+      builder.setTitle(R.string.appliveryError)
+          .setCancelable(true)
+          .setMessage(error.getMessage())
+          .setPositiveButton((R.string.appliveryAcceptButton),
+              new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                  dialog.dismiss();
+                }
+              })
+          .show();
+    } else {
+      Toast.makeText(AppliverySdk.getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG)
+          .show();
     }
   }
 }

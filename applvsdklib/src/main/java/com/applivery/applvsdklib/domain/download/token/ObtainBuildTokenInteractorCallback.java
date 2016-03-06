@@ -4,11 +4,11 @@ import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.download.app.DownloadBuildInteractor;
 import com.applivery.applvsdklib.domain.download.app.DownloadBuildInteractorCallback;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
-import com.applivery.applvsdklib.domain.download.permissions.WriteExternalPermission;
-import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.requests.ExternalStorageWriter;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidExternalStorageWriterImpl;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateView;
 
@@ -30,23 +30,15 @@ public class ObtainBuildTokenInteractorCallback implements InteractorCallback<Bu
   }
 
   @Override public void onSuccess(final BuildTokenInfo buildTokenInfo) {
-    AppliverySdk.getPermissionRequestManager().askForPermission(new WriteExternalPermission(),
-        new UserPermissionRequestResponseListener() {
-          @Override public void onPermissionAllowed(boolean permissionAllowed) {
-            if (permissionAllowed){
+    updateView.showDownloadInProgress();
 
-              updateView.showDownloadInProgress();
+    DownloadBuildInteractorCallback interactorCallback = new DownloadBuildInteractorCallback(updateView);
+    ExternalStorageWriter externalStorageWriter = new AndroidExternalStorageWriterImpl();
+    Runnable r =
+        DownloadBuildInteractor.getInstance(apiService, appName, buildTokenInfo, interactorCallback,
+            externalStorageWriter);
 
-              InteractorCallback interactorCallback = new DownloadBuildInteractorCallback(updateView);
-              Runnable r = DownloadBuildInteractor.getInstance(apiService, appName, buildTokenInfo,
-                  interactorCallback);
-
-              AppliverySdk.getExecutor().execute(r);
-            }else{
-              updateView.hideDownloadInProgress();
-            }
-          }
-        }, AppliverySdk.getCurrentActivity());
+    AppliverySdk.getExecutor().execute(r);
   }
 
   @Override public void onError(ErrorObject error) {

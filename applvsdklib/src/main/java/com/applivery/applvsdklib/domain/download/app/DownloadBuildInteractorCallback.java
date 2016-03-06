@@ -18,6 +18,10 @@ public class DownloadBuildInteractorCallback implements InteractorCallback<Downl
     this.updateView = updateView;
   }
 
+  public void updateDownloadProgress(double percent){
+    this.updateView.updateProgress(percent);
+  }
+
   @Override public void onSuccess(DownloadResult businessObject) {
     updateView.hideDownloadInProgress();
   }

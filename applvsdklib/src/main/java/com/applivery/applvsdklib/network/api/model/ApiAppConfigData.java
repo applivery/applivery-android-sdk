@@ -10,42 +10,18 @@ import java.util.List;
  */
 public class ApiAppConfigData {
 
-  @SerializedName("_id")
-  @Expose
-  private String Id;
-  @SerializedName("name")
-  @Expose
-  private String name;
-  @SerializedName("sdk")
-  @Expose
-  private ApiSdK sdk;
-  @SerializedName("crashesCount")
-  @Expose
-  private int crashesCount;
-  @SerializedName("feedbackCount")
-  @Expose
-  private int feedbackCount;
-  @SerializedName("sitesCount")
-  @Expose
-  private int sitesCount;
-  @SerializedName("totalDownloads")
-  @Expose
-  private int totalDownloads;
-  @SerializedName("buildsCount")
-  @Expose
-  private int buildsCount;
-  @SerializedName("modified")
-  @Expose
-  private String modified;
-  @SerializedName("created")
-  @Expose
-  private String created;
-  @SerializedName("so")
-  @Expose
-  private List<String> so;
-  @SerializedName("description")
-  @Expose
-  private String description;
+  @SerializedName("_id") @Expose private String Id;
+  @SerializedName("name") @Expose private String name;
+  @SerializedName("sdk") @Expose private ApiSdK sdk;
+  @SerializedName("crashesCount") @Expose private int crashesCount;
+  @SerializedName("feedbackCount") @Expose private int feedbackCount;
+  @SerializedName("sitesCount") @Expose private int sitesCount;
+  @SerializedName("totalDownloads") @Expose private int totalDownloads;
+  @SerializedName("buildsCount") @Expose private int buildsCount;
+  @SerializedName("modified") @Expose private String modified;
+  @SerializedName("created") @Expose private String created;
+  @SerializedName("so") @Expose private List<String> so;
+  @SerializedName("description") @Expose private String description;
 
   public String getId() {
     return Id;

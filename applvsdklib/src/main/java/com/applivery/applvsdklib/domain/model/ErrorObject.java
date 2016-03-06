@@ -6,7 +6,7 @@ import com.applivery.applvsdklib.network.api.responses.ApiAppliveryServerErrorRe
  * Created by Sergio Martinez Rodriguez
  * Date 8/11/15.
  */
-public class ErrorObject implements BusinessObject<ErrorObject>{
+public class ErrorObject implements BusinessObject<ErrorObject> {
 
   private boolean isBusinessError;
   private String message;
@@ -25,5 +25,4 @@ public class ErrorObject implements BusinessObject<ErrorObject>{
   public String getMessage() {
     return message;
   }
-
 }

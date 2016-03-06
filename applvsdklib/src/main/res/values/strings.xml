@@ -2,7 +2,7 @@
   <string name="app_name">Applivery Sdk</string>
   <string name="update">Update</string>
   <string name="cancel">Cancel</string>
-  <string name="download_message">Application download started...</string>
+  <string name="download_message">Current download progress...</string>
   <string name="download_title">Downloading</string>
 
   <string name="continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>

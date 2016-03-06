@@ -4,7 +4,7 @@ package com.applivery.applvsdklib.tools.permissions;
  * Created by Sergio Martinez Rodriguez
  * Date 17/1/16.
  */
-public class GenericPermissionListenerImpl extends AbstractPermissionListener{
+public class GenericPermissionListenerImpl extends AbstractPermissionListener {
 
   private final Permission permission;
 

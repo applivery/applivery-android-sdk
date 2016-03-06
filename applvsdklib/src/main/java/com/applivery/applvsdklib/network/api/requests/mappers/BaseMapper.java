@@ -8,13 +8,13 @@ import com.applivery.applvsdklib.network.api.responses.ServerResponse;
  * Created by Sergio Martinez Rodriguez
  * Date 8/11/15.
  */
-public abstract class BaseMapper<Model extends BusinessObject, Data>{
+public abstract class BaseMapper<Model extends BusinessObject, Data> {
 
   public BusinessObject map(ServerResponse<Data> serverResponse) {
 
-    if (serverResponse.getStatus() == true){
+    if (serverResponse.getStatus() == true) {
       return mapBusinessObject(serverResponse.getData());
-    }else{
+    } else {
       return new ErrorObject(serverResponse.getError());
     }
   }

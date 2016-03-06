@@ -35,7 +35,7 @@ public class AndroidLastConfigReaderImpl implements LastConfigReader {
     } catch (FileNotFoundException e) {
       Date date = new Date();
       return date.getTime();
-    }catch (IOException e) {
+    } catch (IOException e) {
       Date date = new Date();
       return date.getTime();
     }
@@ -43,14 +43,14 @@ public class AndroidLastConfigReaderImpl implements LastConfigReader {
 
   @Override public boolean existLastConfig() {
     File file = getFile();
-    if (file != null){
+    if (file != null) {
       return file.exists();
-    }else{
+    } else {
       return false;
     }
   }
 
-  private File getFile(){
+  private File getFile() {
     Context context = AppliverySdk.getApplicationContext();
     return new File(context.getFilesDir() + "/" + AndroidLastConfigWriterImpl.TIME_STAMP_FILE_NAME);
   }

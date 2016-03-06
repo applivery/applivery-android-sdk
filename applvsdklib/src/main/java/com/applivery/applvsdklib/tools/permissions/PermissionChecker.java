@@ -9,5 +9,8 @@ import android.app.Activity;
 public interface PermissionChecker {
   void askForPermission(Permission permission, UserPermissionRequestResponseListener userResponse,
       Activity activity);
+
   void continuePendingPermissionsRequestsIfPossible();
+
+  boolean isGranted(Permission permission);
 }

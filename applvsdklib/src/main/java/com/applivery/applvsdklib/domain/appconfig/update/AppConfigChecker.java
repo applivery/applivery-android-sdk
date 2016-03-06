@@ -17,18 +17,18 @@ public class AppConfigChecker {
     this.lastConfigReader = lastConfigReader;
   }
 
-  public boolean shouldCheckAppConfigForUpdate(){
+  public boolean shouldCheckAppConfigForUpdate() {
 
-    if (!lastConfigReader.existLastConfig() || AppliverySdk.isStoreRelease()){
+    if (!lastConfigReader.existLastConfig() || AppliverySdk.isStoreRelease()) {
       return false;
     }
 
     long timeStamp = lastConfigReader.readLastConfigCheckTimeStamp();
     long diff = Calendar.getInstance().get(Calendar.MILLISECOND) - timeStamp;
 
-    if (diff>ONE_DAY){
+    if (diff > ONE_DAY) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }

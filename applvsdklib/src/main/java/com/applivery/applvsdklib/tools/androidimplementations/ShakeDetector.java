@@ -38,13 +38,11 @@ public class ShakeDetector implements SensorEventListener {
     public void onShake(int count);
   }
 
-  @Override
-  public void onAccuracyChanged(Sensor sensor, int accuracy) {
+  @Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
     // ignore
   }
 
-  @Override
-  public void onSensorChanged(SensorEvent event) {
+  @Override public void onSensorChanged(SensorEvent event) {
 
     if (mListener != null) {
       float x = event.values[0];

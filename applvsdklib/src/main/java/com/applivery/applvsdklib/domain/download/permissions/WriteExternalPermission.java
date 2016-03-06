@@ -11,7 +11,7 @@ import com.applivery.applvsdklib.tools.permissions.Permission;
 public class WriteExternalPermission implements Permission {
 
   @Override public String getAndroidPermissionStringType() {
-    return  Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    return Manifest.permission.WRITE_EXTERNAL_STORAGE;
   }
 
   @Override public int getPermissionSettingsDeniedFeedback() {

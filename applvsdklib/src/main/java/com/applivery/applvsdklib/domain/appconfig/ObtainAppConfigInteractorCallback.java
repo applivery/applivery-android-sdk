@@ -9,6 +9,7 @@ import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.Android;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.network.api.requests.ExternalStorageReader;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;

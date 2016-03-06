@@ -2,6 +2,8 @@ package com.applivery.applvsdklib.tools.permissions;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.view.ViewGroup;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.single.CompositePermissionListener;
@@ -13,8 +15,6 @@ import com.karumi.dexter.listener.single.SnackbarOnDeniedPermissionListener;
  * Date 15/1/16.
  */
 public class AndroidPermissionCheckerImpl implements PermissionChecker {
-
-  //TODO this class is impossible to test review With Beni
 
   private final ContextProvider contextProvider;
 
@@ -32,8 +32,7 @@ public class AndroidPermissionCheckerImpl implements PermissionChecker {
     PermissionListener[] listeners = createListeners(permission, userResponse, activity);
 
     Dexter.checkPermission(new CompositePermissionListener(listeners),
-                            permission.getAndroidPermissionStringType());
-
+        permission.getAndroidPermissionStringType());
   }
 
   private PermissionListener[] createListeners(Permission permission,
@@ -44,9 +43,9 @@ public class AndroidPermissionCheckerImpl implements PermissionChecker {
     try {
       ViewGroup viewGroup = PermissionsUIViews.getAppContainer(activity);
       PermissionListener listener = getDefaultDeniedPermissionListener(viewGroup, permission);
-      return new PermissionListener[]{basicListener, listener};
-    }catch (NullContainerException n){
-      return new PermissionListener[]{basicListener};
+      return new PermissionListener[] { basicListener, listener };
+    } catch (NullContainerException n) {
+      return new PermissionListener[] { basicListener };
     }
   }
 
@@ -61,10 +60,19 @@ public class AndroidPermissionCheckerImpl implements PermissionChecker {
 
   private PermissionListener getPermissionListenerImpl(final Permission permission,
       final UserPermissionRequestResponseListener userPermissionRequestResponseListener) {
-    return new GenericPermissionListenerImpl(permission, userPermissionRequestResponseListener, contextProvider);
+    return new GenericPermissionListenerImpl(permission, userPermissionRequestResponseListener,
+        contextProvider);
   }
 
   @Override public void continuePendingPermissionsRequestsIfPossible() {
-    Dexter.continuePendingRequestIfPossible(new ContinueRequestPermissionListenerImpl(contextProvider));
+    Dexter.continuePendingRequestIfPossible(
+        new ContinueRequestPermissionListenerImpl(contextProvider));
+  }
+
+  @Override public boolean isGranted(Permission permission) {
+    Context context = contextProvider.getApplicationContext();
+    int permissionGranted =
+        ContextCompat.checkSelfPermission(context, permission.getAndroidPermissionStringType());
+    return PackageManager.PERMISSION_GRANTED == permissionGranted;
   }
 }

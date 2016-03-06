@@ -1,10 +1,10 @@
 package com.applivery.applvsdklib.network.api.requests;
 
+import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.DownloadResult;
-import com.applivery.applvsdklib.tools.androidimplementations.AndroidExternalStorageWriterImpl;
 import com.squareup.okhttp.ResponseBody;
 import java.io.InputStream;
 import retrofit.Call;
@@ -33,7 +33,7 @@ public class DownloadBuildRequest extends ServerRequest {
   }
 
   @Override protected BusinessObject performRequest() {
-    DownloadResult downloadResult;
+    DownloadResult downloadResult = new DownloadResult(false);
 
     Call<ResponseBody> response = apiService.downloadBuild(token.getBuild(), token.getToken());
 
@@ -42,15 +42,18 @@ public class DownloadBuildRequest extends ServerRequest {
 
       int lenght = Integer.parseInt(apiResponse.headers().get("Content-Length"));
       InputStream in = apiResponse.body().byteStream();
-      String fileName = appName + "_" + token.getBuild();
+      String apkFileName = appName + "_" + token.getBuild();
 
-      String path = externalStorageWriter.writeToFile(in, lenght, downloadStatusListener, fileName);
+      String path = externalStorageWriter.writeToFile(in, lenght, downloadStatusListener, apkFileName);
 
-      downloadResult = new DownloadResult(true, path);
+      if (path!=null){
+        downloadResult = new DownloadResult(true, path);
+      }
+
     } catch (Exception e) {
-      downloadResult = new DownloadResult(false);
-      e.printStackTrace();
+      AppliverySdk.Logger.log(e.getMessage());
     }
+
 
     return downloadResult;
   }

@@ -15,8 +15,9 @@ public class UpdateViewPresenter {
   public UpdateViewPresenter(UpdateListener updateListener) {
     this.updateListener = updateListener;
   }
+
   public void showForcedUpdate(String appName, String updateMessage) {
-    if (AppliverySdk.isContextAvailable()){
+    if (AppliverySdk.isContextAvailable()) {
       UpdateInfo updateInfo = new UpdateInfo(appName, updateMessage);
       this.updateView = new MustUpdateViewImpl(updateInfo, updateListener);
       this.updateListener.setUpdateView(updateView);
@@ -32,5 +33,4 @@ public class UpdateViewPresenter {
       this.updateView.showUpdateDialog();
     }
   }
-
 }

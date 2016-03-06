@@ -45,7 +45,7 @@ public class DateUtilsTest {
         assertThat(expectedDate, not(isDateEqualTo(date)));
     }
 
-    @Test @Ignore
+    @Test
     public void testStringToDateWithFormatWrongDate() throws Exception {
         String stringDate = "Valor Fake";
 

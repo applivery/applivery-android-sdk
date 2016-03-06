@@ -7,7 +7,8 @@ import com.applivery.applvsdklib.network.api.requests.ApiFeedbackRequestData;
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
-public class ApiFeedbackRequestMapper implements RequestMapper<FeedbackWrapper, ApiFeedbackRequestData>{
+public class ApiFeedbackRequestMapper
+    implements RequestMapper<FeedbackWrapper, ApiFeedbackRequestData> {
 
   @Override public ApiFeedbackRequestData modelToData(FeedbackWrapper feedbackWrapper) {
     ApiFeedbackRequestData apiFeedbackData = new ApiFeedbackRequestData();

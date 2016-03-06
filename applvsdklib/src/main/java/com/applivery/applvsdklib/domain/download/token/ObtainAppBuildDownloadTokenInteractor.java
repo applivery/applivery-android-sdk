@@ -2,10 +2,10 @@ package com.applivery.applvsdklib.domain.download.token;
 
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.ObtainBuildDownloadTokenRequest;
 
 /**
@@ -20,7 +20,8 @@ public class ObtainAppBuildDownloadTokenInteractor extends BaseInteractor<BuildT
   public ObtainAppBuildDownloadTokenInteractor(AppliveryApiService appliveryApiService,
       String buildId, InteractorCallback<BuildTokenInfo> infoInteractorCallback) {
 
-    this.obtainBuildDownloadTokenRequest = new ObtainBuildDownloadTokenRequest(appliveryApiService, buildId);
+    this.obtainBuildDownloadTokenRequest =
+        new ObtainBuildDownloadTokenRequest(appliveryApiService, buildId);
     this.infoInteractorCallback = infoInteractorCallback;
   }
 
@@ -41,9 +42,7 @@ public class ObtainAppBuildDownloadTokenInteractor extends BaseInteractor<BuildT
   }
 
   public static Runnable getInstance(AppliveryApiService appliveryApiService, String buildId,
-    InteractorCallback interactorCallback) {
-
-    //TODO check if app is already downloaded and execute install directly
+      InteractorCallback interactorCallback) {
 
     ObtainAppBuildDownloadTokenInteractor obtainAppBuildDownloadTokenInteractor =
         new ObtainAppBuildDownloadTokenInteractor(appliveryApiService, buildId, interactorCallback);

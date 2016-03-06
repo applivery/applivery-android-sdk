@@ -2,12 +2,12 @@ package com.applivery.applvsdklib.domain.feedback;
 
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.Feedback;
 import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.FeedbackRequest;
 
 /**

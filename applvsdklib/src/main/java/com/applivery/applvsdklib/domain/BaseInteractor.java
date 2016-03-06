@@ -9,11 +9,11 @@ import com.applivery.applvsdklib.domain.model.ErrorObject;
  * Created by Sergio Martinez Rodriguez
  * Date 7/11/15.
  */
-public abstract class BaseInteractor<T> implements Runnable{
+public abstract class BaseInteractor<T> implements Runnable {
 
   Handler handler = new Handler() {
     public void handleMessage(Message msg) {
-       receivedResponse((BusinessObject)msg.obj);
+      receivedResponse((BusinessObject) msg.obj);
     }
   };
 
@@ -23,7 +23,7 @@ public abstract class BaseInteractor<T> implements Runnable{
     try {
       T response = responseClass.cast(obj);
       success(response);
-    }catch (ClassCastException classCastException){
+    } catch (ClassCastException classCastException) {
       ErrorObject errorObject = (ErrorObject) obj;
       error(errorObject);
     }
@@ -36,6 +36,12 @@ public abstract class BaseInteractor<T> implements Runnable{
   @Override public void run() {
     Message message = new Message();
     message.obj = performRequest();
+    handler.sendMessage(message);
+  }
+
+  public void sendDelayedResponse(T response) {
+    Message message = new Message();
+    message.obj = response;
     handler.sendMessage(message);
   }
 

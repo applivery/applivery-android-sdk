@@ -18,5 +18,4 @@ public class ApiSdK {
   public void setAndroid(ApiAndroid android) {
     this.android = android;
   }
-
 }

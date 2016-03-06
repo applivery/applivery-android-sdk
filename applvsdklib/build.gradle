@@ -1,29 +1,31 @@
 apply plugin: 'com.android.library'
 apply plugin: 'jacoco-android'
+apply from: rootProject.file('gradle/checkstyle.gradle')
 
 def STRING = "String"
 
 android {
-  compileSdkVersion 23
-  buildToolsVersion "23.0.2"
+  compileSdkVersion parent.ext.androidCompileSdkVersion
+  buildToolsVersion parent.ext.androidBuildToolsVersion
 
   defaultConfig {
-    minSdkVersion 15
-    targetSdkVersion 23
-    versionCode 1
-    versionName "1.0"
+    minSdkVersion parent.ext.androidMinSdkVersion
+    targetSdkVersion parent.ext.androidTargetSdkVersion
+    versionCode parent.ext.androidVersionCode
+    versionName parent.ext.androidVersionName
 
     buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
   }
 
   buildTypes {
     debug {
+      buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
       testCoverageEnabled true
     }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//      buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
+      buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
     }
   }
 

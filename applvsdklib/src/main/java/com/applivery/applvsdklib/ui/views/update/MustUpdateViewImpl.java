@@ -1,6 +1,8 @@
 package com.applivery.applvsdklib.ui.views.update;
 
 import android.app.Dialog;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -66,4 +68,25 @@ public class MustUpdateViewImpl extends Dialog implements UpdateView {
     progressBar.setVisibility(View.VISIBLE);
   }
 
+  @Override public void updateProgress(double percent) {
+    updatProcessTextView(percent, new Handler(getLooper()));
+  }
+
+  private void updatProcessTextView(final double percent, Handler handler) {
+    Runnable myRunnable = new Runnable() {
+      @Override
+      public void run() {
+        progressBar.setProgress(Double.valueOf(percent).intValue());
+      }
+    };
+    handler.post(myRunnable);
+  }
+
+  public Looper getLooper() {
+    if (Looper.myLooper() == Looper.getMainLooper()){
+      return Looper.myLooper();
+    }else{
+      return Looper.getMainLooper();
+    }
+  }
 }

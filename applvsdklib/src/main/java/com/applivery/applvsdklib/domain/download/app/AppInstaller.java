@@ -6,5 +6,5 @@ package com.applivery.applvsdklib.domain.download.app;
  */
 public interface AppInstaller {
 
-  void installApp(String Path);
+  void installApp(String apkFileName);
 }

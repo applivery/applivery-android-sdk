@@ -6,7 +6,7 @@ import com.applivery.applvsdklib.R;
  * Created by Sergio Martinez Rodriguez
  * Date 17/1/16.
  */
-public class ContinueRequestPermissionListenerImpl extends AbstractPermissionListener{
+public class ContinueRequestPermissionListenerImpl extends AbstractPermissionListener {
 
   public ContinueRequestPermissionListenerImpl(ContextProvider contextProvider) {
     super(contextProvider);

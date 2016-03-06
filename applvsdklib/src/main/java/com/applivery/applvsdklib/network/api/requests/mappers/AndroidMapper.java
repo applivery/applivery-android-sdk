@@ -7,7 +7,7 @@ import com.applivery.applvsdklib.network.api.model.ApiAndroid;
  * Created by Sergio Martinez Rodriguez
  * Date 2/1/16.
  */
-public class AndroidMapper implements ResponseMapper<Android, ApiAndroid>{
+public class AndroidMapper implements ResponseMapper<Android, ApiAndroid> {
 
   @Override public Android dataToModel(ApiAndroid apiAndroid) {
     Android android = new Android();

@@ -6,5 +6,6 @@ package com.applivery.applvsdklib.ui.views.update;
  */
 public interface UpdateListener {
   void onUpdateButtonClick();
+
   void setUpdateView(UpdateView updateView);
 }

@@ -4,7 +4,7 @@ package com.applivery.applvsdklib.domain.model;
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
-public class DownloadResult implements BusinessObject<DownloadResult>{
+public class DownloadResult implements BusinessObject<DownloadResult> {
 
   private final boolean success;
   private final String path;
@@ -30,5 +30,4 @@ public class DownloadResult implements BusinessObject<DownloadResult>{
   public String getPath() {
     return path;
   }
-
 }

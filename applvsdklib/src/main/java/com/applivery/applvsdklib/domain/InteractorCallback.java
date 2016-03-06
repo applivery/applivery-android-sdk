@@ -8,5 +8,6 @@ import com.applivery.applvsdklib.domain.model.ErrorObject;
  */
 public interface InteractorCallback<Data> {
   void onSuccess(Data businessObject);
+
   void onError(ErrorObject error);
 }

@@ -25,6 +25,5 @@ public class AndroidLastConfigWriterImpl implements LastConfigWriter {
       e.printStackTrace();
       return false;
     }
-
   }
 }

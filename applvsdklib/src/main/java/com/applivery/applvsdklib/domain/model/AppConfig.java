@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Sergio Martinez Rodriguez
  * Date 7/11/15.
  */
-public class AppConfig implements BusinessObject<AppConfig>{
+public class AppConfig implements BusinessObject<AppConfig> {
 
   private String Id;
   private String name;

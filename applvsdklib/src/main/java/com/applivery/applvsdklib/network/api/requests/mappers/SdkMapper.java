@@ -7,7 +7,7 @@ import com.applivery.applvsdklib.network.api.model.ApiSdK;
  * Created by Sergio Martinez Rodriguez
  * Date 2/1/16.
  */
-public class SdkMapper implements ResponseMapper<Sdk, ApiSdK>{
+public class SdkMapper implements ResponseMapper<Sdk, ApiSdK> {
 
   private AndroidMapper androidMapper;
 

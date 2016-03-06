@@ -16,6 +16,21 @@ allprojects {
   repositories {
     jcenter()
   }
+
+  ext {
+    androidBuildToolsVersion = '23.0.2'
+    androidMinSdkVersion = 10
+    androidTargetSdkVersion = 23
+    androidCompileSdkVersion = 23
+    androidApplicationId = 'com.applivery.applvsdklib'
+
+    versionMajor = 1
+    versionMinor = 0
+    versionPatch = 0
+
+    androidVersionCode = versionMajor * 1000 + versionMinor * 100 + versionPatch
+    androidVersionName = versionMajor + "." + versionMinor + "." + versionPatch
+  }
 }
 
 task clean(type: Delete) {

@@ -2,16 +2,16 @@ package com.applivery.applvsdklib.network.api.requests.mappers;
 
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
-import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
 import com.applivery.applvsdklib.network.api.model.ApiAppConfigData;
 import com.applivery.applvsdklib.network.api.model.DateFormatConstants;
+import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
 import com.applivery.applvsdklib.tools.utils.DateUtils;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 8/11/15.
  */
-public class ApiAppConfigResponseMapper extends BaseMapper<AppConfig, ApiAppConfigData>{
+public class ApiAppConfigResponseMapper extends BaseMapper<AppConfig, ApiAppConfigData> {
 
   private SdkMapper sdkMapper;
 

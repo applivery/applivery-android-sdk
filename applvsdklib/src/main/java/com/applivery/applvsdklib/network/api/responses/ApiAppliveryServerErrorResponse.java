@@ -14,11 +14,9 @@ public class ApiAppliveryServerErrorResponse {
 
   private boolean isBusinessError = true;
 
-  @Expose @SerializedName("code")
-  private int code;
+  @Expose @SerializedName("code") private int code;
 
-  @Expose @SerializedName("msg")
-  private String msg;
+  @Expose @SerializedName("msg") private String msg;
 
   public ApiAppliveryServerErrorResponse(int code, String msg, boolean isBusinessError) {
     this.code = code;
@@ -50,11 +48,11 @@ public class ApiAppliveryServerErrorResponse {
     return new ApiAppliveryServerErrorResponse(code, message, false);
   }
 
-  public boolean isBusinessError(){
+  public boolean isBusinessError() {
     return isBusinessError;
   }
 
-  public boolean isConnectionError(){
-    return (code==NO_CONNECTION_HTTP_CODE);
+  public boolean isConnectionError() {
+    return (code == NO_CONNECTION_HTTP_CODE);
   }
 }

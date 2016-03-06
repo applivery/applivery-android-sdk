@@ -21,7 +21,7 @@ public final class Validate {
           "<uses-permission android:name=\"android.permission.INTERNET\" /> " +
           "to your AndroidManifest.xml.";
 
-  public static<T> T notNull(T arg, String name) {
+  public static <T> T notNull(T arg, String name) {
     if (arg == null) {
       throw new NullPointerException("Argument '" + name + "' cannot be null");
     }
@@ -63,15 +63,14 @@ public final class Validate {
     Validate.notEmpty(container, name);
   }
 
-
   public static void hasInternetPermissions(Context context) {
     Validate.hasInternetPermissions(context, true);
   }
 
   public static void hasInternetPermissions(Context context, boolean shouldThrow) {
     Validate.notNull(context, "context");
-    if (context.checkCallingOrSelfPermission(Manifest.permission.INTERNET) ==
-        PackageManager.PERMISSION_DENIED) {
+    if (context.checkCallingOrSelfPermission(Manifest.permission.INTERNET)
+        == PackageManager.PERMISSION_DENIED) {
       if (shouldThrow) {
         throw new IllegalStateException(NO_INTERNET_PERMISSION_REASON);
       } else {
@@ -83,9 +82,8 @@ public final class Validate {
   public static void sdkInitialized() {
     if (!AppliverySdk.isInitialized()) {
       throw new AppliverySdkNotInitializedException(
-          "The SDK has not been initialized, make sure to call " +
-              "AppliverySdk.sdkInitialize() first.");
+          "The SDK has not been initialized, make sure to call "
+              + "AppliverySdk.sdkInitialize() first.");
     }
   }
-
 }

@@ -1,6 +1,5 @@
 package com.applivery.applvsdklib.network.api.requests;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -10,5 +9,5 @@ import java.io.InputStream;
 public interface ExternalStorageWriter {
 
   String writeToFile(InputStream inputStream, int lenght,
-      DownloadStatusListener downloadStatusListener, String appName) throws IOException;
+      DownloadStatusListener downloadStatusListener, String apkFileName);
 }

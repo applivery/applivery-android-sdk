@@ -6,7 +6,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import com.applivery.applvsdklib.Applivery;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.appconfig.update.AppConfigChecker;
 import com.applivery.applvsdklib.domain.appconfig.update.LastConfigReader;
@@ -18,8 +17,8 @@ import java.util.Stack;
  * Created by Sergio Martinez Rodriguez
  * Date 4/1/16.
  */
-public class AppliveryActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks,
-    ContextProvider{
+public class AppliveryActivityLifecycleCallbacks
+    implements Application.ActivityLifecycleCallbacks, ContextProvider {
 
   private Stack<ActivityLifecyleWrapper> activityStack = new Stack<>();
   private final AppConfigChecker appConfigChecker;
@@ -31,25 +30,24 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
     this.applicationContext = applicationContext;
   }
 
-  @Override
-  public Activity getCurrentActivity() {
+  @Override public Activity getCurrentActivity() {
 
     Activity activity = lastForegroundActivity();
 
-    if (activity!=null){
+    if (activity != null) {
       return activity;
     }
 
     activity = lastPausedActivity();
 
-    if (activity!=null){
+    if (activity != null) {
       return activity;
     }
 
-    if (activityStack.size()>0){
+    if (activityStack.size() > 0) {
       activity = activityStack.peek().getActivity();
 
-      if (activity!=null){
+      if (activity != null) {
         return activity;
       }
     }
@@ -59,7 +57,7 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
 
   @Override public boolean isActivityContextAvailable() {
     //this implementation gives context of pauses and stopped activities
-    return (applicationContext!=null)? true : false;
+    return (applicationContext != null) ? true : false;
   }
 
   @Override public Context getApplicationContext() {
@@ -67,15 +65,15 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
   }
 
   @Override public boolean isApplicationContextAvailable() {
-    return (applicationContext!=null)? true : false;
+    return (applicationContext != null) ? true : false;
   }
 
-  public PhoneStatusType getPhoneStatusType(){
+  public PhoneStatusType getPhoneStatusType() {
     Activity activity = lastPausedActivity();
 
-    if (activity!=null){
+    if (activity != null) {
       return PhoneStatusType.FOREGROUND;
-    }else{
+    } else {
       return PhoneStatusType.BACKGROUND;
     }
   }
@@ -94,7 +92,7 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
   @Override public void onActivityResumed(Activity activity) {
     //TODO Register for phase 2 shake detector
     activityStack.peek().setIsPaused(false);
-    if (appConfigChecker.shouldCheckAppConfigForUpdate()){
+    if (appConfigChecker.shouldCheckAppConfigForUpdate()) {
       AppliverySdk.obtainAppConfigForCheckUpdates();
       AppliverySdk.continuePendingPermissionsRequestsIfPossible();
     }
@@ -105,7 +103,6 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
     activityStack.peek().setIsPaused(true);
   }
 
-
   @Override public void onActivityStopped(Activity activity) {
     activityStack.peek().setIsStopped(true);
   }
@@ -114,7 +111,8 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
     this.activityStack.pop();
   }
 
-  @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
+  @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+  }
 
   //endregion
 
@@ -124,9 +122,9 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
   private Activity lastPausedActivity() {
     Iterator<ActivityLifecyleWrapper> iter = activityStack.iterator();
 
-    while (iter.hasNext()){
+    while (iter.hasNext()) {
       ActivityLifecyleWrapper activityLifecyleWrapper = iter.next();
-      if (!activityLifecyleWrapper.isStopped()){
+      if (!activityLifecyleWrapper.isStopped()) {
         return activityLifecyleWrapper.getActivity();
       }
     }
@@ -137,9 +135,9 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
 
     Iterator<ActivityLifecyleWrapper> iter = activityStack.iterator();
 
-    while (iter.hasNext()){
+    while (iter.hasNext()) {
       ActivityLifecyleWrapper activityLifecyleWrapper = iter.next();
-      if (!activityLifecyleWrapper.isPaused()){
+      if (!activityLifecyleWrapper.isPaused()) {
         return activityLifecyleWrapper.getActivity();
       }
     }
@@ -154,35 +152,37 @@ public class AppliveryActivityLifecycleCallbacks implements Application.Activity
 
     Iterator<ActivityLifecyleWrapper> iter = activityStack.iterator();
 
-    while (iter.hasNext()){
+    while (iter.hasNext()) {
       ActivityLifecyleWrapper activityLifecyleWrapper = iter.next();
-      if (isActivityDestroyed(activityLifecyleWrapper.getActivity())){
-          iter.remove();
+      if (isActivityDestroyed(activityLifecyleWrapper.getActivity())) {
+        iter.remove();
       }
     }
   }
 
   private boolean isActivityDestroyed(Activity activity) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
       return checkActivityDestroyedUnderV17(activity);
-    }else{
+    } else {
       return checkActivityDestroyedV17(activity);
     }
   }
 
   private boolean checkActivityDestroyedUnderV17(Activity activity) {
-    if (activity == null || activity.getBaseContext() == null){
+    if (activity == null || activity.getBaseContext() == null) {
       return true;
+    } else {
+      return false;
     }
-    else return false;
   }
 
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
   private boolean checkActivityDestroyedV17(Activity activity) {
-    if (activity == null || activity.isDestroyed()){
+    if (activity == null || activity.isDestroyed()) {
       return true;
+    } else {
+      return false;
     }
-    else return false;
   }
 
   //endregion

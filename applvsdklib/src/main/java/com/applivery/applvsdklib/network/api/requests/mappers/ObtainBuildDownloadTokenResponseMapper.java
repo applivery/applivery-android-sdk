@@ -10,7 +10,7 @@ import java.util.Date;
  * Date 9/1/16.
  */
 public class ObtainBuildDownloadTokenResponseMapper
-    extends BaseMapper<BuildTokenInfo,ApiBuildTokenData> {
+    extends BaseMapper<BuildTokenInfo, ApiBuildTokenData> {
 
   @Override protected BuildTokenInfo mapBusinessObject(ApiBuildTokenData apiBuildTokenData) {
 

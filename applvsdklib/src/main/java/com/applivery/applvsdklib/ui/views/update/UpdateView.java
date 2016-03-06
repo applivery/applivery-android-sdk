@@ -10,4 +10,6 @@ public interface UpdateView {
   void hideDownloadInProgress();
 
   void showDownloadInProgress();
+
+  void updateProgress(double percent);
 }

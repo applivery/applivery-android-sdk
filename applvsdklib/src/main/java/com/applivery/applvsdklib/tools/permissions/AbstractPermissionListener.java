@@ -20,34 +20,34 @@ public abstract class AbstractPermissionListener implements PermissionListener {
     this.contextProvider = contextProvider;
   }
 
-  public AbstractPermissionListener(UserPermissionRequestResponseListener
-      userPermissionRequestResponseListener, ContextProvider contextProvider) {
+  public AbstractPermissionListener(
+      UserPermissionRequestResponseListener userPermissionRequestResponseListener,
+      ContextProvider contextProvider) {
     this.userPermissionRequestResponseListener = userPermissionRequestResponseListener;
     this.contextProvider = contextProvider;
   }
 
   @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-    if (userPermissionRequestResponseListener!=null){
+    if (userPermissionRequestResponseListener != null) {
       userPermissionRequestResponseListener.onPermissionAllowed(true);
     }
   }
 
   @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-    if (!contextProvider.isActivityContextAvailable()){
-        PermissionsUIViews.showPermissionToast(contextProvider.getApplicationContext(),
+    if (!contextProvider.isActivityContextAvailable()) {
+      PermissionsUIViews.showPermissionToast(contextProvider.getApplicationContext(),
           getPermissionDeniedFeedback());
     }
 
-    if (userPermissionRequestResponseListener!=null){
+    if (userPermissionRequestResponseListener != null) {
       userPermissionRequestResponseListener.onPermissionAllowed(false);
     }
-
   }
 
   @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest,
       PermissionToken token) {
 
-    if (contextProvider.isActivityContextAvailable()){
+    if (contextProvider.isActivityContextAvailable()) {
       Context context = contextProvider.getCurrentActivity();
       PermissionsUIViews.showRationaleView(createRationaleResponseInstance(token), context,
           getPermissionRationaleTitle(), getPermissionRationaleMessage());
@@ -55,19 +55,20 @@ public abstract class AbstractPermissionListener implements PermissionListener {
   }
 
   private RationaleResponse createRationaleResponseInstance(final PermissionToken token) {
-      return new RationaleResponse() {
-        @Override public void cancelPermissionRequest() {
-          token.cancelPermissionRequest();
-        }
+    return new RationaleResponse() {
+      @Override public void cancelPermissionRequest() {
+        token.cancelPermissionRequest();
+      }
 
-        @Override public void continuePermissionRequest() {
-          token.continuePermissionRequest();
-        }
-      };
-    }
+      @Override public void continuePermissionRequest() {
+        token.continuePermissionRequest();
+      }
+    };
+  }
 
   public abstract int getPermissionDeniedFeedback();
-  public abstract int getPermissionRationaleMessage();
-  public abstract int getPermissionRationaleTitle();
 
-  }
+  public abstract int getPermissionRationaleMessage();
+
+  public abstract int getPermissionRationaleTitle();
+}

@@ -6,10 +6,10 @@ import java.util.Date;
  * Created by Sergio Martinez Rodriguez
  * Date 9/1/16.
  */
-public class BuildTokenInfo implements BusinessObject<BuildTokenInfo>{
+public class BuildTokenInfo implements BusinessObject<BuildTokenInfo> {
 
   private String token;
-  private  String build;
+  private String build;
   private Date exp;
 
   public String getToken() {
