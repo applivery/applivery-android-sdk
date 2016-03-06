@@ -41,12 +41,13 @@ public class AndroidLastConfigReaderImpl implements LastConfigReader {
     }
   }
 
-  @Override public boolean existLastConfig() {
+  @Override public boolean notExistsLastConfig() {
     File file = getFile();
-    if (file != null) {
-      return file.exists();
+
+    if (file == null) {
+      return true;
     } else {
-      return false;
+      return !file.exists();
     }
   }
 

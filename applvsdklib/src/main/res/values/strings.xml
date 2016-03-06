@@ -23,6 +23,6 @@
   <string name="readOnExternalPermissionRationaleMessage">Read from external Storage Permission is necessary for installing downloaded app, allow it!</string>
   <string name="readOnExternalPermissionRationaleTitle">Permission Request</string>
 
-  <string name="appliveryError">Error info</string>
+  <string name="appliveryError">Applivery error</string>
   <string name="appliveryAcceptButton">Aceptar</string>
 </resources>

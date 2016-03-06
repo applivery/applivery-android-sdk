@@ -1,12 +1,18 @@
 package com.applivery.applvsdklib.ui.views.update;
 
 import android.app.Dialog;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.applivery.applvsdklib.Applivery;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.ui.model.UpdateInfo;
@@ -41,6 +47,11 @@ public class MustUpdateViewImpl extends Dialog implements UpdateView {
     this.updateMessage = (TextView) findViewById(R.id.must_update_message);
     this.update = (Button) findViewById(R.id.must_update_button);
     this.progressBar = (ProgressBar) findViewById(R.id.must_update_progress_bar);
+    LayerDrawable layerDrawable = (LayerDrawable) progressBar.getProgressDrawable();
+    Drawable progressDrawable = layerDrawable.findDrawableByLayerId(android.R.id.progress);
+    progressDrawable.setColorFilter(
+        ContextCompat.getColor(AppliverySdk.getCurrentActivity(), R.color.appliveryMainColor),
+        PorterDuff.Mode.SRC_IN);
   }
 
   private void initViewElementsData(UpdateInfo updateInfo) {
@@ -70,6 +81,7 @@ public class MustUpdateViewImpl extends Dialog implements UpdateView {
 
   @Override public void updateProgress(double percent) {
     updatProcessTextView(percent, new Handler(getLooper()));
+    AppliverySdk.Logger.log("Updated progress to " + percent);
   }
 
   private void updatProcessTextView(final double percent, Handler handler) {

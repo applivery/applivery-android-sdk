@@ -7,5 +7,5 @@ package com.applivery.applvsdklib.domain.appconfig.update;
 public interface LastConfigReader {
   long readLastConfigCheckTimeStamp();
 
-  boolean existLastConfig();
+  boolean notExistsLastConfig();
 }

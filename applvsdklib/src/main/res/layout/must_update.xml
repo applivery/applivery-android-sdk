@@ -56,8 +56,8 @@
 
             <ProgressBar
                 android:visibility="gone"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/must_update_progress_bar"
                 android:layout_gravity="center_horizontal"

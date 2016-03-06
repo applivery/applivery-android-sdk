@@ -10,6 +10,7 @@ import java.util.Calendar;
 public class AppConfigChecker {
 
   private static final long ONE_DAY = 86400000l;
+  private static final long TEN_SECONDS = 10000l;
 
   private final LastConfigReader lastConfigReader;
 
@@ -19,14 +20,16 @@ public class AppConfigChecker {
 
   public boolean shouldCheckAppConfigForUpdate() {
 
-    if (!lastConfigReader.existLastConfig() || AppliverySdk.isStoreRelease()) {
+    //if not exists last config request TimeStamp, app config is requested automatically
+    if (lastConfigReader.notExistsLastConfig() || AppliverySdk.isStoreRelease()) {
       return false;
     }
 
     long timeStamp = lastConfigReader.readLastConfigCheckTimeStamp();
     long diff = Calendar.getInstance().get(Calendar.MILLISECOND) - timeStamp;
 
-    if (diff > ONE_DAY) {
+    //if (diff > ONE_DAY) {
+    if (diff > TEN_SECONDS) {
       return true;
     } else {
       return false;

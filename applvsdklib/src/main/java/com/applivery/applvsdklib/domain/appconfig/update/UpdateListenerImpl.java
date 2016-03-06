@@ -47,7 +47,7 @@ public class UpdateListenerImpl implements UpdateListener {
   }
 
   private boolean appBuildNotDownloaded(String apkFileName) {
-    return externalStorageReader.fileExists(apkFileName);
+    return !externalStorageReader.fileExists(apkFileName);
   }
 
   private void installApp(String apkFileName) {

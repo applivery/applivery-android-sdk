@@ -57,7 +57,8 @@ public class AndroidExternalStorageWriterImpl implements ExternalStorageWriter {
         read = read + len;
         apk.write(buf, 0, len);
         if (downloadStatusListener != null) {
-          downloadStatusListener.updateDownloadPercentStatus(read / lenght);
+          downloadStatusListener.updateDownloadPercentStatus(
+              (Integer.valueOf(read).doubleValue() / Integer.valueOf(lenght).doubleValue())*100);
         }
       }
 
@@ -69,12 +70,12 @@ public class AndroidExternalStorageWriterImpl implements ExternalStorageWriter {
       AppliverySdk.Logger.log(e.getMessage());
     } finally {
       if (async) {
-        DownloadResult downloadResult = new DownloadResult(result, apkPath);
+        DownloadResult downloadResult = new DownloadResult(result, apkFileName);
         downloadStatusListener.downloadCompleted(downloadResult);
       }
     }
 
-    return apkPath;
+    return apkFileName;
   }
 
   private void askForPermission(final InputStream inputStream, final int lenght,
