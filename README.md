@@ -1,6 +1,7 @@
 #Applivery Android SDK  
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=master)](https://travis-ci.org/applivery/applivery-android-sdk) 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=master)](https://codecov.io/github/applivery/applivery-android-sdk)  ![Language](https://img.shields.io/badge/Language-Java-orange.svg)  ![Version](https://img.shields.io/badge/version-1.0 RC1-blue.svg)
+[![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android Apps.
 
@@ -67,14 +68,47 @@ Now you can import a local aar file using the File --> New --> New Module -->Imp
   compile project(":applvsdklib")
  ```
 
-And that's all, applivery SDK is now ready to use in your project
+And that's all, applivery SDK is now ready to use in your project. But don't forget that using this method you have to import the following libraries that applivery sdk is using:
+
+```groovy
+  compile 'com.android.support:appcompat-v7:23.0.1'
+  compile 'com.squareup.retrofit:converter-gson:2.0.0-beta1'
+  compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
+  compile 'com.squareup.retrofit:retrofit:2.0.0-beta1'
+  compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta1'
+  compile 'com.squareup.okhttp:okhttp:2.5.0'
+  compile 'com.google.code.gson:gson:2.3.1'
+  compile 'com.karumi:dexter:2.1.2'
+```
+
+## Using gradle with jitpack Maven dependency
+
+Add the following repository to your's root gradle:
+ 
+ ```groovy
+   allprojects {
+     repositories {
+       ...
+       maven { url "https://jitpack.io" }
+     }
+   }
+ ````
+
+Add the following dependency to your's app gradle:
+
+  ```groovy
+    dependencies {
+      compile 'com.github.Applivery:applivery-android-sdk:1.0.0-RC'
+    }
+  ```
+  * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
 
 ## Using gradle with nexus dependency
 
 add the following dependency to your's app gradle:
 
  ```groovy
-  compile ‘com.applivery.applivery-android-sdk:1.0-RC1'
+  compile ‘com.applivery.applivery-android-sdk:1.0'
  ```
 ### Ok! Let's go!
 
@@ -85,15 +119,18 @@ At your application start up, in a class extending from Application, you must ca
  @Override public void onCreate() {
    super.onCreate();
    Applivery.init(this, BuildConfig.APP_KEY, BuildConfig.APP_SECRET, false);
+   Applivery.setUpdateCheckingInterval(21600);
  }
  }
  ```
  
+ There we have two Applivery Methods, let's start with `Applivery.init(this, BuildConfig.APP_KEY, BuildConfig.APP_SECRET, false);`. This is the only call you have to make in order to have Applivery sdk integrated, the only thing you have to be worried about is that this call **MUST** be performed in app's `onCreate` Method.
+ 
 **IMPORTANT I:** As you can suspect, you should replace the strings `APP_KEY` and `APP_SECRET` with you api key and your app id respectively. Easy! Don't you think so?, they look like this in my build.gradle:
 
  ```groovy
- buildConfigField "String", "APP_KEY", '"569bf0f4a81d1598273a2bd1"'
- buildConfigField "String", "APP_SECRET", '"f0e46ebc297e6e9a8fa427e15e42336d4d24a33b"'
+ buildConfigField "String", "APP_KEY", '"XXXXXXXXXXXXXXXXXXXXXXXX"'
+ buildConfigField "String", "APP_SECRET", '"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"'
  ```
 
 ## About params
@@ -105,7 +142,7 @@ At your application start up, in a class extending from Application, you must ca
 	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
-** NOTE :: Readme is under manteinace**
+The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Applivery Sdk that the checking for new versions will be executed after 6 hours (21600 secons) when the app will came back from background mode. Anyway if app is destroyed and app `init` method is called again the checking for new versions will be executed again.
 
 ** NOTE :: Gradle dependency is not available on nexus repo yet **
 
