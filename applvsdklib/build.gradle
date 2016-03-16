@@ -16,7 +16,7 @@ android {
     versionCode parent.ext.androidVersionCode
     versionName parent.ext.androidVersionName
 
-    buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
+    buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
     buildConfigField LONG, "UPDATE_CHECKING_TIME", '86400000l'
   }
 
@@ -29,7 +29,6 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
-      buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
     }
   }
 
