@@ -8,7 +8,9 @@ import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.appconfig.update.AppConfigChecker;
 import com.applivery.applvsdklib.domain.appconfig.update.LastConfigReader;
 import com.applivery.applvsdklib.tools.permissions.ContextProvider;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -21,6 +23,7 @@ public class AppliveryActivityLifecycleCallbacks
   private Stack<ActivityLifecyleWrapper> activityStack = new Stack<>();
   private final AppConfigChecker appConfigChecker;
   private final Context applicationContext;
+  private final Set<String> activitiesOnRotation = new HashSet();
 
   public AppliveryActivityLifecycleCallbacks(Context applicationContext) {
     LastConfigReader lastConfigReader = new AndroidLastConfigReaderImpl();
@@ -61,17 +64,30 @@ public class AppliveryActivityLifecycleCallbacks
   @Override public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
 
   @Override public void onActivityStarted(Activity activity) {
+
+    if (activitiesOnRotation.contains(activity.getPackageName() + activity.getLocalClassName())){
+      activitiesOnRotation.remove(activity.getPackageName() + activity.getLocalClassName());
+    }else{
+      if (activityStack.empty() && !activity.isChangingConfigurations()){
+        checkForUpdates();
+      }
+    }
+
     this.activityStack.push(new ActivityLifecyleWrapper(activity, true, false));
+  }
+
+  private void checkForUpdates() {
+    if (appConfigChecker.shouldCheckAppConfigForUpdate()) {
+      AppliverySdk.obtainAppConfigForCheckUpdates();
+      AppliverySdk.continuePendingPermissionsRequestsIfPossible();
+    }
   }
 
   @Override public void onActivityResumed(Activity activity) {
     try {
+      activity.getChangingConfigurations();
       activityStack.peek().setIsPaused(false);
-      if (appConfigChecker.shouldCheckAppConfigForUpdate()) {
-        //TODO Register for phase 2 shake detector
-        AppliverySdk.obtainAppConfigForCheckUpdates();
-        AppliverySdk.continuePendingPermissionsRequestsIfPossible();
-      }
+      //TODO Register for phase 2 shake detector
     } catch (Exception e) {
       AppliverySdk.Logger.log(e.getMessage());
     }
@@ -89,6 +105,9 @@ public class AppliveryActivityLifecycleCallbacks
 
   @Override public void onActivityStopped(Activity activity) {
     try {
+      if (activity.isChangingConfigurations()){
+        activitiesOnRotation.add(activity.getPackageName() + activity.getLocalClassName());
+      }
       removeActivityFromStack(activity);
     } catch (Exception e) {
       AppliverySdk.Logger.log(e.getMessage());

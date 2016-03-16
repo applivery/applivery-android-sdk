@@ -3,6 +3,7 @@ apply plugin: 'jacoco-android'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
 def STRING = "String"
+def LONG = "long"
 
 android {
   compileSdkVersion parent.ext.androidCompileSdkVersion
@@ -15,6 +16,7 @@ android {
     versionName parent.ext.androidVersionName
 
     buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
+    buildConfigField LONG, "UPDATE_CHECKING_TIME", '86400000l'
   }
 
   buildTypes {
@@ -25,7 +27,8 @@ android {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//      buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
+      buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
+      buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
     }
   }
 

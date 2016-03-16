@@ -1,9 +1,11 @@
 package com.applivery.applvsdklib;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
@@ -36,25 +38,53 @@ public class AppliverySdk {
   private static final Object LOCK = new Object();
 
   private static Boolean sdkInitialized = false;
+  private static Boolean sdkRestarted = true;
+  private static long updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
 
   public static synchronized void sdkInitialize(Application app,
       String applicationId, String appClientToken, boolean isPlayStoreRelease) {
 
-    if (sdkInitialized) {
-
-      obtainAppConfig();
-
-      return;
-
-    }else{
+    if (!sdkInitialized) {
 
       initializeAppliveryConstants(app, applicationId, appClientToken, isPlayStoreRelease);
 
+      sdkRestarted = true;
       sdkInitialized = true;
 
-      obtainAppConfig();
+      boolean requestConfig;
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        requestConfig = !registerActivityLifecyleCallbacks(app);
+      }else{
+        requestConfig = true;
+      }
+
+      obtainAppConfig(requestConfig);
+
     }
 
+  }
+
+  /**
+   * @param app
+   * @return true if success false otherwise
+   */
+  @TargetApi(14)
+  private static boolean registerActivityLifecyleCallbacks(Application app) {
+    try {
+      app.registerActivityLifecycleCallbacks(activityLifecycle);
+      return true;
+    }catch (Exception e){
+      return false;
+    }
+  }
+
+  public static synchronized void setSdkRestartedFalse(){
+    sdkRestarted = false;
+  }
+
+  public static synchronized boolean isSdkRestarted(){
+    return sdkRestarted;
   }
 
   private static void initializeAppliveryConstants(Application app, String applicationId,
@@ -75,12 +105,10 @@ public class AppliverySdk {
     AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance(new AndroidCurrentAppInfo(applicationContext));
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager = new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
-
-    app.registerActivityLifecycleCallbacks(activityLifecycle);
   }
 
-  private static void obtainAppConfig() {
-    if (!isPlayStoreRelease){
+  private static void obtainAppConfig(boolean requestConfig) {
+    if (!isPlayStoreRelease && requestConfig){
       getExecutor().execute(ObtainAppConfigInteractor.getInstance(appliveryApiService,
           AppliverySdk.applicationId, AppliverySdk.appClientToken,
           new AndroidCurrentAppInfo(applicationContext)));
@@ -134,7 +162,7 @@ public class AppliverySdk {
 
   public static void obtainAppConfigForCheckUpdates() {
     Validate.sdkInitialized();
-    obtainAppConfig();
+    obtainAppConfig(true);
   }
 
   public static String getToken() {
@@ -159,6 +187,15 @@ public class AppliverySdk {
     applicationContext = null;
     permissionRequestManager = null ;
     activityLifecycle = null;
+    updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
+  }
+
+  public static long getUpdateCheckingTime() {
+    return updateCheckingTime;
+  }
+
+  public static void setUpdateCheckingTime(int updateCheckingTime) {
+    AppliverySdk.updateCheckingTime = new Integer(updateCheckingTime * 1000).longValue();
   }
 
   public static class Logger {

@@ -9,9 +9,6 @@ import java.util.Calendar;
  */
 public class AppConfigChecker {
 
-  private static final long ONE_DAY = 86400000l;
-  private static final long TEN_SECONDS = 10000l;
-
   private final LastConfigReader lastConfigReader;
 
   public AppConfigChecker(LastConfigReader lastConfigReader) {
@@ -20,16 +17,19 @@ public class AppConfigChecker {
 
   public boolean shouldCheckAppConfigForUpdate() {
 
-    //if not exists last config request TimeStamp, app config is requested automatically
-    if (lastConfigReader.notExistsLastConfig() || AppliverySdk.isStoreRelease()) {
-      return false;
+    if (AppliverySdk.isSdkRestarted()){
+      AppliverySdk.setSdkRestartedFalse();
+      return true;
+    }
+
+    if (lastConfigReader.notExistsLastConfig()){
+      return true;
     }
 
     long timeStamp = lastConfigReader.readLastConfigCheckTimeStamp();
-    long diff = Calendar.getInstance().get(Calendar.MILLISECOND) - timeStamp;
+    long diff = System.currentTimeMillis() - timeStamp;
 
-    //if (diff > ONE_DAY) {
-    if (diff > TEN_SECONDS) {
+    if (diff >= AppliverySdk.getUpdateCheckingTime()) {
       return true;
     } else {
       return false;

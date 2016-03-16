@@ -3,6 +3,7 @@ package com.applivery.applvsdklib.domain.appconfig;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
+import com.applivery.applvsdklib.domain.appconfig.update.LastConfigWriter;
 import com.applivery.applvsdklib.domain.appconfig.update.UpdateListenerImpl;
 import com.applivery.applvsdklib.domain.appconfig.update.UpdateType;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
@@ -10,6 +11,7 @@ import com.applivery.applvsdklib.domain.model.Android;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.requests.ExternalStorageReader;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
@@ -22,15 +24,18 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
 
   private final CurrentAppInfo currentAppInfo;
   private final AppliveryApiService appliveryApiService;
+  private final LastConfigWriter lastConfigWriter;
 
   public ObtainAppConfigInteractorCallback(AppliveryApiService appliveryApiService,
       CurrentAppInfo currentAppInfo) {
     this.currentAppInfo = currentAppInfo;
     this.appliveryApiService = appliveryApiService;
+    this.lastConfigWriter = new AndroidLastConfigWriterImpl();
   }
 
   @Override public void onSuccess(AppConfig appConfig) {
     UpdateType updateType = checkForUpdates(appConfig);
+    lastConfigWriter.writeLastConfigCheckTimeStamp(System.currentTimeMillis());
     UpdateViewPresenter presenter = new UpdateViewPresenter(getUpdateListener(appConfig));
     showUpdate(presenter, updateType, appConfig);
   }

@@ -10,7 +10,8 @@ public class Applivery {
   /**
    * Initializes Sdk for the current app and developer. Call this method from your application
    * instance when onCreate method is called. Pay attention to description of isPlayStoreRelease
-   * param
+   * param.
+   *
    * @param app your app instance, it can't be null.
    * @param applicationId your app id. You can find this value at applivery dashboard in your
    * app section
@@ -23,5 +24,17 @@ public class Applivery {
   public static void init(Application app,
       String applicationId, String appClientToken, boolean isPlayStoreRelease) {
     AppliverySdk.sdkInitialize(app, applicationId, appClientToken, isPlayStoreRelease);
+  }
+
+  /**
+   * Sets the time to wait between one check for update request and another. If this time has
+   * been rebased since last checking, when app comes from background will request again to
+   * applivery server for updates.
+   *
+   * @param seconds int with seconds behind checking for new versions will be executed
+   * comming from background
+   */
+  public static void setUpdateCheckingInterval(int seconds){
+    AppliverySdk.setUpdateCheckingTime(seconds);
   }
 }
