@@ -4,7 +4,7 @@ import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.network.api.requests.mappers.ObtainBuildDownloadTokenResponseMapper;
 import com.applivery.applvsdklib.network.api.responses.ApiBuildTokenResponse;
-import retrofit.Call;
+import retrofit2.Call;
 
 /**
  * Created by Sergio Martinez Rodriguez

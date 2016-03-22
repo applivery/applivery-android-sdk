@@ -6,7 +6,7 @@ import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
 import com.applivery.applvsdklib.network.api.requests.mappers.ApiFeedbackRequestMapper;
 import com.applivery.applvsdklib.network.api.responses.ApiFeedbackResponse;
-import retrofit.Call;
+import retrofit2.Call;
 
 /**
  * Created by Sergio Martinez Rodriguez

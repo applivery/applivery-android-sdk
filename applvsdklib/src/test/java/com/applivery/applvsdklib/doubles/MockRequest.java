@@ -4,7 +4,7 @@ import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.network.api.requests.ServerRequest;
 import com.applivery.applvsdklib.network.api.responses.ServerResponse;
 import com.applivery.applvsdklib.utils.AppliveryTestApi;
-import retrofit.Call;
+import retrofit2.Call;
 
 /**
  * Created by Sergio Martinez Rodriguez

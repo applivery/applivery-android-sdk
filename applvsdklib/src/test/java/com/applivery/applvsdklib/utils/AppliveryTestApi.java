@@ -3,10 +3,10 @@ package com.applivery.applvsdklib.utils;
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
 import com.applivery.applvsdklib.network.api.responses.ApiBuildTokenResponse;
 import com.squareup.okhttp.ResponseBody;
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Path;
-import retrofit.http.Streaming;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 
 /**
  * Created by Sergio Martinez Rodriguez

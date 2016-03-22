@@ -5,9 +5,10 @@ import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.DownloadResult;
-import com.squareup.okhttp.ResponseBody;
 import java.io.InputStream;
-import retrofit.Call;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -38,7 +39,7 @@ public class DownloadBuildRequest extends ServerRequest {
     Call<ResponseBody> response = apiService.downloadBuild(token.getBuild(), token.getToken());
 
     try {
-      retrofit.Response<ResponseBody> apiResponse = response.execute();
+      Response<ResponseBody> apiResponse = response.execute();
 
       int lenght = Integer.parseInt(apiResponse.headers().get("Content-Length"));
       InputStream in = apiResponse.body().byteStream();

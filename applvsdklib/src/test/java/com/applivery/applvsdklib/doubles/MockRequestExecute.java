@@ -7,7 +7,7 @@ import com.applivery.applvsdklib.network.api.requests.mappers.BaseMapper;
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
 import com.applivery.applvsdklib.network.api.responses.ServerResponse;
 import com.applivery.applvsdklib.utils.AppliveryTestApi;
-import retrofit.Call;
+import retrofit2.Call;
 
 /**
  * Created by Sergio Martinez Rodriguez

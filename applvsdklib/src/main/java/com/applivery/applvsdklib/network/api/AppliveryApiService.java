@@ -4,13 +4,13 @@ import com.applivery.applvsdklib.network.api.requests.ApiFeedbackRequestData;
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
 import com.applivery.applvsdklib.network.api.responses.ApiBuildTokenResponse;
 import com.applivery.applvsdklib.network.api.responses.ApiFeedbackResponse;
-import com.squareup.okhttp.ResponseBody;
-import retrofit.Call;
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.POST;
-import retrofit.http.Path;
-import retrofit.http.Streaming;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 
 /**
  * Created by Sergio Martinez Rodriguez

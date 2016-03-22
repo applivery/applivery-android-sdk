@@ -2,10 +2,10 @@ package com.applivery.applvsdklib.network.api;
 
 import com.applivery.applvsdklib.BuildConfig;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -17,13 +17,13 @@ public class AppliveryApiServiceBuilder {
 
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
 
-    OkHttpClient okHttpClient = new OkHttpClient();
-    okHttpClient.interceptors().add(new HeadersInterceptor(androidCurrentAppInfo));
-    if (BuildConfig.DEBUG){ okHttpClient.interceptors().add(loggingInterceptor);}
+    OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+    okHttpClientBuilder.interceptors().add(new HeadersInterceptor(androidCurrentAppInfo));
+    if (BuildConfig.DEBUG){ okHttpClientBuilder.interceptors().add(loggingInterceptor);}
 
     return new Retrofit.Builder().baseUrl(BuildConfig.API_URL)
         .addConverterFactory(GsonConverterFactory.create())
-        .client(okHttpClient)
+        .client(okHttpClientBuilder.build())
         .build()
         .create(AppliveryApiService.class);
   }

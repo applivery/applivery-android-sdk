@@ -5,8 +5,8 @@ import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.responses.ApiAppliveryServerErrorResponse;
 import com.applivery.applvsdklib.network.api.responses.ServerResponse;
 import java.io.IOException;
-import retrofit.Call;
-import retrofit.Response;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public abstract class ServerRequest {
 

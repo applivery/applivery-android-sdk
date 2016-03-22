@@ -6,7 +6,7 @@ import com.applivery.applvsdklib.network.api.requests.mappers.AndroidMapper;
 import com.applivery.applvsdklib.network.api.requests.mappers.ApiAppConfigResponseMapper;
 import com.applivery.applvsdklib.network.api.requests.mappers.SdkMapper;
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
-import retrofit.Call;
+import retrofit2.Call;
 
 /**
  * Created by Sergio Martinez Rodriguez
