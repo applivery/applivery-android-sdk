@@ -1,6 +1,6 @@
 #Applivery Android SDK  
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=master)](https://travis-ci.org/applivery/applivery-android-sdk) 
-[![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=master)](https://codecov.io/github/applivery/applivery-android-sdk)  ![Language](https://img.shields.io/badge/Language-Java-orange.svg)  ![Version](https://img.shields.io/badge/version-1.0 RC2-blue.svg)
+[![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=master)](https://codecov.io/github/applivery/applivery-android-sdk)  ![Language](https://img.shields.io/badge/Language-Java-orange.svg)  ![Version](https://img.shields.io/badge/version-1.0 RC3-blue.svg)
 [![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android Apps.
@@ -108,7 +108,7 @@ Add the following dependency to your's app gradle:
 add the following dependency to your's app gradle:
 
  ```groovy
-  compile ‘com.applivery.applivery-android-sdk:1.0'
+  compile ‘com.applivery:applivery-android-sdk:1.0.0'
  ```
 ### Ok! Let's go!
 
@@ -143,8 +143,6 @@ At your application start up, in a class extending from Application, you must ca
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
 The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Applivery Sdk that the checking for new versions will be executed after 6 hours (21600 secons) when the app will came back from background mode. Anyway if app is destroyed and app `init` method is called again the checking for new versions will be executed again.
-
-** NOTE :: Gradle dependency is not available on nexus repo yet **
 
 License
 =======
