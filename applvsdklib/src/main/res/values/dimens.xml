@@ -2,6 +2,7 @@
 <resources>
   <dimen name="appNameLayoutSize">45dp</dimen>
   <dimen name="mustUpdateScreenPadding">16dp</dimen>
+  <dimen name="mustUpdateScreenUpdateMessageMargin">16dp</dimen>
   <dimen name="updateButtonContainerMargin">20dp</dimen>
   <dimen name="suggestedUpdateAlertMargin">20dp</dimen>
   <dimen name="suggestedUpdateMessageContainerMargin">20dp</dimen>
