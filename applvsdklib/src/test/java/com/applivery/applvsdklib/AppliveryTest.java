@@ -5,7 +5,6 @@ import android.content.Context;
 import com.applivery.applvsdklib.domain.exceptions.AppliverySdkNotInitializedException;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import java.util.concurrent.Executor;
-import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;

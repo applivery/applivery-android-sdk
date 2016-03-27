@@ -1,7 +1,6 @@
 package com.applivery.applvsdklib.domain.appconfig.update;
 
 import com.applivery.applvsdklib.AppliverySdk;
-import java.util.Calendar;
 
 /**
  * Created by Sergio Martinez Rodriguez

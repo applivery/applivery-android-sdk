@@ -17,7 +17,6 @@ import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Sergio Martinez Rodriguez
