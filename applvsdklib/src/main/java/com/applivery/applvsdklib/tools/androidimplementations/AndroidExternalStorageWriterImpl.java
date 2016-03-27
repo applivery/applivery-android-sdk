@@ -85,7 +85,11 @@ public class AndroidExternalStorageWriterImpl implements ExternalStorageWriter {
         new UserPermissionRequestResponseListener() {
           @Override public void onPermissionAllowed(boolean permissionAllowed) {
             if (permissionAllowed) {
-              write(inputStream, lenght, downloadStatusListener, apkFileName, true);
+              new Thread(new Runnable() {
+                @Override public void run() {
+                  write(inputStream, lenght, downloadStatusListener, apkFileName, true);
+                }
+              }).start();
             }
           }
         }, AppliverySdk.getCurrentActivity());
