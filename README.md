@@ -1,10 +1,9 @@
 #Applivery Android SDK  
+![Language](https://img.shields.io/badge/Language-Java-orange.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=master)](https://travis-ci.org/applivery/applivery-android-sdk) 
-[![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=master)](https://codecov.io/github/applivery/applivery-android-sdk)  ![Language](https://img.shields.io/badge/Language-Java-orange.svg)  ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-[![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
+[![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=master)](https://codecov.io/github/applivery/applivery-android-sdk)   
 ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-android-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-android-sdk)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android Apps.
 
@@ -85,6 +84,7 @@ And that's all, applivery SDK is now ready to use in your project. But don't for
 ```
 
 ## Using gradle with jitpack Maven dependency
+[![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
 
 Add the following repository to your's root gradle:
  
@@ -107,6 +107,8 @@ Add the following dependency to your's app gradle:
   * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
 
 ## Using gradle with nexus dependency
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-android-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-android-sdk)
 
 add the following dependency to your's app gradle:
 
