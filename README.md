@@ -2,8 +2,7 @@
 ![Language](https://img.shields.io/badge/Language-Java-orange.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=master)](https://travis-ci.org/applivery/applivery-android-sdk) 
-[![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=master)](https://codecov.io/github/applivery/applivery-android-sdk)   
-![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
+[![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=master)](https://codecov.io/github/applivery/applivery-android-sdk) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android Apps.
 
