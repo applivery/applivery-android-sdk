@@ -38,7 +38,7 @@ public class SensorEventsController {
   public static SensorEventsController getInstance(Context applicationContext){
     try {
       return getWorkingInstance(applicationContext);
-    }catch (AppliveryNotHasNoSensorsToManageEventsException appliveryException){
+    }catch (Exception appliveryException){
       AppliverySdk.Logger.log(appliveryException.getMessage());
       return getEmptyInstance();
     }
