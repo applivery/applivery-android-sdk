@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.appconfig.update.AppConfigChecker;
 import com.applivery.applvsdklib.domain.appconfig.update.LastConfigReader;
+import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
 import com.applivery.applvsdklib.tools.permissions.ContextProvider;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,12 +24,14 @@ public class AppliveryActivityLifecycleCallbacks
   private Stack<ActivityLifecyleWrapper> activityStack = new Stack<>();
   private final AppConfigChecker appConfigChecker;
   private final Context applicationContext;
+  private final SensorEventsController sensorEventsController;
   private final Set<String> activitiesOnRotation = new HashSet();
 
   public AppliveryActivityLifecycleCallbacks(Context applicationContext) {
     LastConfigReader lastConfigReader = new AndroidLastConfigReaderImpl();
     this.appConfigChecker = new AppConfigChecker(lastConfigReader);
     this.applicationContext = applicationContext;
+    this.sensorEventsController = SensorEventsController.getInstance(applicationContext);
   }
 
   public Activity getCurrentActivity() {
@@ -69,11 +72,16 @@ public class AppliveryActivityLifecycleCallbacks
       activitiesOnRotation.remove(activity.getPackageName() + activity.getLocalClassName());
     }else{
       if (activityStack.empty() && !activity.isChangingConfigurations()){
-        checkForUpdates();
+        appWillReturnfromBackground();
       }
     }
 
     this.activityStack.push(new ActivityLifecyleWrapper(activity, true, false));
+  }
+
+  private void appWillReturnfromBackground() {
+    checkForUpdates();
+    sensorEventsController.registerAllSensorsForApplication();
   }
 
   private void checkForUpdates() {
@@ -87,7 +95,6 @@ public class AppliveryActivityLifecycleCallbacks
     try {
       activity.getChangingConfigurations();
       activityStack.peek().setIsPaused(false);
-      //TODO Register for phase 2 shake detector
     } catch (Exception e) {
       AppliverySdk.Logger.log(e.getMessage());
     }
@@ -97,7 +104,6 @@ public class AppliveryActivityLifecycleCallbacks
   @Override public void onActivityPaused(Activity activity) {
     try {
       activityStack.peek().setIsPaused(true);
-      //TODO Unregister for phase 2 shake detector
     } catch (Exception e) {
       AppliverySdk.Logger.log(e.getMessage());
     }
@@ -107,11 +113,17 @@ public class AppliveryActivityLifecycleCallbacks
     try {
       if (activity.isChangingConfigurations()){
         activitiesOnRotation.add(activity.getPackageName() + activity.getLocalClassName());
+      }else if (activityStack.size() <= 1){
+          appWillEnterBackground();
       }
       removeActivityFromStack(activity);
     } catch (Exception e) {
       AppliverySdk.Logger.log(e.getMessage());
     }
+  }
+
+  private void appWillEnterBackground() {
+    sensorEventsController.unRegisterAllSensorsForApplication();
   }
 
   @Override public void onActivityDestroyed(Activity activity) {}

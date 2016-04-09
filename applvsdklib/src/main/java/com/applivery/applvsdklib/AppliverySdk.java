@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
@@ -195,6 +196,10 @@ public class AppliverySdk {
 
   public static void setUpdateCheckingTime(int updateCheckingTime) {
     AppliverySdk.updateCheckingTime = new Integer(updateCheckingTime * 1000).longValue();
+  }
+
+  public static void sendFeedbackOnShake() {
+    Toast.makeText(applicationContext, "You shake your phone", Toast.LENGTH_SHORT).show();
   }
 
   public static class Logger {

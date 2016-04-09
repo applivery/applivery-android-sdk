@@ -1,4 +1,4 @@
-package com.applivery.applvsdklib.tools.androidimplementations;
+package com.applivery.applvsdklib.tools.androidimplementations.sensors;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -30,16 +30,16 @@ public class ShakeDetector implements SensorEventListener {
   private long mShakeTimestamp;
   private int mShakeCount;
 
-  public void setOnShakeListener(OnShakeListener listener) {
+  public ShakeDetector(OnShakeListener listener) {
     this.mListener = listener;
   }
 
   public interface OnShakeListener {
-    public void onShake(int count);
+    void onShake(int count);
   }
 
   @Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    // ignore
+
   }
 
   @Override public void onSensorChanged(SensorEvent event) {
