@@ -224,18 +224,13 @@ public class AppliverySdk {
 
   public static void requestForUserFeedBack() {
 
-    FeedbackView feedbackView = UserFeedbackView.getInstance();
+    FeedbackView feedbackView = UserFeedbackView.getInstance(appliveryApiService);
 
     if (feedbackView.isNotShowing()){
       ScreenCapture screenCapture = ScreenCaptureUtils.getScreenCapture(getCurrentActivity());
       feedbackView.setScreenCapture(screenCapture);
       feedbackView.show();
     }
-
-
-    //Toast.makeText(applicationContext, "You shake your phone", Toast.LENGTH_SHORT).show();
-    //Feedback feedback = new UserFeedback();
-    //getExecutor().execute(FeedbackInteractor.getInstance(appliveryApiService, feedback));
   }
 
   public static class Logger {

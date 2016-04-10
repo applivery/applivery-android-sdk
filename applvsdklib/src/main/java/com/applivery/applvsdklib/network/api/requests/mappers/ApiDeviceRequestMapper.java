@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.domain.model;
+package com.applivery.applvsdklib.network.api.requests.mappers;
 
-import com.applivery.applvsdklib.ui.model.ScreenCapture;
+import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
+import com.applivery.applvsdklib.network.api.model.ApiDeviceData;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 3/1/16.
+ * Date 10/4/16.
  */
-public interface Feedback {
-  void setType(FeedBackType bug);
+public class ApiDeviceRequestMapper implements RequestMapper<FeedbackWrapper, ApiDeviceData>{
 
-  void attachScreenshot(boolean activated);
+  @Override public ApiDeviceData modelToData(FeedbackWrapper feedbackWrapper) {
 
-  boolean mustAttachScreenshot();
+    String model = feedbackWrapper.getModel();
+    String vendor = feedbackWrapper.getVendor();
+    String type = feedbackWrapper.getType();
 
-  void setMessage(String feedbackMessage);
-
-  void setScreenCapture(ScreenCapture screenCapture);
+    return new ApiDeviceData(model,vendor, type);
+  }
 
 }

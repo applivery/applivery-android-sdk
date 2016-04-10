@@ -32,8 +32,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.Toast;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
 /**
@@ -65,9 +67,10 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     this.userFeedbackPresenter = new UserFeedbackPresenter(this);
   }
 
-  public static FeedbackView getInstance() {
+  public static FeedbackView getInstance(AppliveryApiService appliveryApiService) {
     if (userFeedbackView == null){
       userFeedbackView = new UserFeedbackView();
+      userFeedbackView.userFeedbackPresenter.setAppliveryApiService(appliveryApiService);
     }
 
     return userFeedbackView;
@@ -205,7 +208,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override public void cleanScreenData() {
     hideFormElements();
-    screenShotSwitch.setSelected(true);
+    screenShotSwitch.setChecked(true);
     screenshot.setImageResource(android.R.color.transparent);
     feedbackImage.setImageResource(android.R.color.transparent);
     feedbackImage.setVisibility(View.VISIBLE);
@@ -251,4 +254,5 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
       return !getDialog().isShowing();
     }
   }
+
 }

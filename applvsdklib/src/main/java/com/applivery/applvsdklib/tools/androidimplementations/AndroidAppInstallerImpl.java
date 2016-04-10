@@ -20,7 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import com.applivery.applvsdklib.domain.download.app.AppInstaller;
-import com.applivery.applvsdklib.network.api.requests.ExternalStorageReader;
+import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
 
 /**
  * Created by Sergio Martinez Rodriguez

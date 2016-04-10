@@ -20,7 +20,12 @@ import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
+import com.applivery.applvsdklib.network.api.model.ApiFeedbackData;
+import com.applivery.applvsdklib.network.api.requests.mappers.ApiDeviceInfoRequestMapper;
+import com.applivery.applvsdklib.network.api.requests.mappers.ApiDeviceRequestMapper;
 import com.applivery.applvsdklib.network.api.requests.mappers.ApiFeedbackRequestMapper;
+import com.applivery.applvsdklib.network.api.requests.mappers.ApiOsRequestMapper;
+import com.applivery.applvsdklib.network.api.requests.mappers.ApiPackageInfoRequestMapper;
 import com.applivery.applvsdklib.network.api.responses.ApiFeedbackResponse;
 import retrofit2.Call;
 
@@ -30,8 +35,6 @@ import retrofit2.Call;
  */
 public class FeedbackRequest extends ServerRequest {
 
-  //TODO next release stuff
-
   private final AppliveryApiService apiService;
   private final FeedbackWrapper feedbackWrapper;
   private final ApiFeedbackRequestMapper apiFeedbackRequestMapper;
@@ -39,11 +42,24 @@ public class FeedbackRequest extends ServerRequest {
   public FeedbackRequest(AppliveryApiService apiService, FeedbackWrapper feedbackWrapper) {
     this.apiService = apiService;
     this.feedbackWrapper = feedbackWrapper;
-    this.apiFeedbackRequestMapper = new ApiFeedbackRequestMapper();
+    this.apiFeedbackRequestMapper = createMappers();
+  }
+
+  private ApiFeedbackRequestMapper createMappers() {
+
+    ApiOsRequestMapper apiOsRequestMapper = new ApiOsRequestMapper();
+    ApiDeviceRequestMapper apiDeviceRequestMapper = new ApiDeviceRequestMapper();
+
+    ApiDeviceInfoRequestMapper apiDeviceInfoRequestMapper =
+        new ApiDeviceInfoRequestMapper(apiDeviceRequestMapper, apiOsRequestMapper);
+
+    ApiPackageInfoRequestMapper apiPackageInfoRequestMapper = new ApiPackageInfoRequestMapper();
+
+    return new ApiFeedbackRequestMapper(apiPackageInfoRequestMapper, apiDeviceInfoRequestMapper);
   }
 
   @Override protected BusinessObject performRequest() {
-    ApiFeedbackRequestData apiFeedbackData = apiFeedbackRequestMapper.modelToData(feedbackWrapper);
+    ApiFeedbackData apiFeedbackData = apiFeedbackRequestMapper.modelToData(feedbackWrapper);
     Call<ApiFeedbackResponse> response = apiService.sendFeedback(apiFeedbackData);
     ApiFeedbackResponse apiFeedbackResponse = super.performRequest(response);
     return new FeedbackResult(apiFeedbackResponse.getStatus());

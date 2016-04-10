@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.domain.model;
+package com.applivery.applvsdklib.domain.download.app;
 
-import com.applivery.applvsdklib.ui.model.ScreenCapture;
+import com.applivery.applvsdklib.tools.androidimplementations.AppPathReceiver;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 3/1/16.
+ * Date 9/1/16.
  */
-public interface Feedback {
-  void setType(FeedBackType bug);
-
-  void attachScreenshot(boolean activated);
-
-  boolean mustAttachScreenshot();
-
-  void setMessage(String feedbackMessage);
-
-  void setScreenCapture(ScreenCapture screenCapture);
-
+public interface ExternalStorageReader {
+  boolean fileExists(String apkFileName);
+  void getPath(String apkFileName, AppPathReceiver appPathReceiver);
 }

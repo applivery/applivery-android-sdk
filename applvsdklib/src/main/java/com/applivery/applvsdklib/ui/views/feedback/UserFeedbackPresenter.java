@@ -16,26 +16,36 @@
 
 package com.applivery.applvsdklib.ui.views.feedback;
 
-import android.widget.Toast;
 import com.applivery.applvsdklib.AppliverySdk;
+import com.applivery.applvsdklib.domain.InteractorCallback;
+import com.applivery.applvsdklib.domain.feedback.FeedbackInteractor;
+import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.FeedBackType;
 import com.applivery.applvsdklib.domain.model.Feedback;
+import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
+import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 10/4/16.
  */
-public class UserFeedbackPresenter{
+public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>{
 
-  final FeedbackView feedbackView;
-  final Feedback feedback;
+  private final FeedbackView feedbackView;
+  private final Feedback feedback;
+  private AppliveryApiService appliveryApiService;
   private ScreenCapture screenCapture;
 
   public UserFeedbackPresenter(FeedbackView feedbackView) {
     this.feedbackView = feedbackView;
     this.feedback = new UserFeedback();
+  }
+
+  public void setAppliveryApiService(AppliveryApiService appliveryApiService) {
+    this.appliveryApiService = appliveryApiService;
   }
 
   public void cancelButtonPressed() {
@@ -79,7 +89,24 @@ public class UserFeedbackPresenter{
     return screenCapture;
   }
 
-  public void sendFeedbackInfo(String s) {
-    Toast.makeText(AppliverySdk.getCurrentActivity(), "Feedback Ready", Toast.LENGTH_SHORT).show();
+  public void sendFeedbackInfo(String feedbackMessage) {
+    feedback.setMessage(feedbackMessage);
+
+    if (feedback.mustAttachScreenshot()){
+      feedback.setScreenCapture(screenCapture);
+    }
+
+    AppliverySdk.getExecutor().execute(FeedbackInteractor.getInstance(appliveryApiService, feedback));
+
+  }
+
+  @Override public void onSuccess(FeedbackResult businessObject) {
+    feedbackView.cleanScreenData();
+    feedbackView.dismissFeedBack();
+  }
+
+  @Override public void onError(ErrorObject error) {
+    ShowErrorAlert showErrorAlert = new ShowErrorAlert();
+    showErrorAlert.showError(error);
   }
 }

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.model;
+package com.applivery.applvsdklib.domain.download.app;
+
+import com.applivery.applvsdklib.domain.model.DownloadResult;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 2/1/16.
+ * Date 9/1/16.
  */
-public class ApiFeedbackResponseData {
-  //TODO next release stuff
+public interface DownloadStatusListener {
+
+  void updateDownloadPercentStatus(double percent);
+
+  void downloadCompleted(DownloadResult downloadResult);
+
 }

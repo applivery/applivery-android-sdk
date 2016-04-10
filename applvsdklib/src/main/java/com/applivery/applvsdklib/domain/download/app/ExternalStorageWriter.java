@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.requests;
+package com.applivery.applvsdklib.domain.download.app;
 
-import com.applivery.applvsdklib.domain.model.DownloadResult;
+import java.io.InputStream;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 9/1/16.
  */
-public interface DownloadStatusListener {
+public interface ExternalStorageWriter {
 
-  void updateDownloadPercentStatus(double percent);
-
-  void downloadCompleted(DownloadResult downloadResult);
-
+  String writeToFile(InputStream inputStream, int lenght,
+      DownloadStatusListener downloadStatusListener, String apkFileName);
 }

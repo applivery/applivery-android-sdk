@@ -21,11 +21,66 @@ package com.applivery.applvsdklib.domain.model;
  * Date 3/1/16.
  */
 public class FeedbackWrapper {
+  private String packageName;
+  private String appVersionName;
+  private String osName;
+  private String screenShotBase64;
+  private String feedBackMessage;
+  private String vendor;
+  private String model;
+  private String type;
+  private String appId;
+  private String bugType;
+  private String osVersion;
 
   //TODO next release stuff
 
   public static FeedbackWrapper createWrapper(Feedback feedback) {
     FeedbackWrapper feedbackWrapper = new FeedbackWrapper();
     return feedbackWrapper;
+  }
+
+  public String getPackageName() {
+    return packageName;
+  }
+
+  public String getAppVersionName() {
+    return appVersionName;
+  }
+
+  public String getOsName() {
+    return osName;
+  }
+
+  public String getScreenShotBase64() {
+    return screenShotBase64;
+  }
+
+  public String getFeedBackMessage() {
+    return feedBackMessage;
+  }
+
+  public String getVendor() {
+    return vendor;
+  }
+
+  public String getModel() {
+    return model;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public String getAppId() {
+    return appId;
+  }
+
+  public String getBugType() {
+    return bugType;
+  }
+
+  public String getOsVersion() {
+    return osVersion;
   }
 }

@@ -20,7 +20,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.download.permissions.ReadExternalPermission;
-import com.applivery.applvsdklib.network.api.requests.ExternalStorageReader;
+import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
 import java.io.File;

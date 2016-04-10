@@ -17,6 +17,8 @@
 package com.applivery.applvsdklib.network.api.requests;
 
 import com.applivery.applvsdklib.AppliverySdk;
+import com.applivery.applvsdklib.domain.download.app.DownloadStatusListener;
+import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;

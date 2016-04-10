@@ -16,6 +16,8 @@
 
 package com.applivery.applvsdklib.domain.model;
 
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
+
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
@@ -24,6 +26,8 @@ public class UserFeedback implements Feedback {
 
   private FeedBackType feedBackType;
   private boolean screenshotAttached;
+  private String feedbackMessage;
+  private ScreenCapture screenCapture;
 
   @Override public void setType(FeedBackType feedBackType) {
     this.feedBackType = feedBackType;
@@ -33,5 +37,15 @@ public class UserFeedback implements Feedback {
     this.screenshotAttached = activated;
   }
 
+  @Override public boolean mustAttachScreenshot() {
+    return screenshotAttached;
+  }
 
+  @Override public void setMessage(String feedbackMessage) {
+    this.feedbackMessage = feedbackMessage;
+  }
+
+  @Override public void setScreenCapture(ScreenCapture screenCapture) {
+    this.screenCapture = screenCapture;
+  }
 }

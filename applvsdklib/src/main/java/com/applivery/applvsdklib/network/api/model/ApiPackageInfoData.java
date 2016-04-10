@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.domain.model;
+package com.applivery.applvsdklib.network.api.model;
 
-import com.applivery.applvsdklib.ui.model.ScreenCapture;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 3/1/16.
+ * Date 10/4/16.
  */
-public interface Feedback {
-  void setType(FeedBackType bug);
+public class ApiPackageInfoData {
 
-  void attachScreenshot(boolean activated);
+  @SerializedName("name") @Expose private final String name;
+  @SerializedName("version") @Expose private final String version;
 
-  boolean mustAttachScreenshot();
-
-  void setMessage(String feedbackMessage);
-
-  void setScreenCapture(ScreenCapture screenCapture);
-
+  public ApiPackageInfoData(String name, String version) {
+    this.name = name;
+    this.version = version;
+  }
 }

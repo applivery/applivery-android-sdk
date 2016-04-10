@@ -16,7 +16,6 @@
 
 package com.applivery.applvsdklib.domain.feedback;
 
-import android.app.Activity;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
@@ -32,8 +31,6 @@ import com.applivery.applvsdklib.network.api.requests.FeedbackRequest;
  * Date 3/1/16.
  */
 public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
-
-  //TODO next release stuff
 
   private final FeedbackRequest feedbackRequest;
   private final InteractorCallback feedbackCallback;

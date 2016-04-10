@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.requests;
+package com.applivery.applvsdklib.network.api.requests.mappers;
 
-import java.io.InputStream;
+import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
+import com.applivery.applvsdklib.network.api.model.ApiOsData;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 9/1/16.
+ * Date 10/4/16.
  */
-public interface ExternalStorageWriter {
+public class ApiOsRequestMapper implements RequestMapper<FeedbackWrapper, ApiOsData>{
 
-  String writeToFile(InputStream inputStream, int lenght,
-      DownloadStatusListener downloadStatusListener, String apkFileName);
+  @Override public ApiOsData modelToData(FeedbackWrapper feedbackWrapper) {
+
+    String name = feedbackWrapper.getOsName();
+    String version = feedbackWrapper.getOsVersion();
+
+    return new ApiOsData(name, version);
+  }
 }

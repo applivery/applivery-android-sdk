@@ -17,19 +17,40 @@
 package com.applivery.applvsdklib.network.api.requests.mappers;
 
 import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
-import com.applivery.applvsdklib.network.api.requests.ApiFeedbackRequestData;
+import com.applivery.applvsdklib.network.api.model.ApiDeviceInfoData;
+import com.applivery.applvsdklib.network.api.model.ApiFeedbackData;
+import com.applivery.applvsdklib.network.api.model.ApiPackageInfoData;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
 public class ApiFeedbackRequestMapper
-    implements RequestMapper<FeedbackWrapper, ApiFeedbackRequestData> {
+    implements RequestMapper<FeedbackWrapper, ApiFeedbackData> {
 
-  @Override public ApiFeedbackRequestData modelToData(FeedbackWrapper feedbackWrapper) {
-    ApiFeedbackRequestData apiFeedbackData = new ApiFeedbackRequestData();
-    //TODO implement mapping of fields
-    //TODO next release stuff
+  private final ApiPackageInfoRequestMapper packageInfoMapper;
+  private final ApiDeviceInfoRequestMapper deviceInfoMapper;
+
+  public ApiFeedbackRequestMapper(ApiPackageInfoRequestMapper packageInfoMapper,
+      ApiDeviceInfoRequestMapper deviceInfoMapper) {
+    this.packageInfoMapper = packageInfoMapper;
+    this.deviceInfoMapper = deviceInfoMapper;
+  }
+
+
+  @Override public ApiFeedbackData modelToData(FeedbackWrapper feedbackWrapper) {
+
+    String app = feedbackWrapper.getAppId();
+    String type = feedbackWrapper.getBugType();
+    String meessage = feedbackWrapper.getFeedBackMessage();
+    String screenShotBase64 = feedbackWrapper.getScreenShotBase64();
+
+    ApiPackageInfoData apiPackageInfoData = packageInfoMapper.modelToData(feedbackWrapper);
+    ApiDeviceInfoData apiDeviceInfoData = deviceInfoMapper.modelToData(feedbackWrapper);
+
+    ApiFeedbackData apiFeedbackData = new ApiFeedbackData(app, type, meessage, apiPackageInfoData,
+        apiDeviceInfoData, screenShotBase64);
+
     return apiFeedbackData;
   }
 }

@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.domain.model;
-
-import com.applivery.applvsdklib.ui.model.ScreenCapture;
+package com.applivery.applvsdklib.network.api.responses;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 3/1/16.
+ * Date 2/1/16.
  */
-public interface Feedback {
-  void setType(FeedBackType bug);
-
-  void attachScreenshot(boolean activated);
-
-  boolean mustAttachScreenshot();
-
-  void setMessage(String feedbackMessage);
-
-  void setScreenCapture(ScreenCapture screenCapture);
-
+public class ApiFeedbackResponseData {
+  //TODO next release stuff
 }
