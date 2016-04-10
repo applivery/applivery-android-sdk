@@ -16,8 +16,10 @@
 
 package com.applivery.applvsdklib.domain.feedback;
 
+import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
+import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.Feedback;
@@ -25,6 +27,9 @@ import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.FeedbackRequest;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidDeviceDetailsInfo;
+import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackPresenter;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -32,17 +37,17 @@ import com.applivery.applvsdklib.network.api.requests.FeedbackRequest;
  */
 public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
 
-  //TODO next release stuff
-
   private final FeedbackRequest feedbackRequest;
   private final InteractorCallback feedbackCallback;
   private final FeedbackWrapper feedbackWrapper;
 
-  public FeedbackInteractor(FeedbackRequest feedbackRequest, InteractorCallback feedbackCallback,
-      Feedback feedback, AppliveryApiService appliveryApiService) {
-    this.feedbackWrapper = FeedbackWrapper.createWrapper(feedback);
+  public FeedbackInteractor(AppliveryApiService appliveryApiService, Feedback feedback,
+      CurrentAppInfo currentAppInfo, DeviceDetailsInfo deviceDetailsInfo,
+      InteractorCallback interactorCallback) {
+
+    this.feedbackWrapper = FeedbackWrapper.createWrapper(feedback, currentAppInfo, deviceDetailsInfo);
     this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedbackWrapper);
-    this.feedbackCallback = feedbackCallback;
+    this.feedbackCallback = interactorCallback;
   }
 
   @Override protected void receivedResponse(BusinessObject result) {
@@ -58,7 +63,18 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
   }
 
   @Override protected BusinessObject performRequest() {
-    //TODO transform fee
     return feedbackRequest.execute();
+  }
+
+  public static Runnable getInstance(AppliveryApiService service, Feedback feedback, UserFeedbackPresenter
+      userFeedbackPresenter) {
+
+    CurrentAppInfo currentAppInfo = new AndroidCurrentAppInfo(AppliverySdk.getApplicationContext());
+    DeviceDetailsInfo deviceDetailsInfo = new AndroidDeviceDetailsInfo();
+
+    FeedbackInteractor feedbackInteractor = new FeedbackInteractor(service, feedback,
+        currentAppInfo, deviceDetailsInfo, userFeedbackPresenter);
+
+    return feedbackInteractor;
   }
 }

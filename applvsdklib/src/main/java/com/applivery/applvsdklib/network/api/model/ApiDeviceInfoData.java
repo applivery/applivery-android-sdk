@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.requests;
+package com.applivery.applvsdklib.network.api.model;
 
-import com.applivery.applvsdklib.tools.androidimplementations.AppPathReceiver;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 9/1/16.
+ * Date 10/4/16.
  */
-public interface ExternalStorageReader {
-  boolean fileExists(String apkFileName);
-  void getPath(String apkFileName, AppPathReceiver appPathReceiver);
+public class ApiDeviceInfoData {
+
+  @SerializedName("device") @Expose private final ApiDeviceData device;
+  @SerializedName("os") @Expose private final ApiOsData os;
+
+  public ApiDeviceInfoData(ApiDeviceData device, ApiOsData os) {
+    this.device = device;
+    this.os = os;
+  }
 }

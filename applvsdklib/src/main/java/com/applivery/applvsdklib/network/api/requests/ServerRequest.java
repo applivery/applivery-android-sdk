@@ -28,7 +28,8 @@ public abstract class ServerRequest {
 
     public final BusinessObject execute() {
         try {
-            return performRequest();
+            BusinessObject businessObject = performRequest();
+            return businessObject;
         }catch (RequestHttpException re){
             return new ErrorObject(re.getServerResponse().getError());
         }

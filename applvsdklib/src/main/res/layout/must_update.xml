@@ -15,15 +15,17 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <LinearLayout
+        android:id="@+id/applivery_update_title"
         android:background="@color/appliveryMainColor"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appliveryTitleHeight">
 
@@ -35,16 +37,18 @@
             />
 
     <TextView
-        android:gravity="center"
         android:textColor="@android:color/white"
         android:id="@+id/must_update_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/appliveryTitleHeight"
+        android:textSize="@dimen/appNameTextSize"
         android:text="@string/app_name"
         />
     </LinearLayout>
 
     <LinearLayout
+        android:layout_below="@+id/applivery_update_title"
         android:orientation="vertical"
         android:layout_gravity="center"
         android:layout_width="match_parent"
@@ -92,4 +96,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

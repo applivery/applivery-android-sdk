@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.requests;
+package com.applivery.applvsdklib.ui.model;
+
+import android.graphics.Bitmap;
+import com.applivery.applvsdklib.tools.utils.ImageUtils;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 3/1/16.
+ * Date 10/4/16.
  */
-public class ApiFeedbackRequestData {
+public class ScreenCapture {
 
-  //TODO next release stuff
+  private final Bitmap screenShot;
 
+  public ScreenCapture(Bitmap screenShot) {
+    this.screenShot = screenShot;
+  }
+
+  public Bitmap getScreenShot() {
+    return screenShot;
+  }
+
+  public String getBase64() {
+    return ImageUtils.getBase64(screenShot);
+  }
 }

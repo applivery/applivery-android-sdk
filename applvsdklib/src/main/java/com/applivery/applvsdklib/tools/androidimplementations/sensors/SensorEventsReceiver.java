@@ -25,7 +25,7 @@ import com.applivery.applvsdklib.AppliverySdk;
 public class SensorEventsReceiver implements ShakeDetector.OnShakeListener {
 
   @Override public void onShake(int count) {
-    AppliverySdk.sendFeedbackOnShake();
+    AppliverySdk.requestForUserFeedBack();
   }
 
 }

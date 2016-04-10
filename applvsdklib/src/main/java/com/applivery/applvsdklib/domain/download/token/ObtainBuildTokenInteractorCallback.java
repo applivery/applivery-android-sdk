@@ -23,7 +23,7 @@ import com.applivery.applvsdklib.domain.download.app.DownloadBuildInteractorCall
 import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
-import com.applivery.applvsdklib.network.api.requests.ExternalStorageWriter;
+import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidExternalStorageWriterImpl;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateView;

@@ -48,6 +48,8 @@ import com.applivery.applvsdklib.ui.model.UpdateInfo;
 
 public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
+  //TODO avoid dismiss dialog in rotation
+
   private Button update;
   private UpdateInfo updateInfo;
   private ProgressBar progressBar;

@@ -16,7 +16,7 @@
 
 package com.applivery.applvsdklib.network.api;
 
-import com.applivery.applvsdklib.network.api.requests.ApiFeedbackRequestData;
+import com.applivery.applvsdklib.network.api.model.ApiFeedbackData;
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
 import com.applivery.applvsdklib.network.api.responses.ApiBuildTokenResponse;
 import com.applivery.applvsdklib.network.api.responses.ApiFeedbackResponse;
@@ -43,8 +43,8 @@ public interface AppliveryApiService {
   @Streaming
   Call<ResponseBody> downloadBuild(@Path("build_id") String buildId, @Path("download_token") String download_token);
 
-  @POST("/api/bugs")
-  Call<ApiFeedbackResponse> sendFeedback(@Body ApiFeedbackRequestData bugRequest);
+  @POST("/api/feedback")
+  Call<ApiFeedbackResponse> sendFeedback(@Body ApiFeedbackData feedback);
 
 
   //TODO this will be implemented in second phase

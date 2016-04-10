@@ -25,8 +25,6 @@ import com.applivery.applvsdklib.domain.model.DownloadResult;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.DownloadBuildRequest;
-import com.applivery.applvsdklib.network.api.requests.DownloadStatusListener;
-import com.applivery.applvsdklib.network.api.requests.ExternalStorageWriter;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidAppInstallerImpl;
 
 /**
@@ -40,7 +38,7 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
   private final DownloadStatusListener downloadStatusListener;
   private final AppInstaller appInstaller;
 
-  public DownloadBuildInteractor(AppliveryApiService appliveryApiService, String appName,
+  private DownloadBuildInteractor(AppliveryApiService appliveryApiService, String appName,
       BuildTokenInfo buildTokenInfo, final DownloadBuildInteractorCallback interactorCallback,
       ExternalStorageWriter externalStorageWriter) {
 

@@ -34,7 +34,7 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
   private final ObtainAppConfigRequest obtainAppConfigRequest;
   private final InteractorCallback appConfigInteractorCallback;
 
-  public ObtainAppConfigInteractor(AppliveryApiService apiService, String appId, String authToken,
+  private ObtainAppConfigInteractor(AppliveryApiService apiService, String appId, String authToken,
       CurrentAppInfo currentAppInfo) {
     this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService, appId, authToken);
     this.appConfigInteractorCallback = new ObtainAppConfigInteractorCallback(apiService, currentAppInfo);

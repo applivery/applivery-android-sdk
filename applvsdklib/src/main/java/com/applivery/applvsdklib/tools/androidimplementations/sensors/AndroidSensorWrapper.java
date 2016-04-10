@@ -25,11 +25,11 @@ import android.hardware.SensorEventListener;
 public class AndroidSensorWrapper {
 
   private boolean enabled;
-  private final AppliverySensor appliverySensor;
+  private final AppliverySensorType appliverySensorType;
   private final SensorEventListener sensorEventListener;
 
-  public AndroidSensorWrapper(AppliverySensor appliverySensor, SensorEventListener listener) {
-    this.appliverySensor = appliverySensor;
+  public AndroidSensorWrapper(AppliverySensorType appliverySensorType, SensorEventListener listener) {
+    this.appliverySensorType = appliverySensorType;
     this.enabled = false;
     this.sensorEventListener = listener;
   }
@@ -42,12 +42,12 @@ public class AndroidSensorWrapper {
     return enabled;
   }
 
-  public AppliverySensor getAppliverySensor() {
-    return appliverySensor;
+  public AppliverySensorType getAppliverySensorType() {
+    return appliverySensorType;
   }
 
   public int getAndroidSensorType() {
-    return appliverySensor.toAndroidSensor();
+    return appliverySensorType.toAndroidSensor();
   }
 
   public SensorEventListener getSensorEventListener() {

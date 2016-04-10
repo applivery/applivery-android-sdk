@@ -14,12 +14,36 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.model;
+package com.applivery.applvsdklib.ui.views.feedback;
+
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 2/1/16.
+ * Date 9/4/16.
  */
-public class ApiFeedbackResponseData {
-  //TODO next release stuff
+public interface FeedbackView {
+
+  void show();
+
+  void showFeedbackFormView();
+
+  void dismissFeedBack();
+
+  void cleanScreenData();
+
+  void takeDataFromScreen();
+
+  void setBugButtonSelected();
+
+  void setFeedbackButtonSelected();
+
+  void showFeedbackImage();
+
+  void hideFeedbackImage();
+
+  void setScreenCapture(ScreenCapture screenCapture);
+
+  boolean isNotShowing();
+
 }

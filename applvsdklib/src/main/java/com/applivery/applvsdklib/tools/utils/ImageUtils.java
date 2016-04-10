@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.requests;
+package com.applivery.applvsdklib.tools.utils;
 
-import java.io.InputStream;
+import android.graphics.Bitmap;
+import android.util.Base64;
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 9/1/16.
+ * Date 10/4/16.
  */
-public interface ExternalStorageWriter {
-
-  String writeToFile(InputStream inputStream, int lenght,
-      DownloadStatusListener downloadStatusListener, String apkFileName);
+public class ImageUtils {
+  public static String getBase64(Bitmap screenShot) {
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    screenShot.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+    byte[] byteArray = byteArrayOutputStream .toByteArray();
+    return Base64.encodeToString(byteArray, Base64.DEFAULT);
+  }
 }

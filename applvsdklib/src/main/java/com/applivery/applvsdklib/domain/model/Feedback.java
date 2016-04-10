@@ -16,10 +16,26 @@
 
 package com.applivery.applvsdklib.domain.model;
 
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
+
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
 public interface Feedback {
-  //TODO next release stuff
+  void setType(FeedBackType bug);
+
+  void attachScreenshot(boolean activated);
+
+  boolean mustAttachScreenshot();
+
+  void setMessage(String feedbackMessage);
+
+  String getMessage();
+
+  void setScreenCapture(ScreenCapture screenCapture);
+
+  String getBase64ScreenCapture();
+
+  FeedBackType getType();
 }

@@ -34,6 +34,12 @@ public class ErrorObject implements BusinessObject<ErrorObject> {
     isBusinessError = serverResponse.isBusinessError();
   }
 
+  public ErrorObject() {
+    businessCode = -99;
+    message = "Unknown Error";
+    isBusinessError = false;
+  }
+
   @Override public ErrorObject getObject() {
     return this;
   }
