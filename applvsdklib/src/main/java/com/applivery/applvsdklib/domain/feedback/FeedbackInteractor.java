@@ -16,6 +16,7 @@
 
 package com.applivery.applvsdklib.domain.feedback;
 
+import android.app.Activity;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
@@ -38,11 +39,10 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
   private final InteractorCallback feedbackCallback;
   private final FeedbackWrapper feedbackWrapper;
 
-  public FeedbackInteractor(FeedbackRequest feedbackRequest, InteractorCallback feedbackCallback,
-      Feedback feedback, AppliveryApiService appliveryApiService) {
+  public FeedbackInteractor(AppliveryApiService appliveryApiService, Feedback feedback) {
     this.feedbackWrapper = FeedbackWrapper.createWrapper(feedback);
     this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedbackWrapper);
-    this.feedbackCallback = feedbackCallback;
+    this.feedbackCallback = new FeedbackInteractorCallback();
   }
 
   @Override protected void receivedResponse(BusinessObject result) {
@@ -60,5 +60,10 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
   @Override protected BusinessObject performRequest() {
     //TODO transform fee
     return feedbackRequest.execute();
+  }
+
+  public static Runnable getInstance(AppliveryApiService service, Feedback feedback) {
+    FeedbackInteractor feedbackInteractor = new FeedbackInteractor(service, feedback);
+    return feedbackInteractor;
   }
 }

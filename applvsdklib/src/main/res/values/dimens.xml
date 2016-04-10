@@ -16,12 +16,27 @@
   -->
 
 <resources>
-  <dimen name="appNameLayoutSize">45dp</dimen>
+  <dimen name="appNameTextSize">20dp</dimen>
+  <dimen name="appliveryTitleHeight">56dp</dimen>
+  <dimen name="appliveryTitleIconSize">45dp</dimen>
+  <dimen name="appliveryTitleIconPaddingSmall">7dp</dimen>
+  <dimen name="appliveryTitleIconPaddingMedium">10dp</dimen>
+  <dimen name="appliveryFabButtonSize">50dp</dimen>
+  <dimen name="appliveryFabButtonMargin">16dp</dimen>
+  <dimen name="appliveryTabButtonsHeight">50dp</dimen>
+  <dimen name="appliveryTabButtonTextSize">20dp</dimen>
+  <dimen name="appliveryTabButtonSeparatorHeight">40dp</dimen>
+  <dimen name="appliveryFeedbackFormSidePadding">16dp</dimen>
+  <dimen name="appliveryFeedbackTextBoxBottomMargin">20dp</dimen>
+  <dimen name="appliveryFeedbackTextBoxTopMargin">20dp</dimen>
+  <dimen name="appliveryScreenShotHeightSize">144dp</dimen>
+  <dimen name="appliveryScreenShotWidthSize">96dp</dimen>
   <dimen name="mustUpdateScreenPadding">16dp</dimen>
   <dimen name="mustUpdateScreenUpdateMessageMargin">16dp</dimen>
   <dimen name="updateButtonContainerMargin">20dp</dimen>
   <dimen name="suggestedUpdateAlertMargin">20dp</dimen>
   <dimen name="suggestedUpdateMessageContainerMargin">20dp</dimen>
   <dimen name="suggestedUpdateButtonPadding">10dp</dimen>
-
+  <dimen name="appliveryIconTitleMargin">5dp</dimen>
+  <dimen name="appliveryIconTitleMargindouble">10dp</dimen>
 </resources>

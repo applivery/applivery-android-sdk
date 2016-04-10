@@ -40,7 +40,7 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
   private final DownloadStatusListener downloadStatusListener;
   private final AppInstaller appInstaller;
 
-  public DownloadBuildInteractor(AppliveryApiService appliveryApiService, String appName,
+  private DownloadBuildInteractor(AppliveryApiService appliveryApiService, String appName,
       BuildTokenInfo buildTokenInfo, final DownloadBuildInteractorCallback interactorCallback,
       ExternalStorageWriter externalStorageWriter) {
 

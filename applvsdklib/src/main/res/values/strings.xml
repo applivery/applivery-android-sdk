@@ -41,4 +41,16 @@
 
   <string name="appliveryError">Applivery error</string>
   <string name="appliveryAcceptButton">Aceptar</string>
+
+  <string name="appliveryBugSelectorText">Bug</string>
+  <string name="appliveryFeedbackSelectorText">Feedback</string>
+
+  <string name="appliveryLogoImageDesc">Applivery Logo</string>
+  <string name="appliveryCancelFeedbackButtonDesc">Cancel feedback button</string>
+  <string name="appliverynextFeedbackButtonDesc">Continue with feedback button</string>
+  <string name="appliverySendFeedbackButtonDesc">Send feedback button</string>
+  <string name="appliveryScreenshotImageDesc">Screenshot feedback Image</string>
+
+  <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
+
 </resources>

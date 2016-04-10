@@ -33,7 +33,7 @@ public class ObtainAppBuildDownloadTokenInteractor extends BaseInteractor<BuildT
   private final ObtainBuildDownloadTokenRequest obtainBuildDownloadTokenRequest;
   private final InteractorCallback<BuildTokenInfo> infoInteractorCallback;
 
-  public ObtainAppBuildDownloadTokenInteractor(AppliveryApiService appliveryApiService,
+  private ObtainAppBuildDownloadTokenInteractor(AppliveryApiService appliveryApiService,
       String buildId, InteractorCallback<BuildTokenInfo> infoInteractorCallback) {
 
     this.obtainBuildDownloadTokenRequest =

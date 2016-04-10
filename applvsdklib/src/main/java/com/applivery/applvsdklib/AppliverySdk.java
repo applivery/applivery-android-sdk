@@ -25,14 +25,22 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
+import com.applivery.applvsdklib.domain.feedback.FeedbackInteractor;
+import com.applivery.applvsdklib.domain.model.Feedback;
+import com.applivery.applvsdklib.domain.model.UserFeedback;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
+import com.applivery.applvsdklib.tools.androidimplementations.ScreenCaptureUtils;
 import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
+import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
+import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
+import com.applivery.applvsdklib.ui.views.update.MustUpdateViewImpl;
 import java.util.concurrent.*;
 
 /**
@@ -214,8 +222,20 @@ public class AppliverySdk {
     AppliverySdk.updateCheckingTime = new Integer(updateCheckingTime * 1000).longValue();
   }
 
-  public static void sendFeedbackOnShake() {
-    Toast.makeText(applicationContext, "You shake your phone", Toast.LENGTH_SHORT).show();
+  public static void requestForUserFeedBack() {
+
+    FeedbackView feedbackView = UserFeedbackView.getInstance();
+
+    if (feedbackView.isNotShowing()){
+      ScreenCapture screenCapture = ScreenCaptureUtils.getScreenCapture(getCurrentActivity());
+      feedbackView.setScreenCapture(screenCapture);
+      feedbackView.show();
+    }
+
+
+    //Toast.makeText(applicationContext, "You shake your phone", Toast.LENGTH_SHORT).show();
+    //Feedback feedback = new UserFeedback();
+    //getExecutor().execute(FeedbackInteractor.getInstance(appliveryApiService, feedback));
   }
 
   public static class Logger {

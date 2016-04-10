@@ -69,12 +69,12 @@ public class ShakeDetector implements SensorEventListener {
       float gY = y / SensorManager.GRAVITY_EARTH;
       float gZ = z / SensorManager.GRAVITY_EARTH;
 
-      // gForce will be close to 1 when there is no movement.
+      // gForce will be applivery_close to 1 when there is no movement.
       double gForce = Math.sqrt(gX * gX + gY * gY + gZ * gZ);
 
       if (gForce > SHAKE_THRESHOLD_GRAVITY) {
         final long now = System.currentTimeMillis();
-        // ignore shake events too close to each other (500ms)
+        // ignore shake events too applivery_close to each other (500ms)
         if (mShakeTimestamp + SHAKE_SLOP_TIME_MS > now) {
           return;
         }

@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.tools.androidimplementations.sensors;
+package com.applivery.applvsdklib.domain.feedback;
 
-import com.applivery.applvsdklib.AppliverySdk;
+import com.applivery.applvsdklib.domain.InteractorCallback;
+import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.domain.model.FeedbackResult;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
  */
-public class SensorEventsReceiver implements ShakeDetector.OnShakeListener {
+public class FeedbackInteractorCallback implements InteractorCallback<FeedbackResult> {
 
-  @Override public void onShake(int count) {
-    AppliverySdk.requestForUserFeedBack();
+  @Override public void onSuccess(FeedbackResult businessObject) {
+
+  }
+
+  @Override public void onError(ErrorObject error) {
+
   }
 
 }

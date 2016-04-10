@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.tools.androidimplementations.sensors;
-
-import com.applivery.applvsdklib.AppliverySdk;
+package com.applivery.applvsdklib.domain.model;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
  */
-public class SensorEventsReceiver implements ShakeDetector.OnShakeListener {
+public class UserFeedback implements Feedback {
 
-  @Override public void onShake(int count) {
-    AppliverySdk.requestForUserFeedBack();
+  private FeedBackType feedBackType;
+  private boolean screenshotAttached;
+
+  @Override public void setType(FeedBackType feedBackType) {
+    this.feedBackType = feedBackType;
   }
+
+  @Override public void attachScreenshot(boolean activated) {
+    this.screenshotAttached = activated;
+  }
+
 
 }

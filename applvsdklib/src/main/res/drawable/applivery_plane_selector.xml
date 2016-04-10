@@ -15,7 +15,15 @@
   ~ limitations under the License.
   -->
 
-<resources>
-  <item name="appliveryMainColor" type="color">#6494A5</item>
-  <item name="white" type="color">#ffffff</item>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item android:state_enabled="true"
+      android:state_pressed="true" android:drawable="@drawable/applivery_plane_selected" />
+  <item android:state_enabled="true"
+      android:state_focused="true" android:drawable="@drawable/applivery_plane_selected" />
+  <item android:state_enabled="true"
+      android:state_selected="true" android:drawable="@drawable/applivery_plane_selected" />
+  <item
+      android:drawable="@drawable/applivery_plane" />
+
+</selector>

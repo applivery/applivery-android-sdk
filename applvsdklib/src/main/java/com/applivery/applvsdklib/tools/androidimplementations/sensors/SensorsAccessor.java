@@ -36,8 +36,8 @@ public class SensorsAccessor {
 
   private void initSensors(SensorEventsReceiver sensorEventsReceiver) {
     //init Accelerometer sensor SHAKE Detection
-    sensors.put(AppliverySensor.ACCELEROMETER.getStringValue(),
-        new AndroidSensorWrapper(AppliverySensor.ACCELEROMETER,
+    sensors.put(AppliverySensorType.ACCELEROMETER.getStringValue(),
+        new AndroidSensorWrapper(AppliverySensorType.ACCELEROMETER,
             new ShakeDetector(sensorEventsReceiver)));
 
     //init Init all required sensors here
@@ -45,26 +45,26 @@ public class SensorsAccessor {
 
   }
 
-  public boolean isSensorAvailable(AppliverySensor appliverySensor){
-    if (sensors.containsKey(appliverySensor.getStringValue())){
-      AndroidSensorWrapper androidSensorWrapper = sensors.get(appliverySensor.getStringValue());
+  public boolean isSensorAvailable(AppliverySensorType appliverySensorType){
+    if (sensors.containsKey(appliverySensorType.getStringValue())){
+      AndroidSensorWrapper androidSensorWrapper = sensors.get(appliverySensorType.getStringValue());
       return androidSensorWrapper.isEnabled();
     }else{
       return false;
     }
   }
 
-  public void setSensorAsAvailable(AppliverySensor appliverySensor){
-    if (!isSensorAvailable(appliverySensor) &&
-        sensors.containsKey(appliverySensor.getStringValue())){
-      AndroidSensorWrapper androidSensorWrapper = sensors.get(appliverySensor.getStringValue());
+  public void setSensorAsAvailable(AppliverySensorType appliverySensorType){
+    if (!isSensorAvailable(appliverySensorType) &&
+        sensors.containsKey(appliverySensorType.getStringValue())){
+      AndroidSensorWrapper androidSensorWrapper = sensors.get(appliverySensorType.getStringValue());
       androidSensorWrapper.enableSensor();
     }
   }
 
   public void enableSensor(int type) {
-    AppliverySensor appliverySensor = AppliverySensor.toAppliverySensor(type);
-    setSensorAsAvailable(appliverySensor);
+    AppliverySensorType appliverySensorType = AppliverySensorType.toAppliverySensor(type);
+    setSensorAsAvailable(appliverySensorType);
   }
 
   public boolean hasAvailableSensors() {

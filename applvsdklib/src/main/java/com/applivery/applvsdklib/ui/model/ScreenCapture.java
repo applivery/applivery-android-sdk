@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.tools.androidimplementations.sensors;
+package com.applivery.applvsdklib.ui.model;
 
-import com.applivery.applvsdklib.AppliverySdk;
+import android.graphics.Bitmap;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 9/4/16.
+ * Date 10/4/16.
  */
-public class SensorEventsReceiver implements ShakeDetector.OnShakeListener {
+public class ScreenCapture {
 
-  @Override public void onShake(int count) {
-    AppliverySdk.requestForUserFeedBack();
+  private final Bitmap screenShot;
+
+  public ScreenCapture(Bitmap screenShot) {
+    this.screenShot = screenShot;
   }
 
+  public Bitmap getScreenShot() {
+    return screenShot;
+  }
 }

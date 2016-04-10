@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.tools.androidimplementations.sensors;
+package com.applivery.applvsdklib.domain.model;
 
-import com.applivery.applvsdklib.AppliverySdk;
+import com.applivery.applvsdklib.tools.utils.StringValueEnum;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 9/4/16.
+ * Date 10/4/16.
  */
-public class SensorEventsReceiver implements ShakeDetector.OnShakeListener {
+public enum FeedBackType implements StringValueEnum{
+  FEEDBACK("FEEDBACK"),
+  BUG("BUG");
 
-  @Override public void onShake(int count) {
-    AppliverySdk.requestForUserFeedBack();
+  private final String type;
+
+  FeedBackType(final String type) {
+    this.type = type;
   }
 
+  public String getStringValue() {
+    return type;
+  }
 }

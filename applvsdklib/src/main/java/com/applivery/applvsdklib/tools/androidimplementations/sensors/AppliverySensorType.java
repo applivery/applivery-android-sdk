@@ -23,12 +23,12 @@ import com.applivery.applvsdklib.tools.utils.StringValueEnum;
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
  */
-public enum AppliverySensor implements StringValueEnum{
+public enum AppliverySensorType implements StringValueEnum{
   ACCELEROMETER("ACCELEROMETER");
 
   private final String type;
 
-  AppliverySensor(final String type) {
+  AppliverySensorType(final String type) {
     this.type = type;
   }
 
@@ -45,10 +45,10 @@ public enum AppliverySensor implements StringValueEnum{
     }
   }
 
-  public static AppliverySensor toAppliverySensor(int sensor){
+  public static AppliverySensorType toAppliverySensor(int sensor){
     switch (sensor){
       case Sensor.TYPE_ACCELEROMETER:
-        return AppliverySensor.ACCELEROMETER;
+        return AppliverySensorType.ACCELEROMETER;
       default:
         return null;
     }

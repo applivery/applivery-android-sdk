@@ -14,18 +14,36 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.tools.androidimplementations.sensors;
+package com.applivery.applvsdklib.ui.views.feedback;
 
-import com.applivery.applvsdklib.AppliverySdk;
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
  */
-public class SensorEventsReceiver implements ShakeDetector.OnShakeListener {
+public interface FeedbackView {
 
-  @Override public void onShake(int count) {
-    AppliverySdk.requestForUserFeedBack();
-  }
+  void show();
+
+  void showFeedbackFormView();
+
+  void dismissFeedBack();
+
+  void cleanScreenData();
+
+  void takeDataFromScreen();
+
+  void setBugButtonSelected();
+
+  void setFeedbackButtonSelected();
+
+  void showFeedbackImage();
+
+  void hideFeedbackImage();
+
+  void setScreenCapture(ScreenCapture screenCapture);
+
+  boolean isNotShowing();
 
 }
