@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.ui.model;
-
-import android.graphics.Bitmap;
-import com.applivery.applvsdklib.tools.utils.ImageUtils;
+package com.applivery.applvsdklib.domain.feedback;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 10/4/16.
+ * Date 10/1/16.
  */
-public class ScreenCapture {
+public interface DeviceDetailsInfo {
 
-  private final Bitmap screenShot;
+  String getOsName();
 
-  public ScreenCapture(Bitmap screenShot) {
-    this.screenShot = screenShot;
-  }
+  String getVendor();
 
-  public Bitmap getScreenShot() {
-    return screenShot;
-  }
+  String getModel();
 
-  public String getBase64() {
-    return ImageUtils.getBase64(screenShot);
-  }
+  String getDeviceType();
+
+  String getOsversion();
 }

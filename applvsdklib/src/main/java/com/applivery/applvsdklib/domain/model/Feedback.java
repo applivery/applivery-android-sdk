@@ -31,6 +31,11 @@ public interface Feedback {
 
   void setMessage(String feedbackMessage);
 
+  String getMessage();
+
   void setScreenCapture(ScreenCapture screenCapture);
 
+  String getBase64ScreenCapture();
+
+  FeedBackType getType();
 }

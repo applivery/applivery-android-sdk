@@ -16,8 +16,10 @@
 
 package com.applivery.applvsdklib.domain.feedback;
 
+import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
+import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.Feedback;
@@ -25,6 +27,8 @@ import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.FeedbackRequest;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidDeviceDetailsInfo;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -36,8 +40,10 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
   private final InteractorCallback feedbackCallback;
   private final FeedbackWrapper feedbackWrapper;
 
-  public FeedbackInteractor(AppliveryApiService appliveryApiService, Feedback feedback) {
-    this.feedbackWrapper = FeedbackWrapper.createWrapper(feedback);
+  public FeedbackInteractor(AppliveryApiService appliveryApiService, Feedback feedback,
+      CurrentAppInfo currentAppInfo, DeviceDetailsInfo deviceDetailsInfo) {
+
+    this.feedbackWrapper = FeedbackWrapper.createWrapper(feedback, currentAppInfo, deviceDetailsInfo);
     this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedbackWrapper);
     this.feedbackCallback = new FeedbackInteractorCallback();
   }
@@ -55,12 +61,17 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
   }
 
   @Override protected BusinessObject performRequest() {
-    //TODO transform fee
     return feedbackRequest.execute();
   }
 
   public static Runnable getInstance(AppliveryApiService service, Feedback feedback) {
-    FeedbackInteractor feedbackInteractor = new FeedbackInteractor(service, feedback);
+
+    CurrentAppInfo currentAppInfo = new AndroidCurrentAppInfo(AppliverySdk.getApplicationContext());
+    DeviceDetailsInfo deviceDetailsInfo = new AndroidDeviceDetailsInfo();
+
+    FeedbackInteractor feedbackInteractor = new FeedbackInteractor(service, feedback,
+        currentAppInfo, deviceDetailsInfo);
+
     return feedbackInteractor;
   }
 }

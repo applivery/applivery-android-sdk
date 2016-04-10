@@ -16,29 +16,66 @@
 
 package com.applivery.applvsdklib.domain.model;
 
+import com.applivery.applvsdklib.AppliverySdk;
+import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
+import com.applivery.applvsdklib.domain.feedback.DeviceDetailsInfo;
+
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
 public class FeedbackWrapper {
-  private String packageName;
-  private String appVersionName;
-  private String osName;
-  private String screenShotBase64;
-  private String feedBackMessage;
-  private String vendor;
-  private String model;
-  private String type;
-  private String appId;
-  private String bugType;
-  private String osVersion;
 
-  //TODO next release stuff
+  final private String packageName;
+  final private String appVersionName;
+  final private String osName;
+  final private String screenShotBase64;
+  final private String feedBackMessage;
+  final private String vendor;
+  final private String model;
+  final private String type;
+  final private String appId;
+  final private String bugType;
+  final private String osVersion;
 
-  public static FeedbackWrapper createWrapper(Feedback feedback) {
-    FeedbackWrapper feedbackWrapper = new FeedbackWrapper();
+  public FeedbackWrapper(String packageName, String appVersionName, String osName,
+      String screenShotBase64, String feedBackMessage, String vendor, String model, String type,
+      String appId, String bugType, String osVersion) {
+
+    this.packageName = packageName;
+    this.appVersionName = appVersionName;
+    this.osName = osName;
+    this.screenShotBase64 = screenShotBase64;
+    this.feedBackMessage = feedBackMessage;
+    this.vendor = vendor;
+    this.model = model;
+    this.type = type;
+    this.appId = appId;
+    this.bugType = bugType;
+    this.osVersion = osVersion;
+
+  }
+
+  public static FeedbackWrapper createWrapper(Feedback feedback, CurrentAppInfo currentAppInfo,
+      DeviceDetailsInfo deviceDetailsInfo) {
+
+    FeedbackWrapper feedbackWrapper =
+        new FeedbackWrapper(
+            currentAppInfo.getPackageName(),
+            String.valueOf(currentAppInfo.getVersionCode()),
+            deviceDetailsInfo.getOsName(),
+            feedback.getBase64ScreenCapture(),
+            feedback.getMessage(),
+            deviceDetailsInfo.getVendor(),
+            deviceDetailsInfo.getModel(),
+            deviceDetailsInfo.getDeviceType(),
+            AppliverySdk.getApplicationId(),
+            feedback.getType().getStringValue(),
+            deviceDetailsInfo.getOsversion());
+
     return feedbackWrapper;
   }
+
 
   public String getPackageName() {
     return packageName;

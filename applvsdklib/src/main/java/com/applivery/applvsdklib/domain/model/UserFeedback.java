@@ -45,7 +45,19 @@ public class UserFeedback implements Feedback {
     this.feedbackMessage = feedbackMessage;
   }
 
+  @Override public String getMessage() {
+    return feedbackMessage;
+  }
+
   @Override public void setScreenCapture(ScreenCapture screenCapture) {
     this.screenCapture = screenCapture;
+  }
+
+  @Override public String getBase64ScreenCapture() {
+    return screenCapture.getBase64();
+  }
+
+  @Override public FeedBackType getType() {
+    return feedBackType;
   }
 }

@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.ui.model;
+package com.applivery.applvsdklib.tools.utils;
 
 import android.graphics.Bitmap;
-import com.applivery.applvsdklib.tools.utils.ImageUtils;
+import android.util.Base64;
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 10/4/16.
  */
-public class ScreenCapture {
-
-  private final Bitmap screenShot;
-
-  public ScreenCapture(Bitmap screenShot) {
-    this.screenShot = screenShot;
-  }
-
-  public Bitmap getScreenShot() {
-    return screenShot;
-  }
-
-  public String getBase64() {
-    return ImageUtils.getBase64(screenShot);
+public class ImageUtils {
+  public static String getBase64(Bitmap screenShot) {
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    screenShot.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+    byte[] byteArray = byteArrayOutputStream .toByteArray();
+    return Base64.encodeToString(byteArray, Base64.DEFAULT);
   }
 }

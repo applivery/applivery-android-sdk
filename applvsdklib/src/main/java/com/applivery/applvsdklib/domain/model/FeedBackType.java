@@ -23,8 +23,8 @@ import com.applivery.applvsdklib.tools.utils.StringValueEnum;
  * Date 10/4/16.
  */
 public enum FeedBackType implements StringValueEnum{
-  FEEDBACK("FEEDBACK"),
-  BUG("BUG");
+  FEEDBACK("feedback"),
+  BUG("bug");
 
   private final String type;
 

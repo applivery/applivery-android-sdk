@@ -23,11 +23,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
-import com.applivery.applvsdklib.domain.feedback.FeedbackInteractor;
-import com.applivery.applvsdklib.domain.model.Feedback;
-import com.applivery.applvsdklib.domain.model.UserFeedback;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
@@ -40,7 +36,6 @@ import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
-import com.applivery.applvsdklib.ui.views.update.MustUpdateViewImpl;
 import java.util.concurrent.*;
 
 /**
@@ -137,6 +132,11 @@ public class AppliverySdk {
           AppliverySdk.applicationId, AppliverySdk.appClientToken,
           new AndroidCurrentAppInfo(applicationContext)));
     }
+  }
+
+  public static String getApplicationId(){
+    Validate.sdkInitialized();
+    return applicationId;
   }
 
   public static Executor getExecutor() {

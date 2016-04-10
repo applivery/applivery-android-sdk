@@ -42,6 +42,10 @@ public class AndroidCurrentAppInfo implements CurrentAppInfo {
     }
   }
 
+  @Override public String getPackageName() {
+    return context.getPackageName();
+  }
+
   public String getVersionName() {
     try {
       PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);

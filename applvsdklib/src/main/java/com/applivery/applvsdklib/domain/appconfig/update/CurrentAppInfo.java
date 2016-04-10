@@ -22,4 +22,6 @@ package com.applivery.applvsdklib.domain.appconfig.update;
  */
 public interface CurrentAppInfo {
   long getVersionCode();
+
+  String getPackageName();
 }
