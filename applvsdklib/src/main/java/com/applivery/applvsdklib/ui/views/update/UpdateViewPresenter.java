@@ -35,7 +35,10 @@ public class UpdateViewPresenter {
   public void showForcedUpdate(String appName, String updateMessage) {
     if (AppliverySdk.isContextAvailable()) {
       UpdateInfo updateInfo = new UpdateInfo(appName, updateMessage);
-      this.updateView = new MustUpdateViewImpl(updateInfo, updateListener);
+      MustUpdateViewImpl mustUpdateView = new MustUpdateViewImpl();
+      mustUpdateView.setUpdateInfo(updateInfo);
+      mustUpdateView.setUpdateListener(updateListener);
+      this.updateView = mustUpdateView;
       this.updateListener.setUpdateView(updateView);
       this.updateView.showUpdateDialog();
     }
