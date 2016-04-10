@@ -29,6 +29,7 @@ import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.FeedbackRequest;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidDeviceDetailsInfo;
+import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackPresenter;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -41,11 +42,12 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
   private final FeedbackWrapper feedbackWrapper;
 
   public FeedbackInteractor(AppliveryApiService appliveryApiService, Feedback feedback,
-      CurrentAppInfo currentAppInfo, DeviceDetailsInfo deviceDetailsInfo) {
+      CurrentAppInfo currentAppInfo, DeviceDetailsInfo deviceDetailsInfo,
+      InteractorCallback interactorCallback) {
 
     this.feedbackWrapper = FeedbackWrapper.createWrapper(feedback, currentAppInfo, deviceDetailsInfo);
     this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedbackWrapper);
-    this.feedbackCallback = new FeedbackInteractorCallback();
+    this.feedbackCallback = interactorCallback;
   }
 
   @Override protected void receivedResponse(BusinessObject result) {
@@ -64,13 +66,14 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
     return feedbackRequest.execute();
   }
 
-  public static Runnable getInstance(AppliveryApiService service, Feedback feedback) {
+  public static Runnable getInstance(AppliveryApiService service, Feedback feedback, UserFeedbackPresenter
+      userFeedbackPresenter) {
 
     CurrentAppInfo currentAppInfo = new AndroidCurrentAppInfo(AppliverySdk.getApplicationContext());
     DeviceDetailsInfo deviceDetailsInfo = new AndroidDeviceDetailsInfo();
 
     FeedbackInteractor feedbackInteractor = new FeedbackInteractor(service, feedback,
-        currentAppInfo, deviceDetailsInfo);
+        currentAppInfo, deviceDetailsInfo, userFeedbackPresenter);
 
     return feedbackInteractor;
   }

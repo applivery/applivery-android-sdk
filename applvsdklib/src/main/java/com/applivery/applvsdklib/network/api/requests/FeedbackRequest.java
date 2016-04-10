@@ -16,9 +16,9 @@
 
 package com.applivery.applvsdklib.network.api.requests;
 
+import com.applivery.applvsdklib.network.api.requests.mappers.ApiFeedbackResponseMapper;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
-import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
 import com.applivery.applvsdklib.network.api.model.ApiFeedbackData;
 import com.applivery.applvsdklib.network.api.requests.mappers.ApiDeviceInfoRequestMapper;
@@ -38,10 +38,12 @@ public class FeedbackRequest extends ServerRequest {
   private final AppliveryApiService apiService;
   private final FeedbackWrapper feedbackWrapper;
   private final ApiFeedbackRequestMapper apiFeedbackRequestMapper;
+  private final ApiFeedbackResponseMapper apiFeedbackResponseMapper;
 
   public FeedbackRequest(AppliveryApiService apiService, FeedbackWrapper feedbackWrapper) {
     this.apiService = apiService;
     this.feedbackWrapper = feedbackWrapper;
+    this.apiFeedbackResponseMapper = new ApiFeedbackResponseMapper();
     this.apiFeedbackRequestMapper = createMappers();
   }
 
@@ -62,7 +64,8 @@ public class FeedbackRequest extends ServerRequest {
     ApiFeedbackData apiFeedbackData = apiFeedbackRequestMapper.modelToData(feedbackWrapper);
     Call<ApiFeedbackResponse> response = apiService.sendFeedback(apiFeedbackData);
     ApiFeedbackResponse apiFeedbackResponse = super.performRequest(response);
-    return new FeedbackResult(apiFeedbackResponse.getStatus());
+    BusinessObject businessObject = apiFeedbackResponseMapper.map(apiFeedbackResponse);
+    return businessObject;
   }
 
 }

@@ -94,9 +94,12 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
 
     if (feedback.mustAttachScreenshot()){
       feedback.setScreenCapture(screenCapture);
+    }else{
+      feedback.setScreenCapture(null);
     }
 
-    AppliverySdk.getExecutor().execute(FeedbackInteractor.getInstance(appliveryApiService, feedback));
+    AppliverySdk.getExecutor().execute(FeedbackInteractor.getInstance(appliveryApiService,
+        feedback, this));
 
   }
 

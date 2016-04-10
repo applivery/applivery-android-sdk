@@ -16,11 +16,9 @@
 
 package com.applivery.applvsdklib.network.api.responses;
 
-import com.applivery.applvsdklib.network.api.model.ApiFeedbackData;
-
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 2/1/16.
  */
-public class ApiFeedbackResponse extends ServerResponse<ApiFeedbackData> {
+public class ApiFeedbackResponse extends ServerResponse<Object> {
 }

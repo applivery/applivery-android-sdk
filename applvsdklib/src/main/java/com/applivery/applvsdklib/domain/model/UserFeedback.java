@@ -25,7 +25,7 @@ import com.applivery.applvsdklib.ui.model.ScreenCapture;
 public class UserFeedback implements Feedback {
 
   private FeedBackType feedBackType;
-  private boolean screenshotAttached;
+  private boolean screenshotAttached = true;
   private String feedbackMessage;
   private ScreenCapture screenCapture;
 
@@ -54,7 +54,12 @@ public class UserFeedback implements Feedback {
   }
 
   @Override public String getBase64ScreenCapture() {
-    return screenCapture.getBase64();
+    if (screenCapture!=null){
+      return screenCapture.getBase64();
+    }else{
+      return null;
+    }
+
   }
 
   @Override public FeedBackType getType() {

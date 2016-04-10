@@ -52,6 +52,11 @@ public abstract class BaseInteractor<T> implements Runnable {
   @Override public void run() {
     Message message = new Message();
     message.obj = performRequest();
+
+    if (message.obj == null){
+      message.obj = new ErrorObject();
+    }
+
     handler.sendMessage(message);
   }
 
