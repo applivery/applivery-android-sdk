@@ -150,7 +150,7 @@ The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Appliver
 
 You can shake your phone if you want send Applivery some feedback about your App. By shaking your phone you will have a screen like the following:
 
-![FILES](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/feedback.png)
+![FILES](https://github.com/applivery/applivery-android-sdk/blob/develop/documentation/feedback.png)
 
 Here you can add the screenshot of the screen you were on if you woud like. You can say something interesting about the screen and type your feedback as a bug or simply something you want to give as feedback. By pressing the small screenshot you will have the same image bigger just in case you would like to check something. Then if you tap on the plane icon you will send the info, or you could press the close button in the upper right corner otherwise.
 
