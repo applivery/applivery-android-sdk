@@ -30,18 +30,18 @@ public class ReadExternalPermission implements Permission {
   }
 
   @Override public int getPermissionSettingsDeniedFeedback() {
-    return R.string.readOnExternalPermissionSettingsDeniedFeedback;
+    return R.string.applivery_readOnExternalPermissionSettingsDeniedFeedback;
   }
 
   @Override public int getPermissionDeniedFeedback() {
-    return R.string.readOnExternalPermissionDeniedFeedback;
+    return R.string.applivery_readOnExternalPermissionDeniedFeedback;
   }
 
   @Override public int getPermissionRationaleTitle() {
-    return R.string.readOnExternalPermissionRationaleTitle;
+    return R.string.applivery_readOnExternalPermissionRationaleTitle;
   }
 
   @Override public int getPermissionRationaleMessage() {
-    return R.string.readOnExternalPermissionRationaleMessage;
+    return R.string.applivery_readOnExternalPermissionRationaleMessage;
   }
 }

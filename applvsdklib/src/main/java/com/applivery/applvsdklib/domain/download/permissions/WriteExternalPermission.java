@@ -31,18 +31,18 @@ public class WriteExternalPermission implements Permission {
   }
 
   @Override public int getPermissionSettingsDeniedFeedback() {
-    return R.string.writeOnExternalPermissionSettingsDeniedFeedback;
+    return R.string.applivery_writeOnExternalPermissionSettingsDeniedFeedback;
   }
 
   @Override public int getPermissionDeniedFeedback() {
-    return R.string.continueRequestPermissionDeniedFeedback;
+    return R.string.applivery_continueRequestPermissionDeniedFeedback;
   }
 
   @Override public int getPermissionRationaleTitle() {
-    return R.string.readOnExternalPermissionRationaleTitle;
+    return R.string.applivery_readOnExternalPermissionRationaleTitle;
   }
 
   @Override public int getPermissionRationaleMessage() {
-    return R.string.continueRequestPermissionRationaleMessage;
+    return R.string.applivery_continueRequestPermissionRationaleMessage;
   }
 }

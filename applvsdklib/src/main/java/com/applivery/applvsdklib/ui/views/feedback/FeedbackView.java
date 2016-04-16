@@ -16,6 +16,7 @@
 
 package com.applivery.applvsdklib.ui.views.feedback;
 
+import android.app.Activity;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
 /**
@@ -45,5 +46,7 @@ public interface FeedbackView {
   void setScreenCapture(ScreenCapture screenCapture);
 
   boolean isNotShowing();
+
+  void lockRotationOnParentScreen(Activity currentActivity);
 
 }

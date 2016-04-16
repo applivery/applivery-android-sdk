@@ -48,8 +48,6 @@ import com.applivery.applvsdklib.ui.model.UpdateInfo;
 
 public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
-  //TODO avoid dismiss dialog in rotation
-
   private Button update;
   private UpdateInfo updateInfo;
   private ProgressBar progressBar;
@@ -89,7 +87,7 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstState) {
-    View view = inflater.inflate(R.layout.must_update, container);
+    View view = inflater.inflate(R.layout.applivery_must_update, container);
     setCancelable(false);
     initViewElements(view);
     initViewElementsData(updateInfo);
@@ -143,6 +141,10 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
     }catch (NotForegroundActivityAvailable notForegroundActivityAvailable){
       AppliverySdk.Logger.log("Unable to show dialog again");
     }
+  }
+
+  public void lockRotationOnParentScreen(Activity currentActivity) {
+    AppliverySdk.lockRotationToPortrait();
   }
 
   @Override public void hideDownloadInProgress() {

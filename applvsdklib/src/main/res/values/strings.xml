@@ -15,29 +15,29 @@
   -->
 
 <resources>
-  <string name="app_name">Applivery Sdk</string>
-  <string name="update">Update</string>
-  <string name="cancel">Cancel</string>
-  <string name="download_message">Current download progress...</string>
-  <string name="download_title">Downloading</string>
+  <string name="applivery_app_name">Applivery Sdk</string>
+  <string name="appliveryUpdate">Update</string>
+  <string name="appliveryLater">Cancel</string>
+  <string name="applivery_download_message">Current download progress...</string>
+  <string name="applivery_download_title">Downloading</string>
 
-  <string name="continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>
-  <string name="continueRequestPermissionSettingsDeniedFeedback">SETTINGS</string>
-  <string name="continueRequestPermissionDeniedFeedback">Permissions denied are necessary for doing some tasks</string>
-  <string name="continueRequestPermissionRationaleMessage">Permissions denied are necessary for doing some tasks, allow it!</string>
-  <string name="continueRequestPermissionRationaleTitle">Permission Request</string>
+  <string name="applivery_continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>
+  <string name="applivery_continueRequestPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="applivery_continueRequestPermissionDeniedFeedback">Permissions denied are necessary for doing some tasks</string>
+  <string name="applivery_continueRequestPermissionRationaleMessage">Permissions denied are necessary for doing some tasks, allow it!</string>
+  <string name="applivery_continueRequestPermissionRationaleTitle">Permission Request</string>
 
-  <string name="writeOnExternalPermissionAllowedFeedback">Write on external Storage has been allowed</string>
-  <string name="writeOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
-  <string name="writeOnExternalPermissionDeniedFeedback">Write on external Storage Permission is necessary for downloading new app</string>
-  <string name="writeOnExternalPermissionRationaleMessage">Write on external Storage Permission is necessary for downloading new app version, allow it!</string>
-  <string name="writeOnExternalPermissionRationaleTitle">Permission Request</string>
+  <string name="applivery_writeOnExternalPermissionAllowedFeedback">Write on external Storage has been allowed</string>
+  <string name="applivery_writeOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="applivery_writeOnExternalPermissionDeniedFeedback">Write on external Storage Permission is necessary for downloading new app</string>
+  <string name="applivery_writeOnExternalPermissionRationaleMessage">Write on external Storage Permission is necessary for downloading new app version, allow it!</string>
+  <string name="applivery_writeOnExternalPermissionRationaleTitle">Permission Request</string>
 
-  <string name="readOnExternalPermissionAllowedFeedback">Read from external Storage has been allowed</string>
-  <string name="readOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
-  <string name="readOnExternalPermissionDeniedFeedback">Read from external Storage Permission is necessary for installing downloaded app</string>
-  <string name="readOnExternalPermissionRationaleMessage">Read from external Storage Permission is necessary for installing downloaded app, allow it!</string>
-  <string name="readOnExternalPermissionRationaleTitle">Permission Request</string>
+  <string name="applivery_readOnExternalPermissionAllowedFeedback">Read from external Storage has been allowed</string>
+  <string name="applivery_readOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="applivery_readOnExternalPermissionDeniedFeedback">Read from external Storage Permission is necessary for installing downloaded app</string>
+  <string name="applivery_readOnExternalPermissionRationaleMessage">Read from external Storage Permission is necessary for installing downloaded app, allow it!</string>
+  <string name="applivery_readOnExternalPermissionRationaleTitle">Permission Request</string>
 
   <string name="appliveryError">Applivery error</string>
   <string name="appliveryAcceptButton">Aceptar</string>
@@ -52,6 +52,6 @@
   <string name="appliveryScreenshotImageDesc">Screenshot feedback Image</string>
 
   <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
-  <string name="mustUpdateAppLocked">Your app is locked, please update...</string>
+  <string name="appliveryMustUpdateAppLocked">Your app is locked, please update...</string>
 
 </resources>

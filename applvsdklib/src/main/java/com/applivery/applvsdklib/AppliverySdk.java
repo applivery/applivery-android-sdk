@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class AppliverySdk {
   private static volatile String applicationId;
   private static volatile String appClientToken;
   private static boolean isPlayStoreRelease = false;
+  private static boolean lockedApp = false;
   private static volatile AppliveryApiService appliveryApiService;
   private static volatile boolean isDebugEnabled = BuildConfig.DEBUG;
   private static Context applicationContext;
@@ -177,7 +179,21 @@ public class AppliverySdk {
 
   public static boolean isContextAvailable() {
     Validate.sdkInitialized();
-    return (activityLifecycle.getCurrentActivity()!=null)? true : false;
+    return (activityLifecycle.getCurrentActivity() != null);
+  }
+
+  public static void lockRotationToPortrait() {
+    Activity activity = activityLifecycle.getCurrentActivity();
+    if (activity != null){
+      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+  }
+
+  public static void unlockRotation() {
+    Activity activity = activityLifecycle.getCurrentActivity();
+    if (activity != null){
+      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    }
   }
 
   public static synchronized boolean isInitialized() {
@@ -224,13 +240,28 @@ public class AppliverySdk {
 
   public static void requestForUserFeedBack() {
 
-    FeedbackView feedbackView = UserFeedbackView.getInstance(appliveryApiService);
+    if (!lockedApp){
+      FeedbackView feedbackView = UserFeedbackView.getInstance(appliveryApiService);
 
-    if (feedbackView.isNotShowing()){
-      ScreenCapture screenCapture = ScreenCaptureUtils.getScreenCapture(getCurrentActivity());
-      feedbackView.setScreenCapture(screenCapture);
-      feedbackView.show();
+      if (feedbackView.isNotShowing()){
+        feedbackView.lockRotationOnParentScreen(getCurrentActivity());
+        ScreenCapture screenCapture = ScreenCaptureUtils.getScreenCapture(getCurrentActivity());
+        feedbackView.setScreenCapture(screenCapture);
+        feedbackView.show();
+      }
     }
+  }
+
+  public static void lockApp(){
+    lockedApp = true;
+  }
+
+  public static void unlockApp(){
+    lockedApp = false;
+  }
+
+  public static boolean isAppLocked(){
+    return lockedApp;
   }
 
   public static class Logger {

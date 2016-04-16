@@ -55,7 +55,7 @@ public class SuggestedUpdateViewImpl implements UpdateView {
 
     final AlertDialog alertDialog = builder.create();
     LayoutInflater inflater = alertDialog.getLayoutInflater();
-    inflater.inflate(R.layout.suggested_update, frameView);
+    inflater.inflate(R.layout.applivery_suggested_update, frameView);
     TextView textView = (TextView) frameView.findViewById(R.id.suggested_update_text);
     textView.setText(updateInfo.getAppUpdateMessage());
     return alertDialog;
@@ -65,8 +65,8 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     Builder builder = new AlertDialog.Builder(context);
     builder.setTitle(updateInfo.getAppName())
         .setCancelable(true)
-        .setPositiveButton(context.getString(R.string.update), onUpdateClick())
-        .setNegativeButton(context.getString(R.string.cancel), onCancelClick());
+        .setPositiveButton(context.getString(R.string.appliveryUpdate), onUpdateClick())
+        .setNegativeButton(context.getString(R.string.appliveryLater), onCancelClick());
     return builder;
   }
 
@@ -99,8 +99,8 @@ public class SuggestedUpdateViewImpl implements UpdateView {
 
   @Override public void showDownloadInProgress() {
     if (AppliverySdk.isContextAvailable()) {
-      progress = ProgressDialog.show(context, context.getString(R.string.download_title),
-          context.getString(R.string.download_message)+" 0%", true);
+      progress = ProgressDialog.show(context, context.getString(R.string.applivery_download_title),
+          context.getString(R.string.applivery_download_message)+" 0%", true);
     }
   }
 
@@ -112,7 +112,7 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     Runnable myRunnable = new Runnable() {
       @Override
       public void run() {
-        progress.setMessage(context.getString(R.string.download_message)+" "+ Double.valueOf(percent).intValue() + "%");
+        progress.setMessage(context.getString(R.string.applivery_download_message)+" "+ Double.valueOf(percent).intValue() + "%");
       }
     };
     handler.post(myRunnable);

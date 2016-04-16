@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/appliveryTitleHeight"
         android:textSize="@dimen/appNameTextSize"
-        android:text="@string/app_name"
+        android:text="@string/applivery_app_name"
         />
     </LinearLayout>
 
@@ -61,7 +61,7 @@
             android:id="@+id/must_update_message"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="@string/mustUpdateAppLocked"
+            android:text="@string/appliveryMustUpdateAppLocked"
             />
 
         <LinearLayout
@@ -80,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/suggestedUpdateButtonPadding"
-                android:text="@string/update"/>
+                android:text="@string/appliveryUpdate"/>
 
             <ProgressBar
                 android:visibility="gone"

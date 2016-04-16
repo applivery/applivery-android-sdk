@@ -79,7 +79,15 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
 
     }
 
-    return obtainUpdateType(minVersion, lastVersion, currentVersion, ota, forceUpdate);
+    UpdateType updateType = obtainUpdateType(minVersion, lastVersion, currentVersion, ota, forceUpdate);
+
+    if (updateType == UpdateType.FORCED_UPDATE){
+      AppliverySdk.lockApp();
+    }else{
+      AppliverySdk.unlockApp();
+    }
+
+    return updateType;
   }
 
   private UpdateType obtainUpdateType(long minVersion, long lastVersion, long currentVersion,

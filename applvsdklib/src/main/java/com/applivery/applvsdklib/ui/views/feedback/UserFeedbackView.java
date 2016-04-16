@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
-import android.widget.Toast;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
@@ -107,7 +106,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstState) {
-    View view = inflater.inflate(R.layout.user_feedback, container);
+    View view = inflater.inflate(R.layout.applivery_user_feedback, container);
     setCancelable(false);
     initViewElements(view);
     return view;
@@ -204,6 +203,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override public void dismissFeedBack() {
     dismiss();
+    AppliverySdk.unlockRotation();
   }
 
   @Override public void cleanScreenData() {
@@ -255,4 +255,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     }
   }
 
+  @Override public void lockRotationOnParentScreen(Activity currentActivity) {
+    AppliverySdk.lockRotationToPortrait();
+  }
 }
