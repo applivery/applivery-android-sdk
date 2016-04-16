@@ -72,14 +72,12 @@ Now you can import a local aar file using the File --> New --> New Module -->Imp
 And that's all, applivery SDK is now ready to use in your project. But don't forget that using this method you have to import the following libraries that applivery sdk is using:
 
 ```groovy
-  compile 'com.android.support:appcompat-v7:23.0.1'
-  compile 'com.squareup.retrofit:converter-gson:2.0.0-beta1'
-  compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
-  compile 'com.squareup.retrofit:retrofit:2.0.0-beta1'
-  compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta1'
-  compile 'com.squareup.okhttp:okhttp:2.5.0'
-  compile 'com.google.code.gson:gson:2.3.1'
-  compile 'com.karumi:dexter:2.1.2'
+  compile 'com.android.support:appcompat-v7:23.1.1'
+  compile 'com.squareup.retrofit2:retrofit:2.0.0'
+  compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+  compile 'com.google.code.gson:gson:2.6.2'
+  compile 'com.karumi:dexter:2.2.2'
 ```
 
 ## Using gradle with jitpack Maven dependency
@@ -100,7 +98,7 @@ Add the following dependency to your's app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:1.0.0-RC'
+      compile 'com.github.Applivery:applivery-android-sdk:1.1.0-RC2'
     }
   ```
   * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
@@ -147,6 +145,14 @@ At your application start up, in a class extending from Application, you must ca
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
 The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Applivery Sdk that the checking for new versions will be executed after 6 hours (21600 secons) when the app will came back from background mode. Anyway if app is destroyed and app `init` method is called again the checking for new versions will be executed again.
+
+### Feedback
+
+You can shake your phone if you want send Applivery some feedback about your App. By shaking your phone you will have a screen like the following:
+
+![FILES](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/feedback.png)
+
+Here you can add the screenshot of the screen you were on if you woud like. You can say something interesting about the screen and type your feedback as a bug or simply something you want to give as feedback. By pressing the small screenshot you will have the same image bigger just in case you would like to check something. Then if you tap on the plane icon you will send the info, or you could press the close button in the upper right corner otherwise.
 
 License
 =======
