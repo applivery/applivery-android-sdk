@@ -19,6 +19,7 @@
   <dimen name="appNameTextSize">20dp</dimen>
   <dimen name="appliveryTitleHeight">56dp</dimen>
   <dimen name="appliveryTitleIconSize">45dp</dimen>
+  <dimen name="appliveryTitleIconButton">27dp</dimen>
   <dimen name="appliveryTitleIconPaddingSmall">7dp</dimen>
   <dimen name="appliveryTitleIconPaddingMedium">10dp</dimen>
   <dimen name="appliveryFabButtonSize">50dp</dimen>
@@ -38,5 +39,6 @@
   <dimen name="suggestedUpdateMessageContainerMargin">20dp</dimen>
   <dimen name="suggestedUpdateButtonPadding">10dp</dimen>
   <dimen name="appliveryIconTitleMargin">5dp</dimen>
+  <dimen name="appliveryIconbuttonMarginRight">15dp</dimen>
   <dimen name="appliveryIconTitleMargindouble">10dp</dimen>
 </resources>

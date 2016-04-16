@@ -18,7 +18,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
 
     <RelativeLayout
@@ -47,35 +48,24 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/appliveryTitleHeight"
             android:textSize="@dimen/appNameTextSize"
-            android:text="@string/applivery_app_name"
+            android:text="@string/applivery_name"
             />
 
         <ImageButton
             android:id="@+id/applivery_feedback_cancel_button"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:background="@android:color/transparent"
-            android:layout_width="@dimen/appliveryTitleIconSize"
-            android:layout_height="@dimen/appliveryTitleIconSize"
+            android:background="@drawable/applivery_close_selector"
+            android:layout_width="@dimen/appliveryTitleIconButton"
+            android:layout_height="@dimen/appliveryTitleIconButton"
             android:padding="@dimen/appliveryTitleIconPaddingMedium"
-            android:layout_marginRight="@dimen/appliveryIconTitleMargin"
+            android:layout_marginRight="@dimen/appliveryIconbuttonMarginRight"
             android:contentDescription="@string/appliveryCancelFeedbackButtonDesc"
-            android:src="@drawable/applivery_close_selector"
             />
 
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/applivery_feedback_toolbar"
-        android:contentDescription="@string/appliveryScreenshotImageDesc"
-        android:id="@+id/appliveryScreenShot"
-        />
-
-
     <LinearLayout
-        android:visibility="gone"
         android:animateLayoutChanges="true"
         android:id="@+id/applivery_feedback_form"
         android:layout_below="@+id/applivery_feedback_toolbar"
@@ -173,6 +163,7 @@
                 android:layout_gravity="center_horizontal"
                 />
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/applivery_feedback_image"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="@dimen/appliveryFeedbackFormSidePadding"
@@ -182,23 +173,7 @@
                 />
         </RelativeLayout>
 
-
-
-
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/applivery_feedback_next_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="@dimen/appliveryFabButtonSize"
-        android:layout_height="@dimen/appliveryFabButtonSize"
-        android:background="@drawable/applivery_arrow_selector"
-        android:layout_marginBottom="@dimen/appliveryFabButtonMargin"
-        android:contentDescription="@string/appliverynextFeedbackButtonDesc"
-        android:layout_marginRight="16dp"
-
-        />
 
     <ImageButton
         android:id="@+id/applivery_feedback_send_button"
@@ -210,7 +185,32 @@
         android:contentDescription="@string/appliverySendFeedbackButtonDesc"
         android:layout_marginBottom="@dimen/appliveryFabButtonMargin"
         android:layout_marginRight="@dimen/appliveryFabButtonMargin"
+        />
+
+    <ImageView
         android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:layout_below="@+id/applivery_feedback_toolbar"
+        android:contentDescription="@string/appliveryScreenshotImageDesc"
+        android:id="@+id/appliveryScreenShot"
+        android:animateLayoutChanges="true"
+        />
+
+    <ImageButton
+        android:animateLayoutChanges="true"
+        android:visibility="gone"
+        android:id="@+id/applivery_feedback_ok_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="@dimen/appliveryFabButtonSize"
+        android:layout_height="@dimen/appliveryFabButtonSize"
+        android:background="@drawable/applivery_arrow_selector"
+        android:layout_marginBottom="@dimen/appliveryFabButtonMargin"
+        android:contentDescription="@string/appliverynextFeedbackButtonDesc"
+        android:layout_marginRight="16dp"
+
         />
 
 </RelativeLayout>

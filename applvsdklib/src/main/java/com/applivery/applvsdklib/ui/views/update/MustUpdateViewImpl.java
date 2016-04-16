@@ -51,10 +51,9 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   private Button update;
   private UpdateInfo updateInfo;
   private ProgressBar progressBar;
-  private TextView appName;
   private TextView updateMessage;
+  private TextView permissionsDenied;
   private UpdateListener updateListener;
-
 
   /**
    * * Using DialogFragment instead of Dialog because DialogFragment is not dismissed in rotation.
@@ -106,8 +105,8 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   }
 
   private void initViewElements(View view) {
-    this.appName = (TextView) view.findViewById(R.id.must_update_title);
     this.updateMessage = (TextView) view.findViewById(R.id.must_update_message);
+    this.permissionsDenied = (TextView) view.findViewById(R.id.permissions_denied_message);
     this.update = (Button) view.findViewById(R.id.must_update_button);
     this.progressBar = (ProgressBar) view.findViewById(R.id.must_update_progress_bar);
 
@@ -120,9 +119,12 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
   private void initViewElementsData(UpdateInfo updateInfo) {
     if (updateInfo != null){
-      appName.setText(updateInfo.getAppName());
       updateMessage.setText(updateInfo.getAppUpdateMessage());
     }
+
+    permissionsDenied.setVisibility(View.GONE);
+    progressBar.setVisibility(View.GONE);
+
     if (updateListener != null){
       update.setVisibility(View.VISIBLE);
       update.setOnClickListener(new View.OnClickListener() {
@@ -143,23 +145,27 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
     }
   }
 
-  public void lockRotationOnParentScreen(Activity currentActivity) {
+  public void lockRotationOnParentScreen() {
     AppliverySdk.lockRotationToPortrait();
   }
 
-  @Override public void hideDownloadInProgress() {
-    update.setVisibility(View.VISIBLE);
-    progressBar.setVisibility(View.GONE);
-  }
+  @Override public void hideDownloadInProgress() {}
 
   @Override public void showDownloadInProgress() {
     update.setVisibility(View.GONE);
     progressBar.setVisibility(View.VISIBLE);
+    permissionsDenied.setVisibility(View.GONE);
   }
 
   @Override public void updateProgress(double percent) {
     updatProcessTextView(percent, new Handler(getLooper()));
     AppliverySdk.Logger.log("Updated progress to " + percent);
+  }
+
+  @Override public void downloadNotStartedPermissionDenied() {
+    permissionsDenied.setVisibility(View.VISIBLE);
+    progressBar.setVisibility(View.GONE);
+    update.setVisibility(View.VISIBLE);
   }
 
   private void updatProcessTextView(final double percent, Handler handler) {

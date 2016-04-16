@@ -25,6 +25,7 @@ import com.applivery.applvsdklib.domain.model.Feedback;
 import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.tools.androidimplementations.ScreenCaptureUtils;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 
@@ -53,8 +54,8 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     feedbackView.dismissFeedBack();
   }
 
-  public void nextButtonPressed() {
-    feedbackView.showFeedbackFormView();
+  public void okButtonPressed() {
+    okScreenShotPressed();
   }
 
   public void sendButtonPressed() {
@@ -81,11 +82,13 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     }
   }
 
-  public void setScreenCapture(ScreenCapture screenCapture) {
-    this.screenCapture = screenCapture;
-  }
-
   public ScreenCapture getScreenCapture() {
+
+    if (screenCapture == null){
+      ScreenCapture screenCapture = ScreenCaptureUtils.getScreenCapture(AppliverySdk.getCurrentActivity());
+      this.screenCapture = screenCapture;
+    }
+
     return screenCapture;
   }
 
@@ -111,5 +114,13 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   @Override public void onError(ErrorObject error) {
     ShowErrorAlert showErrorAlert = new ShowErrorAlert();
     showErrorAlert.showError(error);
+  }
+
+  public void feedbackImagePressed() {
+    feedbackView.showScheenShotPreview();
+  }
+
+  public void okScreenShotPressed() {
+    feedbackView.hideScheenShotPreview();
   }
 }

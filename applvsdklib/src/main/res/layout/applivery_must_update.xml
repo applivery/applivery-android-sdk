@@ -43,11 +43,13 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/appliveryTitleHeight"
         android:textSize="@dimen/appNameTextSize"
-        android:text="@string/applivery_app_name"
+        android:text="@string/applivery_name"
         />
+
     </LinearLayout>
 
     <LinearLayout
+        android:animateLayoutChanges="true"
         android:layout_below="@+id/applivery_update_title"
         android:orientation="vertical"
         android:layout_gravity="center"
@@ -55,6 +57,7 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:animateLayoutChanges="true"
             android:gravity="center"
             android:layout_margin="@dimen/mustUpdateScreenUpdateMessageMargin"
             android:layout_weight="1"
@@ -62,6 +65,19 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:text="@string/appliveryMustUpdateAppLocked"
+            />
+
+        <TextView
+            android:animateLayoutChanges="true"
+            android:visibility="gone"
+            android:textColor="@color/appliveryRedColor"
+            android:id="@+id/permissions_denied_message"
+            android:gravity="center"
+            android:layout_margin="@dimen/mustUpdateScreenUpdateMessageMargin"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="@string/applivery_continueRequestPermissionDeniedFeedback"
             />
 
         <LinearLayout
@@ -74,6 +90,7 @@
             android:layout_height="0dp">
 
             <Button
+                android:animateLayoutChanges="true"
                 android:id="@+id/must_update_button"
                 android:background="@color/appliveryMainColor"
                 android:textColor="@android:color/white"
@@ -83,6 +100,7 @@
                 android:text="@string/appliveryUpdate"/>
 
             <ProgressBar
+                android:animateLayoutChanges="true"
                 android:visibility="gone"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"

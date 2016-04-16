@@ -16,14 +16,15 @@
 
 <resources>
   <string name="applivery_app_name">Applivery Sdk</string>
+  <string name="applivery_name">Applivery</string>
   <string name="appliveryUpdate">Update</string>
-  <string name="appliveryLater">Cancel</string>
+  <string name="appliveryLater">Later</string>
   <string name="applivery_download_message">Current download progress...</string>
   <string name="applivery_download_title">Downloading</string>
 
   <string name="applivery_continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>
   <string name="applivery_continueRequestPermissionSettingsDeniedFeedback">SETTINGS</string>
-  <string name="applivery_continueRequestPermissionDeniedFeedback">Permissions denied are necessary for doing some tasks</string>
+  <string name="applivery_continueRequestPermissionDeniedFeedback">Write permission denied, this permission is compulsory for download and store the new app version.</string>
   <string name="applivery_continueRequestPermissionRationaleMessage">Permissions denied are necessary for doing some tasks, allow it!</string>
   <string name="applivery_continueRequestPermissionRationaleTitle">Permission Request</string>
 

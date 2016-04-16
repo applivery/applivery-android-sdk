@@ -38,7 +38,7 @@ public class UpdateViewPresenter {
       MustUpdateViewImpl mustUpdateView = new MustUpdateViewImpl();
       mustUpdateView.setUpdateInfo(updateInfo);
       mustUpdateView.setUpdateListener(updateListener);
-      mustUpdateView.lockRotationOnParentScreen(AppliverySdk.getCurrentActivity());
+      mustUpdateView.lockRotationOnParentScreen();
       this.updateView = mustUpdateView;
       this.updateListener.setUpdateView(updateView);
       this.updateView.showUpdateDialog();

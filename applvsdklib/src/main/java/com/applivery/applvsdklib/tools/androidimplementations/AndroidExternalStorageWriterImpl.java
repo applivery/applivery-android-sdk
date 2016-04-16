@@ -106,6 +106,8 @@ public class AndroidExternalStorageWriterImpl implements ExternalStorageWriter {
                   write(inputStream, lenght, downloadStatusListener, apkFileName, true);
                 }
               }).start();
+            }else{
+              downloadStatusListener.downloadNotStartedPermissionDenied();
             }
           }
         }, AppliverySdk.getCurrentActivity());

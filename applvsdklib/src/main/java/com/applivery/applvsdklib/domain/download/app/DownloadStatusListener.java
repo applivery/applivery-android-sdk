@@ -28,4 +28,5 @@ public interface DownloadStatusListener {
 
   void downloadCompleted(DownloadResult downloadResult);
 
+  void downloadNotStartedPermissionDenied();
 }

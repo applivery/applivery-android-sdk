@@ -46,7 +46,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   private static UserFeedbackView userFeedbackView;
 
   private ImageButton cancelButton;
-  private ImageButton nextButton;
+  private ImageButton okButton;
   private ImageButton sendButton;
 
   private LinearLayout feedbackButton;
@@ -115,7 +115,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   private void initViewElements(View view) {
 
     cancelButton = (ImageButton) view.findViewById(R.id.applivery_feedback_cancel_button);
-    nextButton = (ImageButton) view.findViewById(R.id.applivery_feedback_next_button);
+    okButton = (ImageButton) view.findViewById(R.id.applivery_feedback_ok_button);
     sendButton = (ImageButton) view.findViewById(R.id.applivery_feedback_send_button);
     feedbackButton = (LinearLayout) view.findViewById(R.id.applivery_tab_button_selector_feedback);
     bugButton = (LinearLayout) view.findViewById(R.id.applivery_tab_button_selector_bug);
@@ -132,18 +132,17 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   }
 
   private void initViewState() {
-    showScreenshotElements();
+    showFeedbackFormView();
     userFeedbackPresenter.feedbackButtonPressed();
-    setFeedbackButtonSelected();
-    screenShotSwitch.setChecked(true);
+    screenShotSwitch.setChecked(false);
   }
 
   @Override public void onClick(View v) {
 
     if (R.id.applivery_feedback_cancel_button == v.getId()){
       userFeedbackPresenter.cancelButtonPressed();
-    }else if(R.id.applivery_feedback_next_button == v.getId()){
-      userFeedbackPresenter.nextButtonPressed();
+    }else if(R.id.applivery_feedback_ok_button == v.getId()){
+      userFeedbackPresenter.okButtonPressed();
     }else if(R.id.applivery_feedback_send_button == v.getId()){
       userFeedbackPresenter.sendButtonPressed();
     }else if(R.id.applivery_tab_button_selector_feedback == v.getId()){
@@ -152,43 +151,19 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
       userFeedbackPresenter.bugButtonPressed();
     }else if(R.id.attach_screenshot_switch == v.getId()){
       userFeedbackPresenter.screenshotSwitchPressed(screenShotSwitch.isChecked());
+    }else if(R.id.applivery_feedback_image == v.getId()){
+      userFeedbackPresenter.feedbackImagePressed();
     }
   }
 
   private void initElementActions() {
     cancelButton.setOnClickListener(this);
-    nextButton.setOnClickListener(this);
+    okButton.setOnClickListener(this);
     sendButton.setOnClickListener(this);
     feedbackButton.setOnClickListener(this);
     bugButton.setOnClickListener(this);
     screenShotSwitch.setOnClickListener(this);
-  }
-
-  private void showScreenshotElements() {
-    ScreenCapture screenCapture = userFeedbackPresenter.getScreenCapture();
-    //NOTE screenshot get lost after screen capture
-    if (screenCapture!=null){
-      screenshot.setImageBitmap(screenCapture.getScreenShot());
-    }
-    screenshot.setVisibility(View.VISIBLE);
-    nextButton.setVisibility(View.VISIBLE);
-  }
-
-  private void hideFormElements() {
-    feedbackFormContainer.setVisibility(View.GONE);
-    sendButton.setVisibility(View.GONE);
-  }
-
-  private void showFormElements() {
-    feedbackFormContainer.setVisibility(View.VISIBLE);
-    sendButton.setVisibility(View.VISIBLE);
-    showFeedbackImage();
-  }
-
-  private void hideScreenShotElements() {
-    screenshot.setImageResource(android.R.color.transparent);
-    screenshot.setVisibility(View.GONE);
-    nextButton.setVisibility(View.GONE);
+    feedbackImage.setOnClickListener(this);
   }
 
   @Override
@@ -197,8 +172,8 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   }
 
   @Override public void showFeedbackFormView() {
-    hideScreenShotElements();
-    showFormElements();
+    feedbackImage.setVisibility(View.GONE);
+    feedbackImage.setImageResource(android.R.color.transparent);
   }
 
   @Override public void dismissFeedBack() {
@@ -207,11 +182,10 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   }
 
   @Override public void cleanScreenData() {
-    hideFormElements();
-    screenShotSwitch.setChecked(true);
+    screenShotSwitch.setChecked(false);
     screenshot.setImageResource(android.R.color.transparent);
     feedbackImage.setImageResource(android.R.color.transparent);
-    feedbackImage.setVisibility(View.VISIBLE);
+    feedbackImage.setVisibility(View.GONE);
     feedbackMessage.getText().clear();
   }
 
@@ -230,10 +204,9 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   }
 
   @Override public void showFeedbackImage() {
-    feedbackImage.setVisibility(View.VISIBLE);
     ScreenCapture screenCapture = userFeedbackPresenter.getScreenCapture();
-    //NOTE screenshot get lost after screen capture
     if (screenCapture!=null) {
+      feedbackImage.setVisibility(View.VISIBLE);
       feedbackImage.setImageBitmap(screenCapture.getScreenShot());
     }
   }
@@ -241,10 +214,6 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   @Override public void hideFeedbackImage() {
     feedbackImage.setImageResource(android.R.color.transparent);
     feedbackImage.setVisibility(View.GONE);
-  }
-
-  @Override public void setScreenCapture(ScreenCapture screenCapture) {
-    userFeedbackPresenter.setScreenCapture(screenCapture);
   }
 
   @Override public boolean isNotShowing() {
@@ -257,5 +226,20 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override public void lockRotationOnParentScreen(Activity currentActivity) {
     AppliverySdk.lockRotationToPortrait();
+  }
+
+  @Override public void hideScheenShotPreview() {
+    screenshot.setImageResource(android.R.color.transparent);
+    screenshot.setVisibility(View.GONE);
+    okButton.setVisibility(View.GONE);
+  }
+
+  @Override public void showScheenShotPreview() {
+    ScreenCapture screenCapture = userFeedbackPresenter.getScreenCapture();
+    if (screenCapture!=null) {
+      screenshot.setVisibility(View.VISIBLE);
+      screenshot.setImageBitmap(screenCapture.getScreenShot());
+    }
+    okButton.setVisibility(View.VISIBLE);
   }
 }

@@ -28,4 +28,6 @@ public interface UpdateView {
   void showDownloadInProgress();
 
   void updateProgress(double percent);
+
+  void downloadNotStartedPermissionDenied();
 }

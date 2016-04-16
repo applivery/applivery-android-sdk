@@ -50,6 +50,10 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
       @Override public void downloadCompleted(DownloadResult downloadResult) {
         sendDelayedResponse(downloadResult);
       }
+
+      @Override public void downloadNotStartedPermissionDenied() {
+        interactorCallback.downloadNotStartedPermissionDenied();
+      }
     };
 
     this.downloadBuildRequest =

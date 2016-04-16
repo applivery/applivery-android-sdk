@@ -108,6 +108,10 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     updatProcessTextView(percent, new Handler(getLooper()));
   }
 
+  @Override public void downloadNotStartedPermissionDenied() {
+    progress.dismiss();
+  }
+
   private void updatProcessTextView(final double percent, Handler handler) {
     Runnable myRunnable = new Runnable() {
       @Override

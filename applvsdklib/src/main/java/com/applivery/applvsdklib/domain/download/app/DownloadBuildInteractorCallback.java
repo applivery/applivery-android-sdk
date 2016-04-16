@@ -46,4 +46,8 @@ public class DownloadBuildInteractorCallback implements InteractorCallback<Downl
     ShowErrorAlert showErrorAlert = new ShowErrorAlert();
     showErrorAlert.showError(error);
   }
+
+  public void downloadNotStartedPermissionDenied() {
+    updateView.downloadNotStartedPermissionDenied();
+  }
 }

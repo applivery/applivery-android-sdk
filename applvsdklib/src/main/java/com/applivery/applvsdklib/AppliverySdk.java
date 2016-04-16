@@ -245,8 +245,6 @@ public class AppliverySdk {
 
       if (feedbackView.isNotShowing()){
         feedbackView.lockRotationOnParentScreen(getCurrentActivity());
-        ScreenCapture screenCapture = ScreenCaptureUtils.getScreenCapture(getCurrentActivity());
-        feedbackView.setScreenCapture(screenCapture);
         feedbackView.show();
       }
     }
