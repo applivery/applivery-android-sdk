@@ -154,6 +154,8 @@ You can shake your phone if you want send Applivery some feedback about your App
 
 Here you can add the screenshot of the screen you were on if you woud like. You can say something interesting about the screen and type your feedback as a bug or simply something you want to give as feedback. By pressing the small screenshot you will have the same image bigger just in case you would like to check something. Then if you tap on the plane icon you will send the info, or you could press the close button in the upper right corner otherwise.
 
+NOTE: Feedback is only available in version 1.1.0-RC2
+
 License
 =======
 
