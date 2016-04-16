@@ -41,7 +41,7 @@ allprojects {
     androidApplicationId = 'com.applivery.applvsdklib'
 
     versionMajor = 1
-    versionMinor = 0
+    versionMinor = 1
     versionPatch = 0
 
     androidVersionCode = versionMajor * 1000 + versionMinor * 100 + versionPatch
