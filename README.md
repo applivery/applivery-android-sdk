@@ -98,7 +98,7 @@ Add the following dependency to your's app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:1.1.0-RC2'
+      compile 'com.github.Applivery:applivery-android-sdk:1.1.0-RC3'
     }
   ```
   * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
@@ -154,7 +154,24 @@ You can shake your phone if you want send Applivery some feedback about your App
 
 Here you can add the screenshot of the screen you were on if you woud like. You can say something interesting about the screen and type your feedback as a bug or simply something you want to give as feedback. By pressing the small screenshot you will have the same image bigger just in case you would like to check something. Then if you tap on the plane icon you will send the info, or you could press the close button in the upper right corner otherwise.
 
-NOTE: Feedback is only available in version 1.1.0-RC2
+If you want to disable feedback:
+
+```java
+Applivery.enableFeedback();
+```
+Call it having your app in foreground whenever you want.
+
+If you want to disable feedback:
+
+```java
+Applivery.disableFeedback();
+```
+
+Call it having your app in foreground whenever you want
+
+Feedback is enabled by default.
+
+NOTE: Feedback is only available in version 1.1.0-RC3
 
 License
 =======
