@@ -27,6 +27,7 @@ public class AndroidSensorWrapper {
   private boolean enabled;
   private final AppliverySensorType appliverySensorType;
   private final SensorEventListener sensorEventListener;
+  private boolean registered;
 
   public AndroidSensorWrapper(AppliverySensorType appliverySensorType, SensorEventListener listener) {
     this.appliverySensorType = appliverySensorType;
@@ -36,6 +37,10 @@ public class AndroidSensorWrapper {
 
   public void enableSensor(){
     this.enabled = true;
+  }
+
+  public void disableSensor(){
+    this.enabled = false;
   }
 
   public boolean isEnabled() {
@@ -52,5 +57,13 @@ public class AndroidSensorWrapper {
 
   public SensorEventListener getSensorEventListener() {
     return sensorEventListener;
+  }
+
+  public void setRegistered(boolean registered) {
+    this.registered = registered;
+  }
+
+  public boolean isRegistered() {
+    return registered;
   }
 }

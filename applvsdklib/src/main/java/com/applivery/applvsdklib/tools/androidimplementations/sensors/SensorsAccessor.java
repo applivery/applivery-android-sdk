@@ -85,6 +85,28 @@ public class SensorsAccessor {
     return new AppliverySensorIterator();
   }
 
+  public void disableSensor(int type) {
+    AndroidSensorWrapper androidSensorWrapper = getSensorWrapper(type);
+
+    if (androidSensorWrapper!=null){
+      androidSensorWrapper.disableSensor();
+    }
+  }
+
+  public AndroidSensorWrapper getSensor(int type) {
+    return getSensorWrapper(type);
+  }
+
+  private AndroidSensorWrapper getSensorWrapper(int type) {
+    AppliverySensorType appliverySensorType = AppliverySensorType.toAppliverySensor(type);
+    if (isSensorAvailable(appliverySensorType) &&
+        sensors.containsKey(appliverySensorType.getStringValue())){
+      AndroidSensorWrapper androidSensorWrapper = sensors.get(appliverySensorType.getStringValue());
+      return androidSensorWrapper;
+    }
+    return null;
+  }
+
   protected class AppliverySensorIterator {
 
     private Set<String> keys;

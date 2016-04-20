@@ -53,4 +53,18 @@ public class Applivery {
   public static void setUpdateCheckingInterval(int seconds){
     AppliverySdk.setUpdateCheckingTime(seconds);
   }
+
+  /**
+   * Enables feedback on shake, call it having your app in foreground whenever you want.
+   */
+  public static void enableFeedback(){
+    AppliverySdk.enableFeedback();
+  }
+
+  /**
+   * Disables feedback on shake, call it having your app in foreground whenever you want.
+   */
+  public static void disableFeedback(){
+    AppliverySdk.disableFeedback();
+  }
 }

@@ -35,7 +35,7 @@ allprojects {
 
   ext {
     androidBuildToolsVersion = '23.0.2'
-    androidMinSdkVersion = 14
+    androidMinSdkVersion = 10
     androidTargetSdkVersion = 23
     androidCompileSdkVersion = 23
     androidApplicationId = 'com.applivery.applvsdklib'

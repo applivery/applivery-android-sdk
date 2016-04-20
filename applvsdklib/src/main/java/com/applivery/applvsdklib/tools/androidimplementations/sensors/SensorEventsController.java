@@ -30,6 +30,7 @@ import java.util.List;
 public class SensorEventsController {
   private static final int REGISTER = 1;
   private static final int UNREGISTER = 2;
+  private static SensorEventsController sensorEventsController;
   private final SensorManager sensorManager;
   private final SensorEventsReceiver sensorEventsReceiver = new SensorEventsReceiver();
   private final SensorsAccessor sensorsAccessor = new SensorsAccessor(sensorEventsReceiver);
@@ -37,7 +38,12 @@ public class SensorEventsController {
 
   public static SensorEventsController getInstance(Context applicationContext){
     try {
-      return getWorkingInstance(applicationContext);
+      if (sensorEventsController == null){
+        sensorEventsController = getWorkingInstance(applicationContext);
+      }
+
+        return sensorEventsController;
+
     }catch (Exception appliveryException){
       AppliverySdk.Logger.log(appliveryException.getMessage());
       return getEmptyInstance();
@@ -45,32 +51,49 @@ public class SensorEventsController {
   }
 
   public void unRegisterAllSensorsForApplication() {
-    sensorAction(REGISTER);
+    sensorActionForAllSensors(REGISTER);
   }
 
-  private void sensorAction(int action){
+  private void sensorActionForAllSensors(int action){
 
     SensorsAccessor.AppliverySensorIterator iterator = sensorsAccessor.getIterator();
 
     while (iterator.hasNext()){
       AndroidSensorWrapper androidSensorWrapper = iterator.next();
-      SensorEventListener sensorEventListener = androidSensorWrapper.getSensorEventListener();
-      Sensor sensor = sensorManager.getDefaultSensor(androidSensorWrapper.getAndroidSensorType());
-      if (action == REGISTER){
-        sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-      }else if (action == UNREGISTER){
-        sensorManager.unregisterListener(sensorEventListener, sensor);
-      }
-
+      sensorAction(action, androidSensorWrapper);
     }
   }
 
+  private void sensorAction(int action, AndroidSensorWrapper androidSensorWrapper) {
+    SensorEventListener sensorEventListener = androidSensorWrapper.getSensorEventListener();
+    Sensor sensor = sensorManager.getDefaultSensor(androidSensorWrapper.getAndroidSensorType());
+    //if (action == REGISTER && androidSensorWrapper.isEnabled()){
+    if (action == REGISTER){
+      sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+      androidSensorWrapper.setRegistered(true);
+    }else if (action == UNREGISTER){
+      //}else if (action == UNREGISTER
+      //    && androidSensorWrapper.isEnabled() && androidSensorWrapper.isRegistered()){
+      sensorManager.unregisterListener(sensorEventListener, sensor);
+      androidSensorWrapper.setRegistered(false);
+    }
+  }
+
+  public void disableSensor(int androidSensorType){
+    AndroidSensorWrapper androidSensorWrapper = sensorsAccessor.getSensor(androidSensorType);
+
+    if (androidSensorWrapper != null){
+      sensorAction(UNREGISTER, androidSensorWrapper);
+    }
+    sensorsAccessor.disableSensor(androidSensorType);
+  }
+
   public void registerAllSensorsForApplication() {
-    sensorAction(REGISTER);
+    sensorActionForAllSensors(REGISTER);
   }
 
   private SensorEventsController(Context context){
-    sensorManager = (SensorManager) context.getSystemService(context.SENSOR_SERVICE);
+    sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
   }
 
   private SensorEventsController() {
@@ -100,6 +123,15 @@ public class SensorEventsController {
         AppliverySdk.Logger.log("ACCELEROMETER sensor is available on device");
         sensorsAccessor.enableSensor(listOfSensorsOnDevice.get(i).getType());
       }
+    }
+  }
+
+  public void enableSensor(int androidSensorType) {
+    sensorsAccessor.enableSensor(androidSensorType);
+    AndroidSensorWrapper androidSensorWrapper = sensorsAccessor.getSensor(androidSensorType);
+
+    if (androidSensorWrapper != null){
+      sensorAction(REGISTER, androidSensorWrapper);
     }
   }
 }
