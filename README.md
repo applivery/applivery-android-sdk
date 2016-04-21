@@ -173,6 +173,10 @@ Feedback is enabled by default.
 
 NOTE: Feedback is only available in version 1.1.0-RC3
 
+## Sample
+
+As an example of integration you can have a look at: [our sample app](https://github.com/applivery/applivery-android-sample-app)
+
 License
 =======
 
