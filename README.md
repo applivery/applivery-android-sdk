@@ -120,7 +120,7 @@ At your application start up, in a class extending from Application, you must ca
  public class AppliveryApplication extends Application{
  @Override public void onCreate() {
    super.onCreate();
-   Applivery.init(this, BuildConfig.APP_KEY, BuildConfig.APP_SECRET, false);
+   Applivery.init(this, BuildConfig.APP_ID, BuildConfig.ACCOUNT_API_KEY, false);
    Applivery.setUpdateCheckingInterval(21600);
  }
  }
@@ -131,20 +131,20 @@ At your application start up, in a class extending from Application, you must ca
 **IMPORTANT I:** As you can suspect, you should replace the strings `APP_KEY` and `APP_SECRET` with you api key and your app id respectively. Easy! Don't you think so?, they look like this in my build.gradle:
 
  ```groovy
- buildConfigField "String", "APP_KEY", '"XXXXXXXXXXXXXXXXXXXXXXXX"'
- buildConfigField "String", "APP_SECRET", '"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"'
+ buildConfigField "String", "APP_ID", '"XXXXXXXXXXXXXXXXXXXXXXXX"'
+ buildConfigField "String", "ACCOUNT_API_KEY", '"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"'
  ```
 
 ## About params
 
 - **app**: Your app instance.
-- **apiKey**: Your developer's Api Key
-- **appId**: Your application's ID
+- **applicationId**: Your application's ID
+- **appClientToken**: Your developer's Api Key
 - **isPlayStoreRelease**: is the last param and the aim of this flag is to mark if the build will be submitted to Play Store. This is needed to prevent unwanted behavior like prompt to a final user that a new version is available on Applivery.com.
 	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
-The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Applivery Sdk that the checking for new versions will be executed after 6 hours (21600 secons) when the app will came back from background mode. Anyway if app is destroyed and app `init` method is called again the checking for new versions will be executed again.
+The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Applivery Sdk that the checking for new versions will be executed after 6 hours (21600 seconds) when the app will came back from background mode. Anyway if app is destroyed and app `init` method is called again the checking for new versions will be executed again.
 
 ### Feedback
 
