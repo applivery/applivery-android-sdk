@@ -15,7 +15,7 @@
   -->
 
 <resources>
-  <string name="applivery_app_name">Applivery Sdk</string>
+  <string name="applivery_sdk_string_name">Applivery Sdk</string>
   <string name="applivery_name">Applivery</string>
   <string name="appliveryUpdate">Update</string>
   <string name="appliveryLater">Later</string>

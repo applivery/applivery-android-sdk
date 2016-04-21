@@ -33,7 +33,7 @@
             android:id="@+id/suggested_update_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/applivery_app_name"/>
+            android:text="@string/applivery_sdk_string_name"/>
     </LinearLayout>
 
 </LinearLayout>
