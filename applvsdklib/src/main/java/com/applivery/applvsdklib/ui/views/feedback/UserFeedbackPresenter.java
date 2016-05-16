@@ -92,8 +92,9 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     return screenCapture;
   }
 
-  public void sendFeedbackInfo(String feedbackMessage) {
+  public void sendFeedbackInfo(String feedbackMessage, String screen) {
     feedback.setMessage(feedbackMessage);
+    feedback.setScreen(screen);
 
     if (feedback.mustAttachScreenshot()){
       feedback.setScreenCapture(screenCapture);

@@ -16,11 +16,13 @@
 
 package com.applivery.applvsdklib.ui.views.feedback;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +43,7 @@ import com.applivery.applvsdklib.ui.model.ScreenCapture;
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class UserFeedbackView extends DialogFragment implements FeedbackView, View.OnClickListener {
 
   private static UserFeedbackView userFeedbackView;
@@ -131,6 +134,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   private void initViewState() {
     showFeedbackFormView();
     userFeedbackPresenter.feedbackButtonPressed();
@@ -181,6 +185,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     AppliverySdk.unlockRotation();
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   @Override public void cleanScreenData() {
     screenShotSwitch.setChecked(false);
     screenshot.setImageResource(android.R.color.transparent);
@@ -190,7 +195,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   }
 
   @Override public void takeDataFromScreen() {
-    userFeedbackPresenter.sendFeedbackInfo(feedbackMessage.getText().toString());
+    userFeedbackPresenter.sendFeedbackInfo(feedbackMessage.getText().toString(), getActivity().getLocalClassName());
   }
 
   @Override public void setBugButtonSelected() {

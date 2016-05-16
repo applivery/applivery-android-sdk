@@ -43,12 +43,13 @@ public class ApiFeedbackRequestMapper
     String app = feedbackWrapper.getAppId();
     String type = feedbackWrapper.getBugType();
     String meessage = feedbackWrapper.getFeedBackMessage();
+    String screen = feedbackWrapper.getScreen();
     String screenShotBase64 = feedbackWrapper.getScreenShotBase64();
 
     ApiPackageInfoData apiPackageInfoData = packageInfoMapper.modelToData(feedbackWrapper);
     ApiDeviceInfoData apiDeviceInfoData = deviceInfoMapper.modelToData(feedbackWrapper);
 
-    ApiFeedbackData apiFeedbackData = new ApiFeedbackData(app, type, meessage, apiPackageInfoData,
+    ApiFeedbackData apiFeedbackData = new ApiFeedbackData(app, type, meessage, screen, apiPackageInfoData,
         apiDeviceInfoData, screenShotBase64);
 
     return apiFeedbackData;

@@ -27,6 +27,7 @@ public class ApiFeedbackData {
 
   @SerializedName("app") @Expose private final String app;
   @SerializedName("type") @Expose private final String type;
+  @SerializedName("screen") @Expose private final String screen;
   @SerializedName("message") @Expose private final String message;
 
   @SerializedName("packageInfo") @Expose private final ApiPackageInfoData packageInfo;
@@ -34,11 +35,13 @@ public class ApiFeedbackData {
 
   @SerializedName("screenshot") @Expose private final String screenshot;
 
-  public ApiFeedbackData(String app, String type, String message, ApiPackageInfoData packageInfo,
+  public ApiFeedbackData(String app, String type, String message,
+      String screen, ApiPackageInfoData packageInfo,
       ApiDeviceInfoData deviceInfo, String screenshot) {
     this.app = app;
     this.type = type;
     this.message = message;
+    this.screen = screen;
     this.packageInfo = packageInfo;
     this.deviceInfo = deviceInfo;
     this.screenshot = screenshot;

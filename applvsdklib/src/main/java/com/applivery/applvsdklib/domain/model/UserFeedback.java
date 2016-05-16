@@ -27,6 +27,7 @@ public class UserFeedback implements Feedback {
   private FeedBackType feedBackType;
   private boolean screenshotAttached = true;
   private String feedbackMessage;
+  private String screen;
   private ScreenCapture screenCapture;
 
   @Override public void setType(FeedBackType feedBackType) {
@@ -47,6 +48,14 @@ public class UserFeedback implements Feedback {
 
   @Override public String getMessage() {
     return feedbackMessage;
+  }
+
+  @Override public void setScreen(String screen) {
+    this.screen = screen;
+  }
+
+  @Override public String getScreen() {
+    return screen;
   }
 
   @Override public void setScreenCapture(ScreenCapture screenCapture) {

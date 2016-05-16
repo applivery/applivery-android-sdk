@@ -29,6 +29,7 @@ public class FeedbackWrapper {
   final private String packageName;
   final private String appVersionName;
   final private String osName;
+  final private String screen;
   final private String screenShotBase64;
   final private String feedBackMessage;
   final private String vendor;
@@ -38,13 +39,14 @@ public class FeedbackWrapper {
   final private String bugType;
   final private String osVersion;
 
-  public FeedbackWrapper(String packageName, String appVersionName, String osName,
+  public FeedbackWrapper(String packageName, String appVersionName, String osName, String screen,
       String screenShotBase64, String feedBackMessage, String vendor, String model, String type,
       String appId, String bugType, String osVersion) {
 
     this.packageName = packageName;
     this.appVersionName = appVersionName;
     this.osName = osName;
+    this.screen = screen;
     this.screenShotBase64 = screenShotBase64;
     this.feedBackMessage = feedBackMessage;
     this.vendor = vendor;
@@ -64,6 +66,7 @@ public class FeedbackWrapper {
             currentAppInfo.getPackageName(),
             String.valueOf(currentAppInfo.getVersionCode()),
             deviceDetailsInfo.getOsName(),
+            feedback.getScreen(),
             feedback.getBase64ScreenCapture(),
             feedback.getMessage(),
             deviceDetailsInfo.getVendor(),
@@ -87,6 +90,10 @@ public class FeedbackWrapper {
 
   public String getOsName() {
     return osName;
+  }
+
+  public String getScreen() {
+    return screen;
   }
 
   public String getScreenShotBase64() {

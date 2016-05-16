@@ -33,6 +33,10 @@ public interface Feedback {
 
   String getMessage();
 
+  void setScreen(String screen);
+
+  String getScreen();
+
   void setScreenCapture(ScreenCapture screenCapture);
 
   String getBase64ScreenCapture();
