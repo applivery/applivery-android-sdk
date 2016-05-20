@@ -1,19 +1,57 @@
+/*
+ * Copyright (c) 2016 Applivery
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.applivery.applvsdklib.network.api.requests.mappers;
 
 import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
-import com.applivery.applvsdklib.network.api.requests.ApiFeedbackRequestData;
+import com.applivery.applvsdklib.network.api.model.ApiDeviceInfoData;
+import com.applivery.applvsdklib.network.api.model.ApiFeedbackData;
+import com.applivery.applvsdklib.network.api.model.ApiPackageInfoData;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
 public class ApiFeedbackRequestMapper
-    implements RequestMapper<FeedbackWrapper, ApiFeedbackRequestData> {
+    implements RequestMapper<FeedbackWrapper, ApiFeedbackData> {
 
-  @Override public ApiFeedbackRequestData modelToData(FeedbackWrapper feedbackWrapper) {
-    ApiFeedbackRequestData apiFeedbackData = new ApiFeedbackRequestData();
-    //TODO implement mapping of fields
-    //TODO next release stuff
+  private final ApiPackageInfoRequestMapper packageInfoMapper;
+  private final ApiDeviceInfoRequestMapper deviceInfoMapper;
+
+  public ApiFeedbackRequestMapper(ApiPackageInfoRequestMapper packageInfoMapper,
+      ApiDeviceInfoRequestMapper deviceInfoMapper) {
+    this.packageInfoMapper = packageInfoMapper;
+    this.deviceInfoMapper = deviceInfoMapper;
+  }
+
+
+  @Override public ApiFeedbackData modelToData(FeedbackWrapper feedbackWrapper) {
+
+    String app = feedbackWrapper.getAppId();
+    String type = feedbackWrapper.getBugType();
+    String meessage = feedbackWrapper.getFeedBackMessage();
+    String screen = feedbackWrapper.getScreen();
+    String screenShotBase64 = feedbackWrapper.getScreenShotBase64();
+
+    ApiPackageInfoData apiPackageInfoData = packageInfoMapper.modelToData(feedbackWrapper);
+    ApiDeviceInfoData apiDeviceInfoData = deviceInfoMapper.modelToData(feedbackWrapper);
+
+    ApiFeedbackData apiFeedbackData = new ApiFeedbackData(app, type, meessage, screen, apiPackageInfoData,
+        apiDeviceInfoData, screenShotBase64);
+
     return apiFeedbackData;
   }
 }

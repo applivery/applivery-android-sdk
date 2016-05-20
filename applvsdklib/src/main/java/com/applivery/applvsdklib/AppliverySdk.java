@@ -1,9 +1,27 @@
+/*
+ * Copyright (c) 2016 Applivery
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.applivery.applvsdklib;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.hardware.Sensor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -13,9 +31,12 @@ import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
+import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
 import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
+import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
+import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
 import java.util.concurrent.*;
 
 /**
@@ -24,11 +45,14 @@ import java.util.concurrent.*;
  */
 public class AppliverySdk {
 
+  //TODO This class is already using too many Static fields, consider redesign.
+  //TODO Hold static reference only to AppliverySdk object and wrap smaller objects inside
   private static final String TAG = AppliverySdk.class.getCanonicalName();
   private static volatile Executor executor;
   private static volatile String applicationId;
   private static volatile String appClientToken;
   private static boolean isPlayStoreRelease = false;
+  private static boolean lockedApp = false;
   private static volatile AppliveryApiService appliveryApiService;
   private static volatile boolean isDebugEnabled = BuildConfig.DEBUG;
   private static Context applicationContext;
@@ -43,6 +67,16 @@ public class AppliverySdk {
   public static synchronized void sdkInitialize(Application app,
       String applicationId, String appClientToken, boolean isPlayStoreRelease) {
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+        init(app, applicationId, appClientToken, isPlayStoreRelease);
+    }else{
+      Logger.log("Despite Applivery SDK compiles from API level 10 and forward, it is not compatible for API levels under 14");
+    }
+  }
+
+  @TargetApi(14)
+  private static void init(Application app, String applicationId, String appClientToken,
+      boolean isPlayStoreRelease) {
     if (!sdkInitialized) {
 
       initializeAppliveryConstants(app, applicationId, appClientToken, isPlayStoreRelease);
@@ -61,7 +95,6 @@ public class AppliverySdk {
       obtainAppConfig(requestConfig);
 
     }
-
   }
 
   /**
@@ -114,6 +147,11 @@ public class AppliverySdk {
     }
   }
 
+  public static String getApplicationId(){
+    Validate.sdkInitialized();
+    return applicationId;
+  }
+
   public static Executor getExecutor() {
     synchronized (LOCK) {
       if (AppliverySdk.executor == null) {
@@ -152,7 +190,21 @@ public class AppliverySdk {
 
   public static boolean isContextAvailable() {
     Validate.sdkInitialized();
-    return (activityLifecycle.getCurrentActivity()!=null)? true : false;
+    return (activityLifecycle.getCurrentActivity() != null);
+  }
+
+  public static void lockRotationToPortrait() {
+    Activity activity = activityLifecycle.getCurrentActivity();
+    if (activity != null){
+      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+  }
+
+  public static void unlockRotation() {
+    Activity activity = activityLifecycle.getCurrentActivity();
+    if (activity != null){
+      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    }
   }
 
   public static synchronized boolean isInitialized() {
@@ -184,7 +236,7 @@ public class AppliverySdk {
     applicationId = appClientToken = null;
     isPlayStoreRelease = isDebugEnabled = sdkInitialized = false;
     applicationContext = null;
-    permissionRequestManager = null ;
+    permissionRequestManager = null;
     activityLifecycle = null;
     updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
   }
@@ -194,7 +246,44 @@ public class AppliverySdk {
   }
 
   public static void setUpdateCheckingTime(int updateCheckingTime) {
+    Validate.sdkInitialized();
     AppliverySdk.updateCheckingTime = new Integer(updateCheckingTime * 1000).longValue();
+  }
+
+  public static void requestForUserFeedBack() {
+
+    if (!lockedApp){
+      FeedbackView feedbackView = UserFeedbackView.getInstance(appliveryApiService);
+
+      if (feedbackView.isNotShowing()){
+        feedbackView.lockRotationOnParentScreen(getCurrentActivity());
+        feedbackView.show();
+      }
+    }
+  }
+
+  public static void lockApp(){
+    lockedApp = true;
+  }
+
+  public static void unlockApp(){
+    lockedApp = false;
+  }
+
+  public static boolean isAppLocked(){
+    return lockedApp;
+  }
+
+  public static void disableFeedback() {
+    Validate.sdkInitialized();
+    SensorEventsController sensorController = SensorEventsController.getInstance(applicationContext);
+    sensorController.disableSensor(Sensor.TYPE_ACCELEROMETER);
+  }
+
+  public static void enableFeedback() {
+    Validate.sdkInitialized();
+    SensorEventsController sensorController = SensorEventsController.getInstance(applicationContext);
+    sensorController.enableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
   public static class Logger {

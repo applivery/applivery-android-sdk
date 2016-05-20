@@ -1,28 +1,58 @@
+<!--
+  ~ Copyright (c) 2016 Applivery
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
-  <string name="app_name">Applivery Sdk</string>
-  <string name="update">Update</string>
-  <string name="cancel">Cancel</string>
-  <string name="download_message">Current download progress...</string>
-  <string name="download_title">Downloading</string>
+  <string name="applivery_sdk_string_name">Applivery Sdk</string>
+  <string name="applivery_name">Applivery</string>
+  <string name="appliveryUpdate">Update</string>
+  <string name="appliveryLater">Later</string>
+  <string name="applivery_download_message">Current download progress...</string>
+  <string name="applivery_download_title">Downloading</string>
 
-  <string name="continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>
-  <string name="continueRequestPermissionSettingsDeniedFeedback">SETTINGS</string>
-  <string name="continueRequestPermissionDeniedFeedback">Permissions denied are necessary for doing some tasks</string>
-  <string name="continueRequestPermissionRationaleMessage">Permissions denied are necessary for doing some tasks, allow it!</string>
-  <string name="continueRequestPermissionRationaleTitle">Permission Request</string>
+  <string name="applivery_continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>
+  <string name="applivery_continueRequestPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="applivery_continueRequestPermissionDeniedFeedback">Write permission denied, this permission is compulsory for download and store the new app version.</string>
+  <string name="applivery_continueRequestPermissionRationaleMessage">Permissions denied are necessary for doing some tasks, allow it!</string>
+  <string name="applivery_continueRequestPermissionRationaleTitle">Permission Request</string>
 
-  <string name="writeOnExternalPermissionAllowedFeedback">Write on external Storage has been allowed</string>
-  <string name="writeOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
-  <string name="writeOnExternalPermissionDeniedFeedback">Write on external Storage Permission is necessary for downloading new app</string>
-  <string name="writeOnExternalPermissionRationaleMessage">Write on external Storage Permission is necessary for downloading new app version, allow it!</string>
-  <string name="writeOnExternalPermissionRationaleTitle">Permission Request</string>
+  <string name="applivery_writeOnExternalPermissionAllowedFeedback">Write on external Storage has been allowed</string>
+  <string name="applivery_writeOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="applivery_writeOnExternalPermissionDeniedFeedback">Write on external Storage Permission is necessary for downloading new app</string>
+  <string name="applivery_writeOnExternalPermissionRationaleMessage">Write on external Storage Permission is necessary for downloading new app version, allow it!</string>
+  <string name="applivery_writeOnExternalPermissionRationaleTitle">Permission Request</string>
 
-  <string name="readOnExternalPermissionAllowedFeedback">Read from external Storage has been allowed</string>
-  <string name="readOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
-  <string name="readOnExternalPermissionDeniedFeedback">Read from external Storage Permission is necessary for installing downloaded app</string>
-  <string name="readOnExternalPermissionRationaleMessage">Read from external Storage Permission is necessary for installing downloaded app, allow it!</string>
-  <string name="readOnExternalPermissionRationaleTitle">Permission Request</string>
+  <string name="applivery_readOnExternalPermissionAllowedFeedback">Read from external Storage has been allowed</string>
+  <string name="applivery_readOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="applivery_readOnExternalPermissionDeniedFeedback">Read from external Storage Permission is necessary for installing downloaded app</string>
+  <string name="applivery_readOnExternalPermissionRationaleMessage">Read from external Storage Permission is necessary for installing downloaded app, allow it!</string>
+  <string name="applivery_readOnExternalPermissionRationaleTitle">Permission Request</string>
 
   <string name="appliveryError">Applivery error</string>
   <string name="appliveryAcceptButton">Aceptar</string>
+
+  <string name="appliveryBugSelectorText">Bug</string>
+  <string name="appliveryFeedbackSelectorText">Feedback</string>
+
+  <string name="appliveryLogoImageDesc">Applivery Logo</string>
+  <string name="appliveryCancelFeedbackButtonDesc">Cancel feedback button</string>
+  <string name="appliverynextFeedbackButtonDesc">Continue with feedback button</string>
+  <string name="appliverySendFeedbackButtonDesc">Send feedback button</string>
+  <string name="appliveryScreenshotImageDesc">Screenshot feedback Image</string>
+
+  <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
+  <string name="appliveryMustUpdateAppLocked">Your app is locked, please update...</string>
+
 </resources>
