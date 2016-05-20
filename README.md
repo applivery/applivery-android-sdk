@@ -1,6 +1,6 @@
 #Applivery Android SDK  
 ![Language](https://img.shields.io/badge/Language-Java-orange.svg)
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
 
@@ -110,7 +110,7 @@ Add the following dependency to your's app gradle:
 add the following dependency to your's app gradle:
 
  ```groovy
-  compile ‘com.applivery:applivery-android-sdk:1.0.0'
+  compile ‘com.applivery:applivery-android-sdk:1.1.0'
  ```
 ### Ok! Let's go!
 
@@ -174,6 +174,14 @@ Feedback is enabled by default.
 ## Sample
 
 As an example of integration you can have a look at: [our sample app](https://github.com/applivery/applivery-android-sample-app)
+
+# Acknowledgements
+
+We would like to mention every open source lib authors:
+
+* Thank's to [Square](http://square.github.io/), we are using several libs they developed (Retrofit 2, OkHttp).
+* Thank's to Google, and Android Dev team, obviously, Android SDK, Support Libs ...
+* Thank's to [Karumi](http://www.karumi.com/) for his great contributions to developers community in general. We are using [Dexter](https://github.com/Karumi/Dexter) from Karumi as well.
 
 License
 =======
