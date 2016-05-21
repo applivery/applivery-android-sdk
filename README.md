@@ -157,7 +157,7 @@ Here you can add the screenshot of the screen you were on if you woud like. You 
 Feedback is enabled by default. If you want to disable feedback:
 
 ```java
-Applivery.enableFeedback();
+Applivery.disableFeedback();
 ```
 Call it having your app in foreground whenever you want.
 
