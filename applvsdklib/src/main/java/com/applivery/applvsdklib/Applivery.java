@@ -33,7 +33,7 @@ public class Applivery {
    * app section
    * @param appClientToken your developer secret key. You can find this value at
    * applivery dashboard in developer section
-   * @param isPlayStoreRelease this flag MUST be null when application is candidate to be Google
+   * @param isPlayStoreRelease this flag MUST be true when application is candidate to be Google
    * Play Store release, because otherwise app can show dialogs from applivery about updates that
    * can redirect end users to applivery beta versions.
    */
