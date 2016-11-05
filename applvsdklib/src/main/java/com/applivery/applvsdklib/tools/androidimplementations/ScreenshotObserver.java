@@ -2,11 +2,13 @@ package com.applivery.applvsdklib.tools.androidimplementations;
 
 import android.content.Context;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.provider.MediaStore;
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
 /**
  * Created by Andres Hernandez on 5/11/16.
@@ -19,6 +21,7 @@ public class ScreenshotObserver {
   private HandlerThread handlerThread;
   private Handler handler;
   private ContentObserver contentObserver;
+  private ScreenshotResolver screenshotResolver;
 
   public static ScreenshotObserver getInstance(Context applicationContext) {
     if (screenshotObserver == null) {
@@ -30,6 +33,7 @@ public class ScreenshotObserver {
 
   private ScreenshotObserver(Context applicationContext) {
     this.applicationContext = applicationContext;
+    screenshotResolver = new ScreenshotResolver(applicationContext);
     setupObserver();
   }
 
@@ -64,6 +68,9 @@ public class ScreenshotObserver {
 
       @Override public void onChange(boolean selfChange, Uri uri) {
         super.onChange(selfChange, uri);
+        String path = screenshotResolver.resolvePathFrom(uri);
+        Bitmap screenshot = screenshotResolver.resolveBitmapFrom(path);
+        ScreenCapture screenCapture = new ScreenCapture(screenshot);
       }
     };
   }
