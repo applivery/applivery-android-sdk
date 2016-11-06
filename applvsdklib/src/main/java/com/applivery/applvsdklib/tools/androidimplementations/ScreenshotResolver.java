@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
+import com.applivery.applvsdklib.domain.download.permissions.ReadExternalPermission;
+import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
+import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
 
 /**
  * Created by Andres Hernandez on 5/11/16.
@@ -21,37 +24,75 @@ public class ScreenshotResolver {
   private static final String SORT_ORDER = MediaStore.Images.Media.DATE_ADDED + " DESC";
   private static final long DEFAULT_DETECT_WINDOW_SECONDS = 10;
 
-  private Context applicationContext;
+  private final Context applicationContext;
+  private final FileResolver fileResolver;
+  private PermissionChecker permissionRequestExecutor;
+  private final ReadExternalPermission readExternalPermission;
+  private long currentTime = 0;
 
-  public ScreenshotResolver(Context applicationContext) {
+  public ScreenshotResolver(Context applicationContext, FileResolver fileResolver) {
     this.applicationContext = applicationContext;
+    this.fileResolver = fileResolver;
+    readExternalPermission = new ReadExternalPermission();
   }
 
-  public String resolvePathFrom(Uri uri) {
+  public void setupPermissionRequest() {
+    permissionRequestExecutor = AppliverySdk.getPermissionRequestManager();
+  }
+
+  public void screenshotWasTaken() {
+    currentTime = System.currentTimeMillis() / 1000;
+  }
+
+  public void resolvePathFrom(Uri uri) {
+    if (permissionRequestExecutor == null) {
+      AppliverySdk.Logger.log(
+          "PermissionRequestExecutor must be initialized before reading external storage");
+      return;
+    }
+
+    if (!permissionRequestExecutor.isGranted(readExternalPermission)) {
+      askForPermission(uri);
+    } else {
+      resolvePath(uri);
+    }
+  }
+
+  private void askForPermission(final Uri uri) {
+    permissionRequestExecutor.askForPermission(readExternalPermission, new UserPermissionRequestResponseListener() {
+      @Override public void onPermissionAllowed(boolean permissionAllowed) {
+        if (permissionAllowed) {
+          resolvePath(uri);
+        }
+      }
+    }, AppliverySdk.getCurrentActivity());
+  }
+
+  private void resolvePath(Uri uri) {
     String path = "";
 
     if (!uri.toString().startsWith(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())) {
-      return path;
+      return;
     }
 
     Cursor cursor = null;
     cursor = applicationContext.getContentResolver().query(uri, FIELDS, null, null, SORT_ORDER);
 
     if (cursor == null || !cursor.moveToFirst()) {
-      return path;
+      return;
     }
 
     String tempPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
     long dateAdded = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED));
-    long currentTime = System.currentTimeMillis();
 
     if (matchPath(tempPath) && matchTime(currentTime, dateAdded)) {
       path = tempPath;
     }
 
+    currentTime = 0;
     cursor.close();
 
-    return path;
+    fileResolver.pathResolved(path);
   }
 
   public Bitmap resolveBitmapFrom(String path) {

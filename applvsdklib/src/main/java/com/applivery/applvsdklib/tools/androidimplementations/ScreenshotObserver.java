@@ -8,12 +8,13 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.provider.MediaStore;
+import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
 /**
  * Created by Andres Hernandez on 5/11/16.
  */
-public class ScreenshotObserver {
+public class ScreenshotObserver implements FileResolver {
 
   private static ScreenshotObserver screenshotObserver;
 
@@ -33,8 +34,12 @@ public class ScreenshotObserver {
 
   private ScreenshotObserver(Context applicationContext) {
     this.applicationContext = applicationContext;
-    screenshotResolver = new ScreenshotResolver(applicationContext);
+    screenshotResolver = new ScreenshotResolver(applicationContext, this);
     setupObserver();
+  }
+
+  public void init() {
+    screenshotResolver.setupPermissionRequest();
   }
 
   public void startObserving() {
@@ -68,10 +73,15 @@ public class ScreenshotObserver {
 
       @Override public void onChange(boolean selfChange, Uri uri) {
         super.onChange(selfChange, uri);
-        String path = screenshotResolver.resolvePathFrom(uri);
-        Bitmap screenshot = screenshotResolver.resolveBitmapFrom(path);
-        ScreenCapture screenCapture = new ScreenCapture(screenshot);
+        screenshotResolver.screenshotWasTaken();
+        screenshotResolver.resolvePathFrom(uri);
       }
     };
+  }
+
+  @Override public void pathResolved(String resolvedPath) {
+    Bitmap screenshot = screenshotResolver.resolveBitmapFrom(resolvedPath);
+    ScreenCapture screenCapture = new ScreenCapture(screenshot);
+    AppliverySdk.requestForUserFeedBackWith(screenCapture);
   }
 }

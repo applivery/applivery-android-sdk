@@ -35,6 +35,7 @@ import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEven
 import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
 import java.util.concurrent.*;
@@ -79,10 +80,10 @@ public class AppliverySdk {
       boolean isPlayStoreRelease) {
     if (!sdkInitialized) {
 
-      initializeAppliveryConstants(app, applicationId, appClientToken, isPlayStoreRelease);
-
       sdkRestarted = true;
       sdkInitialized = true;
+
+      initializeAppliveryConstants(app, applicationId, appClientToken, isPlayStoreRelease);
 
       boolean requestConfig;
 
@@ -137,6 +138,7 @@ public class AppliverySdk {
     AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance(new AndroidCurrentAppInfo(applicationContext));
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager = new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
+    activityLifecycle.initScreenshotObserver();
   }
 
   private static void obtainAppConfig(boolean requestConfig) {
@@ -250,15 +252,24 @@ public class AppliverySdk {
     AppliverySdk.updateCheckingTime = new Integer(updateCheckingTime * 1000).longValue();
   }
 
-  public static void requestForUserFeedBack() {
-
+  public static FeedbackView requestForUserFeedBack() {
+    FeedbackView feedbackView = null;
     if (!lockedApp){
-      FeedbackView feedbackView = UserFeedbackView.getInstance(appliveryApiService);
+      feedbackView = UserFeedbackView.getInstance(appliveryApiService);
 
       if (feedbackView.isNotShowing()){
         feedbackView.lockRotationOnParentScreen(getCurrentActivity());
         feedbackView.show();
       }
+    }
+
+    return feedbackView;
+  }
+
+  public static void requestForUserFeedBackWith(ScreenCapture screenCapture) {
+    FeedbackView feedbackView = requestForUserFeedBack();
+    if (feedbackView != null) {
+      // TODO: send screenCapture to feedbackView
     }
   }
 
