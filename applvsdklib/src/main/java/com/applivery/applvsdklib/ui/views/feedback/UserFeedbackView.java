@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -172,7 +173,10 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override
   public void show() {
-    show(AppliverySdk.getCurrentActivity().getFragmentManager(), "");
+    FragmentManager fragmentManager = AppliverySdk.getCurrentActivity().getFragmentManager();
+    fragmentManager.beginTransaction()
+        .add(this, "")
+        .commitAllowingStateLoss();
   }
 
   @Override public void showFeedbackFormView() {
