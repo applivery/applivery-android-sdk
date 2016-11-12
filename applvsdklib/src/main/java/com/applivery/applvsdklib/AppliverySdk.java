@@ -269,7 +269,7 @@ public class AppliverySdk {
   public static void requestForUserFeedBackWith(ScreenCapture screenCapture) {
     FeedbackView feedbackView = requestForUserFeedBack();
     if (feedbackView != null) {
-      // TODO: send screenCapture to feedbackView
+      feedbackView.setScreenCapture(screenCapture);
     }
   }
 

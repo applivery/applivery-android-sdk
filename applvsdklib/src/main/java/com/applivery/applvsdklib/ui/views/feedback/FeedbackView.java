@@ -17,6 +17,7 @@
 package com.applivery.applvsdklib.ui.views.feedback;
 
 import android.app.Activity;
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -49,4 +50,8 @@ public interface FeedbackView {
   void hideScheenShotPreview();
 
   void showScheenShotPreview();
+
+  void setScreenCapture(ScreenCapture screenCapture);
+
+  void checkScreenshotCheck(boolean isChecked);
 }

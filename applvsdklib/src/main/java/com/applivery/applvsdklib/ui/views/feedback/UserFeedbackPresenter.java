@@ -49,6 +49,20 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     this.appliveryApiService = appliveryApiService;
   }
 
+  public void setScreenCapture(ScreenCapture screenCapture) {
+    this.screenCapture = screenCapture;
+  }
+
+  public void initUi() {
+    if (screenCapture == null) {
+      feedbackView.checkScreenshotCheck(false);
+    } else {
+      feedbackView.showFeedbackImage();
+      feedbackView.showScheenShotPreview();
+      feedbackView.checkScreenshotCheck(true);
+    }
+  }
+
   public void cancelButtonPressed() {
     feedbackView.cleanScreenData();
     feedbackView.dismissFeedBack();

@@ -138,8 +138,8 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   private void initViewState() {
     showFeedbackFormView();
+    userFeedbackPresenter.initUi();
     userFeedbackPresenter.feedbackButtonPressed();
-    screenShotSwitch.setChecked(false);
   }
 
   @Override public void onClick(View v) {
@@ -250,5 +250,13 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
       screenshot.setImageBitmap(screenCapture.getScreenShot());
     }
     okButton.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void setScreenCapture(ScreenCapture screenCapture) {
+    userFeedbackPresenter.setScreenCapture(screenCapture);
+  }
+
+  @Override public void checkScreenshotCheck(boolean isChecked) {
+    screenShotSwitch.setChecked(isChecked);
   }
 }
