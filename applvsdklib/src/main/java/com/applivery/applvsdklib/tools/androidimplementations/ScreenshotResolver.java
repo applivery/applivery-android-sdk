@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.domain.download.permissions.ReadExternalPermission;
+import com.applivery.applvsdklib.domain.download.permissions.ReadScreenshotFolderPermission;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
 
@@ -27,13 +28,13 @@ public class ScreenshotResolver {
   private final Context applicationContext;
   private final FileResolver fileResolver;
   private PermissionChecker permissionRequestExecutor;
-  private final ReadExternalPermission readExternalPermission;
+  private final ReadScreenshotFolderPermission readScreenshotFolderPermission;
   private long currentTime = 0;
 
   public ScreenshotResolver(Context applicationContext, FileResolver fileResolver) {
     this.applicationContext = applicationContext;
     this.fileResolver = fileResolver;
-    readExternalPermission = new ReadExternalPermission();
+    readScreenshotFolderPermission = new ReadScreenshotFolderPermission();
   }
 
   public void setupPermissionRequest() {
@@ -51,7 +52,7 @@ public class ScreenshotResolver {
       return;
     }
 
-    if (!permissionRequestExecutor.isGranted(readExternalPermission)) {
+    if (!permissionRequestExecutor.isGranted(readScreenshotFolderPermission)) {
       askForPermission(uri);
     } else {
       resolvePath(uri);
@@ -59,7 +60,7 @@ public class ScreenshotResolver {
   }
 
   private void askForPermission(final Uri uri) {
-    permissionRequestExecutor.askForPermission(readExternalPermission, new UserPermissionRequestResponseListener() {
+    permissionRequestExecutor.askForPermission(readScreenshotFolderPermission, new UserPermissionRequestResponseListener() {
       @Override public void onPermissionAllowed(boolean permissionAllowed) {
         if (permissionAllowed) {
           resolvePath(uri);

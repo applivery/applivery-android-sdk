@@ -40,6 +40,12 @@
   <string name="applivery_readOnExternalPermissionRationaleMessage">Read from external Storage Permission is necessary for installing downloaded app, allow it!</string>
   <string name="applivery_readOnExternalPermissionRationaleTitle">Permission Request</string>
 
+  <string name="applivery_readOnScreenshotFolderPermissionAllowedFeedback">Read from external Storage has been allowed</string>
+  <string name="applivery_readOnScreenshotFolderPermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="applivery_readOnScreenshotFolderPermissionDeniedFeedback">Read from external Storage Permission is necessary for detecting screenshots</string>
+  <string name="applivery_readOnScreenshotFolderPermissionRationalMessage">Read from external Storage Permission is necessary for detecting screenshots, allow it!</string>
+  <string name="applivery_readOnScreenshotFolderPermissionRationaleTitle">Permission Request</string>
+
   <string name="appliveryError">Applivery error</string>
   <string name="appliveryAcceptButton">Aceptar</string>
 
