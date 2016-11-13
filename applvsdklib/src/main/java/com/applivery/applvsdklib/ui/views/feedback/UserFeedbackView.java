@@ -139,6 +139,8 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   private void initViewState() {
+    okButton.setVisibility(View.GONE);
+    sendButton.setVisibility(View.GONE);
     showFeedbackFormView();
     userFeedbackPresenter.initUi();
     userFeedbackPresenter.feedbackButtonPressed();
@@ -195,6 +197,8 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   @Override public void cleanScreenData() {
     screenShotSwitch.setChecked(false);
     screenshot.setImageResource(android.R.color.transparent);
+    okButton.setVisibility(View.GONE);
+    sendButton.setVisibility(View.VISIBLE);
     feedbackImage.setImageResource(android.R.color.transparent);
     feedbackImage.setVisibility(View.GONE);
     feedbackMessage.getText().clear();
@@ -243,6 +247,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     screenshot.setImageResource(android.R.color.transparent);
     screenshot.setVisibility(View.GONE);
     okButton.setVisibility(View.GONE);
+    sendButton.setVisibility(View.VISIBLE);
   }
 
   @Override public void showScheenShotPreview() {
@@ -251,6 +256,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
       screenshot.setVisibility(View.VISIBLE);
       screenshot.setImageBitmap(screenCapture.getScreenShot());
     }
+    sendButton.setVisibility(View.GONE);
     okButton.setVisibility(View.VISIBLE);
   }
 
