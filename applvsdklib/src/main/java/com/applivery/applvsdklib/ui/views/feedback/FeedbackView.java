@@ -53,5 +53,7 @@ public interface FeedbackView {
 
   void setScreenCapture(ScreenCapture screenCapture);
 
-  void checkScreenshotCheck(boolean isChecked);
+  void checkScreenshotSwitch(boolean isChecked);
+
+  void retrieveEditedScreenshot();
 }
