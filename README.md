@@ -1,6 +1,6 @@
 #Applivery Android SDK  
 ![Language](https://img.shields.io/badge/Language-Java-orange.svg)
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.0-blue.svg)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
 
@@ -98,7 +98,7 @@ Add the following dependency to your's app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:1.1.0-RC4'
+      compile 'com.github.Applivery:applivery-android-sdk:v2.0'
     }
   ```
   * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
@@ -110,7 +110,7 @@ Add the following dependency to your's app gradle:
 add the following dependency to your's app gradle:
 
  ```groovy
-  compile ‘com.applivery:applivery-android-sdk:1.1.0'
+  compile 'com.applivery:applivery-android-sdk:1.1.0'
  ```
 ### Ok! Let's go!
 
@@ -148,17 +148,28 @@ The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Appliver
 
 ### Feedback
 
-You can shake your phone if you want send Applivery some feedback about your App. By shaking your phone you will have a screen like the following:
+You can either take a screenshot or shake your phone if you want to send Applivery some feedback about your App. By taking a screenshot or shaking your phone you will get a screen like the following:
 
-![FILES](https://github.com/applivery/applivery-android-sdk/blob/develop/documentation/feedback.png)
+![FILES](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/new_feedback.png)
 
-Here you can add the screenshot of the screen you were on if you woud like. You can say something interesting about the screen and type your feedback as a bug or simply something you want to give as feedback. By pressing the small screenshot you will have the same image bigger just in case you would like to check something. Then if you tap on the plane icon you will send the info, or you could press the close button in the upper right corner otherwise.
+Here you can add the screenshot of the screen you were on if you woud like. You can say something interesting about the screen and type your feedback as a bug or simply something you want to give as feedback. By pressing the small screenshot you will have the same image bigger just in case you would like to check something. Then if you tap on the top right button you will send the info, or you could press the close button in the upper left corner otherwise.
 
-Feedback is enabled by default. If you want to disable feedback:
+Additionally, if you go into the screenshot detail you can actually freehand draw over it.
+
+You can enable or disable the screenshot feedback by using the following methods:
 
 ```java
-Applivery.disableFeedback();
+Applivery.enableScreenshotFeedback();
+Applivery.disableScreenshotFeedback();
 ```
+
+... and the shake feedback by using:
+
+```java
+Applivery.enableShakeFeedback();
+Applivery.disableShakeFeedback();
+```
+
 Call it having your app in foreground whenever you want.
 
 ## Sample
