@@ -31,6 +31,7 @@ import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
+import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
 import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
 import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
@@ -138,7 +139,6 @@ public class AppliverySdk {
     AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance(new AndroidCurrentAppInfo(applicationContext));
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager = new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
-    activityLifecycle.initScreenshotObserver();
   }
 
   private static void obtainAppConfig(boolean requestConfig) {
@@ -285,16 +285,33 @@ public class AppliverySdk {
     return lockedApp;
   }
 
-  public static void disableFeedback() {
+  public static void disableShakeFeedback() {
     Validate.sdkInitialized();
     SensorEventsController sensorController = SensorEventsController.getInstance(applicationContext);
     sensorController.disableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
-  public static void enableFeedback() {
+  public static void enableShakeFeedback() {
     Validate.sdkInitialized();
     SensorEventsController sensorController = SensorEventsController.getInstance(applicationContext);
     sensorController.enableSensor(Sensor.TYPE_ACCELEROMETER);
+  }
+
+  public static void disableScreenshotFeedback() {
+    Validate.sdkInitialized();
+    ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
+    screenshotObserver.stopObserving();
+    screenshotObserver.disableScreenshotObserver();
+  }
+
+  public static void enableScreenshotFeedback() {
+    Validate.sdkInitialized();
+    ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
+    screenshotObserver.enableScreenshotObserver();
+
+    if (activityLifecycle.isActivityContextAvailable()) {
+      screenshotObserver.startObserving();
+    }
   }
 
   public static class Logger {

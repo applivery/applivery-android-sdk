@@ -52,10 +52,6 @@ public class AppliveryActivityLifecycleCallbacks
     this.screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
   }
 
-  public void initScreenshotObserver() {
-    screenshotObserver.init();
-  }
-
   public Activity getCurrentActivity() {
 
     for (ActivityLifecyleWrapper activityLifecyleWrapper : activityStack) {

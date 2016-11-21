@@ -57,14 +57,30 @@ public class Applivery {
   /**
    * Enables feedback on shake, call it having your app in foreground whenever you want.
    */
-  public static void enableFeedback(){
-    AppliverySdk.enableFeedback();
+  public static void enableShakeFeedback(){
+    AppliverySdk.enableShakeFeedback();
   }
 
   /**
    * Disables feedback on shake, call it having your app in foreground whenever you want.
    */
-  public static void disableFeedback(){
-    AppliverySdk.disableFeedback();
+  public static void disableShakeFeedback(){
+    AppliverySdk.disableShakeFeedback();
+  }
+
+  /**
+   * Enables feedback on screenshot capture, call it having your app in foreground whenever you
+   * want.
+   */
+  public static void enableScreenshotFeedback() {
+    AppliverySdk.enableScreenshotFeedback();
+  }
+
+  /**
+   * Disables feedback on screenshot capture, call it having your app in foreground whenever you
+   * want.
+   */
+  public static void disableScreenshotFeedback() {
+    AppliverySdk.disableScreenshotFeedback();
   }
 }

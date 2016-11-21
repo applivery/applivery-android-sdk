@@ -18,6 +18,7 @@ public class ScreenshotObserver implements FileResolver {
 
   private static ScreenshotObserver screenshotObserver;
 
+  private boolean isEnabled;
   private Context applicationContext;
   private HandlerThread handlerThread;
   private Handler handler;
@@ -38,17 +39,30 @@ public class ScreenshotObserver implements FileResolver {
     setupObserver();
   }
 
-  public void init() {
+  public void enableScreenshotObserver() {
+    isEnabled = true;
     screenshotResolver.setupPermissionRequest();
   }
 
+  public void disableScreenshotObserver() {
+    isEnabled = false;
+  }
+
   public void startObserving() {
+    if (!isEnabled) {
+      return;
+    }
+
     applicationContext.getContentResolver()
         .registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true,
             contentObserver);
   }
 
   public void stopObserving() {
+    if (!isEnabled) {
+      return;
+    }
+
     applicationContext.getContentResolver().unregisterContentObserver(contentObserver);
   }
 
@@ -81,6 +95,10 @@ public class ScreenshotObserver implements FileResolver {
 
   @Override public void pathResolved(String resolvedPath) {
     Bitmap screenshot = screenshotResolver.resolveBitmapFrom(resolvedPath);
+    if (screenshot == null) {
+      AppliverySdk.Logger.log("Resolved bitmap is null.");
+    }
+
     ScreenCapture screenCapture = new ScreenCapture(screenshot);
     AppliverySdk.requestForUserFeedBackWith(screenCapture);
   }
