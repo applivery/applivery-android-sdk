@@ -51,7 +51,7 @@ public class SensorEventsController {
   }
 
   public void unRegisterAllSensorsForApplication() {
-    sensorActionForAllSensors(REGISTER);
+    sensorActionForAllSensors(UNREGISTER);
   }
 
   private void sensorActionForAllSensors(int action){

@@ -20,6 +20,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -38,6 +40,7 @@ import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
+import com.applivery.applvsdklib.ui.views.DrawingImageView;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -55,7 +58,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   private LinearLayout feedbackButton;
   private LinearLayout bugButton;
 
-  private ImageView screenshot;
+  private DrawingImageView screenshot;
   private ImageView feedbackImage;
   private Switch screenShotSwitch;
 
@@ -122,7 +125,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     sendButton = (ImageButton) view.findViewById(R.id.applivery_feedback_send_button);
     feedbackButton = (LinearLayout) view.findViewById(R.id.applivery_tab_button_selector_feedback);
     bugButton = (LinearLayout) view.findViewById(R.id.applivery_tab_button_selector_bug);
-    screenshot = (ImageView) view.findViewById(R.id.appliveryScreenShot);
+    screenshot = (DrawingImageView) view.findViewById(R.id.appliveryScreenShot);
     feedbackImage = (ImageView) view.findViewById(R.id.applivery_feedback_image);
     feedbackMessage = (EditText) view.findViewById(R.id.applivery_feedback_description);
     feedbackFormContainer = (LinearLayout) view.findViewById(R.id.applivery_feedback_form);
@@ -136,9 +139,11 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   private void initViewState() {
+    okButton.setVisibility(View.GONE);
+    sendButton.setVisibility(View.GONE);
     showFeedbackFormView();
+    userFeedbackPresenter.initUi();
     userFeedbackPresenter.feedbackButtonPressed();
-    screenShotSwitch.setChecked(false);
   }
 
   @Override public void onClick(View v) {
@@ -172,7 +177,10 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override
   public void show() {
-    show(AppliverySdk.getCurrentActivity().getFragmentManager(), "");
+    FragmentManager fragmentManager = AppliverySdk.getCurrentActivity().getFragmentManager();
+    fragmentManager.beginTransaction()
+        .add(this, "")
+        .commitAllowingStateLoss();
   }
 
   @Override public void showFeedbackFormView() {
@@ -189,6 +197,8 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   @Override public void cleanScreenData() {
     screenShotSwitch.setChecked(false);
     screenshot.setImageResource(android.R.color.transparent);
+    okButton.setVisibility(View.GONE);
+    sendButton.setVisibility(View.VISIBLE);
     feedbackImage.setImageResource(android.R.color.transparent);
     feedbackImage.setVisibility(View.GONE);
     feedbackMessage.getText().clear();
@@ -237,6 +247,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     screenshot.setImageResource(android.R.color.transparent);
     screenshot.setVisibility(View.GONE);
     okButton.setVisibility(View.GONE);
+    sendButton.setVisibility(View.VISIBLE);
   }
 
   @Override public void showScheenShotPreview() {
@@ -245,6 +256,20 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
       screenshot.setVisibility(View.VISIBLE);
       screenshot.setImageBitmap(screenCapture.getScreenShot());
     }
+    sendButton.setVisibility(View.GONE);
     okButton.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void setScreenCapture(ScreenCapture screenCapture) {
+    userFeedbackPresenter.setScreenCapture(screenCapture);
+  }
+
+  @Override public void checkScreenshotSwitch(boolean isChecked) {
+    screenShotSwitch.setChecked(isChecked);
+  }
+
+  @Override public void retrieveEditedScreenshot() {
+    Bitmap retrievedScreenshot = screenshot.getBitmap();
+    userFeedbackPresenter.updateScreenCaptureWith(retrievedScreenshot);
   }
 }

@@ -31,10 +31,12 @@ import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
+import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
 import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
 import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
 import java.util.concurrent.*;
@@ -79,10 +81,10 @@ public class AppliverySdk {
       boolean isPlayStoreRelease) {
     if (!sdkInitialized) {
 
-      initializeAppliveryConstants(app, applicationId, appClientToken, isPlayStoreRelease);
-
       sdkRestarted = true;
       sdkInitialized = true;
+
+      initializeAppliveryConstants(app, applicationId, appClientToken, isPlayStoreRelease);
 
       boolean requestConfig;
 
@@ -250,15 +252,24 @@ public class AppliverySdk {
     AppliverySdk.updateCheckingTime = new Integer(updateCheckingTime * 1000).longValue();
   }
 
-  public static void requestForUserFeedBack() {
-
+  public static FeedbackView requestForUserFeedBack() {
+    FeedbackView feedbackView = null;
     if (!lockedApp){
-      FeedbackView feedbackView = UserFeedbackView.getInstance(appliveryApiService);
+      feedbackView = UserFeedbackView.getInstance(appliveryApiService);
 
       if (feedbackView.isNotShowing()){
         feedbackView.lockRotationOnParentScreen(getCurrentActivity());
         feedbackView.show();
       }
+    }
+
+    return feedbackView;
+  }
+
+  public static void requestForUserFeedBackWith(ScreenCapture screenCapture) {
+    FeedbackView feedbackView = requestForUserFeedBack();
+    if (feedbackView != null) {
+      feedbackView.setScreenCapture(screenCapture);
     }
   }
 
@@ -274,16 +285,33 @@ public class AppliverySdk {
     return lockedApp;
   }
 
-  public static void disableFeedback() {
+  public static void disableShakeFeedback() {
     Validate.sdkInitialized();
     SensorEventsController sensorController = SensorEventsController.getInstance(applicationContext);
     sensorController.disableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
-  public static void enableFeedback() {
+  public static void enableShakeFeedback() {
     Validate.sdkInitialized();
     SensorEventsController sensorController = SensorEventsController.getInstance(applicationContext);
     sensorController.enableSensor(Sensor.TYPE_ACCELEROMETER);
+  }
+
+  public static void disableScreenshotFeedback() {
+    Validate.sdkInitialized();
+    ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
+    screenshotObserver.stopObserving();
+    screenshotObserver.disableScreenshotObserver();
+  }
+
+  public static void enableScreenshotFeedback() {
+    Validate.sdkInitialized();
+    ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
+    screenshotObserver.enableScreenshotObserver();
+
+    if (activityLifecycle.isActivityContextAvailable()) {
+      screenshotObserver.startObserving();
+    }
   }
 
   public static class Logger {

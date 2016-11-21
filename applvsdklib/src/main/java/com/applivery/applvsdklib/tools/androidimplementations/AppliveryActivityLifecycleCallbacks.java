@@ -41,6 +41,7 @@ public class AppliveryActivityLifecycleCallbacks
   private final AppConfigChecker appConfigChecker;
   private final Context applicationContext;
   private final SensorEventsController sensorEventsController;
+  private final ScreenshotObserver screenshotObserver;
   private final Set<String> activitiesOnRotation = new HashSet();
 
   public AppliveryActivityLifecycleCallbacks(Context applicationContext) {
@@ -48,6 +49,7 @@ public class AppliveryActivityLifecycleCallbacks
     this.appConfigChecker = new AppConfigChecker(lastConfigReader);
     this.applicationContext = applicationContext;
     this.sensorEventsController = SensorEventsController.getInstance(applicationContext);
+    this.screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
   }
 
   public Activity getCurrentActivity() {
@@ -98,6 +100,7 @@ public class AppliveryActivityLifecycleCallbacks
   private void appWillReturnfromBackground() {
     checkForUpdates();
     sensorEventsController.registerAllSensorsForApplication();
+    screenshotObserver.startObserving();
   }
 
   private void checkForUpdates() {
@@ -140,6 +143,7 @@ public class AppliveryActivityLifecycleCallbacks
 
   private void appWillEnterBackground() {
     sensorEventsController.unRegisterAllSensorsForApplication();
+    screenshotObserver.stopObserving();
   }
 
   @Override public void onActivityDestroyed(Activity activity) {}

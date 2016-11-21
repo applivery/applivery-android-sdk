@@ -30,9 +30,23 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/appliveryTitleHeight">
 
+        <ImageButton
+            android:id="@+id/applivery_feedback_cancel_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/applivery_close_selector"
+            android:layout_width="@dimen/appliveryTitleIconButton"
+            android:layout_height="@dimen/appliveryTitleIconButton"
+            android:padding="@dimen/appliveryTitleIconPaddingMedium"
+            android:layout_marginLeft="@dimen/appliveryIconbuttonMarginRight"
+            android:layout_marginRight="@dimen/appliveryIconbuttonMarginRight"
+            android:contentDescription="@string/appliveryCancelFeedbackButtonDesc"
+            />
+
         <ImageView
             android:id="@+id/applivery_feedback_title_icon"
-            android:layout_alignParentLeft="true"
+            android:layout_toRightOf="@+id/applivery_feedback_cancel_button"
             android:layout_centerVertical="true"
             android:layout_width="@dimen/appliveryTitleIconSize"
             android:layout_height="@dimen/appliveryTitleIconSize"
@@ -52,15 +66,31 @@
             />
 
         <ImageButton
-            android:id="@+id/applivery_feedback_cancel_button"
+            android:id="@+id/applivery_feedback_send_button"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:background="@drawable/applivery_close_selector"
+            android:layout_alignParentEnd="true"
             android:layout_width="@dimen/appliveryTitleIconButton"
             android:layout_height="@dimen/appliveryTitleIconButton"
-            android:padding="@dimen/appliveryTitleIconPaddingMedium"
-            android:layout_marginRight="@dimen/appliveryIconbuttonMarginRight"
-            android:contentDescription="@string/appliveryCancelFeedbackButtonDesc"
+            android:background="@drawable/applivery_send_selector"
+            android:contentDescription="@string/appliverySendFeedbackButtonDesc"
+            android:layout_marginRight="@dimen/appliveryFabButtonMargin"
+            android:layout_marginEnd="@dimen/appliveryFabButtonMargin"
+            />
+
+        <ImageButton
+            android:animateLayoutChanges="true"
+            android:visibility="gone"
+            android:id="@+id/applivery_feedback_ok_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="@dimen/appliveryTitleIconButton"
+            android:layout_height="@dimen/appliveryTitleIconButton"
+            android:background="@drawable/applivery_done_selector"
+            android:contentDescription="@string/appliverynextFeedbackButtonDesc"
+            android:layout_marginRight="@dimen/appliveryFabButtonMargin"
+            android:layout_marginEnd="@dimen/appliveryFabButtonMargin"
             />
 
     </RelativeLayout>
@@ -74,73 +104,60 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-        android:animateLayoutChanges="true"
-        android:id="@+id/feedbackSelector"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/appliveryTabButtonsHeight">
-
         <LinearLayout
-            android:id="@+id/applivery_tab_button_selector_feedback"
-            android:background="@drawable/applivery_tab_button_selector"
-            android:layout_gravity="center"
-            android:layout_weight="100"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:text="@string/appliveryFeedbackSelectorText"
-                android:gravity="center"
-                android:textSize="@dimen/appliveryTabButtonTextSize"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/applivery_tab_button_selector_separator"
-            android:background="@android:color/darker_gray"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/appliveryTabButtonSeparatorHeight">
-
-        </View>
-
-        <LinearLayout
-            android:id="@+id/applivery_tab_button_selector_bug"
-            android:layout_weight="100"
-            android:layout_gravity="center"
-            android:background="@drawable/applivery_tab_button_selector"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:text="@string/appliveryBugSelectorText"
-                android:gravity="center"
-                android:textSize="@dimen/appliveryTabButtonTextSize"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-
-        </LinearLayout>
-
-        </LinearLayout>
-
-        <Switch
+            android:animateLayoutChanges="true"
+            android:id="@+id/feedbackSelector"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:shadowColor="@color/appliveryMainColor"
-            android:text="@string/appliveryAttachScreenshotSwithText"
-            android:textSize="@dimen/appNameTextSize"
-            android:layout_margin="@dimen/appliveryFeedbackFormSidePadding"
-            android:id="@+id/attach_screenshot_switch"
-            android:layout_gravity="center_horizontal"
-            />
+            android:layout_height="@dimen/appliveryTabButtonsHeight">
+
+            <LinearLayout
+                android:id="@+id/applivery_tab_button_selector_feedback"
+                android:background="@drawable/applivery_tab_button_selector"
+                android:layout_gravity="center"
+                android:layout_weight="100"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="@string/appliveryFeedbackSelectorText"
+                    android:gravity="center"
+                    android:textSize="@dimen/appliveryTabButtonTextSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/applivery_tab_button_selector_separator"
+                android:background="@android:color/darker_gray"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/appliveryTabButtonSeparatorHeight">
+
+            </View>
+
+            <LinearLayout
+                android:id="@+id/applivery_tab_button_selector_bug"
+                android:layout_weight="100"
+                android:layout_gravity="center"
+                android:background="@drawable/applivery_tab_button_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="@string/appliveryBugSelectorText"
+                    android:gravity="center"
+                    android:textSize="@dimen/appliveryTabButtonTextSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:animateLayoutChanges="true"
@@ -175,19 +192,20 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/applivery_feedback_send_button"
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:shadowColor="@color/appliveryMainColor"
+        android:text="@string/appliveryAttachScreenshotSwithText"
+        android:textSize="@dimen/appNameTextSize"
+        android:layout_margin="@dimen/appliveryFeedbackFormSidePadding"
+        android:id="@+id/attach_screenshot_switch"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="@dimen/appliveryFabButtonSize"
-        android:layout_height="@dimen/appliveryFabButtonSize"
-        android:background="@drawable/applivery_plane_selector"
-        android:contentDescription="@string/appliverySendFeedbackButtonDesc"
-        android:layout_marginBottom="@dimen/appliveryFabButtonMargin"
-        android:layout_marginRight="@dimen/appliveryFabButtonMargin"
         />
 
-    <ImageView
+    <com.applivery.applvsdklib.ui.views.DrawingImageView
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -196,21 +214,6 @@
         android:contentDescription="@string/appliveryScreenshotImageDesc"
         android:id="@+id/appliveryScreenShot"
         android:animateLayoutChanges="true"
-        />
-
-    <ImageButton
-        android:animateLayoutChanges="true"
-        android:visibility="gone"
-        android:id="@+id/applivery_feedback_ok_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="@dimen/appliveryFabButtonSize"
-        android:layout_height="@dimen/appliveryFabButtonSize"
-        android:background="@drawable/applivery_arrow_selector"
-        android:layout_marginBottom="@dimen/appliveryFabButtonMargin"
-        android:contentDescription="@string/appliverynextFeedbackButtonDesc"
-        android:layout_marginRight="16dp"
-
         />
 
 </RelativeLayout>

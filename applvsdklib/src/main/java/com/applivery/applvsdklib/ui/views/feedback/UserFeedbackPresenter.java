@@ -16,6 +16,7 @@
 
 package com.applivery.applvsdklib.ui.views.feedback;
 
+import android.graphics.Bitmap;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.feedback.FeedbackInteractor;
@@ -47,6 +48,20 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
 
   public void setAppliveryApiService(AppliveryApiService appliveryApiService) {
     this.appliveryApiService = appliveryApiService;
+  }
+
+  public void setScreenCapture(ScreenCapture screenCapture) {
+    this.screenCapture = screenCapture;
+  }
+
+  public void initUi() {
+    if (screenCapture == null) {
+      feedbackView.checkScreenshotSwitch(false);
+    } else {
+      feedbackView.showFeedbackImage();
+      feedbackView.showScheenShotPreview();
+      feedbackView.checkScreenshotSwitch(true);
+    }
   }
 
   public void cancelButtonPressed() {
@@ -92,6 +107,17 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     return screenCapture;
   }
 
+  public void updateScreenCaptureWith(Bitmap screenshot) {
+    if (screenshot == null) {
+      AppliverySdk.Logger.log("Cannot update ScreenCapture with a null bitmap.");
+      return;
+    }
+
+    screenCapture = new ScreenCapture(screenshot);
+    feedbackView.showFeedbackImage();
+    feedbackView.checkScreenshotSwitch(true);
+  }
+
   public void sendFeedbackInfo(String feedbackMessage, String screen) {
     feedback.setMessage(feedbackMessage);
     feedback.setScreen(screen);
@@ -122,6 +148,7 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   }
 
   public void okScreenShotPressed() {
+    feedbackView.retrieveEditedScreenshot();
     feedbackView.hideScheenShotPreview();
   }
 }
