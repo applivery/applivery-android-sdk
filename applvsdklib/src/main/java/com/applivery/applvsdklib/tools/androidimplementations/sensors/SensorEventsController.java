@@ -105,8 +105,8 @@ public class SensorEventsController {
     sensorEventsController.checkAvalableSensors();
 
     if (!sensorEventsController.sensorsAccessor.hasAvailableSensors()){
-      throw new AppliveryNotHasNoSensorsToManageEventsException("There are not registered sensors, "
-          + "some features like shake feedback can be not available");
+      AppliverySdk.Logger.log(
+          "There are not registered sensors, some features like shake feedback can be not available");
     }
 
     return sensorEventsController;
@@ -117,12 +117,18 @@ public class SensorEventsController {
   }
 
   private void checkAvalableSensors() {
+    boolean isAccelerometerAvailable = false;
     List<Sensor> listOfSensorsOnDevice = sensorManager.getSensorList(Sensor.TYPE_ALL);
     for (int i = 0; i < listOfSensorsOnDevice.size(); i++) {
       if (listOfSensorsOnDevice.get(i).getType() == Sensor.TYPE_ACCELEROMETER) {
+        isAccelerometerAvailable = true;
         AppliverySdk.Logger.log("ACCELEROMETER sensor is available on device");
-        sensorsAccessor.enableSensor(listOfSensorsOnDevice.get(i).getType());
       }
+    }
+
+    if (!isAccelerometerAvailable) {
+      AppliverySdk.Logger.log(
+          "There are not registered sensors, some features like shake feedback can be not available");
     }
   }
 
