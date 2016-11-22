@@ -97,6 +97,7 @@ public class ScreenshotObserver implements FileResolver {
     Bitmap screenshot = screenshotResolver.resolveBitmapFrom(resolvedPath);
     if (screenshot == null) {
       AppliverySdk.Logger.log("Resolved bitmap is null.");
+      return;
     }
 
     ScreenCapture screenCapture = new ScreenCapture(screenshot);

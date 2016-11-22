@@ -267,6 +267,10 @@ public class AppliverySdk {
   }
 
   public static void requestForUserFeedBackWith(ScreenCapture screenCapture) {
+    if (lockedApp) {
+      return;
+    }
+
     FeedbackView feedbackView = requestForUserFeedBack();
     if (feedbackView != null) {
       feedbackView.setScreenCapture(screenCapture);

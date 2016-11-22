@@ -67,6 +67,7 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   public void cancelButtonPressed() {
     feedbackView.cleanScreenData();
     feedbackView.dismissFeedBack();
+    screenCapture = null;
   }
 
   public void okButtonPressed() {
