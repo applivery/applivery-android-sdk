@@ -32,6 +32,11 @@ public class AppConfigChecker {
 
   public boolean shouldCheckAppConfigForUpdate() {
 
+    if (AppliverySdk.isSdkFirstTime()) {
+      AppliverySdk.setSdkFirstTimeFalse();
+      return false;
+    }
+
     if (AppliverySdk.isSdkRestarted()){
       AppliverySdk.setSdkRestartedFalse();
       return true;

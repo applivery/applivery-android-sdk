@@ -63,6 +63,7 @@ public class AppliverySdk {
   private static final Object LOCK = new Object();
 
   private static Boolean sdkInitialized = false;
+  private static Boolean sdkFirstTime;
   private static Boolean sdkRestarted = true;
   private static long updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
 
@@ -81,6 +82,7 @@ public class AppliverySdk {
       boolean isPlayStoreRelease) {
     if (!sdkInitialized) {
 
+      sdkFirstTime = true;
       sdkRestarted = true;
       sdkInitialized = true;
 
@@ -93,9 +95,6 @@ public class AppliverySdk {
       }else{
         requestConfig = true;
       }
-
-      obtainAppConfig(requestConfig);
-
     }
   }
 
@@ -111,6 +110,14 @@ public class AppliverySdk {
     }catch (Exception e){
       return false;
     }
+  }
+
+  public static synchronized void setSdkFirstTimeFalse() {
+    sdkFirstTime = false;
+  }
+
+  public static synchronized boolean isSdkFirstTime() {
+    return sdkFirstTime;
   }
 
   public static synchronized void setSdkRestartedFalse(){

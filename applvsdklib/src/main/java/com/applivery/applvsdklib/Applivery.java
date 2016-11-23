@@ -55,6 +55,13 @@ public class Applivery {
   }
 
   /**
+   * Manually check for App updates on Applivery.
+   */
+  public static void checkForUpdates() {
+    AppliverySdk.obtainAppConfigForCheckUpdates();
+  }
+
+  /**
    * Enables feedback on shake, call it having your app in foreground whenever you want.
    */
   public static void enableShakeFeedback(){
