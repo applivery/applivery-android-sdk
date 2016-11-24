@@ -139,7 +139,9 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
   @Override public void showUpdateDialog() {
     try{
-      show(AppliverySdk.getCurrentActivity().getFragmentManager(), "");
+      if (!AppliverySdk.isUpdating()) {
+        show(AppliverySdk.getCurrentActivity().getFragmentManager(), "");
+      }
     }catch (NotForegroundActivityAvailable notForegroundActivityAvailable){
       AppliverySdk.Logger.log("Unable to show dialog again");
     }
@@ -149,9 +151,12 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
     AppliverySdk.lockRotationToPortrait();
   }
 
-  @Override public void hideDownloadInProgress() {}
+  @Override public void hideDownloadInProgress() {
+    AppliverySdk.isUpdating(false);
+  }
 
   @Override public void showDownloadInProgress() {
+    AppliverySdk.isUpdating(true);
     update.setVisibility(View.GONE);
     progressBar.setVisibility(View.VISIBLE);
     permissionsDenied.setVisibility(View.GONE);

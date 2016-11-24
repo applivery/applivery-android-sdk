@@ -66,6 +66,7 @@ public class AppliverySdk {
   private static Boolean sdkFirstTime;
   private static Boolean sdkRestarted = true;
   private static long updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
+  private static Boolean isUpdating = false;
 
   public static synchronized void sdkInitialize(Application app,
       String applicationId, String appClientToken, boolean isPlayStoreRelease) {
@@ -126,6 +127,14 @@ public class AppliverySdk {
 
   public static synchronized boolean isSdkRestarted(){
     return sdkRestarted;
+  }
+
+  public static synchronized void isUpdating(Boolean updating) {
+    isUpdating = updating;
+  }
+
+  public static synchronized Boolean isUpdating() {
+    return isUpdating;
   }
 
   private static void initializeAppliveryConstants(Application app, String applicationId,

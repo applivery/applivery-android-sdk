@@ -88,17 +88,21 @@ public class SuggestedUpdateViewImpl implements UpdateView {
   }
 
   @Override public void showUpdateDialog() {
-    alertDialog.show();
+    if (!AppliverySdk.isUpdating()) {
+      alertDialog.show();
+    }
   }
 
   @Override public void hideDownloadInProgress() {
     if (progress != null && progress.isShowing()) {
+      AppliverySdk.isUpdating(false);
       progress.dismiss();
     }
   }
 
   @Override public void showDownloadInProgress() {
     if (AppliverySdk.isContextAvailable()) {
+      AppliverySdk.isUpdating(true);
       progress = ProgressDialog.show(context, context.getString(R.string.applivery_download_title),
           context.getString(R.string.applivery_download_message)+" 0%", true);
     }
