@@ -114,26 +114,42 @@ add the following dependency to your's app gradle:
  ```
 ### Ok! Let's go!
 
+#### Step 1
 At your application start up, in a class extending from Application, you must call the init method:
 
  ```java
  public class AppliveryApplication extends Application{
- @Override public void onCreate() {
-   super.onCreate();
-   Applivery.init(this, BuildConfig.APP_ID, BuildConfig.ACCOUNT_API_KEY, false);
-   Applivery.setUpdateCheckingInterval(21600);
- }
+	 @Override public void onCreate() {
+	   super.onCreate();
+	   Applivery.init(this, BuildConfig.APP_ID, BuildConfig.ACCOUNT_API_KEY, false);
+	   Applivery.setUpdateCheckingInterval(21600);
+	 }
  }
  ```
  
- There we have two Applivery Methods, let's start with `Applivery.init(this, BuildConfig.APP_KEY, BuildConfig.APP_SECRET, false);`. This is the only call you have to make in order to have Applivery sdk integrated, the only thing you have to be worried about is that this call **MUST** be performed in app's `onCreate` Method.
+In this step you have to call some Applivery methods:
+ ```java
+Applivery.init(this, BuildConfig.APP_ID, BuildConfig.ACCOUNT_API_KEY, false);
+ ```
+This method is intended to initialize the Applivery SDK. The only thing you have to take care about is that this call **MUST** be performed in app's `onCreate()` Method.
  
-**IMPORTANT I:** As you can suspect, you should replace the strings `APP_KEY` and `APP_SECRET` with you api key and your app id respectively. Easy! Don't you think so?, they look like this in my build.gradle:
+You should replace the strings `APP_KEY` and `APP_SECRET` with you api key and your app id respectively. Easy! Don't you think so?, they look like this in my build.gradle:
 
  ```groovy
- buildConfigField "String", "APP_ID", '"XXXXXXXXXXXXXXXXXXXXXXXX"'
- buildConfigField "String", "ACCOUNT_API_KEY", '"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"'
+buildConfigField "String", "APP_ID", '"XXXXXXXXXXXXXXXXXXXXXXXX"'
+buildConfigField "String", "ACCOUNT_API_KEY", '"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"'
  ```
+  Optionally you can also specify the time interval the SDK should wait until perform the next version check. 
+ ```java
+Applivery.setUpdateCheckingInterval(21600);
+ ```
+ 
+#### Step 2
+Once initialized the SDK and once your App is stable in the Home Screen you have to call proactivelly the following method in order to check for new updates:
+```java
+checkForUpdates()
+```
+Additionally, the SDK will automatically check for new updates when returning from Background as well.
 
 ## About params
 
