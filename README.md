@@ -147,7 +147,7 @@ Applivery.setUpdateCheckingInterval(21600);
 #### Step 2
 Once initialized the SDK and once your App is stable in the Home Screen you have to call proactivelly the following method in order to check for new updates:
 ```java
-checkForUpdates()
+Applivery.checkForUpdates()
 ```
 Additionally, the SDK will automatically check for new updates when returning from Background as well.
 
