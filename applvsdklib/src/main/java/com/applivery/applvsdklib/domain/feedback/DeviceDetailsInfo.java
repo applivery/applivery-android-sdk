@@ -31,4 +31,22 @@ public interface DeviceDetailsInfo {
   String getDeviceType();
 
   String getOsversion();
+
+  String getDeviceId();
+
+  String getBatteryPercentage();
+
+  String isBatteryCharging();
+
+  String getNetworkConnectivity();
+
+  String getScreenResolution();
+
+  String getUsedRam();
+
+  String getTotalRam();
+
+  String getFreeDiskPercentage();
+
+  String getScreenOrientation();
 }
