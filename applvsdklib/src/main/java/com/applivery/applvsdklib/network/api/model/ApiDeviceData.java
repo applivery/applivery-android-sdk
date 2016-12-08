@@ -28,10 +28,30 @@ public class ApiDeviceData {
   @SerializedName("model") @Expose private final String model;
   @SerializedName("vendor") @Expose private final String vendor;
   @SerializedName("type") @Expose private final String type;
+  @SerializedName("id") @Expose private final String id;
+  @SerializedName("battery") @Expose private final String battery;
+  @SerializedName("batteryStatus") @Expose private final String batteryStatus;
+  @SerializedName("network") @Expose private final String network;
+  @SerializedName("resolution") @Expose private final String resolution;
+  @SerializedName("ramUsed") @Expose private final String ramUsed;
+  @SerializedName("ramTotal") @Expose private final String ramTotal;
+  @SerializedName("diskFree") @Expose private final String diskFree;
+  @SerializedName("orientation") @Expose private final String orientation;
 
-  public ApiDeviceData(String model, String vendor, String type) {
+  public ApiDeviceData(String model, String vendor, String type, String id, String battery,
+      String batteryStatus, String network, String resolution, String ramUsed, String ramTotal,
+      String diskFree, String orientation) {
     this.model = model;
     this.vendor = vendor;
     this.type = type;
+    this.id = id;
+    this.battery = battery;
+    this.batteryStatus = batteryStatus;
+    this.network = network;
+    this.resolution = resolution;
+    this.ramUsed = ramUsed;
+    this.ramTotal = ramTotal;
+    this.diskFree = diskFree;
+    this.orientation = orientation;
   }
 }

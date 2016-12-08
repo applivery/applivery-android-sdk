@@ -38,10 +38,21 @@ public class FeedbackWrapper {
   final private String appId;
   final private String bugType;
   final private String osVersion;
+  final private String deviceId;
+  final private String batteryPercentage;
+  final private String isBatteryCharging;
+  final private String networkConnectivity;
+  final private String screenResolution;
+  final private String ramUsed;
+  final private String ramTotal;
+  final private String freeDiskPercentage;
+  final private String screenOrientation;
 
   public FeedbackWrapper(String packageName, String appVersionName, String osName, String screen,
       String screenShotBase64, String feedBackMessage, String vendor, String model, String type,
-      String appId, String bugType, String osVersion) {
+      String appId, String bugType, String osVersion, String deviceId, String batteryPercentage,
+      String isBatteryCharging, String networkConnectivity, String screenResolution, String ramUsed,
+      String ramTotal, String freeDiskPercentage, String screenOrientation) {
 
     this.packageName = packageName;
     this.appVersionName = appVersionName;
@@ -55,7 +66,15 @@ public class FeedbackWrapper {
     this.appId = appId;
     this.bugType = bugType;
     this.osVersion = osVersion;
-
+    this.deviceId = deviceId;
+    this.batteryPercentage = batteryPercentage;
+    this.isBatteryCharging = isBatteryCharging;
+    this.networkConnectivity = networkConnectivity;
+    this.screenResolution = screenResolution;
+    this.ramUsed = ramUsed;
+    this.ramTotal = ramTotal;
+    this.freeDiskPercentage = freeDiskPercentage;
+    this.screenOrientation = screenOrientation;
   }
 
   public static FeedbackWrapper createWrapper(Feedback feedback, CurrentAppInfo currentAppInfo,
@@ -74,7 +93,16 @@ public class FeedbackWrapper {
             deviceDetailsInfo.getDeviceType(),
             AppliverySdk.getApplicationId(),
             feedback.getType().getStringValue(),
-            deviceDetailsInfo.getOsversion());
+            deviceDetailsInfo.getOsversion(),
+            deviceDetailsInfo.getDeviceId(),
+            deviceDetailsInfo.getBatteryPercentage(),
+            deviceDetailsInfo.isBatteryCharging(),
+            deviceDetailsInfo.getNetworkConnectivity(),
+            deviceDetailsInfo.getScreenResolution(),
+            deviceDetailsInfo.getUsedRam(),
+            deviceDetailsInfo.getTotalRam(),
+            deviceDetailsInfo.getFreeDiskPercentage(),
+            deviceDetailsInfo.getScreenOrientation());
 
     return feedbackWrapper;
   }
@@ -126,5 +154,41 @@ public class FeedbackWrapper {
 
   public String getOsVersion() {
     return osVersion;
+  }
+
+  public String getDeviceId() {
+    return deviceId;
+  }
+
+  public String getBatteryPercentage() {
+    return batteryPercentage;
+  }
+
+  public String getIsBatteryCharging() {
+    return isBatteryCharging;
+  }
+
+  public String getNetworkConnectivity() {
+    return networkConnectivity;
+  }
+
+  public String getScreenResolution() {
+    return screenResolution;
+  }
+
+  public String getRamUsed() {
+    return ramUsed;
+  }
+
+  public String getRamTotal() {
+    return ramTotal;
+  }
+
+  public String getFreeDiskPercentage() {
+    return freeDiskPercentage;
+  }
+
+  public String getScreenOrientation() {
+    return screenOrientation;
   }
 }

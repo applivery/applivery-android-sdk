@@ -30,8 +30,19 @@ public class ApiDeviceRequestMapper implements RequestMapper<FeedbackWrapper, Ap
     String model = feedbackWrapper.getModel();
     String vendor = feedbackWrapper.getVendor();
     String type = feedbackWrapper.getType();
+    String deviceId = feedbackWrapper.getDeviceId();
+    String batteryPercentage = feedbackWrapper.getBatteryPercentage();
+    String isBatteryCharging = feedbackWrapper.getIsBatteryCharging();
+    String networkConnectivity = feedbackWrapper.getNetworkConnectivity();
+    String screenResolution = feedbackWrapper.getScreenResolution();
+    String ramUsed = feedbackWrapper.getRamUsed();
+    String ramTotal = feedbackWrapper.getRamTotal();
+    String freeDiskPercentage = feedbackWrapper.getFreeDiskPercentage();
+    String screenOrientation = feedbackWrapper.getScreenOrientation();
 
-    return new ApiDeviceData(model,vendor, type);
+    return new ApiDeviceData(model, vendor, type, deviceId, batteryPercentage, isBatteryCharging,
+        networkConnectivity, screenResolution, ramUsed, ramTotal, freeDiskPercentage,
+        screenOrientation);
   }
 
 }
