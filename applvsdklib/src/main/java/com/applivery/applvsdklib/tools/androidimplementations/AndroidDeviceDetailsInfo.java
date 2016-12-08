@@ -16,6 +16,8 @@
 
 package com.applivery.applvsdklib.tools.androidimplementations;
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,12 +27,25 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.view.WindowManager;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.feedback.DeviceDetailsInfo;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -46,6 +61,8 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
   private static final String CONNECTIVITY_2G = "gprs";
   private static final String CONNECTIVITY_3G = "3g";
   private static final String CONNECTIVITY_4G = "4g";
+  private static final String ORIENTATION_PORTRAIT = "portrait";
+  private static final String ORIENTATION_LANDSCAPE = "landscape";
 
   @Override public String getOsName() {
     return ANDROID;
@@ -84,8 +101,10 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
   }
 
   @Override public String getDeviceId() {
-    // TODO
-    return null;
+    Context context = AppliverySdk.getApplicationContext();
+    String secureAndroidId =
+        Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    return secureAndroidId;
   }
 
   @Override public String getBatteryPercentage() {
@@ -150,19 +169,70 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
   }
 
   @Override public String getUsedRam() {
-    return null;
+    long totalAppMemory = -1;
+
+    Context context = AppliverySdk.getApplicationContext();
+    ActivityManager activityManager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+    List<ActivityManager.RunningAppProcessInfo> runningAppProcesses =
+        activityManager.getRunningAppProcesses();
+
+    Map<Integer, String> pidMap = new TreeMap<>();
+    for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
+      pidMap.put(runningAppProcessInfo.pid, runningAppProcessInfo.processName);
+    }
+
+    Collection<Integer> processesPids = pidMap.keySet();
+    for (int pid : processesPids) {
+      int pids[] = new int[1];
+      pids[0] = pid;
+      android.os.Debug.MemoryInfo[] memoryInfoArray = activityManager.getProcessMemoryInfo(pids);
+      for (android.os.Debug.MemoryInfo pidMemoryInfo: memoryInfoArray) {
+        totalAppMemory += pidMemoryInfo.getTotalPss();
+      }
+    }
+
+    totalAppMemory /= 1024;
+
+    return String.valueOf(totalAppMemory);
   }
 
   @Override public String getTotalRam() {
-    return null;
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+        ? getTotalMemory()
+        : getTotalMemoryForOlderDevices();
   }
 
   @Override public String getFreeDiskPercentage() {
-    return null;
+    File rootDirectory = Environment.getRootDirectory();
+    StatFs fileSystemData = new StatFs(rootDirectory.getPath());
+
+    long blockSize;
+    long totalSize;
+    long availableSize;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+      blockSize = fileSystemData.getBlockSizeLong();
+      totalSize = fileSystemData.getBlockCountLong() * blockSize;
+      availableSize = fileSystemData.getAvailableBlocksLong() * blockSize;
+    } else {
+      blockSize = fileSystemData.getBlockSize();
+      totalSize = fileSystemData.getBlockCount() * blockSize;
+      availableSize = fileSystemData.getAvailableBlocks() * blockSize;
+    }
+
+    long freeDiskPercentage = availableSize * 100 / totalSize;
+    return String.valueOf(freeDiskPercentage);
   }
 
   @Override public String getScreenOrientation() {
-    return null;
+    Context context = AppliverySdk.getApplicationContext();
+    String screenOrientation;
+
+    int orientation = context.getResources().getConfiguration().orientation;
+    screenOrientation = (orientation == Configuration.ORIENTATION_LANDSCAPE)
+        ? ORIENTATION_LANDSCAPE
+        : ORIENTATION_PORTRAIT;
+
+    return screenOrientation;
   }
 
   private Intent getBatteryStatus(Context context) {
@@ -213,5 +283,40 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
     ConnectivityManager cm =
         (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     return cm.getActiveNetworkInfo();
+  }
+
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+  private String getTotalMemory() {
+    Context context = AppliverySdk.getApplicationContext();
+    ActivityManager activityManager =
+        (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+    activityManager.getMemoryInfo(memoryInfo);
+
+    long totalMemory = memoryInfo.totalMem;
+
+    return String.valueOf((totalMemory / 1024) / 1024);
+  }
+
+  private String getTotalMemoryForOlderDevices() {
+    final String fileToRead = "/proc/meminfo";
+    String lineToRead = "";
+    String[] arrayOfString;
+    long totalMemory = 0;
+
+    try {
+      FileReader fileReader = new FileReader(fileToRead);
+      BufferedReader bufferedReader = new BufferedReader(fileReader, 8192);
+
+      lineToRead = bufferedReader.readLine();
+      arrayOfString = lineToRead.split("\\s+");
+      totalMemory = Integer.valueOf(arrayOfString[1]);
+
+      bufferedReader.close();
+    } catch (IOException e) {
+      return String.valueOf(-1);
+    }
+
+    return String.valueOf(totalMemory / 1024);
   }
 }
