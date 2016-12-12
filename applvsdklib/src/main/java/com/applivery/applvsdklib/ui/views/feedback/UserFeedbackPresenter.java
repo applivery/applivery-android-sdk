@@ -19,6 +19,7 @@ package com.applivery.applvsdklib.ui.views.feedback;
 import android.graphics.Bitmap;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
+import com.applivery.applvsdklib.domain.download.permissions.AccessNetworkStatePermission;
 import com.applivery.applvsdklib.domain.feedback.FeedbackInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.FeedBackType;
@@ -27,6 +28,8 @@ import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenCaptureUtils;
+import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
+import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 
@@ -40,10 +43,14 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   private final Feedback feedback;
   private AppliveryApiService appliveryApiService;
   private ScreenCapture screenCapture;
+  final private PermissionChecker permissionRequestExecutor;
+  final private AccessNetworkStatePermission accessNetworkStatePermission;
 
   public UserFeedbackPresenter(FeedbackView feedbackView) {
     this.feedbackView = feedbackView;
     this.feedback = new UserFeedback();
+    this.permissionRequestExecutor = AppliverySdk.getPermissionRequestManager();
+    this.accessNetworkStatePermission = new AccessNetworkStatePermission();
   }
 
   public void setAppliveryApiService(AppliveryApiService appliveryApiService) {
@@ -120,6 +127,12 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   }
 
   public void sendFeedbackInfo(String feedbackMessage, String screen) {
+    if (permissionRequestExecutor == null) {
+      AppliverySdk.Logger.log(
+          "PermissionRequestExecutor must be initialized before accessing network state");
+      return;
+    }
+
     feedback.setMessage(feedbackMessage);
     feedback.setScreen(screen);
 
@@ -129,8 +142,11 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
       feedback.setScreenCapture(null);
     }
 
-    AppliverySdk.getExecutor().execute(FeedbackInteractor.getInstance(appliveryApiService,
-        feedback, this));
+    if (!permissionRequestExecutor.isGranted(accessNetworkStatePermission)) {
+      askForPermission();
+    } else {
+      sendFeedback();
+    }
 
   }
 
@@ -151,5 +167,21 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   public void okScreenShotPressed() {
     feedbackView.retrieveEditedScreenshot();
     feedbackView.hideScheenShotPreview();
+  }
+
+  private void askForPermission() {
+    permissionRequestExecutor.askForPermission(accessNetworkStatePermission,
+        new UserPermissionRequestResponseListener() {
+          @Override public void onPermissionAllowed(boolean permissionAllowed) {
+            if (permissionAllowed) {
+              sendFeedback();
+            }
+          }
+        }, AppliverySdk.getCurrentActivity());
+  }
+
+  private void sendFeedback() {
+    AppliverySdk.getExecutor()
+        .execute(FeedbackInteractor.getInstance(appliveryApiService, feedback, this));
   }
 }

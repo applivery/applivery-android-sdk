@@ -46,6 +46,12 @@
   <string name="applivery_readOnScreenshotFolderPermissionRationalMessage">Read from external Storage Permission is necessary for detecting screenshots, allow it!</string>
   <string name="applivery_readOnScreenshotFolderPermissionRationaleTitle">Permission Request</string>
 
+  <string name="applivery_accessNetworkStatePermissionAllowedFeedback">Access network state has been allowed</string>
+  <string name="applivery_accessNetworkStatePermissionSettingsDeniedFeedback">SETTINGS</string>
+  <string name="applivery_accessNetworkStatePermissionDeniedFeedback">Access network state Permission is necessary for sending feedback</string>
+  <string name="applivery_accessNetworkStatePermissionRationalMessage">Access network state Permission is necessary for sending feedback, allow it!</string>
+  <string name="applivery_accessNetworkStatePermissionRationaleTitle">Permission Request</string>
+
   <string name="appliveryError">Applivery error</string>
   <string name="appliveryAcceptButton">Aceptar</string>
 
