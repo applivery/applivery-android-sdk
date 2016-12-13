@@ -36,7 +36,7 @@ public interface DeviceDetailsInfo {
 
   String getBatteryPercentage();
 
-  String isBatteryCharging();
+  boolean isBatteryCharging();
 
   String getNetworkConnectivity();
 

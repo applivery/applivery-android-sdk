@@ -118,7 +118,7 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
     return batteryPercentage;
   }
 
-  @Override public String isBatteryCharging() {
+  @Override public boolean isBatteryCharging() {
     Context context = AppliverySdk.getApplicationContext();
     boolean isBatteryCharging = false;
     Intent batteryStatus = getBatteryStatus(context);
@@ -130,7 +130,7 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
       isBatteryCharging = isBatteryCharging || plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
     }
 
-    return String.valueOf(isBatteryCharging);
+    return isBatteryCharging;
   }
 
   @Override public String getNetworkConnectivity() {

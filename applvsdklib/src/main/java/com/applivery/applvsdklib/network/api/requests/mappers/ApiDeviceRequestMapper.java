@@ -32,7 +32,7 @@ public class ApiDeviceRequestMapper implements RequestMapper<FeedbackWrapper, Ap
     String type = feedbackWrapper.getType();
     String deviceId = feedbackWrapper.getDeviceId();
     String batteryPercentage = feedbackWrapper.getBatteryPercentage();
-    String isBatteryCharging = feedbackWrapper.getIsBatteryCharging();
+    boolean isBatteryCharging = feedbackWrapper.isBatteryCharging();
     String networkConnectivity = feedbackWrapper.getNetworkConnectivity();
     String screenResolution = feedbackWrapper.getScreenResolution();
     String ramUsed = feedbackWrapper.getRamUsed();

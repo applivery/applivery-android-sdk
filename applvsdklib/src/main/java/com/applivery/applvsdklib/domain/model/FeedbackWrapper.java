@@ -40,7 +40,7 @@ public class FeedbackWrapper {
   final private String osVersion;
   final private String deviceId;
   final private String batteryPercentage;
-  final private String isBatteryCharging;
+  final private boolean isBatteryCharging;
   final private String networkConnectivity;
   final private String screenResolution;
   final private String ramUsed;
@@ -51,7 +51,7 @@ public class FeedbackWrapper {
   public FeedbackWrapper(String packageName, String appVersionName, String osName, String screen,
       String screenShotBase64, String feedBackMessage, String vendor, String model, String type,
       String appId, String bugType, String osVersion, String deviceId, String batteryPercentage,
-      String isBatteryCharging, String networkConnectivity, String screenResolution, String ramUsed,
+      boolean isBatteryCharging, String networkConnectivity, String screenResolution, String ramUsed,
       String ramTotal, String freeDiskPercentage, String screenOrientation) {
 
     this.packageName = packageName;
@@ -164,7 +164,7 @@ public class FeedbackWrapper {
     return batteryPercentage;
   }
 
-  public String getIsBatteryCharging() {
+  public boolean isBatteryCharging() {
     return isBatteryCharging;
   }
 
