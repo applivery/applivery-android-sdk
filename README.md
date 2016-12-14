@@ -1,6 +1,6 @@
 #Applivery Android SDK  
 ![Language](https://img.shields.io/badge/Language-Java-orange.svg)
-![Version](https://img.shields.io/badge/version-2.0.2-blue.svg)
+![Version](https://img.shields.io/badge/version-2.0.3-blue.svg)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
 
