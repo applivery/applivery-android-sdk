@@ -44,18 +44,8 @@
             android:contentDescription="@string/appliveryCancelFeedbackButtonDesc"
             />
 
-        <ImageView
-            android:id="@+id/applivery_feedback_title_icon"
-            android:layout_toRightOf="@+id/applivery_feedback_cancel_button"
-            android:layout_centerVertical="true"
-            android:layout_width="@dimen/appliveryTitleIconSize"
-            android:layout_height="@dimen/appliveryTitleIconSize"
-            android:src="@drawable/applivery_icon"
-            android:padding="@dimen/appliveryTitleIconPaddingSmall"
-            />
-
         <TextView
-            android:layout_toRightOf="@+id/applivery_feedback_title_icon"
+            android:layout_toRightOf="@+id/applivery_feedback_cancel_button"
             android:textColor="@android:color/white"
             android:id="@+id/must_update_title"
             android:gravity="center_vertical"

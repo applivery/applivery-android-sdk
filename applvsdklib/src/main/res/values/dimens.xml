@@ -41,4 +41,5 @@
   <dimen name="appliveryIconTitleMargin">5dp</dimen>
   <dimen name="appliveryIconbuttonMarginRight">15dp</dimen>
   <dimen name="appliveryIconTitleMargindouble">10dp</dimen>
+  <dimen name="appliveryMustUpdateTitleMarginLeft">16dp</dimen>
 </resources>

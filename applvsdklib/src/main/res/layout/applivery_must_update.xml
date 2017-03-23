@@ -29,19 +29,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/appliveryTitleHeight">
 
-        <ImageView
-            android:layout_width="@dimen/appliveryTitleHeight"
-            android:layout_height="@dimen/appliveryTitleHeight"
-            android:src="@drawable/applivery_icon"
-            android:padding="@dimen/appliveryIconTitleMargindouble"
-            />
-
     <TextView
         android:textColor="@android:color/white"
         android:id="@+id/must_update_title"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/appliveryTitleHeight"
+        android:layout_marginStart="@dimen/appliveryMustUpdateTitleMarginLeft"
+        android:layout_marginLeft="@dimen/appliveryMustUpdateTitleMarginLeft"
         android:textSize="@dimen/appNameTextSize"
         android:text="@string/applivery_name"
         />
