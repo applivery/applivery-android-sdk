@@ -25,7 +25,7 @@
     <RelativeLayout
         android:animateLayoutChanges="true"
         android:id="@+id/applivery_feedback_toolbar"
-        android:background="@color/appliveryMainColor"
+        android:background="@color/applivery_primary_color"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appliveryTitleHeight">
@@ -46,7 +46,7 @@
 
         <TextView
             android:layout_toRightOf="@+id/applivery_feedback_cancel_button"
-            android:textColor="@android:color/white"
+            android:textColor="@color/applivery_primary_font_color"
             android:id="@+id/must_update_title"
             android:gravity="center_vertical"
             android:layout_width="wrap_content"
@@ -158,7 +158,7 @@
             android:layout_marginBottom="@dimen/appliveryFeedbackTextBoxBottomMargin"
             android:layout_marginTop="@dimen/appliveryFeedbackTextBoxTopMargin"
             >
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/applivery_feedback_description"
                 android:layout_centerVertical="true"
                 android:layout_width="match_parent"
@@ -182,17 +182,18 @@
 
     </LinearLayout>
 
-    <Switch
+    <android.support.v7.widget.SwitchCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:shadowColor="@color/appliveryMainColor"
+        android:shadowColor="@color/applivery_primary_color"
         android:text="@string/appliveryAttachScreenshotSwithText"
         android:textSize="@dimen/appNameTextSize"
         android:layout_margin="@dimen/appliveryFeedbackFormSidePadding"
         android:id="@+id/attach_screenshot_switch"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:theme="@style/AppliverySwitch"
         />
 
     <com.applivery.applvsdklib.ui.views.DrawingImageView

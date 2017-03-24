@@ -112,9 +112,8 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
     LayerDrawable layerDrawable = (LayerDrawable) progressBar.getProgressDrawable();
     Drawable progressDrawable = layerDrawable.findDrawableByLayerId(android.R.id.progress);
-    progressDrawable.setColorFilter(
-        ContextCompat.getColor(AppliverySdk.getApplicationContext(), R.color.appliveryMainColor),
-        PorterDuff.Mode.SRC_IN);
+    progressDrawable.setColorFilter(ContextCompat.getColor(AppliverySdk.getApplicationContext(),
+        R.color.applivery_primary_color), PorterDuff.Mode.SRC_IN);
   }
 
   private void initViewElementsData(UpdateInfo updateInfo) {

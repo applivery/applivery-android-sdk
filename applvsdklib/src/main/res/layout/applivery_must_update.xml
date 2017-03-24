@@ -23,14 +23,14 @@
 
     <LinearLayout
         android:id="@+id/applivery_update_title"
-        android:background="@color/appliveryMainColor"
+        android:background="@color/applivery_primary_color"
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/appliveryTitleHeight">
 
     <TextView
-        android:textColor="@android:color/white"
+        android:textColor="@color/applivery_primary_font_color"
         android:id="@+id/must_update_title"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
@@ -87,8 +87,8 @@
             <Button
                 android:animateLayoutChanges="true"
                 android:id="@+id/must_update_button"
-                android:background="@color/appliveryMainColor"
-                android:textColor="@android:color/white"
+                android:background="@color/applivery_primary_color"
+                android:textColor="@color/applivery_primary_font_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/suggestedUpdateButtonPadding"

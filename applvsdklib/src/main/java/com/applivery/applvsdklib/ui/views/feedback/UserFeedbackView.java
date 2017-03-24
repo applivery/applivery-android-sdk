@@ -21,11 +21,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +38,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
@@ -60,9 +62,9 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   private DrawingImageView screenshot;
   private ImageView feedbackImage;
-  private Switch screenShotSwitch;
+  private SwitchCompat screenShotSwitch;
 
-  private EditText feedbackMessage;
+  private AppCompatEditText feedbackMessage;
 
   private LinearLayout feedbackFormContainer;
 
@@ -127,9 +129,9 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     bugButton = (LinearLayout) view.findViewById(R.id.applivery_tab_button_selector_bug);
     screenshot = (DrawingImageView) view.findViewById(R.id.appliveryScreenShot);
     feedbackImage = (ImageView) view.findViewById(R.id.applivery_feedback_image);
-    feedbackMessage = (EditText) view.findViewById(R.id.applivery_feedback_description);
+    feedbackMessage = (AppCompatEditText) view.findViewById(R.id.applivery_feedback_description);
     feedbackFormContainer = (LinearLayout) view.findViewById(R.id.applivery_feedback_form);
-    screenShotSwitch = (Switch) view.findViewById(R.id.attach_screenshot_switch);
+    screenShotSwitch = (SwitchCompat) view.findViewById(R.id.attach_screenshot_switch);
 
     initViewState();
 
@@ -141,6 +143,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   private void initViewState() {
     okButton.setVisibility(View.GONE);
     sendButton.setVisibility(View.GONE);
+    initFeedbackMessageCustomStyle();
     showFeedbackFormView();
     userFeedbackPresenter.initUi();
     userFeedbackPresenter.feedbackButtonPressed();
@@ -163,6 +166,13 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     }else if(R.id.applivery_feedback_image == v.getId()){
       userFeedbackPresenter.feedbackImagePressed();
     }
+  }
+
+  private void initFeedbackMessageCustomStyle() {
+    int appliveryPrimaryColor =
+        getActivity().getResources().getColor(R.color.applivery_primary_color);
+    ColorStateList colorStateList = ColorStateList.valueOf(appliveryPrimaryColor);
+    feedbackMessage.setSupportBackgroundTintList(colorStateList);
   }
 
   private void initElementActions() {
