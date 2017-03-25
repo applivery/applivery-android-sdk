@@ -20,6 +20,7 @@
   <item name="applivery_secondary_color" type="color">#FFFFFF</item>
   <item name="applivery_primary_font_color" type="color">#FFFFFF</item>
   <item name="applivery_secondary_font_color" type="color">#444444</item>
+  <item name="applivery_drawing_color" type="color">#f00</item>
 
   <item name="appliveryMainColor" type="color">#6494A5</item>
   <item name="appliveryRedColor" type="color">#ff0000</item>

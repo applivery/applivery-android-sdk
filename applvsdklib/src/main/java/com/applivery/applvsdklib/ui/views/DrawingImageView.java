@@ -3,12 +3,12 @@ package com.applivery.applvsdklib.ui.views;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+import com.applivery.applvsdklib.R;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,26 +17,27 @@ import java.util.List;
  */
 public class DrawingImageView extends ImageView {
 
-  private int color = Color.RED;
-  private float width = 4f;
-  private List<Holder> holderList = new ArrayList<Holder>();
+  private final float width = 4f;
+  private final List<Holder> holderList = new ArrayList<Holder>();
+  private int color;
 
   public DrawingImageView(Context context) {
     super(context);
-    init();
+    init(context);
   }
 
   public DrawingImageView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    init();
+    init(context);
   }
 
   public DrawingImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    init();
+    init(context);
   }
 
-  private void init() {
+  private void init(Context context) {
+    color = context.getResources().getColor(R.color.applivery_drawing_color);
     setDrawingCacheEnabled(true);
     holderList.add(new Holder(color, width));
   }
