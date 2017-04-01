@@ -1,4 +1,4 @@
-#Applivery Android SDK  
+# Applivery Android SDK  
 ![Language](https://img.shields.io/badge/Language-Java-orange.svg)
 ![Version](https://img.shields.io/badge/version-2.0.2-blue.svg)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
@@ -187,6 +187,28 @@ Applivery.disableShakeFeedback();
 ```
 
 Call it having your app in foreground whenever you want.
+
+## Styles
+
+In order to customize the appearance of the UI, you can make a new resource file under your res/values folder defining your custom attributes.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="applivery_primary_color">#ffbb33</color>
+  <color name="applivery_secondary_color">#ffffff</color>
+  <color name="applivery_primary_font_color">#ffffff</color>
+  <color name="applivery_secondary_font_color">#444444</color>
+  <drawable name="applivery_selected_tab_button">@drawable/tab_selected_example</drawable>
+  <drawable name="applivery_tab_button_selector">@drawable/custom_tab_button_selector</drawable>
+  
+  <color name="applivery_drawing_color">#ffbb33</color>
+
+  <string name="appliveryUpdate">Update!</string>
+  <string name="appliveryMustUpdateAppLocked">You must update.</string>
+</resources>
+```
+*res/values/applivery.xml*
 
 ## Sample
 
