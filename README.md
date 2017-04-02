@@ -166,7 +166,7 @@ The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Appliver
 
 You can either take a screenshot or shake your phone if you want to send Applivery some feedback about your App. By taking a screenshot or shaking your phone you will get a screen like the following:
 
-![FILES](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/new_feedback.png)
+![FILES](https://github.com/applivery/applivery-android-sdk/blob/feature/styling/documentation/new_feedback_color.png)
 
 Here you can add the screenshot of the screen you were on if you woud like. You can say something interesting about the screen and type your feedback as a bug or simply something you want to give as feedback. By pressing the small screenshot you will have the same image bigger just in case you would like to check something. Then if you tap on the top right button you will send the info, or you could press the close button in the upper left corner otherwise.
 
@@ -188,9 +188,9 @@ Applivery.disableShakeFeedback();
 
 Call it having your app in foreground whenever you want.
 
-## Styles
+## Styling the UI
 
-In order to customize the appearance of the UI, you can make a new resource file under your res/values folder defining your custom attributes.
+In order to customize the appearance of the UI, you can make a new resource file under your res/values folder redefining the applivery default attributes.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -199,8 +199,6 @@ In order to customize the appearance of the UI, you can make a new resource file
   <color name="applivery_secondary_color">#ffffff</color>
   <color name="applivery_primary_font_color">#ffffff</color>
   <color name="applivery_secondary_font_color">#444444</color>
-  <drawable name="applivery_selected_tab_button">@drawable/tab_selected_example</drawable>
-  <drawable name="applivery_tab_button_selector">@drawable/custom_tab_button_selector</drawable>
   
   <color name="applivery_drawing_color">#ffbb33</color>
 
@@ -209,6 +207,19 @@ In order to customize the appearance of the UI, you can make a new resource file
 </resources>
 ```
 *res/values/applivery.xml*
+
+You can also override the following drawable resources:
+* Feedback tab indicator (should be provided as a 9patch png):<br />
+*applivery_selected_tab_button*
+* Feedback close button:<br />
+*applivery_close*<br />
+*applivery_close_pressed*
+* Feedback done button:<br />
+*applivery_done*<br />
+*applivery_done_pressed*
+* Feedback send button:<br />
+*applivery_send*<br />
+*applivery_send_pressed*
 
 ## Sample
 
