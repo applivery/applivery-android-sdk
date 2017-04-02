@@ -166,6 +166,7 @@
                 android:layout_alignParentLeft="true"
                 android:inputType="textMultiLine"
                 android:ems="10"
+                android:textCursorDrawable="@drawable/applivery_cursor_drawable"
                 android:layout_toLeftOf="@+id/applivery_feedback_image"
                 android:layout_gravity="center_horizontal"
                 />
