@@ -19,8 +19,10 @@ package com.applivery.applvsdklib.tools.androidimplementations;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import com.applivery.applvsdklib.domain.download.app.AppInstaller;
 import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
+import java.io.File;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -32,17 +34,21 @@ public class AndroidAppInstallerImpl implements AppInstaller, AppPathReceiver {
   private static final String APP_TYPE_ID = "application/vnd.android.package-archive";
 
   private final Context context;
+  private final String fileProviderAuthority;
   private final ExternalStorageReader externalStorageReader;
 
-  public AndroidAppInstallerImpl(Context context) {
+  public AndroidAppInstallerImpl(Context context, String fileProviderAuthority) {
     this.context = context;
+    this.fileProviderAuthority = fileProviderAuthority;
     this.externalStorageReader = new AndroidExternalStorageReaderImpl();
   }
 
   private void install(String path) {
+    File file = new File(FILE_URI_ID + path);
+    Uri uri = FileProvider.getUriForFile(context, fileProviderAuthority, file);
 
     Intent promptInstall =
-        new Intent(Intent.ACTION_VIEW).setDataAndType(Uri.parse(FILE_URI_ID + path), APP_TYPE_ID);
+        new Intent(Intent.ACTION_VIEW).setDataAndType(uri, APP_TYPE_ID);
 
     promptInstall.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(promptInstall);

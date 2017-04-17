@@ -54,6 +54,7 @@ public class AppliverySdk {
   private static volatile String applicationId;
   private static volatile String appClientToken;
   private static boolean isPlayStoreRelease = false;
+  private static volatile String fileProviderAuthority;
   private static boolean lockedApp = false;
   private static volatile AppliveryApiService appliveryApiService;
   private static volatile boolean isDebugEnabled = BuildConfig.DEBUG;
@@ -150,6 +151,8 @@ public class AppliverySdk {
     AppliverySdk.appClientToken = appClientToken;
     AppliverySdk.isPlayStoreRelease = isPlayStoreRelease;
 
+    AppliverySdk.fileProviderAuthority = composeFileProviderAuthority(app);
+
     AppliverySdk.applicationContext = applicationContext;
 
     AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance(new AndroidCurrentAppInfo(applicationContext));
@@ -163,6 +166,10 @@ public class AppliverySdk {
           AppliverySdk.applicationId, AppliverySdk.appClientToken,
           new AndroidCurrentAppInfo(applicationContext)));
     }
+  }
+
+  private static String composeFileProviderAuthority(Application application) {
+    return application.getPackageName() + ".provider";
   }
 
   public static String getApplicationId(){
@@ -246,6 +253,10 @@ public class AppliverySdk {
 
   public static boolean isStoreRelease() {
     return isPlayStoreRelease;
+  }
+
+  public static String getFileProviderAuthority() {
+    return fileProviderAuthority;
   }
 
   public static void cleanAllStatics() {
