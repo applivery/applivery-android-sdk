@@ -19,6 +19,7 @@ package com.applivery.applvsdklib.tools.androidimplementations;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.FileProvider;
 import com.applivery.applvsdklib.domain.download.app.AppInstaller;
 import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
@@ -44,13 +45,15 @@ public class AndroidAppInstallerImpl implements AppInstaller, AppPathReceiver {
   }
 
   private void install(String path) {
-    File file = new File(FILE_URI_ID + path);
-    Uri uri = FileProvider.getUriForFile(context, fileProviderAuthority, file);
+    Uri uri = composeUri(path, fileProviderAuthority);
 
-    Intent promptInstall =
-        new Intent(Intent.ACTION_VIEW).setDataAndType(uri, APP_TYPE_ID);
-
+    Intent promptInstall = new Intent(Intent.ACTION_VIEW);
+    promptInstall.setDataAndType(uri, APP_TYPE_ID);
     promptInstall.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    promptInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    context.grantUriPermission(context.getPackageName(), uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
     context.startActivity(promptInstall);
   }
 
@@ -60,5 +63,14 @@ public class AndroidAppInstallerImpl implements AppInstaller, AppPathReceiver {
 
   @Override public void onPathReady(String path) {
     install(path);
+  }
+
+  private Uri composeUri(String path, String fileProviderAuthority) {
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+      return Uri.parse(FILE_URI_ID + path);
+    } else {
+      File file = new File(path);
+      return FileProvider.getUriForFile(context, fileProviderAuthority, file);
+    }
   }
 }
