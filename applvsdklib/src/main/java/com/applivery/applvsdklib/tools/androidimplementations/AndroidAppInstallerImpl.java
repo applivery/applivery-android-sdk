@@ -19,8 +19,11 @@ package com.applivery.applvsdklib.tools.androidimplementations;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 import com.applivery.applvsdklib.domain.download.app.AppInstaller;
 import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
+import java.io.File;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -32,19 +35,25 @@ public class AndroidAppInstallerImpl implements AppInstaller, AppPathReceiver {
   private static final String APP_TYPE_ID = "application/vnd.android.package-archive";
 
   private final Context context;
+  private final String fileProviderAuthority;
   private final ExternalStorageReader externalStorageReader;
 
-  public AndroidAppInstallerImpl(Context context) {
+  public AndroidAppInstallerImpl(Context context, String fileProviderAuthority) {
     this.context = context;
+    this.fileProviderAuthority = fileProviderAuthority;
     this.externalStorageReader = new AndroidExternalStorageReaderImpl();
   }
 
   private void install(String path) {
+    Uri uri = composeUri(path, fileProviderAuthority);
 
-    Intent promptInstall =
-        new Intent(Intent.ACTION_VIEW).setDataAndType(Uri.parse(FILE_URI_ID + path), APP_TYPE_ID);
-
+    Intent promptInstall = new Intent(Intent.ACTION_VIEW);
+    promptInstall.setDataAndType(uri, APP_TYPE_ID);
     promptInstall.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    promptInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    context.grantUriPermission(context.getPackageName(), uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
     context.startActivity(promptInstall);
   }
 
@@ -54,5 +63,14 @@ public class AndroidAppInstallerImpl implements AppInstaller, AppPathReceiver {
 
   @Override public void onPathReady(String path) {
     install(path);
+  }
+
+  private Uri composeUri(String path, String fileProviderAuthority) {
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+      return Uri.parse(FILE_URI_ID + path);
+    } else {
+      File file = new File(path);
+      return FileProvider.getUriForFile(context, fileProviderAuthority, file);
+    }
   }
 }

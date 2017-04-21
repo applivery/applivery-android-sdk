@@ -67,7 +67,8 @@ public class UpdateListenerImpl implements UpdateListener {
   }
 
   private void installApp(String apkFileName) {
-    AppInstaller appInstaller = new AndroidAppInstallerImpl(AppliverySdk.getApplicationContext());
+    AppInstaller appInstaller = new AndroidAppInstallerImpl(AppliverySdk.getApplicationContext(),
+        AppliverySdk.getFileProviderAuthority());
     appInstaller.installApp(apkFileName);
   }
 

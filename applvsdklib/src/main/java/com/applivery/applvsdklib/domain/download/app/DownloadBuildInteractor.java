@@ -60,7 +60,8 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
         new DownloadBuildRequest(appliveryApiService, buildTokenInfo, appName,
             downloadStatusListener, externalStorageWriter);
     this.interactorCallback = interactorCallback;
-    this.appInstaller = new AndroidAppInstallerImpl(AppliverySdk.getApplicationContext());
+    this.appInstaller = new AndroidAppInstallerImpl(AppliverySdk.getApplicationContext(),
+        AppliverySdk.getFileProviderAuthority());
   }
 
   @Override protected void receivedResponse(BusinessObject downloadResult) {
