@@ -25,21 +25,21 @@ import android.hardware.Sensor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
-import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
 import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
-import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
+import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
-import java.util.concurrent.*;
+import java.util.concurrent.Executor;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -67,6 +67,7 @@ public class AppliverySdk {
   private static Boolean sdkFirstTime;
   private static Boolean sdkRestarted = true;
   private static long updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
+  private static String appliverySdkVersionName = BuildConfig.VERSION_NAME;
   private static Boolean isUpdating = false;
 
   public static synchronized void sdkInitialize(Application app,
@@ -155,9 +156,10 @@ public class AppliverySdk {
 
     AppliverySdk.applicationContext = applicationContext;
 
-    AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance(new AndroidCurrentAppInfo(applicationContext));
+    AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance();
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
-    AppliverySdk.permissionRequestManager = new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
+    AppliverySdk.permissionRequestManager =
+        new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
   }
 
   private static void obtainAppConfig(boolean requestConfig) {
@@ -244,6 +246,11 @@ public class AppliverySdk {
   public static String getToken() {
     Validate.sdkInitialized();
     return appClientToken;
+  }
+
+  public static String getVersionName() {
+    Validate.sdkInitialized();
+    return appliverySdkVersionName;
   }
 
   public static void continuePendingPermissionsRequestsIfPossible() {
