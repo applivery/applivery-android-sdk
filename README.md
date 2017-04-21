@@ -1,6 +1,6 @@
 # Applivery Android SDK  
 ![Language](https://img.shields.io/badge/Language-Java-orange.svg)
-![Version](https://img.shields.io/badge/version-2.0.2-blue.svg)
+[![Version](https://img.shields.io/badge/version-2.0.3-blue.svg)](https://github.com/applivery/applivery-android-sdk/releases)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
 
@@ -98,7 +98,7 @@ Add the following dependency to your's app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v2.0'
+      compile 'com.github.Applivery:applivery-android-sdk:v2.0.3'
     }
   ```
   * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
