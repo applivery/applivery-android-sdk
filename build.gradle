@@ -40,8 +40,8 @@ allprojects {
     androidCompileSdkVersion = 23
     androidApplicationId = 'com.applivery.applvsdklib'
 
-    versionMajor = 1
-    versionMinor = 1
+    versionMajor = 2
+    versionMinor = 4
     versionPatch = 0
 
     androidVersionCode = versionMajor * 1000 + versionMinor * 100 + versionPatch
