@@ -35,6 +35,12 @@ class MainActivity : AppCompatActivity() {
     startChrono()
   }
 
+  override fun onResume() {
+    super.onResume()
+
+    Applivery.checkForUpdates()
+  }
+
   private fun startChrono() {
     (findViewById(R.id.chronometer) as Chronometer).start()
   }

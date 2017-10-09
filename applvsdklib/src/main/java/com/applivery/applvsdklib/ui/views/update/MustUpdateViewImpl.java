@@ -57,29 +57,26 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
   /**
    * * Using DialogFragment instead of Dialog because DialogFragment is not dismissed in rotation.
-   * @param activity
    */
-  @Override
-  public void onAttach(Activity activity) {
+  @Override public void onAttach(Activity activity) {
     super.onAttach(activity);
   }
 
   /**
    * Overrided in order to get fullScreen dialog
-   * @param savedInstanceState
-   * @return
    */
-  @Override
-  public Dialog onCreateDialog(final Bundle savedInstanceState) {
+  @Override public Dialog onCreateDialog(final Bundle savedInstanceState) {
 
     final RelativeLayout root = new RelativeLayout(getActivity());
-    root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));
 
     final Dialog dialog = new Dialog(getActivity());
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setContentView(root);
     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.YELLOW));
-    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    dialog.getWindow()
+        .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
     return dialog;
   }
@@ -117,31 +114,38 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   }
 
   private void initViewElementsData(UpdateInfo updateInfo) {
-    if (updateInfo != null){
-      updateMessage.setText(updateInfo.getAppUpdateMessage());
+
+    String mustUpdateAppLockedText = getString(R.string.appliveryMustUpdateAppLocked);
+
+    if (!mustUpdateAppLockedText.isEmpty()) {
+      updateMessage.setText(mustUpdateAppLockedText);
+    } else {
+      if (updateInfo != null) {
+        updateMessage.setText(updateInfo.getAppUpdateMessage());
+      }
     }
 
     permissionsDenied.setVisibility(View.GONE);
     progressBar.setVisibility(View.GONE);
 
-    if (updateListener != null){
+    if (updateListener != null) {
       update.setVisibility(View.VISIBLE);
       update.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
           updateListener.onUpdateButtonClick();
         }
       });
-    }else{
+    } else {
       update.setVisibility(View.GONE);
     }
   }
 
   @Override public void showUpdateDialog() {
-    try{
+    try {
       if (!AppliverySdk.isUpdating()) {
         show(AppliverySdk.getCurrentActivity().getFragmentManager(), "");
       }
-    }catch (NotForegroundActivityAvailable notForegroundActivityAvailable){
+    } catch (NotForegroundActivityAvailable notForegroundActivityAvailable) {
       AppliverySdk.Logger.log("Unable to show dialog again");
     }
   }
@@ -174,8 +178,7 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
   private void updatProcessTextView(final double percent, Handler handler) {
     Runnable myRunnable = new Runnable() {
-      @Override
-      public void run() {
+      @Override public void run() {
         progressBar.setProgress(Double.valueOf(percent).intValue());
       }
     };
@@ -183,9 +186,9 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   }
 
   public Looper getLooper() {
-    if (Looper.myLooper() == Looper.getMainLooper()){
+    if (Looper.myLooper() == Looper.getMainLooper()) {
       return Looper.myLooper();
-    }else{
+    } else {
       return Looper.getMainLooper();
     }
   }

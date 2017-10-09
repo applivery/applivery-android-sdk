@@ -1,7 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: "applivery-plugin"
 
 def STRING = "String"
+
+def props = new Properties()
+file("../keys.properties").withInputStream { props.load(it) }
 
 android {
   compileSdkVersion 25
@@ -16,14 +20,11 @@ android {
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    //Sandbox test App
-    //    buildConfigField STRING, "APP_KEY", '"569bf0f4a81d1598273a2bd1"'
-    //    buildConfigField STRING, "APP_SECRET", '"f0e46ebc297e6e9a8fa427e15e42336d4d24a33b"'
-
-    //Production test App
-    buildConfigField STRING, "APP_ID", '"56e744ec0174c74a6b25367c"'
-    buildConfigField STRING, "ACCOUNT_API_KEY", '"b5cc90f835dbd9df33b2aa06364e76d60ccd3f8a"'
+    buildConfigField STRING, "APPLIVERY_APP_ID", "\"59d5e81b637c8e7371618080\""
+    buildConfigField STRING, "APPLIVERY_API_KEY",
+        "\"" + props.getProperty("APPLIVERY_API_KEY") + "\""
   }
+
   buildTypes {
     release {
       minifyEnabled false
@@ -42,6 +43,12 @@ dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
   compile project(':applvsdklib')
 }
+
 repositories {
   mavenCentral()
+}
+
+applivery {
+  appId = "59d5e81b637c8e7371618080"
+  apiKey = props.getProperty("APPLIVERY_API_KEY")
 }
