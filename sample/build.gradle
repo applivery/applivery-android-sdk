@@ -8,8 +8,8 @@ def props = new Properties()
 file("../keys.properties").withInputStream { props.load(it) }
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "26.0.0"
+  compileSdkVersion parent.ext.androidCompileSdkVersion
+  buildToolsVersion parent.ext.androidBuildToolsVersion
 
   defaultConfig {
     applicationId "com.applivery.sample"
