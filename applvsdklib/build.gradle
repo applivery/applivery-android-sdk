@@ -1,6 +1,49 @@
+/*
+ * Copyright (c) 2016 Applivery
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 apply plugin: 'com.android.library'
 apply plugin: 'jacoco-android'
 apply from: rootProject.file('gradle/checkstyle.gradle')
+
+group = rootProject.ext.group
+version = rootProject.ext.version
+
+ext {
+  bintrayRepo = 'maven'
+  bintrayName = 'applivery-android-sdk'
+
+  publishedGroupId = rootProject.ext.group
+  libraryName = 'applivery-android-sdk'
+  artifact = 'applivery-android-sdk'
+
+  libraryDescription = 'Applivery android sdk'
+
+  siteUrl = 'https://github.com/applivery/applivery-android-sdk'
+  gitUrl = 'https://github.com/applivery/applivery-android-sdk.git'
+
+  libraryVersion = rootProject.ext.version
+
+  developerId = 'applivery'
+  developerName = 'Applivery'
+  developerEmail = 'info@applivery.com'
+
+  licenseName = 'The Apache Software License, Version 2.0'
+  licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+  allLicenses = ["Apache-2.0"]
+}
 
 def STRING = "String"
 def LONG = "long"
@@ -66,8 +109,8 @@ dependencies {
   compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
   compile 'com.google.code.gson:gson:2.6.2'
 
-  compile ('com.karumi:dexter:2.2.2'){
-    exclude group:'com.android.support', module:'recyclerview-v7'
+  compile('com.karumi:dexter:2.2.2') {
+    exclude group: 'com.android.support', module: 'recyclerview-v7'
   }
 
   testCompile 'junit:junit:4.12'
@@ -75,44 +118,5 @@ dependencies {
   testCompile 'com.squareup.okhttp:mockwebserver:2.6.0'
 }
 
-/*
- * Copyright (c) 2016 Applivery
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-// build a jar with source files
-task sourcesJar(type: Jar) {
-  from android.sourceSets.main.java.srcDirs
-  classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-  failOnError  false
-  source = android.sourceSets.main.java.sourceFiles
-  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-  classpath += configurations.compile
-}
-
-// build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
-  classifier = 'javadoc'
-  from javadoc.destinationDir
-}
-
-artifacts {
-  archives sourcesJar
-  archives javadocJar
-}
-
-apply from: '../maven_push.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
