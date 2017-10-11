@@ -156,7 +156,7 @@ Additionally, the SDK will automatically check for new updates when returning fr
 - **app**: Your app instance.
 - **applicationId**: Your application's ID
 - **appClientToken**: Your developer's Api Key
-- **isPlayStoreRelease**: is the last param and the aim of this flag is to mark if the build will be submitted to Play Store. This is needed to prevent unwanted behavior like prompt to a final user that a new version is available on Applivery.com.
+- **isStoreRelease**: is the last param and the aim of this flag is to mark if the build will be submitted to Store. This is needed to prevent unwanted behavior like prompt to a final user that a new version is available on Applivery.com.
 	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
