@@ -289,19 +289,12 @@ public class AppliverySdk {
     FeedbackView feedbackView = null;
     if (!lockedApp) {
       feedbackView = UserFeedbackView.getInstance(appliveryApiService);
-
-<<<<<<< HEAD
-      if (feedbackView.isNotShowing()){
+      if (feedbackView.isNotShowing()) {
         try {
           feedbackView.lockRotationOnParentScreen(getCurrentActivity());
           feedbackView.show();
         } catch (NotForegroundActivityAvailable exception) {
         }
-=======
-      if (feedbackView.isNotShowing()) {
-        feedbackView.lockRotationOnParentScreen(getCurrentActivity());
-        feedbackView.show();
->>>>>>> release/v2.4.2
       }
     }
 
