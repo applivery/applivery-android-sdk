@@ -1,6 +1,6 @@
 # Applivery Android SDK  
 ![Language](https://img.shields.io/badge/Language-Java-orange.svg)
-[![Version](https://img.shields.io/badge/version-2.0.3-blue.svg)](https://github.com/applivery/applivery-android-sdk/releases)
+[![Version](https://img.shields.io/badge/version-2.4.2-blue.svg)](https://github.com/applivery/applivery-android-sdk/releases)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
 
@@ -34,7 +34,7 @@ You can get your ACCOUNT API KEY in the `Developers` section (left side menu).
 
 Sdk installation is quite simple, and you can follow one of this three methods, choose your favourite. Despite the following guide is oriented to be used with Android Studio/intelIJ feel free to integrate the SDK into your favourite IDE and send us a pull to request that we will include somewhere.
 
-## Download via Gradle:
+## Download via Gradle with jCenter dependency
 ```groovy
 compile 'com.applivery:applvsdklib:2.4.2'
 ```
@@ -103,14 +103,14 @@ Add the following dependency to your's app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v2.4.1'
+      compile 'com.github.Applivery:applivery-android-sdk:v2.4.2'
     }
   ```
   * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
 
-## Using gradle with nexus dependency
+## Using gradle with Nexus/MavenCentral dependency
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-android-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-android-sdk)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applvsdklib/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Capplivery)
 
 add the following dependency to your's app gradle:
 
