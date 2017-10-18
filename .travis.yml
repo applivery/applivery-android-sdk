@@ -1,5 +1,8 @@
 language: android
-jdk: oraclejdk7
+
+jdk:
+  - oraclejdk8
+
 env:
   global:
   - ANDROID_TARGET=android-15
@@ -10,10 +13,11 @@ notifications:
 
 android:
   components:
+
     - tools
     - platform-tools
-    - build-tools-23.0.2
-    - android-23
+    - build-tools-26.0.1
+    - android-25
     - extra-android-support
     - extra-google-m2repository
     - sys-img-armeabi-v7a-android-19
@@ -25,9 +29,6 @@ before_install:
 script:
   - ./gradlew build jacocoTestReport
   - ./gradlew check
-  #- ./gradlew build jacocoTestReport assembleAndroidTest
-  #- ./gradlew connectedCheck
-  #- ./gradlew build
 
 after_success:
   - ./gradlew jacocoFullReport

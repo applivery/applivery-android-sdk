@@ -53,7 +53,7 @@ public class AppliverySdk {
   private static volatile Executor executor;
   private static volatile String applicationId;
   private static volatile String appClientToken;
-  private static boolean isPlayStoreRelease = false;
+  private static boolean isStoreRelease = false;
   private static volatile String fileProviderAuthority;
   private static boolean lockedApp = false;
   private static volatile AppliveryApiService appliveryApiService;
@@ -70,47 +70,46 @@ public class AppliverySdk {
   private static String appliverySdkVersionName = BuildConfig.VERSION_NAME;
   private static Boolean isUpdating = false;
 
-  public static synchronized void sdkInitialize(Application app,
-      String applicationId, String appClientToken, boolean isPlayStoreRelease) {
+  public static synchronized void sdkInitialize(Application app, String applicationId,
+      String appClientToken, boolean isStoreRelease) {
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
-        init(app, applicationId, appClientToken, isPlayStoreRelease);
-    }else{
-      Logger.log("Despite Applivery SDK compiles from API level 10 and forward, it is not compatible for API levels under 14");
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      init(app, applicationId, appClientToken, isStoreRelease);
+    } else {
+      Logger.log(
+          "Despite Applivery SDK compiles from API level 10 and forward, it is not compatible for API levels under 14");
     }
   }
 
   @TargetApi(14)
   private static void init(Application app, String applicationId, String appClientToken,
-      boolean isPlayStoreRelease) {
+      boolean isStoreRelease) {
     if (!sdkInitialized) {
 
       sdkFirstTime = true;
       sdkRestarted = true;
       sdkInitialized = true;
 
-      initializeAppliveryConstants(app, applicationId, appClientToken, isPlayStoreRelease);
+      initializeAppliveryConstants(app, applicationId, appClientToken, isStoreRelease);
 
       boolean requestConfig;
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
         requestConfig = !registerActivityLifecyleCallbacks(app);
-      }else{
+      } else {
         requestConfig = true;
       }
     }
   }
 
   /**
-   * @param app
    * @return true if success false otherwise
    */
-  @TargetApi(14)
-  private static boolean registerActivityLifecyleCallbacks(Application app) {
+  @TargetApi(14) private static boolean registerActivityLifecyleCallbacks(Application app) {
     try {
       app.registerActivityLifecycleCallbacks(activityLifecycle);
       return true;
-    }catch (Exception e){
+    } catch (Exception e) {
       return false;
     }
   }
@@ -123,11 +122,11 @@ public class AppliverySdk {
     return sdkFirstTime;
   }
 
-  public static synchronized void setSdkRestartedFalse(){
+  public static synchronized void setSdkRestartedFalse() {
     sdkRestarted = false;
   }
 
-  public static synchronized boolean isSdkRestarted(){
+  public static synchronized boolean isSdkRestarted() {
     return sdkRestarted;
   }
 
@@ -140,7 +139,7 @@ public class AppliverySdk {
   }
 
   private static void initializeAppliveryConstants(Application app, String applicationId,
-      String appClientToken, boolean isPlayStoreRelease) {
+      String appClientToken, boolean isStoreRelease) {
 
     //region validate some requirements
     Context applicationContext = Validate.notNull(app, "Application").getApplicationContext();
@@ -150,7 +149,7 @@ public class AppliverySdk {
 
     AppliverySdk.applicationId = applicationId;
     AppliverySdk.appClientToken = appClientToken;
-    AppliverySdk.isPlayStoreRelease = isPlayStoreRelease;
+    AppliverySdk.isStoreRelease = isStoreRelease;
 
     AppliverySdk.fileProviderAuthority = composeFileProviderAuthority(app);
 
@@ -163,10 +162,10 @@ public class AppliverySdk {
   }
 
   private static void obtainAppConfig(boolean requestConfig) {
-    if (!isPlayStoreRelease && requestConfig){
-      getExecutor().execute(ObtainAppConfigInteractor.getInstance(appliveryApiService,
-          AppliverySdk.applicationId, AppliverySdk.appClientToken,
-          new AndroidCurrentAppInfo(applicationContext)));
+    if (!isStoreRelease && requestConfig) {
+      getExecutor().execute(
+          ObtainAppConfigInteractor.getInstance(appliveryApiService, AppliverySdk.applicationId,
+              AppliverySdk.appClientToken, new AndroidCurrentAppInfo(applicationContext)));
     }
   }
 
@@ -174,7 +173,7 @@ public class AppliverySdk {
     return application.getPackageName() + ".provider";
   }
 
-  public static String getApplicationId(){
+  public static String getApplicationId() {
     Validate.sdkInitialized();
     return applicationId;
   }
@@ -208,9 +207,9 @@ public class AppliverySdk {
   public static Activity getCurrentActivity() throws NotForegroundActivityAvailable {
     Validate.sdkInitialized();
     Activity activity = activityLifecycle.getCurrentActivity();
-    if (activity!=null){
+    if (activity != null) {
       return activity;
-    }else{
+    } else {
       throw new NotForegroundActivityAvailable("There is not any available ActivityContext");
     }
   }
@@ -222,14 +221,14 @@ public class AppliverySdk {
 
   public static void lockRotationToPortrait() {
     Activity activity = activityLifecycle.getCurrentActivity();
-    if (activity != null){
+    if (activity != null) {
       activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
   }
 
   public static void unlockRotation() {
     Activity activity = activityLifecycle.getCurrentActivity();
-    if (activity != null){
+    if (activity != null) {
       activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
   }
@@ -259,7 +258,7 @@ public class AppliverySdk {
   }
 
   public static boolean isStoreRelease() {
-    return isPlayStoreRelease;
+    return isStoreRelease;
   }
 
   public static String getFileProviderAuthority() {
@@ -270,7 +269,7 @@ public class AppliverySdk {
     appliveryApiService = null;
     executor = null;
     applicationId = appClientToken = null;
-    isPlayStoreRelease = isDebugEnabled = sdkInitialized = false;
+    isStoreRelease = isDebugEnabled = sdkInitialized = false;
     applicationContext = null;
     permissionRequestManager = null;
     activityLifecycle = null;
@@ -288,15 +287,21 @@ public class AppliverySdk {
 
   public static FeedbackView requestForUserFeedBack() {
     FeedbackView feedbackView = null;
-    if (!lockedApp){
+    if (!lockedApp) {
       feedbackView = UserFeedbackView.getInstance(appliveryApiService);
 
+<<<<<<< HEAD
       if (feedbackView.isNotShowing()){
         try {
           feedbackView.lockRotationOnParentScreen(getCurrentActivity());
           feedbackView.show();
         } catch (NotForegroundActivityAvailable exception) {
         }
+=======
+      if (feedbackView.isNotShowing()) {
+        feedbackView.lockRotationOnParentScreen(getCurrentActivity());
+        feedbackView.show();
+>>>>>>> release/v2.4.2
       }
     }
 
@@ -314,27 +319,29 @@ public class AppliverySdk {
     }
   }
 
-  public static void lockApp(){
+  public static void lockApp() {
     lockedApp = true;
   }
 
-  public static void unlockApp(){
+  public static void unlockApp() {
     lockedApp = false;
   }
 
-  public static boolean isAppLocked(){
+  public static boolean isAppLocked() {
     return lockedApp;
   }
 
   public static void disableShakeFeedback() {
     Validate.sdkInitialized();
-    SensorEventsController sensorController = SensorEventsController.getInstance(applicationContext);
+    SensorEventsController sensorController =
+        SensorEventsController.getInstance(applicationContext);
     sensorController.disableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
   public static void enableShakeFeedback() {
     Validate.sdkInitialized();
-    SensorEventsController sensorController = SensorEventsController.getInstance(applicationContext);
+    SensorEventsController sensorController =
+        SensorEventsController.getInstance(applicationContext);
     sensorController.enableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
@@ -357,8 +364,9 @@ public class AppliverySdk {
 
   public static class Logger {
     private static volatile boolean debug = isDebugEnabled;
-    public static void log(String text){
-      if (debug){
+
+    public static void log(String text) {
+      if (debug) {
         Log.d(TAG, text);
       }
     }

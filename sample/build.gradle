@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: "applivery-plugin"
+
+def STRING = "String"
+
+def props = new Properties()
+file("../sample_keys.properties").withInputStream { props.load(it) }
+
+android {
+  compileSdkVersion parent.ext.androidCompileSdkVersion
+  buildToolsVersion parent.ext.androidBuildToolsVersion
+
+  defaultConfig {
+    applicationId "com.applivery.sample"
+    minSdkVersion 16
+    targetSdkVersion 25
+    versionCode 1
+    versionName "1.0"
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    buildConfigField STRING, "APPLIVERY_APP_ID", "\"59d5e81b637c8e7371618080\""
+    buildConfigField STRING, "APPLIVERY_API_KEY",
+        "\"" + props.getProperty("APPLIVERY_API_KEY") + "\""
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  lintOptions {
+    abortOnError false
+  }
+}
+
+dependencies {
+  compile fileTree(include: ['*.jar'], dir: 'libs')
+  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+  compile 'com.android.support:appcompat-v7:25.3.1'
+  testCompile 'junit:junit:4.12'
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+//  compile project(':applvsdklib')
+  compile 'com.applivery:applvsdklib:2.4.2'
+}
+
+repositories {
+  mavenCentral()
+}
+
+applivery {
+  appId = "59d5e81b637c8e7371618080"
+  apiKey = props.getProperty("APPLIVERY_API_KEY")
+}

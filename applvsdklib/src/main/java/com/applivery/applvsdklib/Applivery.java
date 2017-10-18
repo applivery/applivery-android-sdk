@@ -33,13 +33,13 @@ public class Applivery {
    * app section
    * @param appClientToken your developer secret key. You can find this value at
    * applivery dashboard in developer section
-   * @param isPlayStoreRelease this flag MUST be true when application is candidate to be Google
-   * Play Store release, because otherwise app can show dialogs from applivery about updates that
+   * @param isStoreRelease this flag MUST be true when application is candidate to be store
+   * release, because otherwise app can show dialogs from applivery about updates that
    * can redirect end users to applivery beta versions.
    */
-  public static void init(Application app,
-      String applicationId, String appClientToken, boolean isPlayStoreRelease) {
-    AppliverySdk.sdkInitialize(app, applicationId, appClientToken, isPlayStoreRelease);
+  public static void init(Application app, String applicationId, String appClientToken,
+      boolean isStoreRelease) {
+    AppliverySdk.sdkInitialize(app, applicationId, appClientToken, isStoreRelease);
   }
 
   /**
@@ -50,7 +50,7 @@ public class Applivery {
    * @param seconds int with seconds behind checking for new versions will be executed
    * comming from background
    */
-  public static void setUpdateCheckingInterval(int seconds){
+  public static void setUpdateCheckingInterval(int seconds) {
     AppliverySdk.setUpdateCheckingTime(seconds);
   }
 
@@ -64,14 +64,14 @@ public class Applivery {
   /**
    * Enables feedback on shake, call it having your app in foreground whenever you want.
    */
-  public static void enableShakeFeedback(){
+  public static void enableShakeFeedback() {
     AppliverySdk.enableShakeFeedback();
   }
 
   /**
    * Disables feedback on shake, call it having your app in foreground whenever you want.
    */
-  public static void disableShakeFeedback(){
+  public static void disableShakeFeedback() {
     AppliverySdk.disableShakeFeedback();
   }
 

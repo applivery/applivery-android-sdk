@@ -36,3 +36,6 @@ proguard/
 # Windows files
 Thumbs.db
 *.bak
+
+keys.properties
+test_keystore.jks
