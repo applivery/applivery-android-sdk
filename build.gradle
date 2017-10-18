@@ -33,6 +33,7 @@ buildscript {
 allprojects {
   repositories {
     jcenter()
+    maven { url "https://dl.bintray.com/applivery/maven" }
   }
 
   ext {
@@ -44,14 +45,6 @@ allprojects {
     androidMinSdkVersion = 10
     androidTargetSdkVersion = 25
     androidCompileSdkVersion = 25
-    androidApplicationId = 'com.applivery.applvsdklib'
-
-    versionMajor = 2
-    versionMinor = 4
-    versionPatch = 0
-
-    androidVersionCode = versionMajor * 1000 + versionMinor * 100 + versionPatch
-    androidVersionName = versionMajor + "." + versionMinor + "." + versionPatch
   }
 }
 

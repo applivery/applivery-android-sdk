@@ -34,6 +34,11 @@ You can get your ACCOUNT API KEY in the `Developers` section (left side menu).
 
 Sdk installation is quite simple, and you can follow one of this three methods, choose your favourite. Despite the following guide is oriented to be used with Android Studio/intelIJ feel free to integrate the SDK into your favourite IDE and send us a pull to request that we will include somewhere.
 
+## Download via Gradle:
+```groovy
+compile 'com.applivery:applvsdklib:2.4.2'
+```
+
 ## Downloading source and use the project as a project module
 
 Dowload the zip called [Zipped SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.zip "applvsdklib.zip") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads")

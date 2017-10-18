@@ -27,7 +27,7 @@ ext {
 
   publishedGroupId = rootProject.ext.group
   libraryName = 'applivery-android-sdk'
-  artifact = 'applivery-android-sdk'
+  artifact = 'applvsdklib'
 
   libraryDescription = 'Applivery android sdk'
 
@@ -55,8 +55,8 @@ android {
   defaultConfig {
     minSdkVersion parent.ext.androidMinSdkVersion
     targetSdkVersion parent.ext.androidTargetSdkVersion
-    versionCode parent.ext.androidVersionCode
-    versionName parent.ext.androidVersionName
+    versionCode computeVersionCode()
+    versionName rootProject.ext.version
 
     buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
     buildConfigField LONG, "UPDATE_CHECKING_TIME", '86400000l'
@@ -119,4 +119,16 @@ dependencies {
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply from: '../bintrayv1.gradle'
+
+/**
+ * Gets the commit number from the current Git commit. E.g. 538
+ */
+def computeVersionCode() {
+  def stdout = new ByteArrayOutputStream()
+  exec {
+    commandLine 'git', 'rev-list', '--count', 'HEAD'
+    standardOutput = stdout
+  }
+  return stdout.toString().trim().toInteger()
+}
