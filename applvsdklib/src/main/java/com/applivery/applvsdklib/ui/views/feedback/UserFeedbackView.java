@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,8 +47,8 @@ import com.applivery.applvsdklib.ui.views.DrawingImageView;
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class UserFeedbackView extends DialogFragment implements FeedbackView, View.OnClickListener {
+@TargetApi(Build.VERSION_CODES.HONEYCOMB) public class UserFeedbackView extends DialogFragment
+    implements FeedbackView, View.OnClickListener {
 
   private static UserFeedbackView userFeedbackView;
 
@@ -70,12 +69,12 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   private UserFeedbackPresenter userFeedbackPresenter;
 
-  public UserFeedbackView(){
+  public UserFeedbackView() {
     this.userFeedbackPresenter = new UserFeedbackPresenter(this);
   }
 
   public static FeedbackView getInstance(AppliveryApiService appliveryApiService) {
-    if (userFeedbackView == null){
+    if (userFeedbackView == null) {
       userFeedbackView = new UserFeedbackView();
       userFeedbackView.userFeedbackPresenter.setAppliveryApiService(appliveryApiService);
     }
@@ -85,29 +84,26 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   /**
    * * Using DialogFragment instead of Dialog because DialogFragment is not dismissed in rotation.
-   * @param activity
    */
-  @Override
-  public void onAttach(Activity activity) {
+  @Override public void onAttach(Activity activity) {
     super.onAttach(activity);
   }
 
   /**
    * Overrided in order to get fullScreen dialog
-   * @param savedInstanceState
-   * @return
    */
-  @Override
-  public Dialog onCreateDialog(final Bundle savedInstanceState) {
+  @Override public Dialog onCreateDialog(final Bundle savedInstanceState) {
 
     final RelativeLayout root = new RelativeLayout(getActivity());
-    root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));
 
     final Dialog dialog = new Dialog(getActivity());
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setContentView(root);
     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.YELLOW));
-    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    dialog.getWindow()
+        .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
     return dialog;
   }
@@ -136,13 +132,11 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     initViewState();
 
     initElementActions();
-
   }
 
-  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-  private void initViewState() {
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH) private void initViewState() {
     okButton.setVisibility(View.GONE);
-    sendButton.setVisibility(View.GONE);
+    sendButton.setVisibility(View.VISIBLE);
     initFeedbackMessageCustomStyle();
     showFeedbackFormView();
     userFeedbackPresenter.initUi();
@@ -151,19 +145,19 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override public void onClick(View v) {
 
-    if (R.id.applivery_feedback_cancel_button == v.getId()){
+    if (R.id.applivery_feedback_cancel_button == v.getId()) {
       userFeedbackPresenter.cancelButtonPressed();
-    }else if(R.id.applivery_feedback_ok_button == v.getId()){
+    } else if (R.id.applivery_feedback_ok_button == v.getId()) {
       userFeedbackPresenter.okButtonPressed();
-    }else if(R.id.applivery_feedback_send_button == v.getId()){
+    } else if (R.id.applivery_feedback_send_button == v.getId()) {
       userFeedbackPresenter.sendButtonPressed();
-    }else if(R.id.applivery_tab_button_selector_feedback == v.getId()){
+    } else if (R.id.applivery_tab_button_selector_feedback == v.getId()) {
       userFeedbackPresenter.feedbackButtonPressed();
-    }else if(R.id.applivery_tab_button_selector_bug == v.getId()){
+    } else if (R.id.applivery_tab_button_selector_bug == v.getId()) {
       userFeedbackPresenter.bugButtonPressed();
-    }else if(R.id.attach_screenshot_switch == v.getId()){
+    } else if (R.id.attach_screenshot_switch == v.getId()) {
       userFeedbackPresenter.screenshotSwitchPressed(screenShotSwitch.isChecked());
-    }else if(R.id.applivery_feedback_image == v.getId()){
+    } else if (R.id.applivery_feedback_image == v.getId()) {
       userFeedbackPresenter.feedbackImagePressed();
     }
   }
@@ -185,12 +179,9 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     feedbackImage.setOnClickListener(this);
   }
 
-  @Override
-  public void show() {
+  @Override public void show() {
     FragmentManager fragmentManager = AppliverySdk.getCurrentActivity().getFragmentManager();
-    fragmentManager.beginTransaction()
-        .add(this, "")
-        .commitAllowingStateLoss();
+    fragmentManager.beginTransaction().add(this, "").commitAllowingStateLoss();
   }
 
   @Override public void showFeedbackFormView() {
@@ -203,8 +194,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     AppliverySdk.unlockRotation();
   }
 
-  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-  @Override public void cleanScreenData() {
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH) @Override public void cleanScreenData() {
     screenShotSwitch.setChecked(false);
     screenshot.setImageResource(android.R.color.transparent);
     okButton.setVisibility(View.GONE);
@@ -215,7 +205,8 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   }
 
   @Override public void takeDataFromScreen() {
-    userFeedbackPresenter.sendFeedbackInfo(feedbackMessage.getText().toString(), getActivity().getLocalClassName());
+    userFeedbackPresenter.sendFeedbackInfo(feedbackMessage.getText().toString(),
+        getActivity().getLocalClassName());
   }
 
   @Override public void setBugButtonSelected() {
@@ -230,7 +221,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override public void showFeedbackImage() {
     ScreenCapture screenCapture = userFeedbackPresenter.getScreenCapture();
-    if (screenCapture!=null) {
+    if (screenCapture != null) {
       feedbackImage.setVisibility(View.VISIBLE);
       feedbackImage.setImageBitmap(screenCapture.getScreenShot());
     }
@@ -242,9 +233,9 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
   }
 
   @Override public boolean isNotShowing() {
-    if (getDialog() == null){
+    if (getDialog() == null) {
       return true;
-    }else{
+    } else {
       return !getDialog().isShowing();
     }
   }
@@ -262,7 +253,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
   @Override public void showScheenShotPreview() {
     ScreenCapture screenCapture = userFeedbackPresenter.getScreenCapture();
-    if (screenCapture!=null) {
+    if (screenCapture != null) {
       screenshot.setVisibility(View.VISIBLE);
       screenshot.setImageBitmap(screenCapture.getScreenShot());
     }
