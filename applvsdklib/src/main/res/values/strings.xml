@@ -65,6 +65,9 @@
   <string name="appliveryScreenshotImageDesc">Screenshot feedback Image</string>
 
   <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
+
+  <string name="appliveryUpdateMsg"></string>
+
   <string name="appliveryMustUpdateAppLocked"></string>
   <string name="appliveryMustUpdateAppLockedDefault">Your app is locked, please update...</string>
 

@@ -1,6 +1,8 @@
 <resources>
-  <string name="app_name">Sample</string>
+  <string name="app_name">Applivery Sdk Sample</string>
 
-  <string name="appliveryUpdate">Actualiza!</string>
   <string name="appliveryMustUpdateAppLocked">Debes actualizar la app.</string>
+
+  <string name="appliveryUpdateMsg">Opcionalmente podrías actualizar la app</string>
+  <string name="appliveryUpdate">Actualizar</string>
 </resources>
