@@ -57,7 +57,16 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     LayoutInflater inflater = alertDialog.getLayoutInflater();
     inflater.inflate(R.layout.applivery_suggested_update, frameView);
     TextView textView = (TextView) frameView.findViewById(R.id.suggested_update_text);
-    textView.setText(updateInfo.getAppUpdateMessage());
+
+    String appliveryUpdateMsg = context.getString(R.string.appliveryUpdateMsg);
+
+    if (!appliveryUpdateMsg.isEmpty()) {
+      textView.setText(appliveryUpdateMsg);
+    } else {
+      if (updateInfo != null) {
+        textView.setText(updateInfo.getAppUpdateMessage());
+      }
+    }
     return alertDialog;
   }
 
@@ -104,7 +113,7 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     if (AppliverySdk.isContextAvailable()) {
       AppliverySdk.isUpdating(true);
       progress = ProgressDialog.show(context, context.getString(R.string.applivery_download_title),
-          context.getString(R.string.applivery_download_message)+" 0%", true);
+          context.getString(R.string.applivery_download_message) + " 0%", true);
     }
   }
 
@@ -118,18 +127,19 @@ public class SuggestedUpdateViewImpl implements UpdateView {
 
   private void updatProcessTextView(final double percent, Handler handler) {
     Runnable myRunnable = new Runnable() {
-      @Override
-      public void run() {
-        progress.setMessage(context.getString(R.string.applivery_download_message)+" "+ Double.valueOf(percent).intValue() + "%");
+      @Override public void run() {
+        progress.setMessage(
+            context.getString(R.string.applivery_download_message) + " " + Double.valueOf(percent)
+                .intValue() + "%");
       }
     };
     handler.post(myRunnable);
   }
 
   public Looper getLooper() {
-    if (Looper.myLooper() == Looper.getMainLooper()){
+    if (Looper.myLooper() == Looper.getMainLooper()) {
       return Looper.myLooper();
-    }else{
+    } else {
       return Looper.getMainLooper();
     }
   }

@@ -20,7 +20,7 @@ android {
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    buildConfigField STRING, "APPLIVERY_APP_ID", "\"59d5e81b637c8e7371618080\""
+    buildConfigField STRING, "APPLIVERY_APP_ID", "\"58d2b6285063c91d29bedec4\""
     buildConfigField STRING, "APPLIVERY_API_KEY",
         "\"" + props.getProperty("APPLIVERY_API_KEY") + "\""
   }
@@ -45,8 +45,8 @@ dependencies {
   compile 'com.android.support:appcompat-v7:25.3.1'
   testCompile 'junit:junit:4.12'
   compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-//  compile project(':applvsdklib')
-  compile 'com.applivery:applvsdklib:2.4.2'
+  compile project(':applvsdklib')
+//  compile 'com.applivery:applvsdklib:2.4.2'
 }
 
 repositories {
@@ -54,6 +54,6 @@ repositories {
 }
 
 applivery {
-  appId = "59d5e81b637c8e7371618080"
+  appId = "58d2b6285063c91d29bedec4"
   apiKey = props.getProperty("APPLIVERY_API_KEY")
 }

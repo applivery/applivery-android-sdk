@@ -33,11 +33,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     startChrono()
-  }
-
-  override fun onResume() {
-    super.onResume()
-
     Applivery.checkForUpdates()
   }
 
