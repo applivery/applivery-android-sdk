@@ -37,7 +37,7 @@ import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
  * Created by Sergio Martinez Rodriguez
  * Date 10/4/16.
  */
-public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>{
+public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult> {
 
   private final FeedbackView feedbackView;
   private final Feedback feedback;
@@ -98,17 +98,18 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   public void screenshotSwitchPressed(boolean activated) {
     feedback.attachScreenshot(activated);
 
-    if (activated){
+    if (activated) {
       feedbackView.showFeedbackImage();
-    }else{
+    } else {
       feedbackView.hideFeedbackImage();
     }
   }
 
   public ScreenCapture getScreenCapture() {
 
-    if (screenCapture == null){
-      ScreenCapture screenCapture = ScreenCaptureUtils.getScreenCapture(AppliverySdk.getCurrentActivity());
+    if (screenCapture == null) {
+      ScreenCapture screenCapture =
+          ScreenCaptureUtils.getScreenCapture(AppliverySdk.getCurrentActivity());
       this.screenCapture = screenCapture;
     }
 
@@ -136,9 +137,9 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     feedback.setMessage(feedbackMessage);
     feedback.setScreen(screen);
 
-    if (feedback.mustAttachScreenshot()){
+    if (feedback.mustAttachScreenshot()) {
       feedback.setScreenCapture(screenCapture);
-    }else{
+    } else {
       feedback.setScreenCapture(null);
     }
 
@@ -147,10 +148,10 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     } else {
       sendFeedback();
     }
-
   }
 
   @Override public void onSuccess(FeedbackResult businessObject) {
+    screenCapture = null;
     feedbackView.cleanScreenData();
     feedbackView.dismissFeedBack();
   }
