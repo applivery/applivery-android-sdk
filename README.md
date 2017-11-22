@@ -1,6 +1,6 @@
 # Applivery Android SDK  
 ![Language](https://img.shields.io/badge/Language-Java-orange.svg)
-[![Version](https://img.shields.io/badge/version-2.4.2-blue.svg)](https://github.com/applivery/applivery-android-sdk/releases)
+[![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
 
@@ -35,8 +35,9 @@ You can get your ACCOUNT API KEY in the `Developers` section (left side menu).
 Sdk installation is quite simple, and you can follow one of this three methods, choose your favourite. Despite the following guide is oriented to be used with Android Studio/intelIJ feel free to integrate the SDK into your favourite IDE and send us a pull to request that we will include somewhere.
 
 ## Download via Gradle with jCenter dependency
+[ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-compile 'com.applivery:applvsdklib:2.4.2'
+compile 'com.applivery:applvsdklib:2.4.3'
 ```
 
 ## Downloading source and use the project as a project module
@@ -103,7 +104,7 @@ Add the following dependency to your's app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v2.4.2'
+      compile 'com.github.Applivery:applivery-android-sdk:v2.4.3'
     }
   ```
   * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
