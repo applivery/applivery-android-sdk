@@ -70,5 +70,9 @@
 
   <string name="appliveryMustUpdateAppLocked"></string>
   <string name="appliveryMustUpdateAppLockedDefault">Your app is locked, please update...</string>
+  <string name="appliveryUsername">Username</string>
+  <string name="appliveryPassword">Password</string>
+  <string name="appliveryLogin">Login</string>
+  <string name="appliveryCancel">Cancel</string>
 
 </resources>

@@ -17,7 +17,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-  ext.kotlin_version = '1.1.4-2'
+  ext.kotlin_version = '1.2.30'
   repositories {
     jcenter()
   }
@@ -42,7 +42,7 @@ allprojects {
     version = '2.4.3'
 
     androidBuildToolsVersion = '26.0.1'
-    androidMinSdkVersion = 10
+    androidMinSdkVersion = 11
     androidTargetSdkVersion = 25
     androidCompileSdkVersion = 25
   }

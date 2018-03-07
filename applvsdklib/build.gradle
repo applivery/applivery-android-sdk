@@ -15,6 +15,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'jacoco-android'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
@@ -102,6 +103,7 @@ buildscript {
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
   compile 'com.android.support:appcompat-v7:23.1.1'
   compile 'com.squareup.retrofit2:retrofit:2.0.0'
@@ -120,6 +122,9 @@ dependencies {
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: '../bintrayv1.gradle'
+repositories {
+  mavenCentral()
+}
 
 /**
  * Gets the commit number from the current Git commit. E.g. 538
