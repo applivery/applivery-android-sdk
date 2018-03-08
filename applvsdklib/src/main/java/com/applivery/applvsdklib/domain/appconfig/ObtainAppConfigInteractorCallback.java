@@ -16,18 +16,20 @@
 
 package com.applivery.applvsdklib.domain.appconfig;
 
+import android.util.Log;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
 import com.applivery.applvsdklib.domain.appconfig.update.LastConfigWriter;
 import com.applivery.applvsdklib.domain.appconfig.update.UpdateListenerImpl;
 import com.applivery.applvsdklib.domain.appconfig.update.UpdateType;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.Android;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
+import com.applivery.applvsdklib.ui.views.login.LoginView;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
 
@@ -37,6 +39,7 @@ import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
  */
 public class ObtainAppConfigInteractorCallback implements InteractorCallback<AppConfig> {
 
+  private static final String TAG = "ObtainAppConfigICb";
   private final CurrentAppInfo currentAppInfo;
   private final AppliveryApiService appliveryApiService;
   private final LastConfigWriter lastConfigWriter;
@@ -52,7 +55,19 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     UpdateType updateType = checkForUpdates(appConfig);
     lastConfigWriter.writeLastConfigCheckTimeStamp(System.currentTimeMillis());
     UpdateViewPresenter presenter = new UpdateViewPresenter(getUpdateListener(appConfig));
-    showUpdate(presenter, updateType, appConfig);
+
+    if (updateType != UpdateType.NO_UPDATE && needLogin(appConfig)) {
+      showLogin();
+    } else {
+      showUpdate(presenter, updateType, appConfig);
+    }
+  }
+
+  private Boolean needLogin(AppConfig appConfig) {
+
+    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().isAuthUpdate();
+
+    return isAuthUpdate;
   }
 
   @Override public void onError(ErrorObject error) {
@@ -71,19 +86,21 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     boolean ota = android.isOta();
 
     try {
-      if (forceUpdate){
+      if (forceUpdate) {
         minVersion = Integer.valueOf(android.getMinVersion());
       }
       lastVersion = Integer.valueOf(android.getLastBuildVersion());
-    }catch (NumberFormatException n){
-
+    } catch (NumberFormatException n) {
+      Log.e(TAG, "checkForUpdates()", n);
     }
 
-    UpdateType updateType = obtainUpdateType(minVersion, lastVersion, currentVersion, ota, forceUpdate);
+    UpdateType updateType =
+        obtainUpdateType(minVersion, lastVersion, currentVersion, ota, forceUpdate,
+            android.isAuthUpdate());
 
-    if (updateType == UpdateType.FORCED_UPDATE){
+    if (updateType == UpdateType.FORCED_UPDATE) {
       AppliverySdk.lockApp();
-    }else{
+    } else {
       AppliverySdk.unlockApp();
     }
 
@@ -91,39 +108,45 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   }
 
   private UpdateType obtainUpdateType(long minVersion, long lastVersion, long currentVersion,
-      boolean ota, boolean forceUpdate) {
+      boolean ota, boolean forceUpdate, boolean authUpdate) {
 
     UpdateType updateType = UpdateType.NO_UPDATE;
 
-    if (forceUpdate){
-      if (minVersion > currentVersion){
+    if (forceUpdate) {
+      if (minVersion > currentVersion) {
         updateType = UpdateType.FORCED_UPDATE;
-      }else{
-        AppliverySdk.Logger.log("ForceUpdate is true but App version and last uploaded are both same");
+      } else {
+        AppliverySdk.Logger.log(
+            "ForceUpdate is true but App version and last uploaded are both same");
       }
-    }else if (ota){
-      if (lastVersion > currentVersion){
+    } else if (ota) {
+      if (lastVersion > currentVersion) {
         updateType = UpdateType.SUGGESTED_UPDATE;
-      }else{
+      } else {
         AppliverySdk.Logger.log("Ota is true but App version and last uploaded are both same");
       }
-    }else{
+    } else {
       AppliverySdk.Logger.log("Not forceUpdate Neither Ota are activated");
     }
 
     return updateType;
   }
 
+  private void showLogin() {
+    LoginView loginView = new LoginView(AppliverySdk.getCurrentActivity().getFragmentManager());
+    loginView.getPresenter().requestLogin();
+  }
+
   private void showUpdate(UpdateViewPresenter updateViewPresenter, UpdateType updateType,
       AppConfig appConfig) {
-    switch (updateType){
+    switch (updateType) {
       case FORCED_UPDATE:
-        updateViewPresenter.showForcedUpdate(
-            appConfig.getName(), appConfig.getSdk().getAndroid().getMustUpdateMsg());
+        updateViewPresenter.showForcedUpdate(appConfig.getName(),
+            appConfig.getSdk().getAndroid().getMustUpdateMsg());
         break;
       case SUGGESTED_UPDATE:
-        updateViewPresenter.showSuggestedUpdate(
-            appConfig.getName(), appConfig.getSdk().getAndroid().getUpdateMsg());
+        updateViewPresenter.showSuggestedUpdate(appConfig.getName(),
+            appConfig.getSdk().getAndroid().getUpdateMsg());
         break;
       case NO_UPDATE:
       default:
@@ -134,5 +157,4 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   private UpdateListener getUpdateListener(AppConfig appConfig) {
     return new UpdateListenerImpl(appConfig, appliveryApiService);
   }
-
 }

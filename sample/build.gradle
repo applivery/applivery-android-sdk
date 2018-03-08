@@ -20,7 +20,7 @@ android {
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    buildConfigField STRING, "APPLIVERY_APP_ID", "\"58d2b6285063c91d29bedec4\""
+    buildConfigField STRING, "APPLIVERY_APP_ID", "\"5aa0ffa5e78d79e572f1b6cc\""
     buildConfigField STRING, "APPLIVERY_API_KEY",
         "\"" + props.getProperty("APPLIVERY_API_KEY") + "\""
   }
