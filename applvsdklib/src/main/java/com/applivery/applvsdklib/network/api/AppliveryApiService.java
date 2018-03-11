@@ -17,9 +17,11 @@
 package com.applivery.applvsdklib.network.api;
 
 import com.applivery.applvsdklib.network.api.model.ApiFeedbackData;
+import com.applivery.applvsdklib.network.api.model.ApiLogin;
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
 import com.applivery.applvsdklib.network.api.responses.ApiBuildTokenResponse;
 import com.applivery.applvsdklib.network.api.responses.ApiFeedbackResponse;
+import com.applivery.applvsdklib.network.api.responses.ApiLoginResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -45,6 +47,9 @@ public interface AppliveryApiService {
 
   @POST("/api/feedback")
   Call<ApiFeedbackResponse> sendFeedback(@Body ApiFeedbackData feedback);
+
+  @POST("/api/auth")
+  Call<ApiLoginResponse> makeLogin(@Body ApiLogin userData);
 
 
   //TODO this will be implemented in second phase

@@ -29,7 +29,6 @@ import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
-import com.applivery.applvsdklib.ui.views.login.LoginView;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
 
@@ -55,19 +54,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     UpdateType updateType = checkForUpdates(appConfig);
     lastConfigWriter.writeLastConfigCheckTimeStamp(System.currentTimeMillis());
     UpdateViewPresenter presenter = new UpdateViewPresenter(getUpdateListener(appConfig));
-
-    if (updateType != UpdateType.NO_UPDATE && needLogin(appConfig)) {
-      showLogin();
-    } else {
-      showUpdate(presenter, updateType, appConfig);
-    }
-  }
-
-  private Boolean needLogin(AppConfig appConfig) {
-
-    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().isAuthUpdate();
-
-    return isAuthUpdate;
+    showUpdate(presenter, updateType, appConfig);
   }
 
   @Override public void onError(ErrorObject error) {
@@ -95,8 +82,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     }
 
     UpdateType updateType =
-        obtainUpdateType(minVersion, lastVersion, currentVersion, ota, forceUpdate,
-            android.isAuthUpdate());
+        obtainUpdateType(minVersion, lastVersion, currentVersion, ota, forceUpdate);
 
     if (updateType == UpdateType.FORCED_UPDATE) {
       AppliverySdk.lockApp();
@@ -108,7 +94,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   }
 
   private UpdateType obtainUpdateType(long minVersion, long lastVersion, long currentVersion,
-      boolean ota, boolean forceUpdate, boolean authUpdate) {
+      boolean ota, boolean forceUpdate) {
 
     UpdateType updateType = UpdateType.NO_UPDATE;
 
@@ -130,11 +116,6 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     }
 
     return updateType;
-  }
-
-  private void showLogin() {
-    LoginView loginView = new LoginView(AppliverySdk.getCurrentActivity().getFragmentManager());
-    loginView.getPresenter().requestLogin();
   }
 
   private void showUpdate(UpdateViewPresenter updateViewPresenter, UpdateType updateType,

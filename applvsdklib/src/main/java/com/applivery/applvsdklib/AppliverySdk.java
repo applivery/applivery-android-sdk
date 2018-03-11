@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.os.AsyncTask;
@@ -47,8 +48,8 @@ import java.util.concurrent.Executor;
  */
 public class AppliverySdk {
 
-  //TODO This class is already using too many Static fields, consider redesign.
-  //TODO Hold static reference only to AppliverySdk object and wrap smaller objects inside
+  // TODO This class is already using too many Static fields, consider redesign.
+  // TODO Hold static reference only to AppliverySdk object and wrap smaller objects inside
   private static final String TAG = AppliverySdk.class.getCanonicalName();
   private static volatile Executor executor;
   private static volatile String applicationId;
@@ -69,6 +70,7 @@ public class AppliverySdk {
   private static long updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
   private static String appliverySdkVersionName = BuildConfig.VERSION_NAME;
   private static Boolean isUpdating = false;
+  private static SharedPreferences sharedPreferences;
 
   public static synchronized void sdkInitialize(Application app, String applicationId,
       String appClientToken, boolean isStoreRelease) {
@@ -159,6 +161,8 @@ public class AppliverySdk {
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager =
         new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
+
+    AppliverySdk.sharedPreferences = app.getSharedPreferences("applivery", Context.MODE_PRIVATE);
   }
 
   private static void obtainAppConfig(boolean requestConfig) {
@@ -353,6 +357,10 @@ public class AppliverySdk {
     if (activityLifecycle.isActivityContextAvailable()) {
       screenshotObserver.startObserving();
     }
+  }
+
+  public static SharedPreferences getSharedPreferences() {
+    return sharedPreferences;
   }
 
   public static class Logger {

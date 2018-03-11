@@ -1,21 +1,19 @@
 package com.applivery.applvsdklib.ui.views.login
 
-import android.util.Log
+import com.applivery.applvsdklib.domain.login.LoginInteractor
 import com.applivery.applvsdklib.domain.model.UserData
 
-class LoginPresenter {
+class LoginPresenter(private val loginInteractor: LoginInteractor) {
 
   var view: LoginView? = null
 
   fun makeLogin(userData: UserData) {
-    Log.d(TAG, "UserData: $userData")
+    loginInteractor.makeLogin(userData,
+        onSuccess = { view?.showLoginSuccess() },
+        onError = { view?.showLoginError() })
   }
 
   fun requestLogin() {
     view?.showLoginDialog()
-  }
-
-  companion object {
-    private const val TAG = "LoginPresenter"
   }
 }
