@@ -13,10 +13,11 @@ class SessionInterceptor(private val sessionManager: SessionManager) : Intercept
     val requestBuilder = chain.request().newBuilder()
 
     if (sessionManager.hasSession()) {
-      requestBuilder.addHeader("Authorization", sessionManager.getSession())
-    } else {
-      requestBuilder.addHeader("Authorization", AppliverySdk.getToken())
+      requestBuilder.addHeader("x_account_token", sessionManager.getSession())
     }
+
+    requestBuilder.addHeader("Authorization", AppliverySdk.getToken())
+
 
     val request = requestBuilder.build()
     val response = chain.proceed(request)
