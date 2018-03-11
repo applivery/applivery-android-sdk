@@ -28,7 +28,7 @@ class LoginView(private val activity: Activity, private val onSuccess: () -> Uni
 
   fun showLoginError() {
     val alertDialog = AlertDialog.Builder(activity).create()
-    alertDialog.setTitle("Login error")
+    alertDialog.setTitle("Invalid credentials")
     alertDialog.setMessage("The email or password you entered is not valid")
     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", { dialog, _ ->
       showLoginDialog()

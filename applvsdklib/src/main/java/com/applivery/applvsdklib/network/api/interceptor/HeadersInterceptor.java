@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api;
+package com.applivery.applvsdklib.network.api.interceptor;
 
 import com.applivery.applvsdklib.AppliverySdk;
 import java.io.IOException;
@@ -41,9 +41,8 @@ public class HeadersInterceptor implements Interceptor {
     Request original = chain.request();
     return original.newBuilder()
         .url(chain.request().url())
-        .header("Authorization", AppliverySdk.getToken())
         .header("Accept-Language", Locale.getDefault().getLanguage())
-        .header("x_sdk_version", "ANDROID_" + AppliverySdk.getVersionName() )
+        .header("x_sdk_version", "ANDROID_" + AppliverySdk.getVersionName())
         .method(original.method(), original.body())
         .build();
   }

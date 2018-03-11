@@ -4,13 +4,13 @@ import com.applivery.applvsdklib.AppliverySdk
 import com.applivery.applvsdklib.domain.login.LoginInteractor
 import com.applivery.applvsdklib.network.api.AppliveryApiService
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder
+import com.applivery.applvsdklib.network.api.interceptor.SessionInterceptor
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.applvsdklib.tools.executor.MainThreadImp
 import com.applivery.applvsdklib.tools.executor.ThreadExecutor
 import com.applivery.applvsdklib.tools.session.SessionManager
 import com.applivery.applvsdklib.ui.views.login.LoginPresenter
-
 
 object Injection {
 
@@ -39,7 +39,11 @@ object Injection {
     return AppliveryApiServiceBuilder.getAppliveryApiInstance()
   }
 
-   fun provideSessionManager(): SessionManager {
+  fun provideSessionManager(): SessionManager {
     return SessionManager.create(AppliverySdk.getSharedPreferences())
+  }
+
+  fun provideSessionInterceptor(): SessionInterceptor {
+    return SessionInterceptor(provideSessionManager())
   }
 }

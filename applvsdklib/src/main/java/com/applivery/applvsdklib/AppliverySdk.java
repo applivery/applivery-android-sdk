@@ -144,6 +144,8 @@ public class AppliverySdk {
   private static void initializeAppliveryConstants(Application app, String applicationId,
       String appClientToken, boolean isStoreRelease) {
 
+    AppliverySdk.sharedPreferences = app.getSharedPreferences("applivery", Context.MODE_PRIVATE);
+
     //region validate some requirements
     Context applicationContext = Validate.notNull(app, "Application").getApplicationContext();
     Validate.notNull(applicationContext, "applicationContext");
@@ -162,8 +164,6 @@ public class AppliverySdk {
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager =
         new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
-
-    AppliverySdk.sharedPreferences = app.getSharedPreferences("applivery", Context.MODE_PRIVATE);
   }
 
   private static void obtainAppConfig(boolean requestConfig) {
