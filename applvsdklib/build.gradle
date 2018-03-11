@@ -65,7 +65,8 @@ android {
 
   buildTypes {
     debug {
-      buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
+//      buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
+      buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
       testCoverageEnabled true
     }
     release {
@@ -104,12 +105,13 @@ buildscript {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  compile 'com.android.support:appcompat-v7:27.1.0'
+  compile 'com.android.support:design:27.1.0'
 
-  compile 'com.android.support:appcompat-v7:23.1.1'
-  compile 'com.squareup.retrofit2:retrofit:2.0.0'
-  compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-  compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-  compile 'com.google.code.gson:gson:2.6.2'
+  compile 'com.squareup.retrofit2:retrofit:2.3.0'
+  compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+  compile 'com.google.code.gson:gson:2.8.2'
 
   compile('com.karumi:dexter:2.2.2') {
     exclude group: 'com.android.support', module: 'recyclerview-v7'
@@ -127,8 +129,7 @@ repositories {
 }
 
 /**
- * Gets the commit number from the current Git commit. E.g. 538
- */
+ * Gets the commit number from the current Git commit. E.g. 538*/
 def computeVersionCode() {
   def stdout = new ByteArrayOutputStream()
   exec {

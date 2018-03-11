@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    val toolbar = findViewById(R.id.toolbar) as Toolbar
+    val toolbar = findViewById<Toolbar>(R.id.toolbar)
     setSupportActionBar(toolbar)
 
-    val disable = findViewById(R.id.fab) as FloatingActionButton
-    val enable = findViewById(R.id.fab2) as FloatingActionButton
+    val disable = findViewById<FloatingActionButton>(R.id.fab)
+    val enable = findViewById<FloatingActionButton>(R.id.fab2)
 
     enable.setOnClickListener { view ->
       Applivery.enableShakeFeedback()
@@ -37,6 +37,6 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun startChrono() {
-    (findViewById(R.id.chronometer) as Chronometer).start()
+    (findViewById<Chronometer>(R.id.chronometer)).start()
   }
 }

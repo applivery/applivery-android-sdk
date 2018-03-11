@@ -16,8 +16,8 @@
 
 package com.applivery.applvsdklib.network.api.requests;
 
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.mappers.AndroidMapper;
 import com.applivery.applvsdklib.network.api.requests.mappers.ApiAppConfigResponseMapper;
 import com.applivery.applvsdklib.network.api.requests.mappers.SdkMapper;
@@ -47,10 +47,6 @@ public class ObtainAppConfigRequest extends ServerRequest {
   @Override protected BusinessObject performRequest() {
     Call<ApiAppConfigResponse> response = apiService.obtainAppConfig(appId);
     ApiAppConfigResponse apiAppConfigResponse = super.performRequest(response);
-    BusinessObject businessObject = apiAppConfigResponseMapper.map(apiAppConfigResponse);
-    return businessObject;
+    return apiAppConfigResponseMapper.map(apiAppConfigResponse);
   }
-
-
-
 }

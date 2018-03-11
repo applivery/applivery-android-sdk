@@ -36,7 +36,7 @@ class LoginInteractor(
       val apiLoginResponse = apiService.makeLogin(
           ApiLogin(email = userData.username, password = userData.password)).execute().body()
 
-      if (apiLoginResponse.data != null) {
+      if (apiLoginResponse != null && apiLoginResponse.data != null) {
         sessionManager.saveSession(apiLoginResponse.data.accessToken)
         notifySuccess()
       } else {
