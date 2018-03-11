@@ -2,6 +2,7 @@ package com.applivery.applvsdklib.ui.views.login
 
 import android.app.Activity
 import android.app.AlertDialog
+import com.applivery.applvsdklib.R
 import com.applivery.applvsdklib.domain.model.UserData
 import com.applivery.applvsdklib.tools.injection.Injection
 
@@ -28,8 +29,8 @@ class LoginView(private val activity: Activity, private val onSuccess: () -> Uni
 
   fun showLoginError() {
     val alertDialog = AlertDialog.Builder(activity).create()
-    alertDialog.setTitle("Invalid credentials")
-    alertDialog.setMessage("The email or password you entered is not valid")
+    alertDialog.setTitle(activity.getString(R.string.appliveryLoginFailDielogTitle))
+    alertDialog.setMessage(activity.getString(R.string.appliveryLoginFailDielogText))
     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", { dialog, _ ->
       showLoginDialog()
       dialog.dismiss()
