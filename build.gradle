@@ -54,6 +54,10 @@ task clean(type: Delete) {
   delete rootProject.buildDir
 }
 
+subprojects {
+  tasks.withType(Javadoc).all { enabled = false }
+}
+
 task deployLib(type: Exec) {
   workingDir "./"
   def command = "./gradlew"

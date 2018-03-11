@@ -16,22 +16,22 @@
 
 package com.applivery.applvsdklib.network.api;
 
-import android.content.Context;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
+import com.applivery.applvsdklib.doubles.MockRequest;
+import com.applivery.applvsdklib.doubles.MockRequestExecute;
+import com.applivery.applvsdklib.network.api.model.ApiAppConfigData;
 import com.applivery.applvsdklib.network.api.requests.RequestHttpException;
 import com.applivery.applvsdklib.network.api.responses.ApiAppliveryServerErrorResponse;
 import com.applivery.applvsdklib.network.api.responses.ServerResponse;
-import com.applivery.applvsdklib.network.api.model.ApiAppConfigData;
-import com.applivery.applvsdklib.doubles.MockRequest;
-import com.applivery.applvsdklib.doubles.MockRequestExecute;
-import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.utils.AppliveryTestApi;
 import com.applivery.applvsdklib.utils.MockAppliveryInstance;
 import org.junit.Before;
 import org.junit.Test;
 import retrofit2.Call;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -41,18 +41,11 @@ public class TestNetworkClasses {
 
   private AppliveryTestApi appliveryApiTest;
 
-  @Before public void setUp()throws Exception{
+  @Before public void setUp() throws Exception {
     appliveryApiTest = MockAppliveryInstance.getApiTestInstance();
   }
 
-  @Test
-  public void apiServiceBuilderTest(){
-    AppliveryApiService appliveryApi = AppliveryApiServiceBuilder.getAppliveryApiInstance();
-    assertNotNull(appliveryApi);
-  }
-
-  @Test
-  public void serverRequestOkTest(){
+  @Test public void serverRequestOkTest() {
     MockRequest mockRequest = new MockRequest();
     Call call = appliveryApiTest.obtainAppConfig("test");
     ServerResponse resp = mockRequest.performSuperRequest(call);
@@ -62,15 +55,14 @@ public class TestNetworkClasses {
     assertTrue(resp.getData() instanceof ApiAppConfigData);
   }
 
-  @Test
-  public void serverRequestErrorBusinessTest(){
+  @Test public void serverRequestErrorBusinessTest() {
     MockRequest mockRequest = new MockRequest();
     Call call = appliveryApiTest.obtainAppConfig("errorBusiness");
     ServerResponse resp;
 
     try {
       resp = mockRequest.performSuperRequest(call);
-    }catch (RequestHttpException re){
+    } catch (RequestHttpException re) {
       resp = re.getServerResponse();
     }
 
@@ -78,19 +70,17 @@ public class TestNetworkClasses {
     assertNull(resp.getData());
     assertNotNull(resp.getError());
     assertTrue(resp.getError() instanceof ApiAppliveryServerErrorResponse);
-    assertTrue(resp.getError().getCode()>0);
+    assertTrue(resp.getError().getCode() > 0);
   }
 
-
-  @Test
-  public void serverRequestHttpErrorTest(){
+  @Test public void serverRequestHttpErrorTest() {
     MockRequest mockRequest = new MockRequest();
     Call call = appliveryApiTest.obtainAppConfig("error");
     ServerResponse resp;
 
     try {
       resp = mockRequest.performSuperRequest(call);
-    }catch (RequestHttpException re){
+    } catch (RequestHttpException re) {
       resp = re.getServerResponse();
     }
 
@@ -101,15 +91,14 @@ public class TestNetworkClasses {
     assertTrue(resp.getError().getCode() > 0);
   }
 
-  @Test
-  public void serverRequestHttpBadTest(){
+  @Test public void serverRequestHttpBadTest() {
     MockRequest mockRequest = new MockRequest();
     Call call = appliveryApiTest.obtainAppConfig("bad");
     ServerResponse resp;
 
     try {
       resp = mockRequest.performSuperRequest(call);
-    }catch (RequestHttpException re){
+    } catch (RequestHttpException re) {
       resp = re.getServerResponse();
     }
 
@@ -120,32 +109,27 @@ public class TestNetworkClasses {
     assertTrue(resp.getError().getCode() > 0);
   }
 
-  @Test
-  public void serverRequestExecutorHttpBadTest(){
-    MockRequestExecute mockRequest = new MockRequestExecute(appliveryApiTest,"bad");
-
-    BusinessObject businessObject = mockRequest.execute();
-
-    assertNotNull(businessObject);
-
-  }
-
-  @Test
-  public void serverRequestExecutorBusinessErrorTest(){
-    MockRequestExecute mockRequest = new MockRequestExecute(appliveryApiTest,"errorBusiness");
+  @Test public void serverRequestExecutorHttpBadTest() {
+    MockRequestExecute mockRequest = new MockRequestExecute(appliveryApiTest, "bad");
 
     BusinessObject businessObject = mockRequest.execute();
 
     assertNotNull(businessObject);
   }
 
-  @Test
-  public void serverRequestExecutorOkTest(){
-    MockRequestExecute mockRequest = new MockRequestExecute(appliveryApiTest,"test");
+  @Test public void serverRequestExecutorBusinessErrorTest() {
+    MockRequestExecute mockRequest = new MockRequestExecute(appliveryApiTest, "errorBusiness");
 
     BusinessObject businessObject = mockRequest.execute();
 
     assertNotNull(businessObject);
   }
 
+  @Test public void serverRequestExecutorOkTest() {
+    MockRequestExecute mockRequest = new MockRequestExecute(appliveryApiTest, "test");
+
+    BusinessObject businessObject = mockRequest.execute();
+
+    assertNotNull(businessObject);
+  }
 }
