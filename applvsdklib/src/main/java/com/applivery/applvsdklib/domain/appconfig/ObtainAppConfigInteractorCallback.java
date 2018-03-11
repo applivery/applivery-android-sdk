@@ -28,6 +28,7 @@ import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
+import com.applivery.applvsdklib.tools.session.SessionManager;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
@@ -41,11 +42,13 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   private static final String TAG = "ObtainAppConfigICb";
   private final CurrentAppInfo currentAppInfo;
   private final AppliveryApiService appliveryApiService;
+  private final SessionManager sessionManager;
   private final LastConfigWriter lastConfigWriter;
 
   public ObtainAppConfigInteractorCallback(AppliveryApiService appliveryApiService,
-      CurrentAppInfo currentAppInfo) {
+      SessionManager sessionManager, CurrentAppInfo currentAppInfo) {
     this.currentAppInfo = currentAppInfo;
+    this.sessionManager = sessionManager;
     this.appliveryApiService = appliveryApiService;
     this.lastConfigWriter = new AndroidLastConfigWriterImpl();
   }
@@ -136,6 +139,6 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   }
 
   private UpdateListener getUpdateListener(AppConfig appConfig) {
-    return new UpdateListenerImpl(appConfig, appliveryApiService);
+    return new UpdateListenerImpl(appConfig, sessionManager, appliveryApiService);
   }
 }

@@ -2,12 +2,11 @@ package com.applivery.applvsdklib.ui.views.login
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.util.Log
 import com.applivery.applvsdklib.domain.model.UserData
 import com.applivery.applvsdklib.tools.injection.Injection
 
 
-class LoginView(private val activity: Activity) {
+class LoginView(private val activity: Activity, private val onSuccess: () -> Unit = {}) {
 
   val presenter: LoginPresenter = Injection.provideLoginPresenter()
 
@@ -24,7 +23,7 @@ class LoginView(private val activity: Activity) {
   }
 
   fun showLoginSuccess() {
-    Log.d(TAG, "showLoginSuccess()")
+    onSuccess()
   }
 
   fun showLoginError() {

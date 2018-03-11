@@ -34,6 +34,7 @@ import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppI
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
 import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
+import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.tools.utils.Validate;
@@ -167,9 +168,9 @@ public class AppliverySdk {
 
   private static void obtainAppConfig(boolean requestConfig) {
     if (!isStoreRelease && requestConfig) {
-      getExecutor().execute(
-          ObtainAppConfigInteractor.getInstance(appliveryApiService, AppliverySdk.applicationId,
-              AppliverySdk.appClientToken, new AndroidCurrentAppInfo(applicationContext)));
+      getExecutor().execute(ObtainAppConfigInteractor.getInstance(appliveryApiService,
+          Injection.INSTANCE.provideSessionManager(), AppliverySdk.applicationId,
+          AppliverySdk.appClientToken, new AndroidCurrentAppInfo(applicationContext)));
     }
   }
 

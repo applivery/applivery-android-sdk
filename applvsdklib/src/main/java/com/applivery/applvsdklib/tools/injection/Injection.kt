@@ -39,7 +39,7 @@ object Injection {
     return AppliveryApiServiceBuilder.getAppliveryApiInstance()
   }
 
-  private fun provideSessionManager(): SessionManager {
+   fun provideSessionManager(): SessionManager {
     return SessionManager.create(AppliverySdk.getSharedPreferences())
   }
 }
