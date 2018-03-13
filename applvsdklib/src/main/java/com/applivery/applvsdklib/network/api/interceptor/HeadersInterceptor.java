@@ -16,7 +16,10 @@
 
 package com.applivery.applvsdklib.network.api.interceptor;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import com.applivery.applvsdklib.AppliverySdk;
+import com.applivery.applvsdklib.BuildConfig;
 import java.io.IOException;
 import java.util.Locale;
 import okhttp3.Interceptor;
@@ -41,9 +44,15 @@ public class HeadersInterceptor implements Interceptor {
     Request original = chain.request();
     return original.newBuilder()
         .url(chain.request().url())
-        .header("Accept-Language", Locale.getDefault().getLanguage())
-        .header("x_sdk_version", "ANDROID_" + AppliverySdk.getVersionName())
+        .addHeader("Accept-Language", Locale.getDefault().getLanguage())
+        .addHeader("x_sdk_version", "ANDROID_" + AppliverySdk.getVersionName())
+        .addHeader("User-Agent", getUserAgent())
         .method(original.method(), original.body())
         .build();
+  }
+
+  @SuppressLint("DefaultLocale") private String getUserAgent() {
+    return String.format("Android/%s; vendor/%s; model/%s; build/%d;", Build.VERSION.RELEASE,
+        Build.MANUFACTURER, Build.MODEL, BuildConfig.VERSION_CODE);
   }
 }
