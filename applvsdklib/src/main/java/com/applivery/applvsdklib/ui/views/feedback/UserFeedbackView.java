@@ -40,8 +40,12 @@ import android.widget.RelativeLayout;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.DrawingImageView;
+import com.applivery.applvsdklib.ui.views.login.LoginView;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -70,7 +74,7 @@ import com.applivery.applvsdklib.ui.views.DrawingImageView;
   private UserFeedbackPresenter userFeedbackPresenter;
 
   public UserFeedbackView() {
-    this.userFeedbackPresenter = new UserFeedbackPresenter(this);
+    this.userFeedbackPresenter = Injection.INSTANCE.provideFeedbackPresenter(this);
   }
 
   public static FeedbackView getInstance(AppliveryApiService appliveryApiService) {
@@ -272,5 +276,15 @@ import com.applivery.applvsdklib.ui.views.DrawingImageView;
   @Override public void retrieveEditedScreenshot() {
     Bitmap retrievedScreenshot = screenshot.getBitmap();
     userFeedbackPresenter.updateScreenCaptureWith(retrievedScreenshot);
+  }
+
+  @Override public void requestLogin() {
+    LoginView loginView = new LoginView(AppliverySdk.getCurrentActivity(), new Function0<Unit>() {
+      @Override public Unit invoke() {
+        takeDataFromScreen();
+        return null;
+      }
+    });
+    loginView.getPresenter().requestLogin();
   }
 }

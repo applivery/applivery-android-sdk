@@ -21,6 +21,7 @@ import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.download.permissions.AccessNetworkStatePermission;
 import com.applivery.applvsdklib.domain.feedback.FeedbackInteractor;
+import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.FeedBackType;
 import com.applivery.applvsdklib.domain.model.Feedback;
@@ -30,6 +31,7 @@ import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenCaptureUtils;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
+import com.applivery.applvsdklib.tools.session.SessionManager;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 
@@ -39,15 +41,20 @@ import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
  */
 public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult> {
 
+  private final AppConfig appConfig;
   private final FeedbackView feedbackView;
   private final Feedback feedback;
   private AppliveryApiService appliveryApiService;
   private ScreenCapture screenCapture;
   final private PermissionChecker permissionRequestExecutor;
   final private AccessNetworkStatePermission accessNetworkStatePermission;
+  private final SessionManager sessionManager;
 
-  public UserFeedbackPresenter(FeedbackView feedbackView) {
+  public UserFeedbackPresenter(AppConfig appConfig, FeedbackView feedbackView,
+      SessionManager sessionManager) {
+    this.appConfig = appConfig;
     this.feedbackView = feedbackView;
+    this.sessionManager = sessionManager;
     this.feedback = new UserFeedback();
     this.permissionRequestExecutor = AppliverySdk.getPermissionRequestManager();
     this.accessNetworkStatePermission = new AccessNetworkStatePermission();
@@ -146,8 +153,17 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     if (!permissionRequestExecutor.isGranted(accessNetworkStatePermission)) {
       askForPermission();
     } else {
-      sendFeedback();
+      if (needLogin()) {
+        feedbackView.requestLogin();
+      } else {
+        sendFeedback();
+      }
     }
+  }
+
+  private Boolean needLogin() {
+    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().isAuthFeedback();
+    return isAuthUpdate && !sessionManager.hasSession();
   }
 
   @Override public void onSuccess(FeedbackResult businessObject) {

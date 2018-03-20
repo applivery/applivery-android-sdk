@@ -2,6 +2,7 @@ package com.applivery.applvsdklib.tools.injection
 
 import com.applivery.applvsdklib.AppliverySdk
 import com.applivery.applvsdklib.domain.login.LoginInteractor
+import com.applivery.applvsdklib.domain.model.AppConfig
 import com.applivery.applvsdklib.network.api.AppliveryApiService
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder
 import com.applivery.applvsdklib.network.api.interceptor.SessionInterceptor
@@ -10,12 +11,20 @@ import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.applvsdklib.tools.executor.MainThreadImp
 import com.applivery.applvsdklib.tools.executor.ThreadExecutor
 import com.applivery.applvsdklib.tools.session.SessionManager
+import com.applivery.applvsdklib.ui.views.feedback.FeedbackView
+import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackPresenter
 import com.applivery.applvsdklib.ui.views.login.LoginPresenter
 
-object Injection {
+internal object Injection {
+
+  var appConfig: AppConfig? = null
 
   fun provideLoginPresenter(): LoginPresenter {
     return LoginPresenter(provideLoginInteractor())
+  }
+
+  fun provideFeedbackPresenter(feedbackView: FeedbackView): UserFeedbackPresenter {
+    return UserFeedbackPresenter(appConfig, feedbackView, provideSessionManager())
   }
 
   private fun provideLoginInteractor(): LoginInteractor {

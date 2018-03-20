@@ -28,6 +28,7 @@ import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
+import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.tools.session.SessionManager;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
@@ -54,6 +55,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   }
 
   @Override public void onSuccess(AppConfig appConfig) {
+    Injection.INSTANCE.setAppConfig(appConfig);
     UpdateType updateType = checkForUpdates(appConfig);
     lastConfigWriter.writeLastConfigCheckTimeStamp(System.currentTimeMillis());
     UpdateViewPresenter presenter = new UpdateViewPresenter(getUpdateListener(appConfig));
