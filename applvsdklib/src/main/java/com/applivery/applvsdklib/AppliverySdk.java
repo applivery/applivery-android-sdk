@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.os.AsyncTask;
@@ -33,6 +34,7 @@ import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppI
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
 import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
+import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.tools.permissions.AndroidPermissionCheckerImpl;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.tools.utils.Validate;
@@ -47,8 +49,8 @@ import java.util.concurrent.Executor;
  */
 public class AppliverySdk {
 
-  //TODO This class is already using too many Static fields, consider redesign.
-  //TODO Hold static reference only to AppliverySdk object and wrap smaller objects inside
+  // TODO This class is already using too many Static fields, consider redesign.
+  // TODO Hold static reference only to AppliverySdk object and wrap smaller objects inside
   private static final String TAG = AppliverySdk.class.getCanonicalName();
   private static volatile Executor executor;
   private static volatile String applicationId;
@@ -69,6 +71,7 @@ public class AppliverySdk {
   private static long updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
   private static String appliverySdkVersionName = BuildConfig.VERSION_NAME;
   private static Boolean isUpdating = false;
+  private static SharedPreferences sharedPreferences;
 
   public static synchronized void sdkInitialize(Application app, String applicationId,
       String appClientToken, boolean isStoreRelease) {
@@ -141,6 +144,8 @@ public class AppliverySdk {
   private static void initializeAppliveryConstants(Application app, String applicationId,
       String appClientToken, boolean isStoreRelease) {
 
+    AppliverySdk.sharedPreferences = app.getSharedPreferences("applivery", Context.MODE_PRIVATE);
+
     //region validate some requirements
     Context applicationContext = Validate.notNull(app, "Application").getApplicationContext();
     Validate.notNull(applicationContext, "applicationContext");
@@ -163,9 +168,9 @@ public class AppliverySdk {
 
   private static void obtainAppConfig(boolean requestConfig) {
     if (!isStoreRelease && requestConfig) {
-      getExecutor().execute(
-          ObtainAppConfigInteractor.getInstance(appliveryApiService, AppliverySdk.applicationId,
-              AppliverySdk.appClientToken, new AndroidCurrentAppInfo(applicationContext)));
+      getExecutor().execute(ObtainAppConfigInteractor.getInstance(appliveryApiService,
+          Injection.INSTANCE.provideSessionManager(), AppliverySdk.applicationId,
+          AppliverySdk.appClientToken, new AndroidCurrentAppInfo(applicationContext)));
     }
   }
 
@@ -353,6 +358,10 @@ public class AppliverySdk {
     if (activityLifecycle.isActivityContextAvailable()) {
       screenshotObserver.startObserving();
     }
+  }
+
+  public static SharedPreferences getSharedPreferences() {
+    return sharedPreferences;
   }
 
   public static class Logger {

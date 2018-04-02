@@ -17,16 +17,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-  ext.kotlin_version = '1.1.4-2'
+  ext.kotlin_version = '1.2.30'
   repositories {
     jcenter()
+    google()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.3'
+    classpath 'com.android.tools.build:gradle:3.0.1'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "com.applivery.gradle:applivery-deploy:1.0.0"
-    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
-    classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
   }
 }
 
@@ -34,22 +35,27 @@ allprojects {
   repositories {
     jcenter()
     maven { url "https://dl.bintray.com/applivery/maven" }
+    google()
   }
 
   ext {
 
     group = 'com.applivery'
-    version = '2.4.3'
+    version = '2.6'
 
-    androidBuildToolsVersion = '26.0.1'
-    androidMinSdkVersion = 10
-    androidTargetSdkVersion = 25
-    androidCompileSdkVersion = 25
+    androidBuildToolsVersion = '27.0.3'
+    androidMinSdkVersion = 14
+    androidTargetSdkVersion = 26
+    androidCompileSdkVersion = 26
   }
 }
 
 task clean(type: Delete) {
   delete rootProject.buildDir
+}
+
+subprojects {
+  tasks.withType(Javadoc).all { enabled = false }
 }
 
 task deployLib(type: Exec) {

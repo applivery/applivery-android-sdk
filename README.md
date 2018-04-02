@@ -211,6 +211,9 @@ In order to customize the appearance of the UI, you can make a new resource file
   <string name="appliveryUpdate">Update!</string>
   <string name="appliveryUpdateMsg">There is a new version available for download! Do you want to update to the latest version?</string>
   <string name="appliveryMustUpdateAppLocked">You must update.</string>
+  
+  <string name="appliveryLoginFailDielogTitle">Invalid credentials</string>
+  <string name="appliveryLoginFailDielogText">The email or password you entered is not valid</string>
 </resources>
 ```
 *res/values/applivery.xml*

@@ -32,6 +32,8 @@ public class ApiAndroid {
   @SerializedName("mustUpdateMsg") @Expose private String mustUpdateMsg;
   @SerializedName("forceUpdate") @Expose private boolean forceUpdate;
   @SerializedName("ota") @Expose private boolean ota;
+  @SerializedName("authUpdate") @Expose private boolean authUpdate;
+  @SerializedName("authFeedback") @Expose private boolean authFeedback;
 
   public String getMinVersion() {
     return minVersion;
@@ -87,5 +89,21 @@ public class ApiAndroid {
 
   public void setOta(boolean ota) {
     this.ota = ota;
+  }
+
+  public boolean isAuthUpdate() {
+    return authUpdate;
+  }
+
+  public void setAuthUpdate(boolean authUpdate) {
+    this.authUpdate = authUpdate;
+  }
+
+  public boolean isAuthFeedback() {
+    return authFeedback;
+  }
+
+  public void setAuthFeedback(boolean authFeedback) {
+    this.authFeedback = authFeedback;
   }
 }

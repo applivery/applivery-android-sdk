@@ -17,6 +17,8 @@
 package com.applivery.applvsdklib.network.api;
 
 import com.applivery.applvsdklib.BuildConfig;
+import com.applivery.applvsdklib.network.api.interceptor.HeadersInterceptor;
+import com.applivery.applvsdklib.tools.injection.Injection;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -31,10 +33,15 @@ public class AppliveryApiServiceBuilder {
   public static AppliveryApiService getAppliveryApiInstance() {
 
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+    loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
     OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
     okHttpClientBuilder.interceptors().add(new HeadersInterceptor());
-    if (BuildConfig.DEBUG){ okHttpClientBuilder.interceptors().add(loggingInterceptor);}
+    okHttpClientBuilder.interceptors().add(Injection.INSTANCE.provideSessionInterceptor());
+
+    if (BuildConfig.DEBUG) {
+      okHttpClientBuilder.interceptors().add(loggingInterceptor);
+    }
 
     return new Retrofit.Builder().baseUrl(BuildConfig.API_URL)
         .addConverterFactory(GsonConverterFactory.create())

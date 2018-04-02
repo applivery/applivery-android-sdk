@@ -34,6 +34,8 @@ public class AndroidMapper implements ResponseMapper<Android, ApiAndroid> {
     android.setMustUpdateMsg(apiAndroid.getMustUpdateMsg());
     android.setOta(apiAndroid.isOta());
     android.setUpdateMsg(apiAndroid.getUpdateMsg());
+    android.setAuthUpdate(apiAndroid.isAuthUpdate());
+    android.setAuthFeedback(apiAndroid.isAuthFeedback());
     return android;
   }
 }

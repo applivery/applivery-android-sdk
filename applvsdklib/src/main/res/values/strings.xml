@@ -70,5 +70,12 @@
 
   <string name="appliveryMustUpdateAppLocked"></string>
   <string name="appliveryMustUpdateAppLockedDefault">Your app is locked, please update...</string>
+  <string name="appliveryUsername">Email</string>
+  <string name="appliveryPassword">Password</string>
+  <string name="appliveryLogin">Login</string>
+  <string name="appliveryCancel">Cancel</string>
+
+  <string name="appliveryLoginFailDielogTitle">Invalid credentials</string>
+  <string name="appliveryLoginFailDielogText">The email or password you entered is not valid</string>
 
 </resources>

@@ -29,6 +29,8 @@ public class Android {
   private boolean forceUpdate;
   private String updateMsg;
   private String mustUpdateMsg;
+  private boolean authUpdate;
+  private boolean authFeedback;
 
   public String getMinVersion() {
     return minVersion;
@@ -84,5 +86,21 @@ public class Android {
 
   public void setMustUpdateMsg(String mustUpdateMsg) {
     this.mustUpdateMsg = mustUpdateMsg;
+  }
+
+  public boolean isAuthUpdate() {
+    return authUpdate;
+  }
+
+  public void setAuthUpdate(boolean authUpdate) {
+    this.authUpdate = authUpdate;
+  }
+
+  public boolean isAuthFeedback() {
+    return authFeedback;
+  }
+
+  public void setAuthFeedback(boolean authFeedback) {
+    this.authFeedback = authFeedback;
   }
 }

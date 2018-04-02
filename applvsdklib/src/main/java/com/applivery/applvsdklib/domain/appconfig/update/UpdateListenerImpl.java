@@ -19,15 +19,19 @@ package com.applivery.applvsdklib.domain.appconfig.update;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.download.app.AppInstaller;
+import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
 import com.applivery.applvsdklib.domain.download.token.ObtainAppBuildDownloadTokenInteractor;
 import com.applivery.applvsdklib.domain.download.token.ObtainBuildTokenInteractorCallback;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
-import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidAppInstallerImpl;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidExternalStorageReaderImpl;
+import com.applivery.applvsdklib.tools.session.SessionManager;
+import com.applivery.applvsdklib.ui.views.login.LoginView;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateView;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -36,19 +40,29 @@ import com.applivery.applvsdklib.ui.views.update.UpdateView;
 public class UpdateListenerImpl implements UpdateListener {
 
   private final AppConfig appConfig;
+  private final SessionManager sessionManager;
   private final AppliveryApiService apiService;
   private final ExternalStorageReader externalStorageReader;
   private UpdateView updateView;
 
-  public UpdateListenerImpl(AppConfig appConfig, AppliveryApiService apiService) {
+  public UpdateListenerImpl(AppConfig appConfig, SessionManager sessionManager,
+      AppliveryApiService apiService) {
     this.appConfig = appConfig;
+    this.sessionManager = sessionManager;
     this.apiService = apiService;
     this.externalStorageReader = new AndroidExternalStorageReaderImpl();
   }
 
   @Override public void onUpdateButtonClick() {
-    String buildId = appConfig.getSdk().getAndroid().getLastBuildId();
+    if (needLogin(appConfig)) {
+      showLogin();
+    } else {
+      updateApp();
+    }
+  }
 
+  private void updateApp() {
+    String buildId = appConfig.getSdk().getAndroid().getLastBuildId();
     if (appBuildNotDownloaded(appConfig.getName() + "_" + buildId)) {
       InteractorCallback interactorCallback =
           new ObtainBuildTokenInteractorCallback(apiService, appConfig.getName(), updateView);
@@ -64,6 +78,21 @@ public class UpdateListenerImpl implements UpdateListener {
 
   private boolean appBuildNotDownloaded(String apkFileName) {
     return !externalStorageReader.fileExists(apkFileName);
+  }
+
+  private Boolean needLogin(AppConfig appConfig) {
+    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().isAuthUpdate();
+    return isAuthUpdate && !sessionManager.hasSession();
+  }
+
+  private void showLogin() {
+    LoginView loginView = new LoginView(AppliverySdk.getCurrentActivity(), new Function0<Unit>() {
+      @Override public Unit invoke() {
+        updateApp();
+        return null;
+      }
+    });
+    loginView.getPresenter().requestLogin();
   }
 
   private void installApp(String apkFileName) {

@@ -56,4 +56,6 @@ public interface FeedbackView {
   void checkScreenshotSwitch(boolean isChecked);
 
   void retrieveEditedScreenshot();
+
+  void requestLogin();
 }
