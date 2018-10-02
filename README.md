@@ -37,7 +37,7 @@ Sdk installation is quite simple, and you can follow one of this three methods, 
 ## Download via Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-compile 'com.applivery:applvsdklib:2.4.3'
+compile 'com.applivery:applvsdklib:2.6'
 ```
 
 ## Downloading source and use the project as a project module
@@ -104,7 +104,7 @@ Add the following dependency to your's app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v2.4.3'
+      compile 'com.github.Applivery:applivery-android-sdk:v2.6'
     }
   ```
   * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
