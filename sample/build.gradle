@@ -6,7 +6,7 @@ apply plugin: "applivery-plugin"
 def STRING = "String"
 
 def props = new Properties()
-file("../keys.properties").withInputStream { props.load(it) }
+file("../sample_keys.properties").withInputStream { props.load(it) }
 
 android {
   compileSdkVersion parent.ext.androidCompileSdkVersion
@@ -58,6 +58,6 @@ repositories {
 }
 
 applivery {
-  appId = "58d2b6285063c91d29bedec4"
+  appId = "5aa0ffa5e78d79e572f1b6cc"
   apiKey = props.getProperty("APPLIVERY_API_KEY")
 }

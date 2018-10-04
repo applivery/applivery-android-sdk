@@ -24,15 +24,24 @@ public class DownloadResult implements BusinessObject<DownloadResult> {
 
   private final boolean success;
   private final String path;
+  private final String error;
 
   public DownloadResult(boolean status, String path) {
     this.success = status;
     this.path = path;
+    this.error = "";
   }
 
   public DownloadResult(boolean status) {
     this.success = status;
     this.path = "";
+    this.error = "";
+  }
+
+  public DownloadResult(String error) {
+    this.success = false;
+    this.path = "";
+    this.error = error;
   }
 
   @Override public DownloadResult getObject() {
@@ -45,5 +54,9 @@ public class DownloadResult implements BusinessObject<DownloadResult> {
 
   public String getPath() {
     return path;
+  }
+
+  public String getError() {
+    return error;
   }
 }

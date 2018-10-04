@@ -19,10 +19,10 @@ package com.applivery.applvsdklib.network.api.requests;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.download.app.DownloadStatusListener;
 import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.DownloadResult;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import java.io.InputStream;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -63,18 +63,17 @@ public class DownloadBuildRequest extends ServerRequest {
       InputStream in = apiResponse.body().byteStream();
       String apkFileName = appName + "_" + token.getBuild();
 
-      String path = externalStorageWriter.writeToFile(in, lenght, downloadStatusListener, apkFileName);
+      String path =
+          externalStorageWriter.writeToFile(in, lenght, downloadStatusListener, apkFileName);
 
-      if (path!=null){
+      if (path != null) {
         downloadResult = new DownloadResult(true, path);
       }
-
     } catch (Exception e) {
       AppliverySdk.Logger.log(e.getMessage());
+      downloadResult = new DownloadResult(e.getMessage());
     }
-
 
     return downloadResult;
   }
-
 }
