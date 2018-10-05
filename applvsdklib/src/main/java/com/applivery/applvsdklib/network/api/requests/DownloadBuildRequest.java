@@ -19,10 +19,10 @@ package com.applivery.applvsdklib.network.api.requests;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.download.app.DownloadStatusListener;
 import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.DownloadResult;
+import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import java.io.InputStream;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -59,22 +59,26 @@ public class DownloadBuildRequest extends ServerRequest {
     try {
       Response<ResponseBody> apiResponse = response.execute();
 
-      int lenght = Integer.parseInt(apiResponse.headers().get("Content-Length"));
-      InputStream in = apiResponse.body().byteStream();
-      String apkFileName = appName + "_" + token.getBuild();
+      if (apiResponse.body() != null) {
+        int lenght = Integer.parseInt(apiResponse.headers().get("Content-Length"));
+        InputStream in = apiResponse.body().byteStream();
+        String apkFileName = appName + "_" + token.getBuild();
 
-      String path = externalStorageWriter.writeToFile(in, lenght, downloadStatusListener, apkFileName);
+        String path =
+            externalStorageWriter.writeToFile(in, lenght, downloadStatusListener, apkFileName);
 
-      if (path!=null){
-        downloadResult = new DownloadResult(true, path);
+        if (path != null) {
+          downloadResult = new DownloadResult(true, path);
+        }
+      } else {
+        AppliverySdk.Logger.log("Empty body response");
+        downloadResult = new DownloadResult("Empty body response - " + apiResponse.message());
       }
-
     } catch (Exception e) {
       AppliverySdk.Logger.log(e.getMessage());
+      downloadResult = new DownloadResult(e.getMessage());
     }
-
 
     return downloadResult;
   }
-
 }

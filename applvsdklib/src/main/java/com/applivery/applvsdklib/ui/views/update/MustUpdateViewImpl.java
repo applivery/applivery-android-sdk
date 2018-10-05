@@ -102,10 +102,10 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   }
 
   private void initViewElements(View view) {
-    this.updateMessage = (TextView) view.findViewById(R.id.must_update_message);
-    this.permissionsDenied = (TextView) view.findViewById(R.id.permissions_denied_message);
-    this.update = (Button) view.findViewById(R.id.must_update_button);
-    this.progressBar = (ProgressBar) view.findViewById(R.id.must_update_progress_bar);
+    this.updateMessage = view.findViewById(R.id.must_update_message);
+    this.permissionsDenied = view.findViewById(R.id.permissions_denied_message);
+    this.update = view.findViewById(R.id.must_update_button);
+    this.progressBar = view.findViewById(R.id.must_update_progress_bar);
 
     LayerDrawable layerDrawable = (LayerDrawable) progressBar.getProgressDrawable();
     Drawable progressDrawable = layerDrawable.findDrawableByLayerId(android.R.id.progress);

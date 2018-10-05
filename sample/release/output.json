@@ -1,1 +1,1 @@
-[{"outputType":{"type":"APK"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":2},"path":"sample-release.apk","properties":{"packageId":"com.applivery.sample","split":"","minSdkVersion":"14"}}]
+[{"outputType":{"type":"APK"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":2,"versionName":"2.0","enabled":true,"outputFile":"sample-release.apk","fullName":"release","baseName":"release"},"path":"sample-release.apk","properties":{}}]

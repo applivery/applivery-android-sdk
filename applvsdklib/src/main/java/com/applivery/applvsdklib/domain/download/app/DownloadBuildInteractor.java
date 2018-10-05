@@ -76,6 +76,10 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
     if (response.isSuccess()) {
       interactorCallback.onSuccess(response);
       appInstaller.installApp(response.getPath());
+    } else {
+      if (response.getError() != null && !response.getError().isEmpty()) {
+        interactorCallback.onError(new ErrorObject("Download error: " + response.getError()));
+      }
     }
   }
 
@@ -87,10 +91,7 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
       BuildTokenInfo buildTokenInfo, DownloadBuildInteractorCallback interactorCallback,
       ExternalStorageWriter externalStorageWriter) {
 
-    DownloadBuildInteractor downloadBuildInteractor =
-        new DownloadBuildInteractor(appliveryApiService, appName, buildTokenInfo,
-            interactorCallback, externalStorageWriter);
-
-    return downloadBuildInteractor;
+    return new DownloadBuildInteractor(appliveryApiService, appName, buildTokenInfo,
+        interactorCallback, externalStorageWriter);
   }
 }

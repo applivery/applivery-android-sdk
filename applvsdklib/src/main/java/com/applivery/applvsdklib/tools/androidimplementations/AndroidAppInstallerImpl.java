@@ -47,7 +47,8 @@ public class AndroidAppInstallerImpl implements AppInstaller, AppPathReceiver {
   private void install(String path) {
     Uri uri = composeUri(path, fileProviderAuthority);
 
-    Intent promptInstall = new Intent(Intent.ACTION_VIEW);
+    //Intent promptInstall = new Intent(Intent.ACTION_VIEW);
+    Intent promptInstall = new Intent(Intent.ACTION_INSTALL_PACKAGE);
     promptInstall.setDataAndType(uri, APP_TYPE_ID);
     promptInstall.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     promptInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
