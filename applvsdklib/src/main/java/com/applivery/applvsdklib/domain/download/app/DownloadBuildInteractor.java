@@ -77,7 +77,9 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
       interactorCallback.onSuccess(response);
       appInstaller.installApp(response.getPath());
     } else {
-      interactorCallback.onError(new ErrorObject("Download error: " + response.getError()));
+      if (response.getError() != null && !response.getError().isEmpty()) {
+        interactorCallback.onError(new ErrorObject("Download error: " + response.getError()));
+      }
     }
   }
 
