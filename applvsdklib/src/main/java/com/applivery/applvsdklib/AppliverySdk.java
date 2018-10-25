@@ -372,5 +372,11 @@ public class AppliverySdk {
         Log.d(TAG, text);
       }
     }
+
+    public static void loge(String text) {
+      if (debug) {
+        Log.e(TAG, text);
+      }
+    }
   }
 }

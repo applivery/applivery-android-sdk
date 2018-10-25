@@ -24,26 +24,26 @@ import com.applivery.applvsdklib.network.api.responses.ApiAppliveryServerErrorRe
  */
 public class ErrorObject implements BusinessObject<ErrorObject> {
 
-  private boolean isBusinessError;
+  private boolean businessError;
   private String message;
   private int businessCode;
 
   public ErrorObject(ApiAppliveryServerErrorResponse serverResponse) {
     businessCode = serverResponse.getCode();
     message = serverResponse.getMsg();
-    isBusinessError = serverResponse.isBusinessError();
+    businessError = serverResponse.isBusinessError();
   }
 
   public ErrorObject() {
     businessCode = -99;
     message = "Unknown Error";
-    isBusinessError = false;
+    businessError = false;
   }
 
   public ErrorObject(String message) {
     this.businessCode = -99;
     this.message = message;
-    this.isBusinessError = false;
+    this.businessError = false;
   }
 
   @Override public ErrorObject getObject() {
@@ -52,5 +52,9 @@ public class ErrorObject implements BusinessObject<ErrorObject> {
 
   public String getMessage() {
     return message;
+  }
+
+  public boolean isBusinessError() {
+    return businessError;
   }
 }
