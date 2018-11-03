@@ -16,6 +16,7 @@
 
 package com.applivery.applvsdklib.domain.feedback;
 
+import android.support.annotation.NonNull;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
@@ -39,13 +40,14 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
 
   private final FeedbackRequest feedbackRequest;
   private final InteractorCallback feedbackCallback;
-  private final FeedbackWrapper feedbackWrapper;
 
-  public FeedbackInteractor(AppliveryApiService appliveryApiService, Feedback feedback,
-      CurrentAppInfo currentAppInfo, DeviceDetailsInfo deviceDetailsInfo,
-      InteractorCallback interactorCallback) {
+  private FeedbackInteractor(@NonNull AppliveryApiService appliveryApiService,
+      @NonNull Feedback feedback, @NonNull CurrentAppInfo currentAppInfo,
+      @NonNull DeviceDetailsInfo deviceDetailsInfo,
+      @NonNull InteractorCallback interactorCallback) {
 
-    this.feedbackWrapper = FeedbackWrapper.createWrapper(feedback, currentAppInfo, deviceDetailsInfo);
+    FeedbackWrapper feedbackWrapper =
+        FeedbackWrapper.createWrapper(feedback, currentAppInfo, deviceDetailsInfo);
     this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedbackWrapper);
     this.feedbackCallback = interactorCallback;
   }
@@ -66,15 +68,13 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
     return feedbackRequest.execute();
   }
 
-  public static Runnable getInstance(AppliveryApiService service, Feedback feedback, UserFeedbackPresenter
-      userFeedbackPresenter) {
+  public static Runnable getInstance(@NonNull AppliveryApiService service,
+      @NonNull Feedback feedback, @NonNull UserFeedbackPresenter userFeedbackPresenter) {
 
     CurrentAppInfo currentAppInfo = new AndroidCurrentAppInfo(AppliverySdk.getApplicationContext());
     DeviceDetailsInfo deviceDetailsInfo = new AndroidDeviceDetailsInfo();
 
-    FeedbackInteractor feedbackInteractor = new FeedbackInteractor(service, feedback,
-        currentAppInfo, deviceDetailsInfo, userFeedbackPresenter);
-
-    return feedbackInteractor;
+    return new FeedbackInteractor(service, feedback, currentAppInfo, deviceDetailsInfo,
+        userFeedbackPresenter);
   }
 }
