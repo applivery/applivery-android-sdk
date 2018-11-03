@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.Chronometer
 import com.applivery.applvsdklib.Applivery
+import kotlinx.android.synthetic.main.activity_main.checkForUpdatesBackgroundSwitch
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,8 +33,15 @@ class MainActivity : AppCompatActivity() {
       Snackbar.make(view, "Feedback disabled", Snackbar.LENGTH_LONG).show()
     }
 
+    initViews()
+  }
+
+  private fun initViews() {
     startChrono()
-    Applivery.checkForUpdates()
+    checkForUpdatesBackgroundSwitch.isChecked = Applivery.getCheckForUpdatesBackground()
+    checkForUpdatesBackgroundSwitch.setOnCheckedChangeListener { _, isChecked ->
+      Applivery.setCheckForUpdatesBackground(isChecked)
+    }
   }
 
   private fun startChrono() {

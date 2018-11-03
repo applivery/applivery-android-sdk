@@ -55,6 +55,13 @@ public class Applivery {
   }
 
   /**
+   * @return Boolean Boolean true if the app check for updates when comming from background
+   */
+  public static Boolean getCheckForUpdatesBackground() {
+    return AppliverySdk.getCheckForUpdatesBackground();
+  }
+
+  /**
    * Manually check for App updates on Applivery.
    */
   public static void checkForUpdates() {

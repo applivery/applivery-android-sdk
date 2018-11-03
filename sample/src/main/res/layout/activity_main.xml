@@ -52,6 +52,38 @@
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
       >
 
+    <LinearLayout
+        android:id="@+id/settingsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/check_for_updates_background"
+          android:textColor="@color/primary_text"
+          android:textSize="@dimen/font_normal"
+          />
+
+      <android.support.v7.widget.SwitchCompat
+          android:id="@+id/checkForUpdatesBackgroundSwitch"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:checked="true"
+          />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/settingsView"
+        android:layout_marginTop="@dimen/spacing_normal"
+        android:background="@color/secondary_text"
+        />
+
     <Chronometer
         android:id="@+id/chronometer"
         android:layout_width="match_parent"
