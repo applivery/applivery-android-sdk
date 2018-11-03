@@ -34,6 +34,7 @@ public class AppConfigChecker {
 
     if (AppliverySdk.isSdkFirstTime()) {
       AppliverySdk.setSdkFirstTimeFalse();
+      AppliverySdk.setSdkRestartedFalse();
       return false;
     }
 
