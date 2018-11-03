@@ -43,15 +43,22 @@ public class Applivery {
   }
 
   /**
-   * Sets the time to wait between one check for update request and another. If this time has
-   * been rebased since last checking, when app comes from background will request again to
-   * applivery server for updates.
+   * Sets if the app should check for updates when comming from background or only should
+   * check it when the app is init for first time.
+   * default false
    *
-   * @param seconds int with seconds behind checking for new versions will be executed
+   * @param checkForUpdatesBackground Boolean if true the app check for updates when
    * comming from background
    */
-  public static void setUpdateCheckingInterval(int seconds) {
-    AppliverySdk.setUpdateCheckingTime(seconds);
+  public static void setCheckForUpdatesBackground(Boolean checkForUpdatesBackground) {
+    AppliverySdk.setCheckForUpdatesBackground(checkForUpdatesBackground);
+  }
+
+  /**
+   * @return Boolean Boolean true if the app check for updates when comming from background
+   */
+  public static Boolean getCheckForUpdatesBackground() {
+    return AppliverySdk.getCheckForUpdatesBackground();
   }
 
   /**

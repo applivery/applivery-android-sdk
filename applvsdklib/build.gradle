@@ -48,7 +48,7 @@ ext {
 }
 
 def STRING = "String"
-def LONG = "long"
+def BOOLEAN = "Boolean"
 
 android {
   compileSdkVersion parent.ext.androidCompileSdkVersion
@@ -61,7 +61,7 @@ android {
     versionName rootProject.ext.version
 
     buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
-    buildConfigField LONG, "UPDATE_CHECKING_TIME", '86400000l'
+    buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
   }
 
   buildTypes {
