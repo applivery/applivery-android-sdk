@@ -27,6 +27,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,7 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   private TextView updateMessage;
   private TextView permissionsDenied;
   private UpdateListener updateListener;
+  private static Boolean isVisible = false;
 
   /**
    * * Using DialogFragment instead of Dialog because DialogFragment is not dismissed in rotation.
@@ -174,6 +176,10 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
     permissionsDenied.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
     update.setVisibility(View.VISIBLE);
+  }
+
+  @NonNull @Override public Boolean isActive() {
+    return isVisible;
   }
 
   private void updatProcessTextView(final double percent, Handler handler) {

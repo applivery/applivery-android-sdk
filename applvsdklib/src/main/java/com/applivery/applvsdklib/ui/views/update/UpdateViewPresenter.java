@@ -41,7 +41,10 @@ public class UpdateViewPresenter {
       mustUpdateView.lockRotationOnParentScreen();
       this.updateView = mustUpdateView;
       this.updateListener.setUpdateView(updateView);
-      this.updateView.showUpdateDialog();
+
+      if (!this.updateView.isActive()) {
+        this.updateView.showUpdateDialog();
+      }
     }
   }
 
@@ -50,7 +53,9 @@ public class UpdateViewPresenter {
       UpdateInfo updateInfo = new UpdateInfo(appName, updateMessage);
       this.updateView = new SuggestedUpdateViewImpl(updateInfo, updateListener);
       this.updateListener.setUpdateView(updateView);
-      this.updateView.showUpdateDialog();
+      if (!this.updateView.isActive()) {
+        this.updateView.showUpdateDialog();
+      }
     }
   }
 }

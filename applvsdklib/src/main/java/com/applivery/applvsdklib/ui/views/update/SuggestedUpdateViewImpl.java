@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ public class SuggestedUpdateViewImpl implements UpdateView {
   private final UpdateListener updateListener;
   private final Context context;
   private ProgressDialog progress;
+  private static Boolean isVisible = false;
 
   public SuggestedUpdateViewImpl(UpdateInfo updateInfo, UpdateListener updateListener) {
     this.context = AppliverySdk.getCurrentActivity();
@@ -56,7 +58,7 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     final AlertDialog alertDialog = builder.create();
     LayoutInflater inflater = alertDialog.getLayoutInflater();
     inflater.inflate(R.layout.applivery_suggested_update, frameView);
-    TextView textView = (TextView) frameView.findViewById(R.id.suggested_update_text);
+    TextView textView = frameView.findViewById(R.id.suggested_update_text);
 
     String appliveryUpdateMsg = context.getString(R.string.appliveryUpdateMsg);
 
@@ -83,6 +85,7 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     return new DialogInterface.OnClickListener() {
       @Override public void onClick(DialogInterface dialog, int id) {
         updateListener.onUpdateButtonClick();
+        isVisible = false;
         alertDialog.dismiss();
       }
     };
@@ -91,6 +94,7 @@ public class SuggestedUpdateViewImpl implements UpdateView {
   private DialogInterface.OnClickListener onCancelClick() {
     return new DialogInterface.OnClickListener() {
       @Override public void onClick(DialogInterface dialog, int id) {
+        isVisible = false;
         alertDialog.dismiss();
       }
     };
@@ -98,6 +102,7 @@ public class SuggestedUpdateViewImpl implements UpdateView {
 
   @Override public void showUpdateDialog() {
     if (!AppliverySdk.isUpdating()) {
+      isVisible = true;
       alertDialog.show();
     }
   }
@@ -123,6 +128,10 @@ public class SuggestedUpdateViewImpl implements UpdateView {
 
   @Override public void downloadNotStartedPermissionDenied() {
     progress.dismiss();
+  }
+
+  @NonNull @Override public Boolean isActive() {
+    return isVisible;
   }
 
   private void updatProcessTextView(final double percent, Handler handler) {
