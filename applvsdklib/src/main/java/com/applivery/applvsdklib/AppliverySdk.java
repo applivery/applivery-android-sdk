@@ -68,7 +68,7 @@ public class AppliverySdk {
   private static Boolean sdkInitialized = false;
   private static Boolean sdkFirstTime;
   private static Boolean sdkRestarted = true;
-  private static long updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
+  private static Boolean checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
   private static String appliverySdkVersionName = BuildConfig.VERSION_NAME;
   private static Boolean isUpdating = false;
   private static SharedPreferences sharedPreferences;
@@ -278,16 +278,16 @@ public class AppliverySdk {
     applicationContext = null;
     permissionRequestManager = null;
     activityLifecycle = null;
-    updateCheckingTime = BuildConfig.UPDATE_CHECKING_TIME;
+    checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
   }
 
-  public static long getUpdateCheckingTime() {
-    return updateCheckingTime;
+  public static Boolean getCheckForUpdatesBackground() {
+    return checkForUpdatesBackground;
   }
 
-  public static void setUpdateCheckingTime(int updateCheckingTime) {
+  public static void setCheckForUpdatesBackground(Boolean checkForUpdatesBackground) {
     Validate.sdkInitialized();
-    AppliverySdk.updateCheckingTime = new Integer(updateCheckingTime * 1000).longValue();
+    AppliverySdk.checkForUpdatesBackground = checkForUpdatesBackground;
   }
 
   public static FeedbackView requestForUserFeedBack() {

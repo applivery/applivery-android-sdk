@@ -37,22 +37,15 @@ public class AppConfigChecker {
       return false;
     }
 
-    if (AppliverySdk.isSdkRestarted()){
+    if (AppliverySdk.isSdkRestarted()) {
       AppliverySdk.setSdkRestartedFalse();
       return true;
     }
 
-    if (lastConfigReader.notExistsLastConfig()){
+    if (lastConfigReader.notExistsLastConfig()) {
       return true;
     }
 
-    long timeStamp = lastConfigReader.readLastConfigCheckTimeStamp();
-    long diff = System.currentTimeMillis() - timeStamp;
-
-    if (diff >= AppliverySdk.getUpdateCheckingTime()) {
-      return true;
-    } else {
-      return false;
-    }
+    return AppliverySdk.getCheckForUpdatesBackground();
   }
 }

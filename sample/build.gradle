@@ -6,7 +6,7 @@ apply plugin: "applivery-plugin"
 def STRING = "String"
 
 def props = new Properties()
-file("../sample_keys.properties").withInputStream { props.load(it) }
+file("../keys.properties").withInputStream { props.load(it) }
 
 android {
   compileSdkVersion parent.ext.androidCompileSdkVersion
