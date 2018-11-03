@@ -6,4 +6,5 @@
   <string name="appliveryUpdateMsg">Opcionalmente podrías actualizar la app</string>
   <string name="appliveryUpdate">Actualizar</string>
   <string name="check_for_updates_background">Check for updates background</string>
+  <string name="enable_shake_feedback">Enable shake feedback</string>
 </resources>
