@@ -163,7 +163,7 @@ public class AppliverySdk {
     AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance();
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager =
-        new AndroidPermissionCheckerImpl(applicationContext, AppliverySdk.activityLifecycle);
+        new AndroidPermissionCheckerImpl(AppliverySdk.activityLifecycle);
   }
 
   private static void obtainAppConfig(boolean requestConfig) {
