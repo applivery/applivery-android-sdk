@@ -198,7 +198,11 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   }
 
   private void sendFeedback() {
-    AppliverySdk.getExecutor()
-        .execute(FeedbackInteractor.getInstance(appliveryApiService, feedback, this));
+    if (appliveryApiService != null) {
+      AppliverySdk.getExecutor()
+          .execute(FeedbackInteractor.getInstance(appliveryApiService, feedback, this));
+    } else {
+      AppliverySdk.Logger.loge("sendFeedback() with null appliveryApiService");
+    }
   }
 }

@@ -19,8 +19,10 @@ package com.applivery.applvsdklib.tools.permissions;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.ViewGroup;
+import com.applivery.applvsdklib.AppliverySdk;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.single.CompositePermissionListener;
 import com.karumi.dexter.listener.single.PermissionListener;
@@ -32,23 +34,20 @@ import com.karumi.dexter.listener.single.SnackbarOnDeniedPermissionListener;
  */
 public class AndroidPermissionCheckerImpl implements PermissionChecker {
 
-  private final ContextProvider contextProvider;
+  @NonNull private final ContextProvider contextProvider;
 
-  public AndroidPermissionCheckerImpl(Context context, ContextProvider contextProvider) {
-    Dexter.initialize(context);
+  public AndroidPermissionCheckerImpl(@NonNull ContextProvider contextProvider) {
     this.contextProvider = contextProvider;
   }
 
-  @Override public void askForPermission(Permission permission,
-      UserPermissionRequestResponseListener userResponse, Activity activity) {
-    if (Dexter.isRequestOngoing()) {
-      return;
-    }
+  @Override public void askForPermission(@NonNull Permission permission,
+      @NonNull UserPermissionRequestResponseListener userResponse, @NonNull Activity activity) {
 
     PermissionListener[] listeners = createListeners(permission, userResponse, activity);
-
-    Dexter.checkPermission(new CompositePermissionListener(listeners),
-        permission.getAndroidPermissionStringType());
+    Dexter.withActivity(activity)
+        .withPermission(permission.getAndroidPermissionStringType())
+        .withListener(new CompositePermissionListener(listeners))
+        .check();
   }
 
   private PermissionListener[] createListeners(Permission permission,
@@ -81,8 +80,7 @@ public class AndroidPermissionCheckerImpl implements PermissionChecker {
   }
 
   @Override public void continuePendingPermissionsRequestsIfPossible() {
-    Dexter.continuePendingRequestIfPossible(
-        new ContinueRequestPermissionListenerImpl(contextProvider));
+    AppliverySdk.Logger.loge("continuePendingPermissionsRequestsIfPossible() not implemented");
   }
 
   @Override public boolean isGranted(Permission permission) {

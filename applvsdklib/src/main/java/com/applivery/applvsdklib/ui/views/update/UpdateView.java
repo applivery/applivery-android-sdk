@@ -16,6 +16,8 @@
 
 package com.applivery.applvsdklib.ui.views.update;
 
+import android.support.annotation.NonNull;
+
 public interface UpdateView {
   void showUpdateDialog();
 
@@ -26,4 +28,6 @@ public interface UpdateView {
   void updateProgress(double percent);
 
   void downloadNotStartedPermissionDenied();
+
+  @NonNull Boolean isActive();
 }
