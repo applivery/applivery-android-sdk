@@ -37,7 +37,7 @@ Sdk installation is quite simple, and you can follow one of this three methods, 
 ## Download via Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-compile 'com.applivery:applvsdklib:2.6.1'
+implementation 'com.applivery:applvsdklib:2.6.2'
 ```
 
 ## Downloading source and use the project as a project module
@@ -83,7 +83,7 @@ And that's all, applivery SDK is now ready to use in your project. But don't for
   compile 'com.squareup.retrofit2:converter-gson:2.0.0'
   compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
   compile 'com.google.code.gson:gson:2.6.2'
-  compile 'com.karumi:dexter:2.2.2'
+  compile 'com.karumi:dexter:5.0.0'
 ```
 
 ## Using gradle with jitpack Maven dependency
@@ -167,6 +167,13 @@ Additionally, the SDK will automatically check for new updates when returning fr
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
 The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Applivery Sdk that the checking for new versions will be executed after 6 hours (21600 seconds) when the app will came back from background mode. Anyway if app is destroyed and app `init` method is called again the checking for new versions will be executed again.
+
+### Updates
+
+To enable check for updates when coming from background 
+```java
+Applivery.setCheckForUpdatesBackground(true)
+```
 
 ### Feedback
 
