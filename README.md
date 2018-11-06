@@ -1,92 +1,70 @@
-# Applivery Android SDK  
-![Language](https://img.shields.io/badge/Language-Java-orange.svg)
+
+![Applivery Logo](https://www.applivery.com/img/icons/applivery-header-1200x627px.png)
+
 [![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
+![Language](https://img.shields.io/badge/Language-Java-orange.svg)
+![MinSDK](https://img.shields.io/badge/Min%20SDK-14-green.svg)
+[![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
+
+### Quality checks
 [![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
-[![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk) ![](https://img.shields.io/badge/Min%20SDK-14-green.svg)
+[![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android Apps.
+
+### Table of Contents
+
+* [Overview](#overview)
+* [Getting Started](#getting-started)
+* [SDK Installation](#sdk-installation)
+	* [Gradle with jCenter dependency](#gradle-with-jcenter-dependency)
+	* [Gradle with JitPack Maven dependency](#gradle-with-jitpack-maven-dependency)
+	* [Gradle with Nexus/MavenCentral dependency](#gradle-with-nexusmavencentral-dependency)
+	* [Downloading source code](#downloading-source-code)
+	* [Downloading aar package as a lib](#downloading-aar-package-as-a-lib)
+* [SDK Setup](#sdk-setup)
+	* [Step 1](#step-1)
+	* [Step 2](#step-2)
+	* [About params](#about-params)
+* [Advanced concepts](#advanced-concepts)
+
 
 ## Overview
 
 With Applivery you can massively distribute your Android Apps (both Ad-hoc or In-House/Enterprise) through a customizable distribution site with no need of your users have to be registered in the platform. No matter if your Android Apps are signed using Play Store or debug developer signature, Applivery is perfect not only for beta testing distribute to your QA team, but also for In-House Enterprise distribution for beta testing users, prior to a release, or even for corporative Apps to the employees of a company.
 
-**Features:**
+### Features
 * **Automatic OTA Updates** when uploading new versions to Applivery.
 * **Force update** if App version is lower than the minimum version configured in Applivery.
+* **Send feedback**. Your test users can report a bug or send improvements feedback by simply taking a screenshot.
 
-# Getting Started
+## Getting Started
 
 First of all, you should create an account on [Applivery.com](https://dashboard.applivery.com/register) and then add a new Application.
 
+
 ### Get your credentials
 
-**ACCOUNT API KEY**: that identifies and grants access to your account in order to use the [Applivery API](http://www.applivery.com/developers/api/). The API will aallow you to easily create an script to integrate your CI system with Applivery, but also is needed for this SDK.
+**SDK API KEY**: that identifies and grants access to your account in order to use the SDK.
 
-You can get your ACCOUNT API KEY in the `Developers` section (left side menu).
+You can get your SDK API KEY in the `Developers` section (left side menu).
 
-![Developers section](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/developers_section.png)
+![Developers section](https://raw.githubusercontent.com/applivery/applivery-ios-sdk/master/documentation/developers_section.png)
 
 **APP ID**: Is your application identifier. You can find it in the App details, going to `Applications` -> Click desired App -> (i) Box
 
-![APP ID](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/application_id.png)
+![APP ID](https://raw.githubusercontent.com/applivery/applivery-ios-sdk/master/documentation/application_id.png)
+
 
 ## SDK Installation
 
-Sdk installation is quite simple, and you can follow one of this three methods, choose your favourite. Despite the following guide is oriented to be used with Android Studio/intelIJ feel free to integrate the SDK into your favourite IDE and send us a pull to request that we will include somewhere.
-
-## Download via Gradle with jCenter dependency
+## Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
 implementation 'com.applivery:applvsdklib:2.6.2'
 ```
 
-## Downloading source and use the project as a project module
-
-Dowload the zip called [Zipped SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.zip "applvsdklib.zip") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads")
- folder. 
- 
- Unzip all the content at the same level than your "app" folder.  
- 
- ![FILES](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/project_files.png)
- 
- Go to settings.gradle file: 
- 
- ![Settings](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/setting_gradle.png)
- 
- And include your new module as follow:
- 
- ```groovy
- include ':app', ':applvsdklib'
- ```
- Now include this line into your app folder buld.gradle dependencies 
-
- ```groovy
- compile project(":applvsdklib")
- ```
-
-And that's all, applivery SDK is now ready to use in your project
-
-## Downloading aar package as a lib
-
-Dowload the zip aar called [aar SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.aar "applvsdklib.aar") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads") folder. 
-Now you can import a local aar file using the File --> New --> New Module -->Import .JAR/.AAR Package option in Android Studio and add this dependency to your app build.gradle in this way:
-
- ```groovy
-  compile project(":applvsdklib")
- ```
-
-And that's all, applivery SDK is now ready to use in your project. But don't forget that using this method you have to import the following libraries that applivery sdk is using:
-
-```groovy
-  compile 'com.android.support:appcompat-v7:23.1.1'
-  compile 'com.squareup.retrofit2:retrofit:2.0.0'
-  compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-  compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-  compile 'com.google.code.gson:gson:2.6.2'
-  compile 'com.karumi:dexter:5.0.0'
-```
-
-## Using gradle with jitpack Maven dependency
+## Gradle with JitPack Maven dependency
 [![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
 
 Add the following repository to your's root gradle:
@@ -100,28 +78,72 @@ Add the following repository to your's root gradle:
    }
  ````
 
-Add the following dependency to your's app gradle:
+Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
       compile 'com.github.Applivery:applivery-android-sdk:v2.6.2'
     }
   ```
-  * Note that Jitpack will be used for **Release Candidate** versions and Nexus for final releases, so be concerned about possible bugs in Jitpack versions
 
-## Using gradle with Nexus/MavenCentral dependency
+## Gradle with Nexus/MavenCentral dependency
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applvsdklib/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Capplivery)
 
-add the following dependency to your's app gradle:
+add the following dependency to your app gradle:
 
  ```groovy
   compile 'com.applivery:applivery-android-sdk:1.1.0'
  ```
-### Ok! Let's go!
 
-#### Step 1
-At your application start up, in a class extending from Application, you must call the init method:
+## Downloading source code
+
+Dowload the zip called [Zipped SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.zip "applvsdklib.zip") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads")
+ folder. 
+ 
+ Unzip all the content at the same level of your "app" folder.  
+ 
+ ![FILES](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/project_files.png)
+ 
+ Go to settings.gradle file: 
+ 
+ ![Settings](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/setting_gradle.png)
+ 
+ And include your new module as follows:
+ 
+ ```groovy
+ include ':app', ':applvsdklib'
+ ```
+ Now include this line into your app folder `buld.gradle` dependencies 
+
+ ```groovy
+ compile project(":applvsdklib")
+ ```
+
+## Downloading aar package as a lib
+
+Dowload the zip aar called [aar SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.aar "applvsdklib.aar") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads") folder. 
+Now you can import a local aar file using the File --> New --> New Module -->Import .JAR/.AAR Package option in Android Studio and add this dependency to your app build.gradle in this way:
+
+ ```groovy
+  compile project(":applvsdklib")
+ ```
+
+Do not forget that using this method you have to import the following libraries that Applivery SDK is using:
+
+```groovy
+  compile 'com.android.support:appcompat-v7:23.1.1'
+  compile 'com.squareup.retrofit2:retrofit:2.0.0'
+  compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+  compile 'com.google.code.gson:gson:2.6.2'
+  compile 'com.karumi:dexter:5.0.0'
+```
+
+## SDK Setup
+
+### Step 1
+At your application startup, in a class extending from `Application`, you must call the init method:
 
  ```java
  public class AppliveryApplication extends Application{
@@ -133,31 +155,21 @@ At your application start up, in a class extending from Application, you must ca
  }
  ```
  
-In this step you have to call some Applivery methods:
+After that make sure to call the following Applivery public methods:
  ```java
 Applivery.init(this, BuildConfig.APP_ID, BuildConfig.ACCOUNT_API_KEY, false);
  ```
-This method is intended to initialize the Applivery SDK. The only thing you have to take care about is that this call **MUST** be performed in app's `onCreate()` Method.
+This method is intended to initialize the Applivery SDK. The only thing you have to take care about is that this call **MUST** be performed in App's `onCreate()` Method.
  
-You should replace the strings `APP_KEY` and `APP_SECRET` with you api key and your app id respectively. Easy! Don't you think so?, they look like this in my build.gradle:
-
- ```groovy
-buildConfigField "String", "APP_ID", '"XXXXXXXXXXXXXXXXXXXXXXXX"'
-buildConfigField "String", "ACCOUNT_API_KEY", '"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"'
- ```
-  Optionally you can also specify the time interval the SDK should wait until perform the next version check. 
- ```java
-Applivery.setUpdateCheckingInterval(21600);
- ```
+**IMPORTANT:** As you can suspect, you should replace the strings `ACCOUNT_API_KEY` and `APP_ID` with you API Key and your App ID respectively. Easy! Don't you think so?
  
-#### Step 2
-Once initialized the SDK and once your App is stable in the Home Screen you have to call proactivelly the following method in order to check for new updates:
+### Step 2
+Once initialized the SDK and **once your App is stable in the Home Screen** you have to call proactivelly the following method in order to check for new updates:
 ```java
 Applivery.checkForUpdates()
 ```
-Additionally, the SDK will automatically check for new updates when returning from Background as well.
 
-## About params
+### About params
 
 - **app**: Your app instance.
 - **applicationId**: Your application's ID
@@ -168,22 +180,29 @@ Additionally, the SDK will automatically check for new updates when returning fr
 
 The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Applivery Sdk that the checking for new versions will be executed after 6 hours (21600 seconds) when the app will came back from background mode. Anyway if app is destroyed and app `init` method is called again the checking for new versions will be executed again.
 
-### Updates
+## Advanced concepts
 
-To enable check for updates when coming from background 
+### Updates
+You will find that the following public methods are available:
+
+Manually check for updates:
+```java
+Applivery.checkForUpdates()
+```
+
+Check for updates when coming from background 
 ```java
 Applivery.setCheckForUpdatesBackground(true)
 ```
 
-### Feedback
+Disable check for updates during during a certain period of time
+ ```java
+Applivery.setUpdateCheckingInterval(21600);
+ ```
 
-You can either take a screenshot or shake your phone if you want to send Applivery some feedback about your App. By taking a screenshot or shaking your phone you will get a screen like the following:
+### Feedback Reporting
 
-![FILES](https://github.com/applivery/applivery-android-sdk/blob/feature/styling/documentation/new_feedback_color.png)
-
-Here you can add the screenshot of the screen you were on if you woud like. You can say something interesting about the screen and type your feedback as a bug or simply something you want to give as feedback. By pressing the small screenshot you will have the same image bigger just in case you would like to check something. Then if you tap on the top right button you will send the info, or you could press the close button in the upper left corner otherwise.
-
-Additionally, if you go into the screenshot detail you can actually freehand draw over it.
+You can either take a screenshot or shake your phone if you want to send activate the Feedback Reproting feature
 
 You can enable or disable the screenshot feedback by using the following methods:
 
@@ -191,19 +210,16 @@ You can enable or disable the screenshot feedback by using the following methods
 Applivery.enableScreenshotFeedback();
 Applivery.disableScreenshotFeedback();
 ```
-
-... and the shake feedback by using:
+... and the shake event by using:
 
 ```java
 Applivery.enableShakeFeedback();
 Applivery.disableShakeFeedback();
 ```
 
-Call it having your app in foreground whenever you want.
+### Styling the UI
 
-## Styling the UI
-
-In order to customize the appearance of the UI, you can make a new resource file under your res/values folder redefining the applivery default attributes.
+In order to customize the appearance of the UI, you can make a new resource file called `applivery.xml` under your `res/values` folder overwriting the Applivery default attributes.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -238,9 +254,9 @@ You can also override the following drawable resources:
 *applivery_send*<br />
 *applivery_send_pressed*
 
-## Sample
+### Sample App
 
-As an example of integration you can have a look at: [our sample app](https://github.com/applivery/applivery-android-sample-app)
+As a sample integration you can take a look at: [our sample app](https://github.com/applivery/applivery-android-sdk/tree/master/sample)
 
 # Acknowledgements
 
@@ -250,10 +266,8 @@ We would like to mention every open source lib authors:
 * Thank's to Google, and Android Dev team, obviously, Android SDK, Support Libs ...
 * Thank's to [Karumi](http://www.karumi.com/) for his great contributions to developers community in general. We are using [Dexter](https://github.com/Karumi/Dexter) from Karumi as well.
 
-License
-=======
-
-    Copyright (C) 2016 Applivery
+# License
+Copyright (C) 2018 Applivery
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
