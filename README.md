@@ -82,7 +82,7 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v2.6.3'
+      compile 'com.github.Applivery:applivery-android-sdk:v2.6.4'
     }
   ```
 
