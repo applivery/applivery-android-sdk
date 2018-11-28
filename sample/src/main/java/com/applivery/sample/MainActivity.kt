@@ -2,6 +2,7 @@ package com.applivery.sample
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.applivery.applvsdklib.Applivery
 import kotlinx.android.synthetic.main.activity_main.checkForUpdatesBackgroundSwitch
 import kotlinx.android.synthetic.main.activity_main.chronometer
@@ -21,6 +22,10 @@ class MainActivity : AppCompatActivity() {
   private fun initViews() {
     setSupportActionBar(toolbar)
     chronometer.start()
+
+    if (BuildConfig.APPLIVERY_API_KEY.isEmpty()) {
+      Toast.makeText(this, "Empty applivery api key", Toast.LENGTH_LONG).show()
+    }
 
     checkForUpdatesBackgroundSwitch.isChecked = Applivery.getCheckForUpdatesBackground()
     checkForUpdatesBackgroundSwitch.setOnCheckedChangeListener { _, isChecked ->

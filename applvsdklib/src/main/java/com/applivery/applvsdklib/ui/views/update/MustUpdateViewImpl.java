@@ -54,8 +54,7 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   private ProgressBar progressBar;
   private TextView updateMessage;
   private TextView permissionsDenied;
-  private UpdateListener updateListener;
-  private static Boolean isVisible = false;
+  private static UpdateListener updateListener;
 
   /**
    * * Using DialogFragment instead of Dialog because DialogFragment is not dismissed in rotation.
@@ -100,7 +99,7 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   }
 
   public void setUpdateListener(UpdateListener updateListener) {
-    this.updateListener = updateListener;
+    MustUpdateViewImpl.updateListener = updateListener;
   }
 
   private void initViewElements(View view) {
@@ -179,7 +178,7 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
   }
 
   @NonNull @Override public Boolean isActive() {
-    return isVisible;
+    return false;
   }
 
   private void updatProcessTextView(final double percent, Handler handler) {
