@@ -33,7 +33,7 @@ artifacts {
 
 // Bintray
 Properties properties = new Properties()
-properties.load(project.rootProject.file('sample_keys.properties').newDataInputStream())
+properties.load(project.rootProject.file('keys.properties').newDataInputStream())
 
 bintray {
   user = properties.getProperty('bintray.user')
