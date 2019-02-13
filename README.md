@@ -93,7 +93,7 @@ Add the following dependency to your app gradle:
 add the following dependency to your app gradle:
 
  ```groovy
-  compile 'com.applivery:applivery-android-sdk:1.1.0'
+  compile 'com.applivery:applvsdklib:2.6.5'
  ```
 
 ## Downloading source code
