@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
 import com.applivery.applvsdklib.domain.download.app.AppInstaller;
 import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
 import java.io.File;
@@ -71,7 +70,7 @@ public class AndroidAppInstallerImpl implements AppInstaller, AppPathReceiver {
       return Uri.parse(FILE_URI_ID + path);
     } else {
       File file = new File(path);
-      return FileProvider.getUriForFile(context, fileProviderAuthority, file);
+      return AppliveryFileProvider.getUriForFile(context, fileProviderAuthority, file);
     }
   }
 }
