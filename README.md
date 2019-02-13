@@ -61,7 +61,7 @@ You can get your SDK API KEY in the `Developers` section (left side menu).
 ## Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-implementation 'com.applivery:applvsdklib:2.6.3'
+implementation 'com.applivery:applvsdklib:2.6.5'
 ```
 
 ## Gradle with JitPack Maven dependency
@@ -82,7 +82,7 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v2.6.4'
+      compile 'com.github.Applivery:applivery-android-sdk:v2.6.5'
     }
   ```
 
