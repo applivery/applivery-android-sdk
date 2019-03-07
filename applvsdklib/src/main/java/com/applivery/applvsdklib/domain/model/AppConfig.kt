@@ -14,21 +14,31 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.domain.model;
+package com.applivery.applvsdklib.domain.model
 
-/**
- * Created by Sergio Martinez Rodriguez
- * Date 8/11/15.
- */
-public class Sdk {
+class AppConfig(
+  val description: String,
+  val id: String,
+  val name: String,
+  val oss: List<String>,
+  val sdk: Sdk,
+  val slug: String
+) : BusinessObject<AppConfig> {
 
-  private Android android;
-
-  public Android getAndroid() {
-    return android;
-  }
-
-  public void setAndroid(Android android) {
-    this.android = android;
+  override fun getObject(): AppConfig {
+    return this
   }
 }
+
+data class Sdk(
+  val android: Android
+)
+
+data class Android(
+  val forceAuth: Boolean,
+  val forceUpdate: Boolean,
+  val lastBuildId: String,
+  val lastBuildVersion: String,
+  val minVersion: String,
+  val ota: Boolean
+)

@@ -36,8 +36,8 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
   private final InteractorCallback appConfigInteractorCallback;
 
   private ObtainAppConfigInteractor(AppliveryApiService apiService, SessionManager sessionManager,
-      String appId, String authToken, CurrentAppInfo currentAppInfo) {
-    this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService, appId, authToken);
+      CurrentAppInfo currentAppInfo) {
+    this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService);
     this.appConfigInteractorCallback =
         new ObtainAppConfigInteractorCallback(apiService, sessionManager, currentAppInfo);
   }
@@ -59,10 +59,8 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
   }
 
   public static Runnable getInstance(AppliveryApiService appliveryApiService,
-      SessionManager sessionManager, String applicationId, String authToken,
-      CurrentAppInfo currentAppInfo) {
+      SessionManager sessionManager, CurrentAppInfo currentAppInfo) {
 
-    return new ObtainAppConfigInteractor(appliveryApiService, sessionManager, applicationId,
-        authToken, currentAppInfo);
+    return new ObtainAppConfigInteractor(appliveryApiService, sessionManager, currentAppInfo);
   }
 }

@@ -74,8 +74,8 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     long lastVersion = -1;
 
     long currentVersion = currentAppInfo.getVersionCode();
-    boolean forceUpdate = android.isForceUpdate();
-    boolean ota = android.isOta();
+    boolean forceUpdate = android.getForceUpdate();
+    boolean ota = android.getOta();
 
     try {
       if (forceUpdate) {
@@ -127,12 +127,12 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
       AppConfig appConfig) {
     switch (updateType) {
       case FORCED_UPDATE:
-        updateViewPresenter.showForcedUpdate(appConfig.getName(),
-            appConfig.getSdk().getAndroid().getMustUpdateMsg());
+        //TODO add update msg
+        updateViewPresenter.showForcedUpdate(appConfig.getName(), "");
         break;
       case SUGGESTED_UPDATE:
-        updateViewPresenter.showSuggestedUpdate(appConfig.getName(),
-            appConfig.getSdk().getAndroid().getUpdateMsg());
+        //TODO add update msg
+        updateViewPresenter.showSuggestedUpdate(appConfig.getName(), "TODO");
         break;
       case NO_UPDATE:
       default:

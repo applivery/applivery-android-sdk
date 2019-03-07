@@ -91,7 +91,7 @@ public class FeedbackWrapper {
             deviceDetailsInfo.getVendor(),
             deviceDetailsInfo.getModel(),
             deviceDetailsInfo.getDeviceType(),
-            AppliverySdk.getApplicationId(),
+            AppliverySdk.getAppToken(),
             feedback.getType().getStringValue(),
             deviceDetailsInfo.getOsversion(),
             deviceDetailsInfo.getDeviceId(),

@@ -16,8 +16,6 @@
 
 package com.applivery.applvsdklib.builders;
 
-import com.applivery.applvsdklib.network.api.model.ApiAppConfigData;
-import com.applivery.applvsdklib.network.api.model.ApiSdK;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

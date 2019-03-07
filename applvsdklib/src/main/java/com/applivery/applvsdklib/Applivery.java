@@ -29,17 +29,14 @@ public class Applivery {
    * param.
    *
    * @param app your app instance, it can't be null.
-   * @param applicationId your app id. You can find this value at applivery dashboard in your
-   * app section
-   * @param appClientToken your developer secret key. You can find this value at
-   * applivery dashboard in developer section
+   * @param appToken your app tokenoken. You can find this value at applivery dashboard in your
+   * app settings section
    * @param isStoreRelease this flag MUST be true when application is candidate to be store
    * release, because otherwise app can show dialogs from applivery about updates that
    * can redirect end users to applivery beta versions.
    */
-  public static void init(Application app, String applicationId, String appClientToken,
-      boolean isStoreRelease) {
-    AppliverySdk.sdkInitialize(app, applicationId, appClientToken, isStoreRelease);
+  public static void init(Application app, String appToken, boolean isStoreRelease) {
+    AppliverySdk.sdkInitialize(app, appToken, isStoreRelease);
   }
 
   /**

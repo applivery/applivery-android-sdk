@@ -7,7 +7,7 @@ class AppliveryApplication : Application() {
 
   override fun onCreate() {
     super.onCreate()
-    Applivery.init(this, BuildConfig.APPLIVERY_APP_ID, BuildConfig.APPLIVERY_API_KEY, false)
+    Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN, false)
     Applivery.setCheckForUpdatesBackground(false)
   }
 }

@@ -5,9 +5,6 @@ apply plugin: "applivery-plugin"
 
 def STRING = "String"
 
-def props = new Properties()
-file("../sample_keys.properties").withInputStream { props.load(it) }
-
 android {
   compileSdkVersion parent.ext.androidCompileSdkVersion
   buildToolsVersion parent.ext.androidBuildToolsVersion
@@ -21,9 +18,7 @@ android {
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    buildConfigField STRING, "APPLIVERY_APP_ID", "\"5aa0ffa5e78d79e572f1b6cc\""
-    buildConfigField STRING, "APPLIVERY_API_KEY",
-        "\"" + props.getProperty("APPLIVERY_API_KEY") + "\""
+    buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"PLH-t4QoOx5jz7HDrBJOtmGD\""
   }
 
   buildTypes {
@@ -57,7 +52,8 @@ repositories {
   mavenCentral()
 }
 
+// Deprecated
 applivery {
   appId = "5aa0ffa5e78d79e572f1b6cc"
-  apiKey = props.getProperty("APPLIVERY_API_KEY")
+  apiKey = "APPLIVERY_API_KEY"
 }

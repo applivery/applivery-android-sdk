@@ -60,20 +60,18 @@ android {
     versionCode computeVersionCode()
     versionName rootProject.ext.version
 
-    buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
     buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
   }
 
   buildTypes {
     debug {
-      //      buildConfigField STRING, "API_URL", '"http://dashboard.sandbox.applivery.com"'
-      buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
+      buildConfigField STRING, "API_URL", '"https://sdk-api-develop.sandbox.applivery.io"'
       testCoverageEnabled true
     }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-      buildConfigField STRING, "API_URL", '"https://dashboard.applivery.com"'
+      buildConfigField STRING, "API_URL", '"https://sdk-api-develop.sandbox.applivery.io"'
     }
   }
 

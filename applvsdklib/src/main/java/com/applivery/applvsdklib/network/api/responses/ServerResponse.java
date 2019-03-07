@@ -22,7 +22,7 @@ import com.google.gson.annotations.SerializedName;
 
   @SerializedName("status") private boolean status;
 
-  @SerializedName("response") private JsonObject data;
+  @SerializedName("data") private JsonObject data;
 
   @SerializedName("error") private ApiAppliveryServerErrorResponse error;
 

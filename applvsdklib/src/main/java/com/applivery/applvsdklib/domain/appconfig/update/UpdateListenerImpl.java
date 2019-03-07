@@ -81,7 +81,7 @@ public class UpdateListenerImpl implements UpdateListener {
   }
 
   private Boolean needLogin(AppConfig appConfig) {
-    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().isAuthUpdate();
+    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().getForceAuth();
     return isAuthUpdate && !sessionManager.hasSession();
   }
 

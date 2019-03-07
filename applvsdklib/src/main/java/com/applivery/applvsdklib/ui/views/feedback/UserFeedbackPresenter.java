@@ -162,7 +162,7 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   }
 
   private Boolean needLogin() {
-    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().isAuthFeedback();
+    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().getForceAuth();
     return isAuthUpdate && !sessionManager.hasSession();
   }
 

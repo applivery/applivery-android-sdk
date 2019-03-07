@@ -19,7 +19,6 @@ package com.applivery.applvsdklib.network.api;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.doubles.MockRequest;
 import com.applivery.applvsdklib.doubles.MockRequestExecute;
-import com.applivery.applvsdklib.network.api.model.ApiAppConfigData;
 import com.applivery.applvsdklib.network.api.requests.RequestHttpException;
 import com.applivery.applvsdklib.network.api.responses.ApiAppliveryServerErrorResponse;
 import com.applivery.applvsdklib.network.api.responses.ServerResponse;

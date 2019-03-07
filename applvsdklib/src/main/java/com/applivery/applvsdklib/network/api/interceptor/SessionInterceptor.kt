@@ -11,15 +11,15 @@ class SessionInterceptor(private val sessionManager: SessionManager) : Intercept
   override fun intercept(chain: Chain): Response {
 
     val requestBuilder = chain.request().newBuilder()
-    val isAppInfo = chain.request().url().url().path.contains("/api/apps/")
+//    val isAppInfo = chain.request().url().url().path.contains("/api/apps/")
+//
+//    if (sessionManager.hasSession() && !isAppInfo) {
+//      requestBuilder.addHeader("Authorization", sessionManager.getSession())
+//    } else {
+//      requestBuilder.addHeader("Authorization", AppliverySdk.getAppToken())
+//    }
 
-    if (sessionManager.hasSession() && !isAppInfo) {
-      requestBuilder.addHeader("Authorization", sessionManager.getSession())
-    } else {
-      requestBuilder.addHeader("Authorization", AppliverySdk.getToken())
-    }
-
-    requestBuilder.addHeader("x_account_token", AppliverySdk.getToken())
+    requestBuilder.addHeader("Authorization", "Bearer " + AppliverySdk.getAppToken())
 
     val request = requestBuilder.build()
     val response = chain.proceed(request)

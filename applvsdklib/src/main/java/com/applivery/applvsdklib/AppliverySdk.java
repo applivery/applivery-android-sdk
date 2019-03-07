@@ -53,8 +53,7 @@ public class AppliverySdk {
   // TODO Hold static reference only to AppliverySdk object and wrap smaller objects inside
   private static final String TAG = AppliverySdk.class.getCanonicalName();
   private static volatile Executor executor;
-  private static volatile String applicationId;
-  private static volatile String appClientToken;
+  private static volatile String appToken;
   private static boolean isStoreRelease = false;
   private static volatile String fileProviderAuthority;
   private static boolean lockedApp = false;
@@ -73,11 +72,11 @@ public class AppliverySdk {
   private static Boolean isUpdating = false;
   private static SharedPreferences sharedPreferences;
 
-  public static synchronized void sdkInitialize(Application app, String applicationId,
-      String appClientToken, boolean isStoreRelease) {
+  public static synchronized void sdkInitialize(Application app, String appToken,
+      boolean isStoreRelease) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-      init(app, applicationId, appClientToken, isStoreRelease);
+      init(app, appToken, isStoreRelease);
     } else {
       Logger.log(
           "Despite Applivery SDK compiles from API level 10 and forward, it is not compatible for API levels under 14");
@@ -85,15 +84,14 @@ public class AppliverySdk {
   }
 
   @TargetApi(14)
-  private static void init(Application app, String applicationId, String appClientToken,
-      boolean isStoreRelease) {
+  private static void init(Application app, String appToken, boolean isStoreRelease) {
     if (!sdkInitialized) {
 
       sdkFirstTime = true;
       sdkRestarted = true;
       sdkInitialized = true;
 
-      initializeAppliveryConstants(app, applicationId, appClientToken, isStoreRelease);
+      initializeAppliveryConstants(app, appToken, isStoreRelease);
 
       boolean requestConfig;
 
@@ -141,8 +139,8 @@ public class AppliverySdk {
     return isUpdating;
   }
 
-  private static void initializeAppliveryConstants(Application app, String applicationId,
-      String appClientToken, boolean isStoreRelease) {
+  private static void initializeAppliveryConstants(Application app, String appToken,
+      boolean isStoreRelease) {
 
     AppliverySdk.sharedPreferences = app.getSharedPreferences("applivery", Context.MODE_PRIVATE);
 
@@ -152,8 +150,7 @@ public class AppliverySdk {
     Validate.hasInternetPermissions(applicationContext, false);
     //endregion
 
-    AppliverySdk.applicationId = applicationId;
-    AppliverySdk.appClientToken = appClientToken;
+    AppliverySdk.appToken = appToken;
     AppliverySdk.isStoreRelease = isStoreRelease;
 
     AppliverySdk.fileProviderAuthority = composeFileProviderAuthority(app);
@@ -169,8 +166,8 @@ public class AppliverySdk {
   private static void obtainAppConfig(boolean requestConfig) {
     if (!isStoreRelease && requestConfig) {
       getExecutor().execute(ObtainAppConfigInteractor.getInstance(appliveryApiService,
-          Injection.INSTANCE.provideSessionManager(), AppliverySdk.applicationId,
-          AppliverySdk.appClientToken, new AndroidCurrentAppInfo(applicationContext)));
+          Injection.INSTANCE.provideSessionManager(),
+          new AndroidCurrentAppInfo(applicationContext)));
     }
   }
 
@@ -178,9 +175,9 @@ public class AppliverySdk {
     return application.getPackageName() + ".provider";
   }
 
-  public static String getApplicationId() {
+  public static String getAppToken() {
     Validate.sdkInitialized();
-    return applicationId;
+    return appToken;
   }
 
   public static Executor getExecutor() {
@@ -247,11 +244,6 @@ public class AppliverySdk {
     obtainAppConfig(true);
   }
 
-  public static String getToken() {
-    Validate.sdkInitialized();
-    return appClientToken;
-  }
-
   public static String getVersionName() {
     Validate.sdkInitialized();
     return appliverySdkVersionName;
@@ -273,7 +265,7 @@ public class AppliverySdk {
   public static void cleanAllStatics() {
     appliveryApiService = null;
     executor = null;
-    applicationId = appClientToken = null;
+    appToken = null;
     isStoreRelease = isDebugEnabled = sdkInitialized = false;
     applicationContext = null;
     permissionRequestManager = null;

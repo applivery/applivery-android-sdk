@@ -16,9 +16,6 @@
 
 package com.applivery.applvsdklib.builders;
 
-import com.applivery.applvsdklib.network.api.model.ApiAndroid;
-import com.applivery.applvsdklib.network.api.model.ApiSdK;
-
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 2/1/16.
