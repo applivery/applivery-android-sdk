@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.model;
+package com.applivery.applvsdklib.tools.androidimplementations
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import android.content.Context
+import com.applivery.applvsdklib.domain.model.PackageInfo
 
-/**
- * Created by Sergio Martinez Rodriguez
- * Date 10/4/16.
- */
-public class ApiDeviceInfoData {
+class AndroidCurrentAppInfo {
 
-  @SerializedName("device") @Expose private final ApiDeviceData device;
-  @SerializedName("os") @Expose private final ApiOsData os;
-
-  public ApiDeviceInfoData(ApiDeviceData device, ApiOsData os) {
-    this.device = device;
-    this.os = os;
+  companion object {
+    fun getPackageInfo(context: Context): PackageInfo {
+      val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+      return PackageInfo(
+        name = context.packageName,
+        version = pInfo.versionCode,
+        versionName = pInfo.versionName
+      )
+    }
   }
 }

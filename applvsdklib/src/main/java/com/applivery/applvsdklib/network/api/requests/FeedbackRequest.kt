@@ -17,37 +17,22 @@
 package com.applivery.applvsdklib.network.api.requests
 
 import com.applivery.applvsdklib.domain.model.BusinessObject
-import com.applivery.applvsdklib.domain.model.FeedbackWrapper
+import com.applivery.applvsdklib.domain.model.Feedback
 import com.applivery.applvsdklib.network.api.AppliveryApiService
-import com.applivery.applvsdklib.network.api.requests.mappers.ApiDeviceInfoRequestMapper
-import com.applivery.applvsdklib.network.api.requests.mappers.ApiDeviceRequestMapper
-import com.applivery.applvsdklib.network.api.requests.mappers.ApiFeedbackRequestMapper
+import com.applivery.applvsdklib.network.api.model.FeedbackEntity
 import com.applivery.applvsdklib.network.api.requests.mappers.ApiFeedbackResponseMapper
-import com.applivery.applvsdklib.network.api.requests.mappers.ApiOsRequestMapper
-import com.applivery.applvsdklib.network.api.requests.mappers.ApiPackageInfoRequestMapper
 
-class FeedbackRequest(private val apiService: AppliveryApiService,
-    private val feedbackWrapper: FeedbackWrapper) : ServerRequest() {
+class FeedbackRequest(
+  private val apiService: AppliveryApiService,
+  private val feedback: Feedback
+) : ServerRequest() {
 
-  private val apiFeedbackRequestMapper = createMappers()
   private val apiFeedbackResponseMapper: ApiFeedbackResponseMapper = ApiFeedbackResponseMapper()
 
-  private fun createMappers(): ApiFeedbackRequestMapper {
-
-    val apiOsRequestMapper = ApiOsRequestMapper()
-    val apiDeviceRequestMapper = ApiDeviceRequestMapper()
-
-    val apiDeviceInfoRequestMapper = ApiDeviceInfoRequestMapper(apiDeviceRequestMapper,
-        apiOsRequestMapper)
-
-    val apiPackageInfoRequestMapper = ApiPackageInfoRequestMapper()
-
-    return ApiFeedbackRequestMapper(apiPackageInfoRequestMapper, apiDeviceInfoRequestMapper)
-  }
-
   override fun performRequest(): BusinessObject<*> {
-    val apiFeedbackData = apiFeedbackRequestMapper.modelToData(feedbackWrapper)
-    val response = apiService.sendFeedback(apiFeedbackData)
+
+    val feedbackEntity = FeedbackEntity.fromFeedback(feedback)
+    val response = apiService.sendFeedback(feedbackEntity)
     val apiFeedbackResponse = super.performRequest(response)
     return apiFeedbackResponseMapper.map(apiFeedbackResponse)
   }

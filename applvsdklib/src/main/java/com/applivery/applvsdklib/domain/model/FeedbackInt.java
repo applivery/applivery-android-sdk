@@ -14,22 +14,32 @@
  * limitations under the License.
  */
 
-package com.applivery.applvsdklib.network.api.requests.mappers;
+package com.applivery.applvsdklib.domain.model;
 
-import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
-import com.applivery.applvsdklib.network.api.model.ApiOsData;
+import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
 /**
  * Created by Sergio Martinez Rodriguez
- * Date 10/4/16.
+ * Date 3/1/16.
  */
-public class ApiOsRequestMapper implements RequestMapper<FeedbackWrapper, ApiOsData>{
+public interface FeedbackInt {
+  void setType(FeedBackType bug);
 
-  @Override public ApiOsData modelToData(FeedbackWrapper feedbackWrapper) {
+  void attachScreenshot(boolean activated);
 
-    String name = feedbackWrapper.getOsName();
-    String version = feedbackWrapper.getOsVersion();
+  boolean mustAttachScreenshot();
 
-    return new ApiOsData(name, version);
-  }
+  void setMessage(String feedbackMessage);
+
+  String getMessage();
+
+  void setScreen(String screen);
+
+  String getScreen();
+
+  void setScreenCapture(ScreenCapture screenCapture);
+
+  String getBase64ScreenCapture();
+
+  FeedBackType getType();
 }

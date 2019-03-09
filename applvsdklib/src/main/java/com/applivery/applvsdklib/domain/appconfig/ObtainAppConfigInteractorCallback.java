@@ -19,13 +19,13 @@ package com.applivery.applvsdklib.domain.appconfig;
 import android.util.Log;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
 import com.applivery.applvsdklib.domain.appconfig.update.LastConfigWriter;
 import com.applivery.applvsdklib.domain.appconfig.update.UpdateListenerImpl;
 import com.applivery.applvsdklib.domain.appconfig.update.UpdateType;
 import com.applivery.applvsdklib.domain.model.Android;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
 import com.applivery.applvsdklib.tools.injection.Injection;
@@ -41,14 +41,14 @@ import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
 public class ObtainAppConfigInteractorCallback implements InteractorCallback<AppConfig> {
 
   private static final String TAG = "ObtainAppConfigICb";
-  private final CurrentAppInfo currentAppInfo;
+  private final PackageInfo packageInfo;
   private final AppliveryApiService appliveryApiService;
   private final SessionManager sessionManager;
   private final LastConfigWriter lastConfigWriter;
 
   public ObtainAppConfigInteractorCallback(AppliveryApiService appliveryApiService,
-      SessionManager sessionManager, CurrentAppInfo currentAppInfo) {
-    this.currentAppInfo = currentAppInfo;
+      SessionManager sessionManager, PackageInfo packageInfo) {
+    this.packageInfo = packageInfo;
     this.sessionManager = sessionManager;
     this.appliveryApiService = appliveryApiService;
     this.lastConfigWriter = new AndroidLastConfigWriterImpl();
@@ -73,7 +73,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     long minVersion = -1;
     long lastVersion = -1;
 
-    long currentVersion = currentAppInfo.getVersionCode();
+    long currentVersion = packageInfo.getVersion();
     boolean forceUpdate = android.getForceUpdate();
     boolean ota = android.getOta();
 
@@ -83,7 +83,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
       }
       lastVersion = Integer.valueOf(android.getLastBuildVersion());
     } catch (NumberFormatException n) {
-      Log.e(TAG, "checkForUpdates()", n);
+      Log.e(TAG, "checkForUpdates()");
     }
 
     UpdateType updateType =

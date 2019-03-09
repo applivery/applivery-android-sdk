@@ -167,7 +167,7 @@ public class AppliverySdk {
     if (!isStoreRelease && requestConfig) {
       getExecutor().execute(ObtainAppConfigInteractor.getInstance(appliveryApiService,
           Injection.INSTANCE.provideSessionManager(),
-          new AndroidCurrentAppInfo(applicationContext)));
+          AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext())));
     }
   }
 

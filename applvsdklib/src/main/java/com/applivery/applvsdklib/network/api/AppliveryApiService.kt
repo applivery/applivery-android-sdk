@@ -16,8 +16,8 @@
 
 package com.applivery.applvsdklib.network.api
 
-import com.applivery.applvsdklib.network.api.model.ApiFeedbackData
 import com.applivery.applvsdklib.network.api.model.ApiLogin
+import com.applivery.applvsdklib.network.api.model.FeedbackEntity
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse
 import com.applivery.applvsdklib.network.api.responses.ApiBuildTokenResponse
 import com.applivery.applvsdklib.network.api.responses.ApiFeedbackResponse
@@ -37,6 +37,9 @@ interface AppliveryApiService {
   @GET("$API_VERSION/app")
   fun obtainAppConfig(): Call<ApiAppConfigResponse>
 
+  @POST("$API_VERSION/feedback")
+  fun sendFeedback(@Body feedback: FeedbackEntity): Call<ApiFeedbackResponse>
+
   // TODO update api
 
   @GET("/api/builds/{build_id}/token")
@@ -46,8 +49,6 @@ interface AppliveryApiService {
   @Streaming
   fun downloadBuild(@Path("build_id") buildId: String, @Path("download_token") download_token: String): Call<ResponseBody>
 
-  @POST("/api/feedback")
-  fun sendFeedback(@Body feedback: ApiFeedbackData): Call<ApiFeedbackResponse>
 
   @POST("/api/auth")
   fun makeLogin(@Body userData: ApiLogin): Call<ApiLoginResponse>

@@ -22,6 +22,7 @@ import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.ObtainAppConfigRequest;
 import com.applivery.applvsdklib.tools.session.SessionManager;
@@ -36,10 +37,10 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
   private final InteractorCallback appConfigInteractorCallback;
 
   private ObtainAppConfigInteractor(AppliveryApiService apiService, SessionManager sessionManager,
-      CurrentAppInfo currentAppInfo) {
+      PackageInfo packageInfo) {
     this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService);
     this.appConfigInteractorCallback =
-        new ObtainAppConfigInteractorCallback(apiService, sessionManager, currentAppInfo);
+        new ObtainAppConfigInteractorCallback(apiService, sessionManager, packageInfo);
   }
 
   @Override protected void receivedResponse(BusinessObject obj) {
@@ -59,8 +60,8 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
   }
 
   public static Runnable getInstance(AppliveryApiService appliveryApiService,
-      SessionManager sessionManager, CurrentAppInfo currentAppInfo) {
+      SessionManager sessionManager, PackageInfo packageInfo) {
 
-    return new ObtainAppConfigInteractor(appliveryApiService, sessionManager, currentAppInfo);
+    return new ObtainAppConfigInteractor(appliveryApiService, sessionManager, packageInfo);
   }
 }
