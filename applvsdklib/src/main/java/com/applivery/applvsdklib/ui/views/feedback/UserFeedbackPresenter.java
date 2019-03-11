@@ -199,8 +199,6 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   private void sendFeedback() {
     if (appliveryApiService != null) {
 
-      // TODO review screnshot
-
       AppliverySdk.getExecutor()
           .execute(FeedbackInteractor.getInstance(appliveryApiService, feedback.getMessage(),
               feedback.getBase64ScreenCapture(), feedback.getType().getStringValue(), this));

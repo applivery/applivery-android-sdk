@@ -19,9 +19,9 @@ package com.applivery.applvsdklib.domain.download.app;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.DownloadResult;
+import com.applivery.applvsdklib.domain.model.DownloadToken;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.DownloadBuildRequest;
@@ -39,7 +39,7 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
   private final AppInstaller appInstaller;
 
   private DownloadBuildInteractor(AppliveryApiService appliveryApiService, String appName,
-      BuildTokenInfo buildTokenInfo, final DownloadBuildInteractorCallback interactorCallback,
+      DownloadToken downloadToken, final DownloadBuildInteractorCallback interactorCallback,
       ExternalStorageWriter externalStorageWriter) {
 
     this.downloadStatusListener = new DownloadStatusListener() {
@@ -57,7 +57,7 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
     };
 
     this.downloadBuildRequest =
-        new DownloadBuildRequest(appliveryApiService, buildTokenInfo, appName,
+        new DownloadBuildRequest(appliveryApiService, downloadToken, appName,
             downloadStatusListener, externalStorageWriter);
     this.interactorCallback = interactorCallback;
     this.appInstaller = new AndroidAppInstallerImpl(AppliverySdk.getApplicationContext(),
@@ -88,10 +88,10 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
   }
 
   public static Runnable getInstance(AppliveryApiService appliveryApiService, String appName,
-      BuildTokenInfo buildTokenInfo, DownloadBuildInteractorCallback interactorCallback,
+      DownloadToken downloadToken, DownloadBuildInteractorCallback interactorCallback,
       ExternalStorageWriter externalStorageWriter) {
 
-    return new DownloadBuildInteractor(appliveryApiService, appName, buildTokenInfo,
+    return new DownloadBuildInteractor(appliveryApiService, appName, downloadToken,
         interactorCallback, externalStorageWriter);
   }
 }

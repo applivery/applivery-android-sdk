@@ -20,10 +20,10 @@ import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.download.app.DownloadBuildInteractor;
 import com.applivery.applvsdklib.domain.download.app.DownloadBuildInteractorCallback;
-import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
+import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
+import com.applivery.applvsdklib.domain.model.DownloadToken;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
-import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidExternalStorageWriterImpl;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateView;
@@ -32,7 +32,7 @@ import com.applivery.applvsdklib.ui.views.update.UpdateView;
  * Created by Sergio Martinez Rodriguez
  * Date 10/1/16.
  */
-public class ObtainBuildTokenInteractorCallback implements InteractorCallback<BuildTokenInfo> {
+public class ObtainBuildTokenInteractorCallback implements InteractorCallback<DownloadToken> {
 
   private final AppliveryApiService apiService;
   private final String appName;
@@ -45,13 +45,14 @@ public class ObtainBuildTokenInteractorCallback implements InteractorCallback<Bu
     this.updateView = updateView;
   }
 
-  @Override public void onSuccess(final BuildTokenInfo buildTokenInfo) {
+  @Override public void onSuccess(final DownloadToken downloadToken) {
     updateView.showDownloadInProgress();
 
-    DownloadBuildInteractorCallback interactorCallback = new DownloadBuildInteractorCallback(updateView);
+    DownloadBuildInteractorCallback interactorCallback =
+        new DownloadBuildInteractorCallback(updateView);
     ExternalStorageWriter externalStorageWriter = new AndroidExternalStorageWriterImpl();
     Runnable r =
-        DownloadBuildInteractor.getInstance(apiService, appName, buildTokenInfo, interactorCallback,
+        DownloadBuildInteractor.getInstance(apiService, appName, downloadToken, interactorCallback,
             externalStorageWriter);
 
     AppliverySdk.getExecutor().execute(r);

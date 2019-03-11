@@ -16,8 +16,6 @@
 
 package com.applivery.applvsdklib.builders;
 
-import com.applivery.applvsdklib.network.api.model.ApiBuildTokenData;
-
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 2/1/16.
