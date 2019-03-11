@@ -4,7 +4,7 @@ data class Feedback(
   val deviceInfo: DeviceInfo,
   val message: String?,
   val packageInfo: PackageInfo,
-  val screenshot: String,
+  val screenshot: String?,
   val type: String
 )
 
