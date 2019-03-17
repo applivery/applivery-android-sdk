@@ -31,10 +31,10 @@ class LoginView(private val activity: Activity, private val onSuccess: () -> Uni
     val alertDialog = AlertDialog.Builder(activity).create()
     alertDialog.setTitle(activity.getString(R.string.appliveryLoginFailDielogTitle))
     alertDialog.setMessage(activity.getString(R.string.appliveryLoginFailDielogText))
-    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", { dialog, _ ->
+    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK") { dialog, _ ->
       showLoginDialog()
       dialog.dismiss()
-    })
+    }
     alertDialog.show()
   }
 

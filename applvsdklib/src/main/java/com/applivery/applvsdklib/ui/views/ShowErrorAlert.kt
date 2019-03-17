@@ -21,6 +21,7 @@ import android.widget.Toast
 import com.applivery.applvsdklib.AppliverySdk
 import com.applivery.applvsdklib.R
 import com.applivery.applvsdklib.domain.model.ErrorObject
+import com.applivery.applvsdklib.ui.views.login.LoginView
 
 class ShowErrorAlert {
 
@@ -56,10 +57,10 @@ class ShowErrorAlert {
       builder.setTitle(R.string.appliveryError)
         .setCancelable(false)
         .setMessage(message)
-        .setPositiveButton(
-          R.string.appliveryAcceptButton
-        ) { dialog, _ -> dialog.dismiss() }
-        .setNeutralButton(R.string.appliveryLogin) { dialog, _ -> dialog.dismiss() }
+        .setPositiveButton(R.string.appliveryLogin) { dialog, _ ->
+          dialog.dismiss()
+          requestLogin()
+        }
         .show()
     } else {
       Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
@@ -67,5 +68,10 @@ class ShowErrorAlert {
     }
   }
 
-
+  private fun requestLogin() {
+    val loginView = LoginView(AppliverySdk.getCurrentActivity()) {
+      AppliverySdk.obtainAppConfigForCheckUpdates()
+    }
+    loginView.presenter.requestLogin()
+  }
 }
