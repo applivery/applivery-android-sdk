@@ -25,9 +25,17 @@ data class FeedbackEntity(
       DeviceInfoEntity.fromDeviceInfo(feedback.deviceInfo),
       feedback.message,
       PackageInfoEntity.fromPackageInfo(feedback.packageInfo),
-      "data:image/png;base64," + feedback.screenshot,
+      getScreenshotData(feedback.screenshot),
       feedback.type
     )
+
+    private fun getScreenshotData(screenshot: String?): String? {
+      return if (screenshot != null) {
+        "data:image/png;base64,$screenshot"
+      } else {
+        null
+      }
+    }
   }
 }
 
