@@ -23,8 +23,13 @@ import com.applivery.applvsdklib.R
 import com.applivery.applvsdklib.domain.model.ErrorObject
 
 class ShowErrorAlert {
+
   fun showError(error: ErrorObject) = if (error.isBusinessError) {
-    showAlertDialog(error.message)
+
+    when (error.businessCode) {
+      ErrorObject.UNAUTHORIZED_ERROR -> showLoginDialog(error.message)
+      else -> showAlertDialog(error.message)
+    }
   } else {
     AppliverySdk.Logger.loge(error.message)
   }
@@ -33,14 +38,34 @@ class ShowErrorAlert {
     if (AppliverySdk.isContextAvailable()) {
       val builder = AlertDialog.Builder(AppliverySdk.getCurrentActivity())
       builder.setTitle(R.string.appliveryError)
-          .setCancelable(true)
-          .setMessage(message)
-          .setPositiveButton(R.string.appliveryAcceptButton
-          ) { dialog, _ -> dialog.dismiss() }
-          .show()
+        .setCancelable(true)
+        .setMessage(message)
+        .setPositiveButton(
+          R.string.appliveryAcceptButton
+        ) { dialog, _ -> dialog.dismiss() }
+        .show()
     } else {
       Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
-          .show()
+        .show()
     }
   }
+
+  private fun showLoginDialog(message: String) {
+    if (AppliverySdk.isContextAvailable()) {
+      val builder = AlertDialog.Builder(AppliverySdk.getCurrentActivity())
+      builder.setTitle(R.string.appliveryError)
+        .setCancelable(false)
+        .setMessage(message)
+        .setPositiveButton(
+          R.string.appliveryAcceptButton
+        ) { dialog, _ -> dialog.dismiss() }
+        .setNeutralButton(R.string.appliveryLogin) { dialog, _ -> dialog.dismiss() }
+        .show()
+    } else {
+      Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
+        .show()
+    }
+  }
+
+
 }

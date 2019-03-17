@@ -55,4 +55,10 @@ public class ErrorObject implements BusinessObject<ErrorObject> {
   public boolean isBusinessError() {
     return businessError;
   }
+
+  public int getBusinessCode() {
+    return businessCode;
+  }
+
+  public static final int UNAUTHORIZED_ERROR=4004;
 }
