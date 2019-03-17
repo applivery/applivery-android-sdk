@@ -87,7 +87,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
       }
       lastVersion = Integer.valueOf(android.getLastBuildVersion());
     } catch (NumberFormatException n) {
-      Log.e(TAG, "checkForUpdates()");
+      Log.e(TAG, "checkForUpdates() - value " + android.getLastBuildVersion());
     }
 
     UpdateType updateType =

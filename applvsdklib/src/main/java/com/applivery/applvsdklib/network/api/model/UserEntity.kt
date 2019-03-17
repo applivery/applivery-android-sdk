@@ -17,7 +17,7 @@ data class LoginEntity(
 }
 
 data class Payload(
-  @SerializedName("email")
+  @SerializedName("user")
   val email: String,
   @SerializedName("password")
   val password: String
