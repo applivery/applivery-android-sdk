@@ -23,7 +23,7 @@ import com.applivery.applvsdklib.domain.download.app.DownloadBuildInteractorCall
 import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
 import com.applivery.applvsdklib.domain.model.DownloadToken;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidExternalStorageWriterImpl;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateView;
@@ -34,11 +34,11 @@ import com.applivery.applvsdklib.ui.views.update.UpdateView;
  */
 public class ObtainBuildTokenInteractorCallback implements InteractorCallback<DownloadToken> {
 
-  private final AppliveryApiService apiService;
+  private final DownloadApiService apiService;
   private final String appName;
   private final UpdateView updateView;
 
-  public ObtainBuildTokenInteractorCallback(AppliveryApiService apiService, String appName,
+  public ObtainBuildTokenInteractorCallback(DownloadApiService apiService, String appName,
       UpdateView updateView) {
     this.apiService = apiService;
     this.appName = appName;

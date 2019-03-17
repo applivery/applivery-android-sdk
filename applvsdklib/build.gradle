@@ -66,12 +66,14 @@ android {
   buildTypes {
     debug {
       buildConfigField STRING, "API_URL", '"https://sdk-api-develop.sandbox.applivery.io"'
+      buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api-develop.sandbox.applivery.io"'
       testCoverageEnabled true
     }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       buildConfigField STRING, "API_URL", '"https://sdk-api-develop.sandbox.applivery.io"'
+      buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api-develop.sandbox.applivery.io"'
     }
   }
 

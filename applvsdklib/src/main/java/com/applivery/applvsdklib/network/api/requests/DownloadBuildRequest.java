@@ -22,7 +22,7 @@ import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.DownloadResult;
 import com.applivery.applvsdklib.domain.model.DownloadToken;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import java.io.InputStream;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -34,13 +34,13 @@ import retrofit2.Response;
  */
 public class DownloadBuildRequest extends ServerRequest {
 
-  private final AppliveryApiService apiService;
+  private final DownloadApiService apiService;
   private final DownloadToken token;
   private final DownloadStatusListener downloadStatusListener;
   private final ExternalStorageWriter externalStorageWriter;
   private final String appName;
 
-  public DownloadBuildRequest(AppliveryApiService apiService, DownloadToken token, String appName,
+  public DownloadBuildRequest(DownloadApiService apiService, DownloadToken token, String appName,
       DownloadStatusListener downloadStatusListener, ExternalStorageWriter externalStorageWriter) {
 
     this.externalStorageWriter = externalStorageWriter;
@@ -54,8 +54,7 @@ public class DownloadBuildRequest extends ServerRequest {
   @Override protected BusinessObject performRequest() {
     DownloadResult downloadResult = new DownloadResult(false);
 
-    Call<ResponseBody> response =
-        apiService.downloadBuild(token.getBuildId(), token.getDownloadToken());
+    Call<ResponseBody> response = apiService.downloadBuild(token.getDownloadToken());
 
     try {
       Response<ResponseBody> apiResponse = response.execute();

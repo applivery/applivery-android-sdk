@@ -27,6 +27,7 @@ import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
 import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.tools.session.SessionManager;
@@ -43,14 +44,17 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   private static final String TAG = "ObtainAppConfigICb";
   private final PackageInfo packageInfo;
   private final AppliveryApiService appliveryApiService;
+  private final DownloadApiService downloadApiService;
   private final SessionManager sessionManager;
   private final LastConfigWriter lastConfigWriter;
 
   public ObtainAppConfigInteractorCallback(AppliveryApiService appliveryApiService,
-      SessionManager sessionManager, PackageInfo packageInfo) {
+      DownloadApiService downloadApiService, SessionManager sessionManager,
+      PackageInfo packageInfo) {
     this.packageInfo = packageInfo;
     this.sessionManager = sessionManager;
     this.appliveryApiService = appliveryApiService;
+    this.downloadApiService = downloadApiService;
     this.lastConfigWriter = new AndroidLastConfigWriterImpl();
   }
 
@@ -141,6 +145,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   }
 
   private UpdateListener getUpdateListener(AppConfig appConfig) {
-    return new UpdateListenerImpl(appConfig, sessionManager, appliveryApiService);
+    return new UpdateListenerImpl(appConfig, sessionManager, appliveryApiService,
+        downloadApiService);
   }
 }

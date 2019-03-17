@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class DownloadTokenEntity(
-  @SerializedName("downloadToken")
+  @SerializedName("token")
   val downloadToken: String?,
   @SerializedName("expiresAt")
   val expiresAt: String?

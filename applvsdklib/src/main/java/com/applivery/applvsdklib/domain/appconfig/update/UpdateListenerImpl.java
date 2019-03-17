@@ -24,6 +24,7 @@ import com.applivery.applvsdklib.domain.download.token.ObtainAppBuildDownloadTok
 import com.applivery.applvsdklib.domain.download.token.ObtainBuildTokenInteractorCallback;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidAppInstallerImpl;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidExternalStorageReaderImpl;
 import com.applivery.applvsdklib.tools.session.SessionManager;
@@ -42,14 +43,16 @@ public class UpdateListenerImpl implements UpdateListener {
   private final AppConfig appConfig;
   private final SessionManager sessionManager;
   private final AppliveryApiService apiService;
+  private final DownloadApiService downloadApiService;
   private final ExternalStorageReader externalStorageReader;
   private UpdateView updateView;
 
   public UpdateListenerImpl(AppConfig appConfig, SessionManager sessionManager,
-      AppliveryApiService apiService) {
+      AppliveryApiService apiService, DownloadApiService downloadApiService) {
     this.appConfig = appConfig;
     this.sessionManager = sessionManager;
     this.apiService = apiService;
+    this.downloadApiService = downloadApiService;
     this.externalStorageReader = new AndroidExternalStorageReaderImpl();
   }
 
@@ -65,7 +68,8 @@ public class UpdateListenerImpl implements UpdateListener {
     String buildId = appConfig.getSdk().getAndroid().getLastBuildId();
     if (appBuildNotDownloaded(appConfig.getName() + "_" + buildId)) {
       InteractorCallback interactorCallback =
-          new ObtainBuildTokenInteractorCallback(apiService, appConfig.getName(), updateView);
+          new ObtainBuildTokenInteractorCallback(downloadApiService, appConfig.getName(),
+              updateView);
 
       Runnable r = ObtainAppBuildDownloadTokenInteractor.getInstance(apiService, buildId,
           interactorCallback);

@@ -30,6 +30,7 @@ import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
@@ -58,6 +59,7 @@ public class AppliverySdk {
   private static volatile String fileProviderAuthority;
   private static boolean lockedApp = false;
   private static volatile AppliveryApiService appliveryApiService;
+  private static volatile DownloadApiService downloadApiService;
   private static volatile boolean isDebugEnabled = BuildConfig.DEBUG;
   private static Context applicationContext;
   private static PermissionChecker permissionRequestManager;
@@ -158,6 +160,7 @@ public class AppliverySdk {
     AppliverySdk.applicationContext = applicationContext;
 
     AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance();
+    AppliverySdk.downloadApiService = AppliveryApiServiceBuilder.getDownloadApiServiceInstance();
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager =
         new AndroidPermissionCheckerImpl(AppliverySdk.activityLifecycle);
@@ -165,9 +168,10 @@ public class AppliverySdk {
 
   private static void obtainAppConfig(boolean requestConfig) {
     if (!isStoreRelease && requestConfig) {
-      getExecutor().execute(ObtainAppConfigInteractor.getInstance(appliveryApiService,
-          Injection.INSTANCE.provideSessionManager(),
-          AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext())));
+      getExecutor().execute(
+          ObtainAppConfigInteractor.getInstance(appliveryApiService, downloadApiService,
+              Injection.INSTANCE.provideSessionManager(),
+              AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext())));
     }
   }
 

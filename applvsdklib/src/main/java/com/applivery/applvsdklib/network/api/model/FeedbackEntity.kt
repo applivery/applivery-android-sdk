@@ -25,7 +25,7 @@ data class FeedbackEntity(
       DeviceInfoEntity.fromDeviceInfo(feedback.deviceInfo),
       feedback.message,
       PackageInfoEntity.fromPackageInfo(feedback.packageInfo),
-      "data:image/jpeg;base64," + feedback.screenshot,
+      "data:image/png;base64," + feedback.screenshot,
       feedback.type
     )
   }

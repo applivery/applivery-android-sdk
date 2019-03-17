@@ -161,8 +161,13 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   }
 
   private Boolean needLogin() {
-    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().getForceAuth();
-    return isAuthUpdate && !sessionManager.hasSession();
+    if (appConfig != null) {
+
+      Boolean isAuthUpdate = appConfig.getSdk().getAndroid().getForceAuth();
+      return isAuthUpdate && !sessionManager.hasSession();
+    }
+
+    return true;
   }
 
   @Override public void onSuccess(FeedbackResult businessObject) {
