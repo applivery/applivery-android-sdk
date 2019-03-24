@@ -18,6 +18,7 @@ package com.applivery.applvsdklib.network.api
 
 import com.applivery.applvsdklib.network.api.model.FeedbackEntity
 import com.applivery.applvsdklib.network.api.model.LoginEntity
+import com.applivery.applvsdklib.network.api.requests.BindUserRequest
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse
 import com.applivery.applvsdklib.network.api.responses.ApiBuildTokenResponse
 import com.applivery.applvsdklib.network.api.responses.ApiFeedbackResponse
@@ -42,6 +43,9 @@ interface AppliveryApiService {
   fun obtainBuildToken(@Path("build_id") buildId: String): Call<ApiBuildTokenResponse>
 
   @POST("$API_VERSION//auth/login")
-  fun makeLogin(@Body LoginEntity: LoginEntity): Call<ApiLoginResponse>
+  fun makeLogin(@Body loginEntity: LoginEntity): Call<ApiLoginResponse>
+
+  @POST("$API_VERSION//auth/check")
+  fun bindUser(@Body bindUserRequest: BindUserRequest): Call<ApiLoginResponse>
 }
 

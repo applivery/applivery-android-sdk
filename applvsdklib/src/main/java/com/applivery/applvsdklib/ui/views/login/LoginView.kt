@@ -18,7 +18,7 @@ class LoginView(private val activity: Activity, private val onSuccess: () -> Uni
   fun showLoginDialog() {
     val loginDialog = LoginDialog()
     loginDialog.listener = { username, password ->
-      presenter.makeLogin(UserData(username, password))
+      presenter.makeLogin(UserData(username = username, password = password))
     }
     loginDialog.show(activity.fragmentManager, "login_dialog")
   }

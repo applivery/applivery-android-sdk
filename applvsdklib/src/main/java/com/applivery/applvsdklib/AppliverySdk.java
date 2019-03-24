@@ -25,9 +25,14 @@ import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
+import com.applivery.applvsdklib.domain.login.BindUserInteractor;
+import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.domain.model.UserData;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
 import com.applivery.applvsdklib.network.api.DownloadApiService;
@@ -42,7 +47,11 @@ import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
+import java.util.Collection;
 import java.util.concurrent.Executor;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -325,28 +334,28 @@ public class AppliverySdk {
     return lockedApp;
   }
 
-  public static void disableShakeFeedback() {
+  static void disableShakeFeedback() {
     Validate.sdkInitialized();
     SensorEventsController sensorController =
         SensorEventsController.getInstance(applicationContext);
     sensorController.disableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
-  public static void enableShakeFeedback() {
+  static void enableShakeFeedback() {
     Validate.sdkInitialized();
     SensorEventsController sensorController =
         SensorEventsController.getInstance(applicationContext);
     sensorController.enableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
-  public static void disableScreenshotFeedback() {
+  static void disableScreenshotFeedback() {
     Validate.sdkInitialized();
     ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
     screenshotObserver.stopObserving();
     screenshotObserver.disableScreenshotObserver();
   }
 
-  public static void enableScreenshotFeedback() {
+  static void enableScreenshotFeedback() {
     Validate.sdkInitialized();
     ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
     screenshotObserver.enableScreenshotObserver();
@@ -354,6 +363,28 @@ public class AppliverySdk {
     if (activityLifecycle.isActivityContextAvailable()) {
       screenshotObserver.startObserving();
     }
+  }
+
+  static void bindUser(@NonNull String email, @Nullable String firstName, @Nullable String lastName,
+      @Nullable Collection<String> tags, final @Nullable BindUserCallback callback) {
+
+    BindUserInteractor bindUserInteractor = Injection.INSTANCE.provideBindUserInteractor();
+    UserData userData = new UserData(email, firstName, lastName, tags, "", "");
+    bindUserInteractor.bindUser(userData, new Function0<Unit>() {
+      @Override public Unit invoke() {
+        if (callback != null) {
+          callback.onSuccess();
+        }
+        return null;
+      }
+    }, new Function1<ErrorObject, Unit>() {
+      @Override public Unit invoke(ErrorObject errorObject) {
+        if (callback != null) {
+          callback.onError(errorObject.getMessage());
+        }
+        return null;
+      }
+    });
   }
 
   public static SharedPreferences getSharedPreferences() {
