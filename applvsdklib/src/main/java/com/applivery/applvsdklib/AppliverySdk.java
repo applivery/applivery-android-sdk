@@ -396,12 +396,18 @@ public class AppliverySdk {
 
     public static void log(String text) {
       if (debug) {
+        if (text == null) {
+          text = "Empty message";
+        }
         Log.d(TAG, text);
       }
     }
 
     public static void loge(String text) {
       if (debug) {
+        if (text == null) {
+          text = "Empty message";
+        }
         Log.e(TAG, text);
       }
     }

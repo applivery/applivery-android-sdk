@@ -45,7 +45,7 @@ interface AppliveryApiService {
   @POST("$API_VERSION//auth/login")
   fun makeLogin(@Body loginEntity: LoginEntity): Call<ApiLoginResponse>
 
-  @POST("$API_VERSION//auth/check")
+  @POST("$API_VERSION/auth/check")
   fun bindUser(@Body bindUserRequest: BindUserRequest): Call<ApiLoginResponse>
 }
 
