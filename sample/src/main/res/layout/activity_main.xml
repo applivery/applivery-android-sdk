@@ -114,6 +114,37 @@
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
+          android:layout_marginBottom="@dimen/spacing_normal"
+          android:layout_marginTop="@dimen/spacing_normal"
+          android:background="@color/secondary_text"
+          />
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/enable_screenshot_feedback"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/font_normal"
+            />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/screenshotSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            />
+      </LinearLayout>
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
           android:layout_marginTop="@dimen/spacing_normal"
           android:background="@color/secondary_text"
           />
