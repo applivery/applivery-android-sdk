@@ -19,10 +19,10 @@ package com.applivery.applvsdklib.network.api.requests;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.download.app.DownloadStatusListener;
 import com.applivery.applvsdklib.domain.download.app.ExternalStorageWriter;
-import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.DownloadResult;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.domain.model.DownloadToken;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import java.io.InputStream;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -34,13 +34,13 @@ import retrofit2.Response;
  */
 public class DownloadBuildRequest extends ServerRequest {
 
-  private final AppliveryApiService apiService;
-  private final BuildTokenInfo token;
+  private final DownloadApiService apiService;
+  private final DownloadToken token;
   private final DownloadStatusListener downloadStatusListener;
   private final ExternalStorageWriter externalStorageWriter;
   private final String appName;
 
-  public DownloadBuildRequest(AppliveryApiService apiService, BuildTokenInfo token, String appName,
+  public DownloadBuildRequest(DownloadApiService apiService, DownloadToken token, String appName,
       DownloadStatusListener downloadStatusListener, ExternalStorageWriter externalStorageWriter) {
 
     this.externalStorageWriter = externalStorageWriter;
@@ -54,7 +54,7 @@ public class DownloadBuildRequest extends ServerRequest {
   @Override protected BusinessObject performRequest() {
     DownloadResult downloadResult = new DownloadResult(false);
 
-    Call<ResponseBody> response = apiService.downloadBuild(token.getBuild(), token.getToken());
+    Call<ResponseBody> response = apiService.downloadBuild(token.getDownloadToken());
 
     try {
       Response<ResponseBody> apiResponse = response.execute();
@@ -62,7 +62,7 @@ public class DownloadBuildRequest extends ServerRequest {
       if (apiResponse.body() != null) {
         int lenght = Integer.parseInt(apiResponse.headers().get("Content-Length"));
         InputStream in = apiResponse.body().byteStream();
-        String apkFileName = appName + "_" + token.getBuild();
+        String apkFileName = appName + "_" + token.getBuildId();
 
         String path =
             externalStorageWriter.writeToFile(in, lenght, downloadStatusListener, apkFileName);

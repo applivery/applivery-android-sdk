@@ -16,22 +16,20 @@
 
 package com.applivery.applvsdklib.domain.model;
 
-import com.applivery.applvsdklib.network.api.responses.ApiAppliveryServerErrorResponse;
-
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 8/11/15.
  */
 public class ErrorObject implements BusinessObject<ErrorObject> {
 
-  private boolean businessError;
-  private String message;
-  private int businessCode;
+  private final boolean businessError;
+  private final String message;
+  private final int businessCode;
 
-  public ErrorObject(ApiAppliveryServerErrorResponse serverResponse) {
-    businessCode = serverResponse.getCode();
-    message = serverResponse.getMsg();
-    businessError = serverResponse.isBusinessError();
+  public ErrorObject(boolean businessError, String message, int businessCode) {
+    this.businessError = businessError;
+    this.message = message;
+    this.businessCode = businessCode;
   }
 
   public ErrorObject() {
@@ -57,4 +55,10 @@ public class ErrorObject implements BusinessObject<ErrorObject> {
   public boolean isBusinessError() {
     return businessError;
   }
+
+  public int getBusinessCode() {
+    return businessCode;
+  }
+
+  public static final int UNAUTHORIZED_ERROR=4004;
 }

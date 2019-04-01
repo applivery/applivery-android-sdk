@@ -22,7 +22,7 @@ import com.applivery.applvsdklib.ui.model.ScreenCapture;
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
  */
-public class UserFeedback implements Feedback {
+public class UserFeedback implements FeedbackInt {
 
   private FeedBackType feedBackType;
   private boolean screenshotAttached = true;

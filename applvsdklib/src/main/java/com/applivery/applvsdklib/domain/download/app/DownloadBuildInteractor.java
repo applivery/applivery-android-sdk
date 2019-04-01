@@ -19,11 +19,11 @@ package com.applivery.applvsdklib.domain.download.app;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.DownloadResult;
+import com.applivery.applvsdklib.domain.model.DownloadToken;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.network.api.requests.DownloadBuildRequest;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidAppInstallerImpl;
 
@@ -38,8 +38,8 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
   private final DownloadStatusListener downloadStatusListener;
   private final AppInstaller appInstaller;
 
-  private DownloadBuildInteractor(AppliveryApiService appliveryApiService, String appName,
-      BuildTokenInfo buildTokenInfo, final DownloadBuildInteractorCallback interactorCallback,
+  private DownloadBuildInteractor(DownloadApiService apiService, String appName,
+      DownloadToken downloadToken, final DownloadBuildInteractorCallback interactorCallback,
       ExternalStorageWriter externalStorageWriter) {
 
     this.downloadStatusListener = new DownloadStatusListener() {
@@ -57,8 +57,8 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
     };
 
     this.downloadBuildRequest =
-        new DownloadBuildRequest(appliveryApiService, buildTokenInfo, appName,
-            downloadStatusListener, externalStorageWriter);
+        new DownloadBuildRequest(apiService, downloadToken, appName, downloadStatusListener,
+            externalStorageWriter);
     this.interactorCallback = interactorCallback;
     this.appInstaller = new AndroidAppInstallerImpl(AppliverySdk.getApplicationContext(),
         AppliverySdk.getFileProviderAuthority());
@@ -87,11 +87,11 @@ public class DownloadBuildInteractor extends BaseInteractor<DownloadResult> {
     return downloadBuildRequest.execute();
   }
 
-  public static Runnable getInstance(AppliveryApiService appliveryApiService, String appName,
-      BuildTokenInfo buildTokenInfo, DownloadBuildInteractorCallback interactorCallback,
+  public static Runnable getInstance(DownloadApiService apiService, String appName,
+      DownloadToken downloadToken, DownloadBuildInteractorCallback interactorCallback,
       ExternalStorageWriter externalStorageWriter) {
 
-    return new DownloadBuildInteractor(appliveryApiService, appName, buildTokenInfo,
-        interactorCallback, externalStorageWriter);
+    return new DownloadBuildInteractor(apiService, appName, downloadToken, interactorCallback,
+        externalStorageWriter);
   }
 }

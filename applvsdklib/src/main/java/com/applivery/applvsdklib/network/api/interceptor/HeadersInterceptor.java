@@ -45,7 +45,7 @@ public class HeadersInterceptor implements Interceptor {
     return original.newBuilder()
         .url(chain.request().url())
         .addHeader("Accept-Language", Locale.getDefault().getLanguage())
-        .addHeader("x_sdk_version", "ANDROID_" + AppliverySdk.getVersionName())
+        .addHeader("x-sdk-version", "ANDROID_" + AppliverySdk.getVersionName())
         .addHeader("User-Agent", getUserAgent())
         .method(original.method(), original.body())
         .build();

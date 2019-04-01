@@ -4,24 +4,27 @@ import android.util.Log
 import com.applivery.applvsdklib.domain.model.ErrorObject
 import com.applivery.applvsdklib.domain.model.UserData
 import com.applivery.applvsdklib.network.api.AppliveryApiService
-import com.applivery.applvsdklib.network.api.model.ApiLogin
+import com.applivery.applvsdklib.network.api.model.LoginEntity
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.applvsdklib.tools.session.SessionManager
 
 class LoginInteractor(
-    private val interactorExecutor: InteractorExecutor,
-    private val mainThread: MainThread,
-    private val apiService: AppliveryApiService,
-    private val sessionManager: SessionManager) : Runnable {
+  private val interactorExecutor: InteractorExecutor,
+  private val mainThread: MainThread,
+  private val apiService: AppliveryApiService,
+  private val sessionManager: SessionManager
+) : Runnable {
 
   lateinit var userData: UserData
   lateinit var onSuccess: () -> Unit
   lateinit var onError: (error: ErrorObject) -> Unit
 
-  fun makeLogin(userData: UserData,
-      onSuccess: () -> Unit = {},
-      onError: (error: ErrorObject) -> Unit = {}) {
+  fun makeLogin(
+    userData: UserData,
+    onSuccess: () -> Unit = {},
+    onError: (error: ErrorObject) -> Unit = {}
+  ) {
 
     this.userData = userData
     this.onSuccess = onSuccess
@@ -34,10 +37,11 @@ class LoginInteractor(
 
     try {
       val apiLoginResponse = apiService.makeLogin(
-          ApiLogin(email = userData.username, password = userData.password)).execute().body()
+        LoginEntity.fromUserData(userData.username, userData.password)
+      ).execute().body()
 
       if (apiLoginResponse != null && apiLoginResponse.data != null) {
-        sessionManager.saveSession(apiLoginResponse.data.accessToken)
+        sessionManager.saveSession(apiLoginResponse.data.bearer)
         notifySuccess()
       } else {
         Log.e(TAG, "Make login response error")

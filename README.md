@@ -172,8 +172,7 @@ Applivery.checkForUpdates()
 ### About params
 
 - **app**: Your app instance.
-- **applicationId**: Your application's ID
-- **appClientToken**: Your developer's Api Key
+- **appToken**: Your app token from applivery dashboard
 - **isStoreRelease**: is the last param and the aim of this flag is to mark if the build will be submitted to Store. This is needed to prevent unwanted behavior like prompt to a final user that a new version is available on Applivery.com.
 	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
@@ -215,6 +214,13 @@ Applivery.disableScreenshotFeedback();
 ```java
 Applivery.enableShakeFeedback();
 Applivery.disableShakeFeedback();
+```
+
+### Bind user
+
+```java
+Applivery.bindUser(@NonNull String email, @Nullable String firstName,
+                @Nullable String lastName, @Nullable Collection<String> tags);
 ```
 
 ### Styling the UI

@@ -22,20 +22,16 @@ import com.applivery.applvsdklib.domain.exceptions.AppliverySdkNotInitializedExc
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import java.util.concurrent.Executor;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -46,33 +42,30 @@ import static org.mockito.Mockito.when;
  * Date 24/1/16.
  * //TODO, redesign test suite, right now is not really useful
  */
-@RunWith(MockitoJUnitRunner.class)
-public class AppliveryTest {
+@RunWith(MockitoJUnitRunner.class) public class AppliveryTest {
 
   @Mock Application app;
   @Mock Context context;
   @Mock Executor executor;
 
-  private String appId =  "kjkjfk9923ioiekj3qe9id";
-  private String clientId =  ".sfmkansdjnariqu3erijefncix";
+  private String appId = "kjkjfk9923ioiekj3qe9id";
+  private String clientId = ".sfmkansdjnariqu3erijefncix";
 
-  @Test
-  public void shouldInitializeAllVariblesInSdkWhenContextIsNotNull() {
+  @Test public void shouldInitializeAllVariblesInSdkWhenContextIsNotNull() {
     when(app.getApplicationContext()).thenReturn(context);
     AppliverySdk.setExecutor(executor);
 
-    Applivery.init(app, appId, clientId, false);
+    Applivery.init(app, clientId, false);
 
     try {
       assertThat(AppliverySdk.getApplicationContext(), instanceOf(Context.class));
-      assertThat(AppliverySdk.getToken(), is(clientId));
       assertThat(AppliverySdk.isStoreRelease(), is(false));
       assertThat(AppliverySdk.isInitialized(), is(true));
       assertNotNull(AppliverySdk.getPermissionRequestManager());
 
       AppliverySdk.cleanAllStatics();
-    }catch (AppliverySdkNotInitializedException s){
-        assertNotNull(s);
+    } catch (AppliverySdkNotInitializedException s) {
+      assertNotNull(s);
     }
   }
 
@@ -81,53 +74,48 @@ public class AppliveryTest {
     when(app.getApplicationContext()).thenReturn(context);
     AppliverySdk.setExecutor(executor);
 
-    Applivery.init(app, appId, clientId, false);
+    Applivery.init(app, clientId, false);
     AppliverySdk.cleanAllStatics();
 
     assertNull(AppliverySdk.getApplicationContext());
   }
 
-  @Test
-  public void shouldThrowExceptionWhenContextIsNull() {
+  @Test public void shouldThrowExceptionWhenContextIsNull() {
     when(app.getApplicationContext()).thenReturn(null);
-    Applivery.init(app, appId, clientId, false);
+    Applivery.init(app, clientId, false);
   }
 
-
-  @Test
-  public void shouldNotInitializeSdkTwice() {
+  @Test public void shouldNotInitializeSdkTwice() {
     Application mockApp = mock(Application.class);
     when(app.getApplicationContext()).thenReturn(context);
     AppliverySdk.setExecutor(executor);
 
-    Applivery.init(app, appId, clientId, false);
-    Applivery.init(mockApp, appId, clientId, false);
+    Applivery.init(app, clientId, false);
+    Applivery.init(mockApp, clientId, false);
     verify(mockApp, never()).getApplicationContext();
 
     AppliverySdk.cleanAllStatics();
   }
 
-  @Test
-  public void shouldNotHaveForegroundActivityInjUnitContext() {
+  @Test public void shouldNotHaveForegroundActivityInjUnitContext() {
     when(app.getApplicationContext()).thenReturn(context);
     AppliverySdk.setExecutor(executor);
 
     try {
-      Applivery.init(app, appId, clientId, false);
+      Applivery.init(app, clientId, false);
       assertFalse(AppliverySdk.isContextAvailable());
-    }catch (AppliverySdkNotInitializedException s){
+    } catch (AppliverySdkNotInitializedException s) {
       assertNotNull(s);
     }
 
-    try{
+    try {
       AppliverySdk.getCurrentActivity();
-    }catch (NotForegroundActivityAvailable na){
+    } catch (NotForegroundActivityAvailable na) {
       assertNotNull(na);
-    }catch (AppliverySdkNotInitializedException s){
+    } catch (AppliverySdkNotInitializedException s) {
       assertNotNull(s);
     }
 
     AppliverySdk.cleanAllStatics();
   }
-
 }

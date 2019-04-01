@@ -1,5 +1,5 @@
 package com.applivery.applvsdklib.network.api.responses
 
-class ApiLoginResponse : ServerResponse<ApiAccessToken>()
+import com.applivery.applvsdklib.network.api.model.UserDataEntity
 
-data class ApiAccessToken(val accessToken: String = "")
+class ApiLoginResponse : ServerResponse<UserDataEntity>()

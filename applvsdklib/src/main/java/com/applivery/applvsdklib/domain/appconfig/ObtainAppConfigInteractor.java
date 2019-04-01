@@ -18,11 +18,12 @@ package com.applivery.applvsdklib.domain.appconfig;
 
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.network.api.requests.ObtainAppConfigRequest;
 import com.applivery.applvsdklib.tools.session.SessionManager;
 
@@ -35,11 +36,13 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
   private final ObtainAppConfigRequest obtainAppConfigRequest;
   private final InteractorCallback appConfigInteractorCallback;
 
-  private ObtainAppConfigInteractor(AppliveryApiService apiService, SessionManager sessionManager,
-      String appId, String authToken, CurrentAppInfo currentAppInfo) {
-    this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService, appId, authToken);
+  private ObtainAppConfigInteractor(AppliveryApiService apiService,
+      DownloadApiService downloadApiService, SessionManager sessionManager,
+      PackageInfo packageInfo) {
+    this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService);
     this.appConfigInteractorCallback =
-        new ObtainAppConfigInteractorCallback(apiService, sessionManager, currentAppInfo);
+        new ObtainAppConfigInteractorCallback(apiService, downloadApiService, sessionManager,
+            packageInfo);
   }
 
   @Override protected void receivedResponse(BusinessObject obj) {
@@ -59,10 +62,10 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
   }
 
   public static Runnable getInstance(AppliveryApiService appliveryApiService,
-      SessionManager sessionManager, String applicationId, String authToken,
-      CurrentAppInfo currentAppInfo) {
+      DownloadApiService downloadApiService, SessionManager sessionManager,
+      PackageInfo packageInfo) {
 
-    return new ObtainAppConfigInteractor(appliveryApiService, sessionManager, applicationId,
-        authToken, currentAppInfo);
+    return new ObtainAppConfigInteractor(appliveryApiService, downloadApiService, sessionManager,
+        packageInfo);
   }
 }

@@ -18,8 +18,8 @@ package com.applivery.applvsdklib.domain.download.token;
 
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.domain.model.BuildTokenInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
+import com.applivery.applvsdklib.domain.model.DownloadToken;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.ObtainBuildDownloadTokenRequest;
@@ -28,13 +28,13 @@ import com.applivery.applvsdklib.network.api.requests.ObtainBuildDownloadTokenRe
  * Created by Sergio Martinez Rodriguez
  * Date 9/1/16.
  */
-public class ObtainAppBuildDownloadTokenInteractor extends BaseInteractor<BuildTokenInfo> {
+public class ObtainAppBuildDownloadTokenInteractor extends BaseInteractor<DownloadToken> {
 
   private final ObtainBuildDownloadTokenRequest obtainBuildDownloadTokenRequest;
-  private final InteractorCallback<BuildTokenInfo> infoInteractorCallback;
+  private final InteractorCallback<DownloadToken> infoInteractorCallback;
 
   private ObtainAppBuildDownloadTokenInteractor(AppliveryApiService appliveryApiService,
-      String buildId, InteractorCallback<BuildTokenInfo> infoInteractorCallback) {
+      String buildId, InteractorCallback<DownloadToken> infoInteractorCallback) {
 
     this.obtainBuildDownloadTokenRequest =
         new ObtainBuildDownloadTokenRequest(appliveryApiService, buildId);
@@ -42,14 +42,14 @@ public class ObtainAppBuildDownloadTokenInteractor extends BaseInteractor<BuildT
   }
 
   @Override protected void receivedResponse(BusinessObject obj) {
-    super.receivedResponse(obj, BuildTokenInfo.class);
+    super.receivedResponse(obj, DownloadToken.class);
   }
 
   @Override protected void error(ErrorObject serverResponse) {
     infoInteractorCallback.onError(serverResponse);
   }
 
-  @Override protected void success(BuildTokenInfo response) {
+  @Override protected void success(DownloadToken response) {
     infoInteractorCallback.onSuccess(response);
   }
 

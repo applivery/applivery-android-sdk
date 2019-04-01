@@ -35,6 +35,9 @@ import android.view.Display;
 import android.view.WindowManager;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.feedback.DeviceDetailsInfo;
+import com.applivery.applvsdklib.domain.model.Device;
+import com.applivery.applvsdklib.domain.model.DeviceInfo;
+import com.applivery.applvsdklib.domain.model.Os;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -64,6 +67,23 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
   private static final String ORIENTATION_PORTRAIT = "portrait";
   private static final String ORIENTATION_LANDSCAPE = "landscape";
 
+  public DeviceInfo getDeviceInfo() {
+    return new DeviceInfo(getDevice(), getOs());
+  }
+
+  private Device getDevice() {
+
+    Context context = AppliverySdk.getApplicationContext();
+
+    return new Device(getBatteryPercentage(), isBatteryCharging(), getFreeDiskPercentage(),
+        getModel(), getNetworkType(context), getScreenOrientation(), getTotalRam(), getUsedRam(),
+        getScreenResolution(), getDeviceType(), getVendor());
+  }
+
+  private Os getOs() {
+    return new Os(getOsName(), getOsversion());
+  }
+
   @Override public String getOsName() {
     return ANDROID;
   }
@@ -74,8 +94,8 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
 
   @Override public String getModel() {
     String model = Build.MODEL;
-    if (model.contains(Build.MANUFACTURER+" ")){
-      return model.replace(Build.MANUFACTURER+" ", "");
+    if (model.contains(Build.MANUFACTURER + " ")) {
+      return model.replace(Build.MANUFACTURER + " ", "");
     } else {
       return model;
     }
@@ -89,9 +109,9 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
     isTablet = (context.getResources().getConfiguration().screenLayout
         & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
 
-    if (isTablet){
+    if (isTablet) {
       return TABLET;
-    } else{
+    } else {
       return MOBILE;
     }
   }
@@ -186,7 +206,7 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
       int pids[] = new int[1];
       pids[0] = pid;
       android.os.Debug.MemoryInfo[] memoryInfoArray = activityManager.getProcessMemoryInfo(pids);
-      for (android.os.Debug.MemoryInfo pidMemoryInfo: memoryInfoArray) {
+      for (android.os.Debug.MemoryInfo pidMemoryInfo : memoryInfoArray) {
         totalAppMemory += pidMemoryInfo.getTotalPss();
       }
     }
@@ -197,8 +217,7 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
   }
 
   @Override public String getTotalRam() {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-        ? getTotalMemory()
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? getTotalMemory()
         : getTotalMemoryForOlderDevices();
   }
 
@@ -228,8 +247,7 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
     String screenOrientation;
 
     int orientation = context.getResources().getConfiguration().orientation;
-    screenOrientation = (orientation == Configuration.ORIENTATION_LANDSCAPE)
-        ? ORIENTATION_LANDSCAPE
+    screenOrientation = (orientation == Configuration.ORIENTATION_LANDSCAPE) ? ORIENTATION_LANDSCAPE
         : ORIENTATION_PORTRAIT;
 
     return screenOrientation;
@@ -285,8 +303,7 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
     return cm.getActiveNetworkInfo();
   }
 
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-  private String getTotalMemory() {
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN) private String getTotalMemory() {
     Context context = AppliverySdk.getApplicationContext();
     ActivityManager activityManager =
         (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

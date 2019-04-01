@@ -31,7 +31,7 @@ public abstract class BaseMapper<Model extends BusinessObject, Data> {
     if (serverResponse.getStatus() == true) {
       return mapBusinessObject(serverResponse.getData());
     } else {
-      return new ErrorObject(serverResponse.getError());
+      return serverResponse.getError().toErrorObject();
     }
   }
 

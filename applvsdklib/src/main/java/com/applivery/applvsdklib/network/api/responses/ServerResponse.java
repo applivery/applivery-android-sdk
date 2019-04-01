@@ -16,15 +16,16 @@
 
 package com.applivery.applvsdklib.network.api.responses;
 
+import com.applivery.applvsdklib.network.api.model.ErrorEntity;
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("UnusedDeclaration") public class ServerResponse<JsonObject> {
 
   @SerializedName("status") private boolean status;
 
-  @SerializedName("response") private JsonObject data;
+  @SerializedName("data") private JsonObject data;
 
-  @SerializedName("error") private ApiAppliveryServerErrorResponse error;
+  @SerializedName("error") private ErrorEntity error;
 
   private int httpCode;
 
@@ -32,11 +33,11 @@ import com.google.gson.annotations.SerializedName;
     this.httpCode = httpCode;
   }
 
-  public ApiAppliveryServerErrorResponse getError() {
+  public ErrorEntity getError() {
     return error;
   }
 
-  public void setError(ApiAppliveryServerErrorResponse error) {
+  public void setError(ErrorEntity error) {
     this.error = error;
   }
 

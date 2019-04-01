@@ -19,14 +19,15 @@ package com.applivery.applvsdklib.domain.appconfig;
 import android.util.Log;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
 import com.applivery.applvsdklib.domain.appconfig.update.LastConfigWriter;
 import com.applivery.applvsdklib.domain.appconfig.update.UpdateListenerImpl;
 import com.applivery.applvsdklib.domain.appconfig.update.UpdateType;
 import com.applivery.applvsdklib.domain.model.Android;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
 import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.tools.session.SessionManager;
@@ -41,16 +42,19 @@ import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
 public class ObtainAppConfigInteractorCallback implements InteractorCallback<AppConfig> {
 
   private static final String TAG = "ObtainAppConfigICb";
-  private final CurrentAppInfo currentAppInfo;
+  private final PackageInfo packageInfo;
   private final AppliveryApiService appliveryApiService;
+  private final DownloadApiService downloadApiService;
   private final SessionManager sessionManager;
   private final LastConfigWriter lastConfigWriter;
 
   public ObtainAppConfigInteractorCallback(AppliveryApiService appliveryApiService,
-      SessionManager sessionManager, CurrentAppInfo currentAppInfo) {
-    this.currentAppInfo = currentAppInfo;
+      DownloadApiService downloadApiService, SessionManager sessionManager,
+      PackageInfo packageInfo) {
+    this.packageInfo = packageInfo;
     this.sessionManager = sessionManager;
     this.appliveryApiService = appliveryApiService;
+    this.downloadApiService = downloadApiService;
     this.lastConfigWriter = new AndroidLastConfigWriterImpl();
   }
 
@@ -73,9 +77,9 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     long minVersion = -1;
     long lastVersion = -1;
 
-    long currentVersion = currentAppInfo.getVersionCode();
-    boolean forceUpdate = android.isForceUpdate();
-    boolean ota = android.isOta();
+    long currentVersion = packageInfo.getVersion();
+    boolean forceUpdate = android.getForceUpdate();
+    boolean ota = android.getOta();
 
     try {
       if (forceUpdate) {
@@ -83,7 +87,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
       }
       lastVersion = Integer.valueOf(android.getLastBuildVersion());
     } catch (NumberFormatException n) {
-      Log.e(TAG, "checkForUpdates()", n);
+      Log.e(TAG, "checkForUpdates() - value " + android.getLastBuildVersion());
     }
 
     UpdateType updateType =
@@ -127,12 +131,12 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
       AppConfig appConfig) {
     switch (updateType) {
       case FORCED_UPDATE:
-        updateViewPresenter.showForcedUpdate(appConfig.getName(),
-            appConfig.getSdk().getAndroid().getMustUpdateMsg());
+        //TODO add update msg
+        updateViewPresenter.showForcedUpdate(appConfig.getName(), "");
         break;
       case SUGGESTED_UPDATE:
-        updateViewPresenter.showSuggestedUpdate(appConfig.getName(),
-            appConfig.getSdk().getAndroid().getUpdateMsg());
+        //TODO add update msg
+        updateViewPresenter.showSuggestedUpdate(appConfig.getName(), "TODO");
         break;
       case NO_UPDATE:
       default:
@@ -141,6 +145,7 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
   }
 
   private UpdateListener getUpdateListener(AppConfig appConfig) {
-    return new UpdateListenerImpl(appConfig, sessionManager, appliveryApiService);
+    return new UpdateListenerImpl(appConfig, sessionManager, appliveryApiService,
+        downloadApiService);
   }
 }
