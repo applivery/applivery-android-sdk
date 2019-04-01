@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 
 class SessionManagerImp(private val sharedPreferences: SharedPreferences) : SessionManager {
 
-  private val TOKEN_KEY = "token_key"
   private var token = ""
 
   @SuppressLint("ApplySharedPref")
@@ -20,7 +19,7 @@ class SessionManagerImp(private val sharedPreferences: SharedPreferences) : Sess
     return if (token.isNotEmpty()) {
       token
     } else {
-      sharedPreferences.getString(TOKEN_KEY, "")
+      sharedPreferences.getString(TOKEN_KEY, "") ?: ""
     }
   }
 
@@ -30,7 +29,11 @@ class SessionManagerImp(private val sharedPreferences: SharedPreferences) : Sess
   override fun clearSession() {
     token = ""
     val editor = sharedPreferences.edit()
-    editor?.putString(TOKEN_KEY, token)
+    editor?.remove(TOKEN_KEY)
     editor?.commit()
+  }
+
+  companion object {
+    private const val TOKEN_KEY = "token_key"
   }
 }

@@ -140,4 +140,16 @@ public class Applivery {
       final @Nullable BindUserCallback callback) {
     AppliverySdk.bindUser(email, firstName, lastName, tags, callback);
   }
+
+  /**
+   * Logout a previously binded user
+   *
+   * Programatically logout a user in Applivery from a previous custom login.
+   *
+   * - Since: 3.0
+   * - Version: 3.0
+   */
+  public static void unbindUser() {
+    AppliverySdk.unbindUser();
+  }
 }

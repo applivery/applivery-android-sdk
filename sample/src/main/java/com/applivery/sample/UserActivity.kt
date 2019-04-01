@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_user.firstNameEditText
 import kotlinx.android.synthetic.main.activity_user.lastNameEditText
 import kotlinx.android.synthetic.main.activity_user.tagsEditText
 import kotlinx.android.synthetic.main.activity_user.toolbar
+import kotlinx.android.synthetic.main.activity_user.unBindUserButton
 
 
 class UserActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class UserActivity : AppCompatActivity() {
     toolbar.setNavigationOnClickListener { onBackPressed() }
 
     bindUserButton.setOnClickListener { bindUser() }
+    unBindUserButton.setOnClickListener { Applivery.unbindUser() }
   }
 
   private fun bindUser() {

@@ -112,5 +112,13 @@
         android:text="@string/bind_user"
         />
 
+    <Button
+        android:id="@+id/unBindUserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal"
+        android:text="@string/unbind_user"
+        />
+
   </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

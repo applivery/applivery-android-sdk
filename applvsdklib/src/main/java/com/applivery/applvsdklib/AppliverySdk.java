@@ -31,6 +31,7 @@ import android.util.Log;
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.domain.login.BindUserInteractor;
+import com.applivery.applvsdklib.domain.login.UnBindUserInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.UserData;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
@@ -382,6 +383,19 @@ public class AppliverySdk {
         if (callback != null) {
           callback.onError(errorObject.getMessage());
         }
+        return null;
+      }
+    });
+  }
+
+  static void unbindUser() {
+    UnBindUserInteractor unBindUserInteractor = Injection.INSTANCE.provideUnBindUserInteractor();
+    unBindUserInteractor.unBindUser(new Function0<Unit>() {
+      @Override public Unit invoke() {
+        return null;
+      }
+    }, new Function1<ErrorObject, Unit>() {
+      @Override public Unit invoke(ErrorObject errorObject) {
         return null;
       }
     });
