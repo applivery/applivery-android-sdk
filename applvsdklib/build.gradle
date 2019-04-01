@@ -52,7 +52,6 @@ def BOOLEAN = "Boolean"
 
 android {
   compileSdkVersion parent.ext.androidCompileSdkVersion
-  buildToolsVersion parent.ext.androidBuildToolsVersion
 
   defaultConfig {
     minSdkVersion parent.ext.androidMinSdkVersion

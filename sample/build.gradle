@@ -7,7 +7,6 @@ def STRING = "String"
 
 android {
   compileSdkVersion parent.ext.androidCompileSdkVersion
-  buildToolsVersion parent.ext.androidBuildToolsVersion
 
   defaultConfig {
     applicationId "com.applivery.sample"
