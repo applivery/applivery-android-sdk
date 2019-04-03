@@ -41,7 +41,7 @@ allprojects {
   ext {
 
     group = 'com.applivery'
-    version = '2.6.5'
+    version = '3.0.0'
 
     androidMinSdkVersion = 14
     androidTargetSdkVersion = 28
