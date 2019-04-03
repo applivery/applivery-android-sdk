@@ -29,6 +29,6 @@ public class ImageUtils {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     screenShot.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
     byte[] byteArray = byteArrayOutputStream .toByteArray();
-    return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    return Base64.encodeToString(byteArray, Base64.NO_WRAP);
   }
 }

@@ -40,28 +40,20 @@ With Applivery you can massively distribute your Android Apps (both Ad-hoc or In
 
 ## Getting Started
 
-First of all, you should create an account on [Applivery.com](https://dashboard.applivery.com/register) and then add a new Application.
-
+First of all, you should create an account on [Applivery.io](https://dashboard.applivery.io/) and then add a new Application.
 
 ### Get your credentials
 
-**SDK API KEY**: that identifies and grants access to your account in order to use the SDK.
+**APP TOKEN**: that identifies and grants access to your app in order to use the SDK.
 
-You can get your SDK API KEY in the `Developers` section (left side menu).
-
-![Developers section](https://raw.githubusercontent.com/applivery/applivery-ios-sdk/master/documentation/developers_section.png)
-
-**APP ID**: Is your application identifier. You can find it in the App details, going to `Applications` -> Click desired App -> (i) Box
-
-![APP ID](https://raw.githubusercontent.com/applivery/applivery-ios-sdk/master/documentation/application_id.png)
-
+You can get your APP TOKEN in the `Settings` section.
 
 ## SDK Installation
 
 ## Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-implementation 'com.applivery:applvsdklib:2.6.5'
+implementation 'com.applivery:applvsdklib:3.0.0'
 ```
 
 ## Gradle with JitPack Maven dependency
@@ -82,7 +74,7 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v2.6.5'
+      compile 'com.github.Applivery:applivery-android-sdk:v3.0.0'
     }
   ```
 
@@ -93,7 +85,7 @@ Add the following dependency to your app gradle:
 add the following dependency to your app gradle:
 
  ```groovy
-  compile 'com.applivery:applvsdklib:2.6.5'
+  compile 'com.applivery:applivery-android-sdk:3.0.0'
  ```
 
 ## Downloading source code
@@ -149,7 +141,7 @@ At your application startup, in a class extending from `Application`, you must c
  public class AppliveryApplication extends Application{
 	 @Override public void onCreate() {
 	   super.onCreate();
-	   Applivery.init(this, BuildConfig.APP_ID, BuildConfig.ACCOUNT_API_KEY, false);
+	   Applivery.init(this, BuildConfig.APP_TOKEN, false);
 	   Applivery.setUpdateCheckingInterval(21600);
 	 }
  }
@@ -157,11 +149,11 @@ At your application startup, in a class extending from `Application`, you must c
  
 After that make sure to call the following Applivery public methods:
  ```java
-Applivery.init(this, BuildConfig.APP_ID, BuildConfig.ACCOUNT_API_KEY, false);
+Applivery.init(this, BuildConfig.APP_TOKEN, false);
  ```
 This method is intended to initialize the Applivery SDK. The only thing you have to take care about is that this call **MUST** be performed in App's `onCreate()` Method.
  
-**IMPORTANT:** As you can suspect, you should replace the strings `ACCOUNT_API_KEY` and `APP_ID` with you API Key and your App ID respectively. Easy! Don't you think so?
+**IMPORTANT:** As you can suspect, you should replace the strings `APP_TOKEN` with you app token. Easy! Don't you think so?
  
 ### Step 2
 Once initialized the SDK and **once your App is stable in the Home Screen** you have to call proactivelly the following method in order to check for new updates:
@@ -172,8 +164,7 @@ Applivery.checkForUpdates()
 ### About params
 
 - **app**: Your app instance.
-- **applicationId**: Your application's ID
-- **appClientToken**: Your developer's Api Key
+- **appToken**: Your app token from applivery dashboard
 - **isStoreRelease**: is the last param and the aim of this flag is to mark if the build will be submitted to Store. This is needed to prevent unwanted behavior like prompt to a final user that a new version is available on Applivery.com.
 	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
@@ -215,6 +206,24 @@ Applivery.disableScreenshotFeedback();
 ```java
 Applivery.enableShakeFeedback();
 Applivery.disableShakeFeedback();
+```
+
+### Bind user
+
+Programatically login a user in Applivery, for example if the app has a custom login and don't 
+want to use Applivery's authentication to track the user in the platform
+
+```java
+Applivery.bindUser(@NonNull String email, @Nullable String firstName,
+                @Nullable String lastName, @Nullable Collection<String> tags);
+```
+
+### Unbind user
+
+Logout a previously binded user
+
+```java
+Applivery.unbindUser();
 ```
 
 ### Styling the UI
@@ -267,7 +276,7 @@ We would like to mention every open source lib authors:
 * Thank's to [Karumi](http://www.karumi.com/) for his great contributions to developers community in general. We are using [Dexter](https://github.com/Karumi/Dexter) from Karumi as well.
 
 # License
-Copyright (C) 2018 Applivery
+Copyright (C) 2019 Applivery
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

@@ -16,11 +16,11 @@
 
 package com.applivery.applvsdklib.network.api.responses;
 
-import com.applivery.applvsdklib.network.api.model.ApiBuildTokenData;
+import com.applivery.applvsdklib.network.api.model.DownloadTokenEntity;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
-public class ApiBuildTokenResponse extends ServerResponse<ApiBuildTokenData> {
+public class ApiBuildTokenResponse extends ServerResponse<DownloadTokenEntity> {
 }

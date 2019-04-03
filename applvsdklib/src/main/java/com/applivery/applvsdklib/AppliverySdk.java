@@ -25,11 +25,18 @@ import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
+import com.applivery.applvsdklib.domain.login.BindUserInteractor;
+import com.applivery.applvsdklib.domain.login.UnBindUserInteractor;
+import com.applivery.applvsdklib.domain.model.ErrorObject;
+import com.applivery.applvsdklib.domain.model.UserData;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
+import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
@@ -41,7 +48,11 @@ import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
+import java.util.Collection;
 import java.util.concurrent.Executor;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -53,12 +64,12 @@ public class AppliverySdk {
   // TODO Hold static reference only to AppliverySdk object and wrap smaller objects inside
   private static final String TAG = AppliverySdk.class.getCanonicalName();
   private static volatile Executor executor;
-  private static volatile String applicationId;
-  private static volatile String appClientToken;
+  private static volatile String appToken;
   private static boolean isStoreRelease = false;
   private static volatile String fileProviderAuthority;
   private static boolean lockedApp = false;
   private static volatile AppliveryApiService appliveryApiService;
+  private static volatile DownloadApiService downloadApiService;
   private static volatile boolean isDebugEnabled = BuildConfig.DEBUG;
   private static Context applicationContext;
   private static PermissionChecker permissionRequestManager;
@@ -73,11 +84,11 @@ public class AppliverySdk {
   private static Boolean isUpdating = false;
   private static SharedPreferences sharedPreferences;
 
-  public static synchronized void sdkInitialize(Application app, String applicationId,
-      String appClientToken, boolean isStoreRelease) {
+  public static synchronized void sdkInitialize(Application app, String appToken,
+      boolean isStoreRelease) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-      init(app, applicationId, appClientToken, isStoreRelease);
+      init(app, appToken, isStoreRelease);
     } else {
       Logger.log(
           "Despite Applivery SDK compiles from API level 10 and forward, it is not compatible for API levels under 14");
@@ -85,15 +96,14 @@ public class AppliverySdk {
   }
 
   @TargetApi(14)
-  private static void init(Application app, String applicationId, String appClientToken,
-      boolean isStoreRelease) {
+  private static void init(Application app, String appToken, boolean isStoreRelease) {
     if (!sdkInitialized) {
 
       sdkFirstTime = true;
       sdkRestarted = true;
       sdkInitialized = true;
 
-      initializeAppliveryConstants(app, applicationId, appClientToken, isStoreRelease);
+      initializeAppliveryConstants(app, appToken, isStoreRelease);
 
       boolean requestConfig;
 
@@ -141,8 +151,8 @@ public class AppliverySdk {
     return isUpdating;
   }
 
-  private static void initializeAppliveryConstants(Application app, String applicationId,
-      String appClientToken, boolean isStoreRelease) {
+  private static void initializeAppliveryConstants(Application app, String appToken,
+      boolean isStoreRelease) {
 
     AppliverySdk.sharedPreferences = app.getSharedPreferences("applivery", Context.MODE_PRIVATE);
 
@@ -152,8 +162,7 @@ public class AppliverySdk {
     Validate.hasInternetPermissions(applicationContext, false);
     //endregion
 
-    AppliverySdk.applicationId = applicationId;
-    AppliverySdk.appClientToken = appClientToken;
+    AppliverySdk.appToken = appToken;
     AppliverySdk.isStoreRelease = isStoreRelease;
 
     AppliverySdk.fileProviderAuthority = composeFileProviderAuthority(app);
@@ -161,6 +170,7 @@ public class AppliverySdk {
     AppliverySdk.applicationContext = applicationContext;
 
     AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance();
+    AppliverySdk.downloadApiService = AppliveryApiServiceBuilder.getDownloadApiServiceInstance();
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager =
         new AndroidPermissionCheckerImpl(AppliverySdk.activityLifecycle);
@@ -168,9 +178,10 @@ public class AppliverySdk {
 
   private static void obtainAppConfig(boolean requestConfig) {
     if (!isStoreRelease && requestConfig) {
-      getExecutor().execute(ObtainAppConfigInteractor.getInstance(appliveryApiService,
-          Injection.INSTANCE.provideSessionManager(), AppliverySdk.applicationId,
-          AppliverySdk.appClientToken, new AndroidCurrentAppInfo(applicationContext)));
+      getExecutor().execute(
+          ObtainAppConfigInteractor.getInstance(appliveryApiService, downloadApiService,
+              Injection.INSTANCE.provideSessionManager(),
+              AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext())));
     }
   }
 
@@ -178,9 +189,9 @@ public class AppliverySdk {
     return application.getPackageName() + ".provider";
   }
 
-  public static String getApplicationId() {
+  public static String getAppToken() {
     Validate.sdkInitialized();
-    return applicationId;
+    return appToken;
   }
 
   public static Executor getExecutor() {
@@ -247,11 +258,6 @@ public class AppliverySdk {
     obtainAppConfig(true);
   }
 
-  public static String getToken() {
-    Validate.sdkInitialized();
-    return appClientToken;
-  }
-
   public static String getVersionName() {
     Validate.sdkInitialized();
     return appliverySdkVersionName;
@@ -273,7 +279,7 @@ public class AppliverySdk {
   public static void cleanAllStatics() {
     appliveryApiService = null;
     executor = null;
-    applicationId = appClientToken = null;
+    appToken = null;
     isStoreRelease = isDebugEnabled = sdkInitialized = false;
     applicationContext = null;
     permissionRequestManager = null;
@@ -329,28 +335,28 @@ public class AppliverySdk {
     return lockedApp;
   }
 
-  public static void disableShakeFeedback() {
+  static void disableShakeFeedback() {
     Validate.sdkInitialized();
     SensorEventsController sensorController =
         SensorEventsController.getInstance(applicationContext);
     sensorController.disableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
-  public static void enableShakeFeedback() {
+  static void enableShakeFeedback() {
     Validate.sdkInitialized();
     SensorEventsController sensorController =
         SensorEventsController.getInstance(applicationContext);
     sensorController.enableSensor(Sensor.TYPE_ACCELEROMETER);
   }
 
-  public static void disableScreenshotFeedback() {
+  static void disableScreenshotFeedback() {
     Validate.sdkInitialized();
     ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
     screenshotObserver.stopObserving();
     screenshotObserver.disableScreenshotObserver();
   }
 
-  public static void enableScreenshotFeedback() {
+  static void enableScreenshotFeedback() {
     Validate.sdkInitialized();
     ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
     screenshotObserver.enableScreenshotObserver();
@@ -358,6 +364,41 @@ public class AppliverySdk {
     if (activityLifecycle.isActivityContextAvailable()) {
       screenshotObserver.startObserving();
     }
+  }
+
+  static void bindUser(@NonNull String email, @Nullable String firstName, @Nullable String lastName,
+      @Nullable Collection<String> tags, final @Nullable BindUserCallback callback) {
+
+    BindUserInteractor bindUserInteractor = Injection.INSTANCE.provideBindUserInteractor();
+    UserData userData = new UserData(email, firstName, lastName, tags, "", "");
+    bindUserInteractor.bindUser(userData, new Function0<Unit>() {
+      @Override public Unit invoke() {
+        if (callback != null) {
+          callback.onSuccess();
+        }
+        return null;
+      }
+    }, new Function1<ErrorObject, Unit>() {
+      @Override public Unit invoke(ErrorObject errorObject) {
+        if (callback != null) {
+          callback.onError(errorObject.getMessage());
+        }
+        return null;
+      }
+    });
+  }
+
+  static void unbindUser() {
+    UnBindUserInteractor unBindUserInteractor = Injection.INSTANCE.provideUnBindUserInteractor();
+    unBindUserInteractor.unBindUser(new Function0<Unit>() {
+      @Override public Unit invoke() {
+        return null;
+      }
+    }, new Function1<ErrorObject, Unit>() {
+      @Override public Unit invoke(ErrorObject errorObject) {
+        return null;
+      }
+    });
   }
 
   public static SharedPreferences getSharedPreferences() {
@@ -369,12 +410,18 @@ public class AppliverySdk {
 
     public static void log(String text) {
       if (debug) {
+        if (text == null) {
+          text = "Empty message";
+        }
         Log.d(TAG, text);
       }
     }
 
     public static void loge(String text) {
       if (debug) {
+        if (text == null) {
+          text = "Empty message";
+        }
         Log.e(TAG, text);
       }
     }

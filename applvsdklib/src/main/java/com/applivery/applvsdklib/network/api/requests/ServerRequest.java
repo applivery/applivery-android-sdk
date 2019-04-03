@@ -17,8 +17,8 @@
 package com.applivery.applvsdklib.network.api.requests;
 
 import com.applivery.applvsdklib.domain.model.BusinessObject;
-import com.applivery.applvsdklib.domain.model.ErrorObject;
-import com.applivery.applvsdklib.network.api.responses.ApiAppliveryServerErrorResponse;
+import com.applivery.applvsdklib.network.api.model.ErrorDataEntityResponse;
+import com.applivery.applvsdklib.network.api.model.ErrorEntity;
 import com.applivery.applvsdklib.network.api.responses.ServerResponse;
 import java.io.IOException;
 import retrofit2.Call;
@@ -26,57 +26,35 @@ import retrofit2.Response;
 
 public abstract class ServerRequest {
 
-    public final BusinessObject execute() {
-        try {
-            return performRequest();
-        }catch (RequestHttpException re){
-            return new ErrorObject(re.getServerResponse().getError());
-        }
+  public final BusinessObject execute() {
+    try {
+      return performRequest();
+    } catch (RequestHttpException re) {
+      return re.getErrorEntity().toErrorObject();
     }
+  }
 
-    protected abstract BusinessObject performRequest();
+  protected abstract BusinessObject performRequest();
 
-    public <T extends ServerResponse> T performRequest(Call<T> call) {
+  public <T extends ServerResponse> T performRequest(Call<T> call) {
 
-        Response<T> apiResponse = null;
+    Response<T> apiResponse = null;
 
-        try{
+    try {
 
-            apiResponse = call.execute();
-            T response = apiResponse.body();
-            response.setHttpCode(apiResponse.code());
+      apiResponse = call.execute();
 
-            return response;
-        }catch (Exception exception){
-            ServerResponse serverResponse = onException(exception, apiResponse);
-            throw new RequestHttpException(serverResponse);
-        }
-    }
-
-    private ServerResponse onException(Exception exception,
-        Response apiResponse) {
-
-        ServerResponse response;
-
-        int httpCode = (apiResponse != null) ? apiResponse.code() :
-            ApiAppliveryServerErrorResponse.NO_CONNECTION_HTTP_CODE;
-        String httpmsg = (apiResponse != null) ? apiResponse.message() :
-            ApiAppliveryServerErrorResponse.NO_CONNECTION_HTTP_MSG;
-
-        response = new ServerResponse();
-
-        response.setStatus(false);
-        response.setData(null);
-        response.setHttpCode(httpCode);
-
-        if (exception instanceof IOException){
-            response.setError(ApiAppliveryServerErrorResponse.
-                createNoConnectionErrorInstance(exception.getMessage()));
-        }else{
-            response.setError(ApiAppliveryServerErrorResponse.
-                createErrorInstance(httpCode, httpmsg));
-        }
-
+      if (apiResponse.isSuccessful()) {
+        T response = apiResponse.body();
+        response.setHttpCode(apiResponse.code());
         return response;
+      } else {
+
+        ErrorEntity error = ErrorDataEntityResponse.Companion.parseError(apiResponse);
+        throw new RequestHttpException(error);
+      }
+    } catch (IOException exception) {
+      throw new RequestHttpException(new ErrorEntity(0, "Exception", null));
     }
+  }
 }

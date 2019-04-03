@@ -17,6 +17,9 @@
 package com.applivery.applvsdklib;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -29,17 +32,15 @@ public class Applivery {
    * param.
    *
    * @param app your app instance, it can't be null.
-   * @param applicationId your app id. You can find this value at applivery dashboard in your
-   * app section
-   * @param appClientToken your developer secret key. You can find this value at
-   * applivery dashboard in developer section
+   * @param appToken your app tokenoken. You can find this value at applivery dashboard in your
+   * app settings section
    * @param isStoreRelease this flag MUST be true when application is candidate to be store
    * release, because otherwise app can show dialogs from applivery about updates that
    * can redirect end users to applivery beta versions.
    */
-  public static void init(Application app, String applicationId, String appClientToken,
+  public static void init(@NonNull Application app, @NonNull String appToken,
       boolean isStoreRelease) {
-    AppliverySdk.sdkInitialize(app, applicationId, appClientToken, isStoreRelease);
+    AppliverySdk.sdkInitialize(app, appToken, isStoreRelease);
   }
 
   /**
@@ -96,5 +97,59 @@ public class Applivery {
    */
   public static void disableScreenshotFeedback() {
     AppliverySdk.disableScreenshotFeedback();
+  }
+
+  /**
+   * Login a user
+   *
+   * Programatically login a user in Applivery, for example if the app has a custom login and don't
+   * want to use Applivery's authentication to track the user in the platform
+   *
+   * - Parameters:
+   * - email: The user email. **Required**
+   * - firstName: The first name of the user. **Optional**
+   * - lastName: The last name of the user. **Optional**
+   * - tags: A list of tags linked to the user with group / categorize purpose. **Optional**
+   *
+   * - Since: 3.0
+   * - Version: 3.0
+   */
+  public static void bindUser(@NonNull String email, @Nullable String firstName,
+      @Nullable String lastName, @Nullable Collection<String> tags) {
+    AppliverySdk.bindUser(email, firstName, lastName, tags, null);
+  }
+
+  /**
+   * Login a user
+   *
+   * Programatically login a user in Applivery, for example if the app has a custom login and don't
+   * want to use Applivery's authentication to track the user in the platform
+   *
+   * - Parameters:
+   * - email: The user email. **Required**
+   * - firstName: The first name of the user. **Optional**
+   * - lastName: The last name of the user. **Optional**
+   * - tags: A list of tags linked to the user with group / categorize purpose. **Optional**
+   * - callback: @BindUserCallback
+   *
+   * - Since: 3.0
+   * - Version: 3.0
+   */
+  public static void bindUser(@NonNull String email, @Nullable String firstName,
+      @Nullable String lastName, @Nullable Collection<String> tags,
+      final @Nullable BindUserCallback callback) {
+    AppliverySdk.bindUser(email, firstName, lastName, tags, callback);
+  }
+
+  /**
+   * Logout a previously binded user
+   *
+   * Programatically logout a user in Applivery from a previous custom login.
+   *
+   * - Since: 3.0
+   * - Version: 3.0
+   */
+  public static void unbindUser() {
+    AppliverySdk.unbindUser();
   }
 }

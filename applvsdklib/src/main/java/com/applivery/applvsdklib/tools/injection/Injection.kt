@@ -1,7 +1,9 @@
 package com.applivery.applvsdklib.tools.injection
 
 import com.applivery.applvsdklib.AppliverySdk
+import com.applivery.applvsdklib.domain.login.BindUserInteractor
 import com.applivery.applvsdklib.domain.login.LoginInteractor
+import com.applivery.applvsdklib.domain.login.UnBindUserInteractor
 import com.applivery.applvsdklib.domain.model.AppConfig
 import com.applivery.applvsdklib.network.api.AppliveryApiService
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder
@@ -34,6 +36,23 @@ internal object Injection {
     val sessionManager = provideSessionManager()
 
     return LoginInteractor(interactorExecutor, mainThread, apiService, sessionManager)
+  }
+
+  fun provideBindUserInteractor(): BindUserInteractor {
+    val interactorExecutor = provideInteractorExecutor()
+    val mainThread = provideMainThread()
+    val apiService = provideAppliveryApiService()
+    val sessionManager = provideSessionManager()
+
+    return BindUserInteractor(interactorExecutor, mainThread, apiService, sessionManager)
+  }
+
+  fun provideUnBindUserInteractor(): UnBindUserInteractor {
+    val interactorExecutor = provideInteractorExecutor()
+    val mainThread = provideMainThread()
+    val sessionManager = provideSessionManager()
+
+    return UnBindUserInteractor(interactorExecutor, mainThread, sessionManager)
   }
 
   private fun provideInteractorExecutor(): InteractorExecutor {

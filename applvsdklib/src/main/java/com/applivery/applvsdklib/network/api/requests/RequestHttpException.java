@@ -16,21 +16,20 @@
 
 package com.applivery.applvsdklib.network.api.requests;
 
-import com.applivery.applvsdklib.network.api.responses.ServerResponse;
+import com.applivery.applvsdklib.network.api.model.ErrorEntity;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 26/12/15.
  */
 public class RequestHttpException extends RuntimeException {
-  private ServerResponse serverResponse;
+  private ErrorEntity errorEntity;
 
-  public RequestHttpException(ServerResponse serverResponse) {
-    this.serverResponse = serverResponse;
+  public RequestHttpException(ErrorEntity errorEntity) {
+    this.errorEntity = errorEntity;
   }
 
-  public ServerResponse getServerResponse() {
-    return serverResponse;
+  public ErrorEntity getErrorEntity() {
+    return errorEntity;
   }
-
 }

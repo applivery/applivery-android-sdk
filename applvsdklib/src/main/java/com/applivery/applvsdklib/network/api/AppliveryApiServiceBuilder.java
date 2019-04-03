@@ -49,4 +49,24 @@ public class AppliveryApiServiceBuilder {
         .build()
         .create(AppliveryApiService.class);
   }
+
+  public static DownloadApiService getDownloadApiServiceInstance() {
+
+    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+    loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+    OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+    okHttpClientBuilder.interceptors().add(new HeadersInterceptor());
+    okHttpClientBuilder.interceptors().add(Injection.INSTANCE.provideSessionInterceptor());
+
+    if (BuildConfig.DEBUG) {
+      okHttpClientBuilder.interceptors().add(loggingInterceptor);
+    }
+
+    return new Retrofit.Builder().baseUrl(BuildConfig.DOWNLOAD_API_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClientBuilder.build())
+        .build()
+        .create(DownloadApiService.class);
+  }
 }

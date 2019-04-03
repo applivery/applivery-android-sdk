@@ -24,7 +24,6 @@ import com.applivery.applvsdklib.domain.feedback.FeedbackInteractor;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.FeedBackType;
-import com.applivery.applvsdklib.domain.model.Feedback;
 import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
@@ -43,7 +42,7 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
 
   private final AppConfig appConfig;
   private final FeedbackView feedbackView;
-  private final Feedback feedback;
+  private final UserFeedback feedback;
   private AppliveryApiService appliveryApiService;
   private ScreenCapture screenCapture;
   final private PermissionChecker permissionRequestExecutor;
@@ -162,8 +161,13 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
   }
 
   private Boolean needLogin() {
-    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().isAuthFeedback();
-    return isAuthUpdate && !sessionManager.hasSession();
+    if (appConfig != null) {
+
+      Boolean isAuthUpdate = appConfig.getSdk().getAndroid().getForceAuth();
+      return isAuthUpdate && !sessionManager.hasSession();
+    }
+
+    return true;
   }
 
   @Override public void onSuccess(FeedbackResult businessObject) {
@@ -199,8 +203,10 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
 
   private void sendFeedback() {
     if (appliveryApiService != null) {
+
       AppliverySdk.getExecutor()
-          .execute(FeedbackInteractor.getInstance(appliveryApiService, feedback, this));
+          .execute(FeedbackInteractor.getInstance(appliveryApiService, feedback.getMessage(),
+              feedback.getBase64ScreenCapture(), feedback.getType().getStringValue(), this));
     } else {
       AppliverySdk.Logger.loge("sendFeedback() with null appliveryApiService");
     }

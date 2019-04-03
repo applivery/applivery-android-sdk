@@ -20,35 +20,27 @@ import android.support.annotation.NonNull;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.domain.appconfig.update.CurrentAppInfo;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
+import com.applivery.applvsdklib.domain.model.DeviceInfo;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.Feedback;
 import com.applivery.applvsdklib.domain.model.FeedbackResult;
-import com.applivery.applvsdklib.domain.model.FeedbackWrapper;
+import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.FeedbackRequest;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidDeviceDetailsInfo;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackPresenter;
 
-/**
- * Created by Sergio Martinez Rodriguez
- * Date 3/1/16.
- */
 public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
 
   private final FeedbackRequest feedbackRequest;
   private final InteractorCallback feedbackCallback;
 
   private FeedbackInteractor(@NonNull AppliveryApiService appliveryApiService,
-      @NonNull Feedback feedback, @NonNull CurrentAppInfo currentAppInfo,
-      @NonNull DeviceDetailsInfo deviceDetailsInfo,
-      @NonNull InteractorCallback interactorCallback) {
+      @NonNull Feedback feedback, @NonNull InteractorCallback interactorCallback) {
 
-    FeedbackWrapper feedbackWrapper =
-        FeedbackWrapper.createWrapper(feedback, currentAppInfo, deviceDetailsInfo);
-    this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedbackWrapper);
+    this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedback);
     this.feedbackCallback = interactorCallback;
   }
 
@@ -68,13 +60,18 @@ public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
     return feedbackRequest.execute();
   }
 
-  public static Runnable getInstance(@NonNull AppliveryApiService service,
-      @NonNull Feedback feedback, @NonNull UserFeedbackPresenter userFeedbackPresenter) {
+  public static Runnable getInstance(@NonNull AppliveryApiService service, @NonNull String message,
+      @NonNull String screenshot, @NonNull String type,
+      @NonNull UserFeedbackPresenter userFeedbackPresenter) {
 
-    CurrentAppInfo currentAppInfo = new AndroidCurrentAppInfo(AppliverySdk.getApplicationContext());
-    DeviceDetailsInfo deviceDetailsInfo = new AndroidDeviceDetailsInfo();
+    PackageInfo packageInfo =
+        AndroidCurrentAppInfo.Companion.getPackageInfo(AppliverySdk.getApplicationContext());
 
-    return new FeedbackInteractor(service, feedback, currentAppInfo, deviceDetailsInfo,
-        userFeedbackPresenter);
+    AndroidDeviceDetailsInfo androidDeviceDetailsInfo = new AndroidDeviceDetailsInfo();
+    DeviceInfo deviceInfo = androidDeviceDetailsInfo.getDeviceInfo();
+
+    Feedback feedback = new Feedback(deviceInfo, message, packageInfo, screenshot, type);
+
+    return new FeedbackInteractor(service, feedback, userFeedbackPresenter);
   }
 }
