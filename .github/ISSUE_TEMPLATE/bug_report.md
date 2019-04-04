@@ -37,9 +37,11 @@ Add any other context about the problem here.
 **Additional information**
 In the case of non-sensitive or private content, please:
 1. Provide a copy of your `manifes.xml` file
-2. Attach the generated APK so our team can test.
-If you want to share certain files privately, please send us an email to support@applivery.com referencing this issue once it has been created.
+2. Attach the generated `APK` file
 
-```<application
+*If you want to share certain files privately, please send us an email to support@applivery.com referencing this issue once it has been created.*
+
+```
+<application
         android:name="..."
 </application>```
