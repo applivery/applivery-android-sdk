@@ -35,4 +35,11 @@ If applicable, add screenshots to help explain your problem.
 Add any other context about the problem here.
 
 **Additional information**
-If applicable and not private, please provide a copy of your `manifes.xml` file and attach the generated APK so our team can test. If you want to share certain files privately, please send us an email to support@applivery.com referencing this issue once it has been created.
+In the case of non-sensitive or private content, please:
+1. Provide a copy of your `manifes.xml` file
+2. Attach the generated APK so our team can test.
+If you want to share certain files privately, please send us an email to support@applivery.com referencing this issue once it has been created.
+
+```<application
+        android:name="..."
+</application>```
