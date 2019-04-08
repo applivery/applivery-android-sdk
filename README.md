@@ -142,7 +142,6 @@ At your application startup, in a class extending from `Application`, you must c
 	 @Override public void onCreate() {
 	   super.onCreate();
 	   Applivery.init(this, BuildConfig.APP_TOKEN, false);
-	   Applivery.setUpdateCheckingInterval(21600);
 	 }
  }
  ```
@@ -169,8 +168,6 @@ Applivery.checkForUpdates()
 	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
 	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
-The second call `Applivery.setUpdateCheckingInterval(21600);` indicates Applivery Sdk that the checking for new versions will be executed after 6 hours (21600 seconds) when the app will came back from background mode. Anyway if app is destroyed and app `init` method is called again the checking for new versions will be executed again.
-
 ## Advanced concepts
 
 ### Updates
@@ -185,11 +182,6 @@ Check for updates when coming from background
 ```java
 Applivery.setCheckForUpdatesBackground(true)
 ```
-
-Disable check for updates during during a certain period of time
- ```java
-Applivery.setUpdateCheckingInterval(21600);
- ```
 
 ### Feedback Reporting
 
