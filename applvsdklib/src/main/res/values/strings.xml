@@ -53,7 +53,7 @@
   <string name="applivery_accessNetworkStatePermissionRationaleTitle">Permission Request</string>
 
   <string name="appliveryError">Applivery error</string>
-  <string name="appliveryAcceptButton">Aceptar</string>
+  <string name="appliveryAcceptButton">Accept</string>
 
   <string name="appliveryBugSelectorText">Bug</string>
   <string name="appliveryFeedbackSelectorText">Feedback</string>
