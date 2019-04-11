@@ -80,7 +80,6 @@ public class AppliverySdk {
   private static Boolean sdkFirstTime;
   private static Boolean sdkRestarted = true;
   private static Boolean checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
-  private static String appliverySdkVersionName = BuildConfig.VERSION_NAME;
   private static Boolean isUpdating = false;
   private static SharedPreferences sharedPreferences;
 
@@ -256,11 +255,6 @@ public class AppliverySdk {
   public static void obtainAppConfigForCheckUpdates() {
     Validate.sdkInitialized();
     obtainAppConfig(true);
-  }
-
-  public static String getVersionName() {
-    Validate.sdkInitialized();
-    return appliverySdkVersionName;
   }
 
   public static void continuePendingPermissionsRequestsIfPossible() {
