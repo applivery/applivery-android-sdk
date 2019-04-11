@@ -18,13 +18,16 @@ package com.applivery.applvsdklib.network.api.interceptor;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
-import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.BuildConfig;
+import com.applivery.applvsdklib.domain.model.PackageInfo;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import java.io.IOException;
 import java.util.Locale;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static com.applivery.applvsdklib.AppliverySdk.getApplicationContext;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -42,10 +45,15 @@ public class HeadersInterceptor implements Interceptor {
 
   private Request composeRequest(Chain chain) {
     Request original = chain.request();
+
+    PackageInfo packageInfo =
+        AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext());
+
     return original.newBuilder()
         .url(chain.request().url())
         .addHeader("Accept-Language", Locale.getDefault().getLanguage())
-        .addHeader("x-sdk-version", "ANDROID_" + AppliverySdk.getVersionName())
+        .addHeader("x-sdk-version", "ANDROID_" + BuildConfig.VERSION_NAME)
+        .addHeader("x-app-version", packageInfo.getVersionName())
         .addHeader("User-Agent", getUserAgent())
         .method(original.method(), original.body())
         .build();
