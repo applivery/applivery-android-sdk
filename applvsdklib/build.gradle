@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Applivery
+ * Copyright (c) 2019 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,131 +18,136 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco-android'
+apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
 group = rootProject.ext.group
 version = rootProject.ext.version
 
 ext {
-  bintrayRepo = 'maven'
-  bintrayName = 'applivery-android-sdk'
+    bintrayRepo = 'maven'
+    bintrayName = 'applivery-android-sdk'
 
-  publishedGroupId = rootProject.ext.group
-  libraryName = 'applivery-android-sdk'
-  artifact = 'applvsdklib'
+    publishedGroupId = rootProject.ext.group
+    libraryName = 'applivery-android-sdk'
+    artifact = 'applvsdklib'
 
-  libraryDescription = 'Applivery android sdk'
+    libraryDescription = 'Applivery android sdk'
 
-  siteUrl = 'https://github.com/applivery/applivery-android-sdk'
-  gitUrl = 'https://github.com/applivery/applivery-android-sdk.git'
+    siteUrl = 'https://github.com/applivery/applivery-android-sdk'
+    gitUrl = 'https://github.com/applivery/applivery-android-sdk.git'
 
-  libraryVersion = rootProject.ext.version
+    libraryVersion = rootProject.ext.version
 
-  developerId = 'applivery'
-  developerName = 'Applivery'
-  developerEmail = 'info@applivery.com'
+    developerId = 'applivery'
+    developerName = 'Applivery'
+    developerEmail = 'info@applivery.com'
 
-  licenseName = 'The Apache Software License, Version 2.0'
-  licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-  allLicenses = ["Apache-2.0"]
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
 }
 
 def STRING = "String"
 def BOOLEAN = "Boolean"
 
 android {
-  compileSdkVersion parent.ext.androidCompileSdkVersion
+    compileSdkVersion androidSdkVersion
+    buildToolsVersion androidToolsVersion
 
-  defaultConfig {
-    minSdkVersion parent.ext.androidMinSdkVersion
-    targetSdkVersion parent.ext.androidTargetSdkVersion
-    versionCode computeVersionCode()
-    versionName rootProject.ext.version
+    defaultConfig {
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidSdkVersion
+        versionCode computeVersionCode()
+        versionName rootProject.ext.version
 
-    buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
-  }
-
-  buildTypes {
-    debug {
-      buildConfigField STRING, "API_URL", '"https://sdk-api-develop.sandbox.applivery.io"'
-      buildConfigField STRING, "DOWNLOAD_API_URL",
-          '"https://download-api-develop.sandbox.applivery.io"'
-      testCoverageEnabled true
+        buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
     }
 
-    prerelease {
-      debuggable true
-      minifyEnabled false
-      testCoverageEnabled true
+    buildTypes {
+        debug {
+            buildConfigField STRING, "API_URL", '"https://sdk-api-develop.sandbox.applivery.io"'
+            buildConfigField STRING, "DOWNLOAD_API_URL",
+                    '"https://download-api-develop.sandbox.applivery.io"'
+            testCoverageEnabled true
+        }
 
-      buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-      buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
+        prerelease {
+            debuggable true
+            minifyEnabled false
+            testCoverageEnabled true
+
+            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
+            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
+            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
+        }
     }
 
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-      buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-      buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
-  }
 
-  testOptions {
-    unitTests.returnDefaultValues = true
-  }
-
-  sourceSets {
-    test {
-      resources {
-        srcDir "test"
-      }
+    sourceSets {
+        test {
+            resources {
+                srcDir "test"
+            }
+        }
     }
-  }
 
-  lintOptions {
-    abortOnError false
-  }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 buildscript {
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    classpath 'com.dicedmelon.gradle:jacoco-android:0.1.2'
-  }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
+    }
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-  implementation 'com.android.support:appcompat-v7:28.0.0'
-  implementation 'com.android.support:design:28.0.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
+    implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
+    implementation "com.android.support:design:${androidSupportVersion}"
 
-  implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-  implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-  implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
-  implementation 'com.google.code.gson:gson:2.8.2'
-  implementation 'com.karumi:dexter:5.0.0'
+    // Network dependencies
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${loggingInterceptorVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
 
-  testImplementation 'junit:junit:4.12'
-  testImplementation 'org.mockito:mockito-all:2.0.2-beta'
-  testImplementation 'com.squareup.okhttp:mockwebserver:2.6.0'
+    implementation "com.karumi:dexter:${dexterVersion}"
+
+    // Test dependencies
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "org.mockito:mockito-all:${mockitoVersion}"
+    testImplementation "com.squareup.okhttp:mockwebserver:${mockwebserverVersion}"
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: '../bintrayv1.gradle'
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 /**
  * Gets the commit number from the current Git commit. E.g. 538*/
 def computeVersionCode() {
-  def stdout = new ByteArrayOutputStream()
-  exec {
-    commandLine 'git', 'rev-list', '--count', 'HEAD'
-    standardOutput = stdout
-  }
-  return stdout.toString().trim().toInteger()
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-list', '--count', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim().toInteger()
 }
