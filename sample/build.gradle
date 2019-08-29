@@ -39,7 +39,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"PLH-t4QoOx5jz7HDrBJOtmGD\""
+            buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
             testCoverageEnabled true
         }
 
@@ -49,13 +49,13 @@ android {
             minifyEnabled false
             testCoverageEnabled true
 
-            buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"BU-2hpX2-oP-Hs2nT3y4sPt9\""
+            buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
         }
 
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"BU-2hpX2-oP-Hs2nT3y4sPt9\""
+            buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
         }
     }
 

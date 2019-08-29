@@ -53,7 +53,7 @@
   <string name="applivery_accessNetworkStatePermissionRationaleTitle">Permission Request</string>
 
   <string name="appliveryError">Applivery error</string>
-  <string name="appliveryAcceptButton">Aceptar</string>
+  <string name="appliveryAcceptButton">Accept</string>
 
   <string name="appliveryBugSelectorText">Bug</string>
   <string name="appliveryFeedbackSelectorText">Feedback</string>
@@ -66,10 +66,10 @@
 
   <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
 
-  <string name="appliveryUpdateMsg"></string>
+  <string name="appliveryUpdateMsg">There is a new version available for download. Do you want to update to the latest version?</string>
 
-  <string name="appliveryMustUpdateAppLocked"></string>
-  <string name="appliveryMustUpdateAppLockedDefault">Your app is locked, please update...</string>
+  <string name="appliveryMustUpdateAppLocked">Sorry this App is outdated. Please, update the App to continue using it</string>
+  <string name="appliveryMustUpdateAppLockedDefault">Your app is locked, please update…</string>
   <string name="appliveryUsername">Email</string>
   <string name="appliveryPassword">Password</string>
   <string name="appliveryLogin">Login</string>
