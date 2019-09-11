@@ -21,7 +21,7 @@ ext {
     androidMinSdkVersion = 21
     androidSdkVersion = 29
     androidCompileSdkVersion = 28
-    androidToolsVersion = "29.0.1"
+    androidToolsVersion = "29.0.2"
 }
 
 buildscript {
