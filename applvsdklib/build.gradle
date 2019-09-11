@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-plugins { id 'com.github.dcendents.android-maven' version '1.5' }
+plugins { id 'com.github.dcendents.android-maven' version '2.1' }
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
