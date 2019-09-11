@@ -29,6 +29,8 @@ android {
 
     defaultConfig {
         minSdkVersion versions.minSdk
+        versionName version
+
         buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
     }
 
