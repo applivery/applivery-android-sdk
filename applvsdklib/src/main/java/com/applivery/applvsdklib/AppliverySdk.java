@@ -77,29 +77,18 @@ public class AppliverySdk {
   private static final Object LOCK = new Object();
 
   private static Boolean sdkInitialized = false;
-  private static Boolean sdkFirstTime;
-  private static Boolean sdkRestarted = true;
   private static Boolean checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
   private static Boolean isUpdating = false;
   private static SharedPreferences sharedPreferences;
 
   public static synchronized void sdkInitialize(Application app, String appToken,
       boolean isStoreRelease) {
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-      init(app, appToken, isStoreRelease);
-    } else {
-      Logger.log(
-          "Despite Applivery SDK compiles from API level 10 and forward, it is not compatible for API levels under 14");
-    }
+    init(app, appToken, isStoreRelease);
   }
 
   @TargetApi(14)
   private static void init(Application app, String appToken, boolean isStoreRelease) {
     if (!sdkInitialized) {
-
-      sdkFirstTime = true;
-      sdkRestarted = true;
       sdkInitialized = true;
 
       initializeAppliveryConstants(app, appToken, isStoreRelease);
@@ -124,22 +113,6 @@ public class AppliverySdk {
     } catch (Exception e) {
       return false;
     }
-  }
-
-  public static synchronized void setSdkFirstTimeFalse() {
-    sdkFirstTime = false;
-  }
-
-  public static synchronized boolean isSdkFirstTime() {
-    return sdkFirstTime;
-  }
-
-  public static synchronized void setSdkRestartedFalse() {
-    sdkRestarted = false;
-  }
-
-  public static synchronized boolean isSdkRestarted() {
-    return sdkRestarted;
   }
 
   public static synchronized void isUpdating(Boolean updating) {

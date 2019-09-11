@@ -14,11 +14,13 @@ import kotlinx.android.synthetic.main.activity_main.toolbar
 
 class MainActivity : AppCompatActivity() {
 
+  private lateinit var appPreferences: AppPreferences
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-
+    appPreferences = AppliveryApplication.appPreferences
     initViews()
   }
 
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     chronometer.start()
     checkForUpdatesBackgroundSwitch.isChecked = Applivery.getCheckForUpdatesBackground()
     checkForUpdatesBackgroundSwitch.setOnCheckedChangeListener { _, isChecked ->
+      appPreferences.checkForUpdatesBackground = isChecked
       Applivery.setCheckForUpdatesBackground(isChecked)
     }
 
