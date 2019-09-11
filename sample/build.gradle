@@ -17,19 +17,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: "applivery-plugin"
 apply from: '../dependencies.gradle'
 
 def STRING = "String"
 
 android {
-    compileSdkVersion androidSdkVersion
-    buildToolsVersion androidToolsVersion
+    compileSdkVersion = versions.compileSdk
 
     defaultConfig {
         applicationId "com.applivery.sample"
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidSdkVersion
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
 
         versionCode 1
         versionName "1.0"
@@ -81,10 +79,4 @@ dependencies {
 
 repositories {
     mavenCentral()
-}
-
-// Deprecated
-applivery {
-    appId = "5aa0ffa5e78d79e572f1b6cc"
-    apiKey = "APPLIVERY_API_KEY"
 }

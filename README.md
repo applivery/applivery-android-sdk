@@ -1,13 +1,10 @@
 
-![Applivery Logo](https://www.applivery.com/img/icons/applivery-header-1200x627px.png)
+![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/05/applivery-logo-dark.png)
 
 [![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
-![Language](https://img.shields.io/badge/Language-Java-orange.svg)
-![MinSDK](https://img.shields.io/badge/Min%20SDK-14-green.svg)
 [![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
 
-### Quality checks
-[![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
+### Quality checks 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android Apps.
