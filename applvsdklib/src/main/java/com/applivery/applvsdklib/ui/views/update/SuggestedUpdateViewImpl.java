@@ -35,7 +35,7 @@ import com.applivery.applvsdklib.ui.model.UpdateInfo;
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
-public class SuggestedUpdateViewImpl implements UpdateView {
+public class SuggestedUpdateViewImpl implements UpdateView, DialogInterface.OnDismissListener {
 
   private final Builder builder;
   private final AlertDialog alertDialog;
@@ -77,7 +77,8 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     builder.setTitle(updateInfo.getAppName())
         .setCancelable(true)
         .setPositiveButton(context.getString(R.string.appliveryUpdate), onUpdateClick())
-        .setNegativeButton(context.getString(R.string.appliveryLater), onCancelClick());
+        .setNegativeButton(context.getString(R.string.appliveryLater), onCancelClick())
+        .setOnDismissListener(this);
     return builder;
   }
 
@@ -85,7 +86,6 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     return new DialogInterface.OnClickListener() {
       @Override public void onClick(DialogInterface dialog, int id) {
         updateListener.onUpdateButtonClick();
-        isVisible = false;
         alertDialog.dismiss();
       }
     };
@@ -94,10 +94,13 @@ public class SuggestedUpdateViewImpl implements UpdateView {
   private DialogInterface.OnClickListener onCancelClick() {
     return new DialogInterface.OnClickListener() {
       @Override public void onClick(DialogInterface dialog, int id) {
-        isVisible = false;
         alertDialog.dismiss();
       }
     };
+  }
+
+  @Override public void onDismiss(DialogInterface dialogInterface) {
+    isVisible = false;
   }
 
   @Override public void showUpdateDialog() {

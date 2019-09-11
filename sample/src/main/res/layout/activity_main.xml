@@ -145,6 +145,20 @@
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
+          android:layout_marginBottom="@dimen/spacing_normal"
+          android:layout_marginTop="@dimen/spacing_normal"
+          android:background="@color/secondary_text"
+          />
+
+      <Button
+          android:id="@+id/checkForUpdatesButton"
+          android:layout_width="match_parent"
+          android:text="@string/main_view_check_for_updates"
+          android:layout_height="wrap_content"/>
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
           android:layout_marginTop="@dimen/spacing_normal"
           android:background="@color/secondary_text"
           />

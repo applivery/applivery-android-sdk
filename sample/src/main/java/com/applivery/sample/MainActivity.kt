@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.applivery.applvsdklib.Applivery
 import kotlinx.android.synthetic.main.activity_main.checkForUpdatesBackgroundSwitch
+import kotlinx.android.synthetic.main.activity_main.checkForUpdatesButton
 import kotlinx.android.synthetic.main.activity_main.chronometer
 import kotlinx.android.synthetic.main.activity_main.feedbackSwitch
 import kotlinx.android.synthetic.main.activity_main.screenshotSwitch
@@ -49,6 +50,10 @@ class MainActivity : AppCompatActivity() {
       } else {
         Applivery.disableScreenshotFeedback()
       }
+    }
+
+    checkForUpdatesButton.setOnClickListener {
+      Applivery.checkForUpdates()
     }
   }
 
