@@ -14,53 +14,21 @@
  * limitations under the License.
  */
 
+plugins { id 'com.github.dcendents.android-maven' version '1.5' }
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'jacoco-android'
 apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
-
-group = rootProject.ext.group
-version = rootProject.ext.version
-
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'applivery-android-sdk'
-
-    publishedGroupId = rootProject.ext.group
-    libraryName = 'applivery-android-sdk'
-    artifact = 'applvsdklib'
-
-    libraryDescription = 'Applivery android sdk'
-
-    siteUrl = 'https://github.com/applivery/applivery-android-sdk'
-    gitUrl = 'https://github.com/applivery/applivery-android-sdk.git'
-
-    libraryVersion = rootProject.ext.version
-
-    developerId = 'applivery'
-    developerName = 'Applivery'
-    developerEmail = 'info@applivery.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
 
 def STRING = "String"
 def BOOLEAN = "Boolean"
 
 android {
-    compileSdkVersion androidSdkVersion
-    buildToolsVersion androidToolsVersion
+    compileSdkVersion versions.compileSdk
 
     defaultConfig {
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidSdkVersion
-        versionCode computeVersionCode()
-        versionName rootProject.ext.version
-
+        minSdkVersion versions.minSdk
         buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
     }
 
@@ -89,29 +57,8 @@ android {
         }
     }
 
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
-
-    sourceSets {
-        test {
-            resources {
-                srcDir "test"
-            }
-        }
-    }
-
     lintOptions {
         abortOnError false
-    }
-}
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
     }
 }
 
@@ -135,19 +82,14 @@ dependencies {
     testImplementation "com.squareup.okhttp:mockwebserver:${mockwebserverVersion}"
 }
 
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: '../bintrayv1.gradle'
-repositories {
-    mavenCentral()
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            groupId project.group
+            artifactId 'applivery-sdk'
+            packaging 'aar'
+        }
+    }
 }
 
-/**
- * Gets the commit number from the current Git commit. E.g. 538*/
-def computeVersionCode() {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-list', '--count', 'HEAD'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim().toInteger()
-}
+apply from: 'deploy.gradle'
