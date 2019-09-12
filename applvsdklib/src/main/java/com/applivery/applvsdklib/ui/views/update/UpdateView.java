@@ -16,18 +16,19 @@
 
 package com.applivery.applvsdklib.ui.views.update;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public interface UpdateView {
-  void showUpdateDialog();
+    void showUpdateDialog();
 
-  void hideDownloadInProgress();
+    void hideDownloadInProgress();
 
-  void showDownloadInProgress();
+    void showDownloadInProgress();
 
-  void updateProgress(double percent);
+    void updateProgress(double percent);
 
-  void downloadNotStartedPermissionDenied();
+    void downloadNotStartedPermissionDenied();
 
-  @NonNull Boolean isActive();
+    @NonNull
+    Boolean isActive();
 }

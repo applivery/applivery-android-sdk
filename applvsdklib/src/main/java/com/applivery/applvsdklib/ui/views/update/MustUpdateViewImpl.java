@@ -27,8 +27,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +35,14 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.ui.model.UpdateInfo;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -49,152 +51,163 @@ import com.applivery.applvsdklib.ui.model.UpdateInfo;
 
 public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
-  private Button update;
-  private UpdateInfo updateInfo;
-  private ProgressBar progressBar;
-  private TextView updateMessage;
-  private TextView permissionsDenied;
-  private static UpdateListener updateListener;
+    private Button update;
+    private UpdateInfo updateInfo;
+    private ProgressBar progressBar;
+    private TextView updateMessage;
+    private TextView permissionsDenied;
+    private static UpdateListener updateListener;
 
-  /**
-   * * Using DialogFragment instead of Dialog because DialogFragment is not dismissed in rotation.
-   */
-  @Override public void onAttach(Activity activity) {
-    super.onAttach(activity);
-  }
-
-  /**
-   * Overrided in order to get fullScreen dialog
-   */
-  @Override public Dialog onCreateDialog(final Bundle savedInstanceState) {
-
-    final RelativeLayout root = new RelativeLayout(getActivity());
-    root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT));
-
-    final Dialog dialog = new Dialog(getActivity());
-    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-    dialog.setContentView(root);
-    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.YELLOW));
-    dialog.getWindow()
-        .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
-    return dialog;
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstState) {
-    View view = inflater.inflate(R.layout.applivery_must_update, container);
-    setCancelable(false);
-    initViewElements(view);
-    initViewElementsData(updateInfo);
-    return view;
-  }
-
-  public MustUpdateViewImpl() {
-  }
-
-  public void setUpdateInfo(UpdateInfo updateInfo) {
-    this.updateInfo = updateInfo;
-  }
-
-  public void setUpdateListener(UpdateListener updateListener) {
-    MustUpdateViewImpl.updateListener = updateListener;
-  }
-
-  private void initViewElements(View view) {
-    this.updateMessage = view.findViewById(R.id.must_update_message);
-    this.permissionsDenied = view.findViewById(R.id.permissions_denied_message);
-    this.update = view.findViewById(R.id.must_update_button);
-    this.progressBar = view.findViewById(R.id.must_update_progress_bar);
-
-    LayerDrawable layerDrawable = (LayerDrawable) progressBar.getProgressDrawable();
-    Drawable progressDrawable = layerDrawable.findDrawableByLayerId(android.R.id.progress);
-    progressDrawable.setColorFilter(ContextCompat.getColor(AppliverySdk.getApplicationContext(),
-        R.color.applivery_primary_color), PorterDuff.Mode.SRC_IN);
-  }
-
-  private void initViewElementsData(UpdateInfo updateInfo) {
-
-    String mustUpdateAppLockedText = getString(R.string.appliveryMustUpdateAppLocked);
-
-    if (!mustUpdateAppLockedText.isEmpty()) {
-      updateMessage.setText(mustUpdateAppLockedText);
-    } else {
-      if (updateInfo != null) {
-        updateMessage.setText(updateInfo.getAppUpdateMessage());
-      }
+    /**
+     * * Using DialogFragment instead of Dialog because DialogFragment is not dismissed in rotation.
+     */
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 
-    permissionsDenied.setVisibility(View.GONE);
-    progressBar.setVisibility(View.GONE);
+    /**
+     * Overrided in order to get fullScreen dialog
+     */
+    @Override
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
 
-    if (updateListener != null) {
-      update.setVisibility(View.VISIBLE);
-      update.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          updateListener.onUpdateButtonClick();
+        final RelativeLayout root = new RelativeLayout(getActivity());
+        root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(root);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.YELLOW));
+        dialog.getWindow()
+                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        return dialog;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstState) {
+        View view = inflater.inflate(R.layout.applivery_must_update, container);
+        setCancelable(false);
+        initViewElements(view);
+        initViewElementsData(updateInfo);
+        return view;
+    }
+
+    public MustUpdateViewImpl() {
+    }
+
+    public void setUpdateInfo(UpdateInfo updateInfo) {
+        this.updateInfo = updateInfo;
+    }
+
+    public void setUpdateListener(UpdateListener updateListener) {
+        MustUpdateViewImpl.updateListener = updateListener;
+    }
+
+    private void initViewElements(View view) {
+        this.updateMessage = view.findViewById(R.id.must_update_message);
+        this.permissionsDenied = view.findViewById(R.id.permissions_denied_message);
+        this.update = view.findViewById(R.id.must_update_button);
+        this.progressBar = view.findViewById(R.id.must_update_progress_bar);
+
+        LayerDrawable layerDrawable = (LayerDrawable) progressBar.getProgressDrawable();
+        Drawable progressDrawable = layerDrawable.findDrawableByLayerId(android.R.id.progress);
+        progressDrawable.setColorFilter(ContextCompat.getColor(AppliverySdk.getApplicationContext(),
+                R.color.applivery_primary_color), PorterDuff.Mode.SRC_IN);
+    }
+
+    private void initViewElementsData(UpdateInfo updateInfo) {
+
+        String mustUpdateAppLockedText = getString(R.string.appliveryMustUpdateAppLocked);
+
+        if (!mustUpdateAppLockedText.isEmpty()) {
+            updateMessage.setText(mustUpdateAppLockedText);
+        } else {
+            if (updateInfo != null) {
+                updateMessage.setText(updateInfo.getAppUpdateMessage());
+            }
         }
-      });
-    } else {
-      update.setVisibility(View.GONE);
+
+        permissionsDenied.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+
+        if (updateListener != null) {
+            update.setVisibility(View.VISIBLE);
+            update.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    updateListener.onUpdateButtonClick();
+                }
+            });
+        } else {
+            update.setVisibility(View.GONE);
+        }
     }
-  }
 
-  @Override public void showUpdateDialog() {
-    try {
-      if (!AppliverySdk.isUpdating()) {
-        show(AppliverySdk.getCurrentActivity().getFragmentManager(), "");
-      }
-    } catch (NotForegroundActivityAvailable notForegroundActivityAvailable) {
-      AppliverySdk.Logger.log("Unable to show dialog again");
+    @Override
+    public void showUpdateDialog() {
+        try {
+            if (!AppliverySdk.isUpdating()) {
+                show(AppliverySdk.getCurrentActivity().getFragmentManager(), "");
+            }
+        } catch (NotForegroundActivityAvailable notForegroundActivityAvailable) {
+            AppliverySdk.Logger.log("Unable to show dialog again");
+        }
     }
-  }
 
-  public void lockRotationOnParentScreen() {
-    AppliverySdk.lockRotationToPortrait();
-  }
-
-  @Override public void hideDownloadInProgress() {
-    AppliverySdk.isUpdating(false);
-  }
-
-  @Override public void showDownloadInProgress() {
-    AppliverySdk.isUpdating(true);
-    update.setVisibility(View.GONE);
-    progressBar.setVisibility(View.VISIBLE);
-    permissionsDenied.setVisibility(View.GONE);
-  }
-
-  @Override public void updateProgress(double percent) {
-    updatProcessTextView(percent, new Handler(getLooper()));
-    AppliverySdk.Logger.log("Updated progress to " + percent);
-  }
-
-  @Override public void downloadNotStartedPermissionDenied() {
-    permissionsDenied.setVisibility(View.VISIBLE);
-    progressBar.setVisibility(View.GONE);
-    update.setVisibility(View.VISIBLE);
-  }
-
-  @NonNull @Override public Boolean isActive() {
-    return false;
-  }
-
-  private void updatProcessTextView(final double percent, Handler handler) {
-    Runnable myRunnable = new Runnable() {
-      @Override public void run() {
-        progressBar.setProgress(Double.valueOf(percent).intValue());
-      }
-    };
-    handler.post(myRunnable);
-  }
-
-  public Looper getLooper() {
-    if (Looper.myLooper() == Looper.getMainLooper()) {
-      return Looper.myLooper();
-    } else {
-      return Looper.getMainLooper();
+    public void lockRotationOnParentScreen() {
+        AppliverySdk.lockRotationToPortrait();
     }
-  }
+
+    @Override
+    public void hideDownloadInProgress() {
+        AppliverySdk.isUpdating(false);
+    }
+
+    @Override
+    public void showDownloadInProgress() {
+        AppliverySdk.isUpdating(true);
+        update.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        permissionsDenied.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void updateProgress(double percent) {
+        updatProcessTextView(percent, new Handler(getLooper()));
+        AppliverySdk.Logger.log("Updated progress to " + percent);
+    }
+
+    @Override
+    public void downloadNotStartedPermissionDenied() {
+        permissionsDenied.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        update.setVisibility(View.VISIBLE);
+    }
+
+    @NonNull
+    @Override
+    public Boolean isActive() {
+        return false;
+    }
+
+    private void updatProcessTextView(final double percent, Handler handler) {
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setProgress(Double.valueOf(percent).intValue());
+            }
+        };
+        handler.post(myRunnable);
+    }
+
+    public Looper getLooper() {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            return Looper.myLooper();
+        } else {
+            return Looper.getMainLooper();
+        }
+    }
 }

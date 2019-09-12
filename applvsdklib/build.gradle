@@ -67,8 +67,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
-    implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
-    implementation "com.android.support:design:${androidSupportVersion}"
+    implementation "androidx.appcompat:appcompat:${appcompatVersion}"
 
     // Network dependencies
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"

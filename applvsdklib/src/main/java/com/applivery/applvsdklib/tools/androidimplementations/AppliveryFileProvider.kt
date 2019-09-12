@@ -1,5 +1,5 @@
 package com.applivery.applvsdklib.tools.androidimplementations
 
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 
 class AppliveryFileProvider : FileProvider()

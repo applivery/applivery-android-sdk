@@ -23,13 +23,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.ui.model.UpdateInfo;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -133,7 +134,8 @@ public class SuggestedUpdateViewImpl implements UpdateView, DialogInterface.OnDi
     progress.dismiss();
   }
 
-  @NonNull @Override public Boolean isActive() {
+  @NonNull
+  @Override public Boolean isActive() {
     return isVisible;
   }
 
