@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Applivery
+ * Copyright (c) 2019 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,5 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.applivery.base
 
-include ':applvsdklib', ':sample', ':applivery-updates', ':applivery-base'
+import android.content.Context
+import com.applivery.base.domain.PackageInfo
+
+class AndroidCurrentAppInfo {
+
+    companion object {
+        fun getPackageInfo(context: Context): PackageInfo {
+            val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            return PackageInfo(
+                name = context.packageName,
+                version = pInfo.versionCode,
+                versionName = pInfo.versionName
+            )
+        }
+    }
+}
