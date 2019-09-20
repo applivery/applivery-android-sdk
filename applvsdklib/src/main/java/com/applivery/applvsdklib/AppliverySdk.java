@@ -47,6 +47,7 @@ import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
+import com.applivery.base.AppliveryDataManager;
 
 import java.util.Collection;
 import java.util.concurrent.Executor;
@@ -138,6 +139,7 @@ public class AppliverySdk {
     //endregion
 
     AppliverySdk.appToken = appToken;
+    AppliveryDataManager.INSTANCE.setAppToken(appToken);
     AppliverySdk.isStoreRelease = isStoreRelease;
 
     AppliverySdk.fileProviderAuthority = composeFileProviderAuthority(app);

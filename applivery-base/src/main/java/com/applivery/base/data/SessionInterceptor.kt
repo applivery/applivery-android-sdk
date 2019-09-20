@@ -1,7 +1,7 @@
 package com.applivery.base.data
 
-import com.applivery.applvsdklib.AppliverySdk
-import com.applivery.applvsdklib.tools.session.SessionManager
+import com.applivery.base.AppliveryDataManager
+import com.applivery.base.domain.SessionManager
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
 import okhttp3.Response
@@ -12,7 +12,7 @@ class SessionInterceptor(private val sessionManager: SessionManager) : Intercept
 
         val requestBuilder = chain.request().newBuilder()
 
-        requestBuilder.addHeader("Authorization", "Bearer " + AppliverySdk.getAppToken())
+        requestBuilder.addHeader("Authorization", "Bearer " + AppliveryDataManager.appToken)
 
         if (sessionManager.hasSession()) {
             requestBuilder.addHeader("x-sdk-auth-token", sessionManager.getSession())

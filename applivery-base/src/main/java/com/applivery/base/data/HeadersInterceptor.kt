@@ -2,7 +2,9 @@ package com.applivery.base.data
 
 import android.annotation.SuppressLint
 import android.os.Build
+import com.applivery.base.util.AndroidCurrentAppInfo
 import com.applivery.base.BuildConfig
+import com.applivery.base.util.AppliveryContentProvider
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -26,7 +28,7 @@ class HeadersInterceptor : Interceptor {
     private fun composeRequest(chain: Interceptor.Chain): Request {
         val original = chain.request()
 
-        val packageInfo = AndroidCurrentAppInfo.getPackageInfo(getApplicationContext())
+        val packageInfo = AndroidCurrentAppInfo.getPackageInfo(AppliveryContentProvider.context)
 
         return original.newBuilder()
             .url(chain.request().url())

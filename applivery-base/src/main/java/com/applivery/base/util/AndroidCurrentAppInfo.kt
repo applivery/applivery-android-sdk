@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.applivery.base
+package com.applivery.base.util
 
 import android.content.Context
-import com.applivery.base.domain.PackageInfo
+import com.applivery.base.domain.model.PackageInfo
 
 class AndroidCurrentAppInfo {
 

@@ -1,4 +1,4 @@
-package com.applivery.base.domain
+package com.applivery.base.domain.model
 
 data class PackageInfo(
     val name: String,

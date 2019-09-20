@@ -20,6 +20,8 @@ import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.model.AppDataEntity;
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
+import com.applivery.base.AppliveryDataManager;
+
 import retrofit2.Call;
 
 /**
@@ -39,7 +41,8 @@ public class ObtainAppConfigRequest extends ServerRequest {
     ApiAppConfigResponse apiAppConfigResponse = super.performRequest(response);
 
     AppDataEntity appDataEntity = apiAppConfigResponse.getData();
-    
+
+    AppliveryDataManager.INSTANCE.setAppData(appDataEntity.toAppData());
     return appDataEntity.toAppConfig();
   }
 }
