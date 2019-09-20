@@ -1,7 +1,7 @@
 package com.applivery.base.data
 
 class ServerResponse<T>(
-    status: Boolean,
-    data: T,
-    error: ApiError
+    val status: Boolean,
+    val data: T,
+    val error: ApiError
 )
