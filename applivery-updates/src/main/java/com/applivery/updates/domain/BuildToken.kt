@@ -1,4 +1,4 @@
-package com.applivery.updates.domain.model
+package com.applivery.updates.domain
 
 data class BuildToken(
     val id: Int = 0,

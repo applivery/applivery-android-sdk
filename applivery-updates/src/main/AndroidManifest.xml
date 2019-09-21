@@ -7,5 +7,16 @@
 
     <application>
         <service android:name=".DownloadService" />
+
+        <provider
+            android:name=".util.AppliveryFileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/applivery_provider_paths" />
+        </provider>
     </application>
 </manifest>

@@ -12,7 +12,8 @@ import com.applivery.base.AppliveryDataManager
 import com.applivery.updates.data.ApiServiceProvider
 import com.applivery.updates.data.DownloadApiService
 import com.applivery.updates.data.UpdatesApiService
-import com.applivery.updates.domain.Download
+import com.applivery.updates.domain.DownloadInfo
+import com.applivery.updates.util.ApkInstaller
 import okhttp3.ResponseBody
 import java.io.BufferedInputStream
 import java.io.File
@@ -24,7 +25,7 @@ import kotlin.math.roundToInt
 private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_87234"
 private const val NOTIFICATION_ID = 0x21
 
-class DownloadService : IntentService("Download Service") {
+class DownloadService : IntentService("DownloadInfo Service") {
 
     private var notificationBuilder: NotificationCompat.Builder? = null
     private var notificationManager: NotificationManager? = null
@@ -43,6 +44,7 @@ class DownloadService : IntentService("Download Service") {
                 initDownload(buildToken)
             }
         } ?: also {
+            // TODO update log
             Log.e("DownloadService", "null AppliveryDataManager.appData")
         }
     }
@@ -58,6 +60,7 @@ class DownloadService : IntentService("Download Service") {
                 ""
             }
         } catch (e: Exception) {
+            // TODO update log
             Log.e("DownloadService", "getBuildToken", e)
             ""
         }
@@ -70,6 +73,7 @@ class DownloadService : IntentService("Download Service") {
             request.execute().body()?.run { downloadFile(this) }
         } catch (e: IOException) {
             notificationManager?.cancel(0)
+            // TODO update log
             Log.e("DownloadService", "initDownload", e)
         }
     }
@@ -77,6 +81,7 @@ class DownloadService : IntentService("Download Service") {
     @Throws(IOException::class)
     private fun downloadFile(body: ResponseBody) {
 
+        // TODO update file name
         val apkFileName = "TODO_874ywfuhsd"
 
         val fileSize = body.contentLength()
@@ -90,6 +95,7 @@ class DownloadService : IntentService("Download Service") {
 
         var count: Int
         val data = ByteArray(fileSize.toInt())
+        val download = DownloadInfo(outputFile.path)
 
         while (bis.read(data) != -1) {
             count = bis.read(data)
@@ -100,8 +106,6 @@ class DownloadService : IntentService("Download Service") {
             val progress = (total * 100 / fileSize).toInt()
 
             val currentTime = System.currentTimeMillis() - startTime
-
-            val download = Download()
             download.totalFileSize = totalFileSize
 
             if (currentTime > 1000 * timeCount) {
@@ -113,7 +117,7 @@ class DownloadService : IntentService("Download Service") {
 
             output.write(data, 0, count)
         }
-        onDownloadComplete()
+        onDownloadComplete(download)
         output.flush()
         output.close()
         bis.close()
@@ -125,44 +129,34 @@ class DownloadService : IntentService("Download Service") {
 
         notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_download)
-            .setContentTitle("Download")
+            .setContentTitle("DownloadInfo")
             .setContentText("Downloading File")
             .setAutoCancel(true)
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder?.build())
     }
 
-    private fun sendNotification(download: Download) {
-        sendIntent(download)
-        notificationBuilder?.setProgress(100, download.progress, false)
+    private fun sendNotification(downloadInfo: DownloadInfo) {
+        notificationBuilder?.setProgress(100, downloadInfo.progress, false)
         notificationBuilder?.setContentText(
             String.format(
                 "Downloaded (%d/%d) MB",
-                download.currentFileSize,
-                download.totalFileSize
+                downloadInfo.currentFileSize,
+                downloadInfo.totalFileSize
             )
         )
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder!!.build())
     }
 
-    private fun sendIntent(download: Download) {
-
-        //        Intent intent = new Intent(MainActivity.MESSAGE_PROGRESS);
-        //        intent.putExtra("download",download);
-        //        LocalBroadcastManager.getInstance(DownloadService.this).sendBroadcast(intent);
-    }
-
-    private fun onDownloadComplete() {
-        val download = Download()
-        download.progress = 100
-        sendIntent(download)
-
-        notificationManager?.cancel(NOTIFICATION_ID)
-        notificationBuilder?.setProgress(0, 0, false)
-        notificationBuilder?.setContentText("File Downloaded")
-        notificationManager?.notify(NOTIFICATION_ID, notificationBuilder!!.build())
+    private fun onDownloadComplete(downloadInfo: DownloadInfo) {
+        clearNotification()
+        ApkInstaller.installApplication(this, downloadInfo.filePath)
     }
 
     override fun onTaskRemoved(rootIntent: Intent) {
+        clearNotification()
+    }
+
+    private fun clearNotification() {
         notificationManager?.cancel(NOTIFICATION_ID)
     }
 

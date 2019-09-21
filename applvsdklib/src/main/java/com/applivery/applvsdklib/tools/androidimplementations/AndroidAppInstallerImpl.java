@@ -70,7 +70,7 @@ public class AndroidAppInstallerImpl implements AppInstaller, AppPathReceiver {
       return Uri.parse(FILE_URI_ID + path);
     } else {
       File file = new File(path);
-      return AppliveryFileProvider.getUriForFile(context, fileProviderAuthority, file);
+      return AppliveryFileProviderLeg.getUriForFile(context, fileProviderAuthority, file);
     }
   }
 }

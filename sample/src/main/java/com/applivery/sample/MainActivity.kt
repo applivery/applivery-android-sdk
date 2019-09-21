@@ -1,6 +1,5 @@
 package com.applivery.sample
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -8,7 +7,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.applivery.applvsdklib.Applivery
 import com.applivery.updates.DownloadService
-import com.applivery.updates.RunTimePermission
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -55,21 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         checkForUpdatesButton.setOnClickListener {
-
-            val runtimePermission = RunTimePermission(this)
-            runtimePermission.requestPermission(listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                object : RunTimePermission.PermissionCallback {
-                    override fun onGranted() {
-
-                        startDownload()
-                    }
-
-                    override fun onDenied() {
-                        //show message if not allow storage permission
-                    }
-                })
-
-
+            startDownload()
 //      Applivery.checkForUpdates()
         }
     }

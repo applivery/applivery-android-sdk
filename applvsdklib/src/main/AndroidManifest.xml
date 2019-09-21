@@ -33,14 +33,14 @@
       android:supportsRtl="true">
 
     <provider
-        android:name=".tools.androidimplementations.AppliveryFileProvider"
+        android:name=".tools.androidimplementations.AppliveryFileProviderLeg"
         android:authorities="${applicationId}.provider"
         android:exported="false"
         android:grantUriPermissions="true">
 
       <meta-data
           android:name="android.support.FILE_PROVIDER_PATHS"
-          android:resource="@xml/applivery_provider_paths"/>
+          android:resource="@xml/applivery_provider_paths_leg"/>
 
     </provider>
 
