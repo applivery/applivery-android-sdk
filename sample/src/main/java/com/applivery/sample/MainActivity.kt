@@ -1,12 +1,10 @@
 package com.applivery.sample
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.applivery.applvsdklib.Applivery
-import com.applivery.updates.DownloadService
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -53,14 +51,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         checkForUpdatesButton.setOnClickListener {
-            startDownload()
-//      Applivery.checkForUpdates()
+            Applivery.checkForUpdates()
         }
-    }
-
-    private fun startDownload() {
-        val intent = Intent(this, DownloadService::class.java)
-        startService(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

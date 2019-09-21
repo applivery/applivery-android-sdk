@@ -40,7 +40,7 @@ class FileManager {
 
                     outputStream.write(fileReader, 0, read)
                     fileSizeDownloaded += read.toLong()
-                    
+
                     val totalFileSize = (fileSize / 1024.0.pow(2.0)).toInt()
                     val current = (fileSizeDownloaded / 1024.0.pow(2.0)).roundToInt().toDouble()
                     val progress = (fileSizeDownloaded * 100 / fileSize).toInt()

@@ -23,7 +23,6 @@ import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
-import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.network.api.requests.ObtainAppConfigRequest;
 import com.applivery.applvsdklib.tools.session.SessionManager;
 
@@ -33,39 +32,42 @@ import com.applivery.applvsdklib.tools.session.SessionManager;
  */
 public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
 
-  private final ObtainAppConfigRequest obtainAppConfigRequest;
-  private final InteractorCallback appConfigInteractorCallback;
+    private final ObtainAppConfigRequest obtainAppConfigRequest;
+    private final InteractorCallback appConfigInteractorCallback;
 
-  private ObtainAppConfigInteractor(AppliveryApiService apiService,
-      DownloadApiService downloadApiService, SessionManager sessionManager,
-      PackageInfo packageInfo) {
-    this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService);
-    this.appConfigInteractorCallback =
-        new ObtainAppConfigInteractorCallback(apiService, downloadApiService, sessionManager,
-            packageInfo);
-  }
+    private ObtainAppConfigInteractor(AppliveryApiService apiService,
+                                      SessionManager sessionManager,
+                                      PackageInfo packageInfo) {
+        this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService);
+        this.appConfigInteractorCallback =
+                new ObtainAppConfigInteractorCallback(sessionManager, packageInfo);
+    }
 
-  @Override protected void receivedResponse(BusinessObject obj) {
-    super.receivedResponse(obj, AppConfig.class);
-  }
+    @Override
+    protected void receivedResponse(BusinessObject obj) {
+        super.receivedResponse(obj, AppConfig.class);
+    }
 
-  @Override protected void error(ErrorObject errorObject) {
-    appConfigInteractorCallback.onError(errorObject);
-  }
+    @Override
+    protected void error(ErrorObject errorObject) {
+        appConfigInteractorCallback.onError(errorObject);
+    }
 
-  @Override protected void success(AppConfig appConfig) {
-    appConfigInteractorCallback.onSuccess(appConfig);
-  }
+    @Override
+    protected void success(AppConfig appConfig) {
+        appConfigInteractorCallback.onSuccess(appConfig);
+    }
 
-  @Override protected BusinessObject performRequest() {
-    return obtainAppConfigRequest.execute();
-  }
+    @Override
+    protected BusinessObject performRequest() {
+        return obtainAppConfigRequest.execute();
+    }
 
-  public static Runnable getInstance(AppliveryApiService appliveryApiService,
-      DownloadApiService downloadApiService, SessionManager sessionManager,
-      PackageInfo packageInfo) {
+    public static Runnable getInstance(AppliveryApiService appliveryApiService,
+                                       SessionManager sessionManager,
+                                       PackageInfo packageInfo) {
 
-    return new ObtainAppConfigInteractor(appliveryApiService, downloadApiService, sessionManager,
-        packageInfo);
-  }
+        return new ObtainAppConfigInteractor(appliveryApiService, sessionManager,
+                packageInfo);
+    }
 }
