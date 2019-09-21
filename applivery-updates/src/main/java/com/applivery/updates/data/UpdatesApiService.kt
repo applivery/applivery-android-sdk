@@ -13,4 +13,3 @@ interface UpdatesApiService {
     @GET("$API_VERSION/build/{build_id}/downloadToken")
     fun obtainBuildToken(@Path("build_id") buildId: String): Call<ServerResponse<ApiBuildToken>>
 }
-
