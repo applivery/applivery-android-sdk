@@ -15,21 +15,18 @@ import com.applivery.updates.data.UpdatesApiService
 import com.applivery.updates.domain.DownloadInfo
 import com.applivery.updates.util.ApkInstaller
 import okhttp3.ResponseBody
-import java.io.BufferedInputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import kotlin.math.pow
-import kotlin.math.roundToInt
 
 private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_87234"
 private const val NOTIFICATION_ID = 0x21
+private const val BYTE_LENGTH = 1024
 
 class DownloadService : IntentService("DownloadInfo Service") {
 
     private var notificationBuilder: NotificationCompat.Builder? = null
     private var notificationManager: NotificationManager? = null
-    private var totalFileSize: Int = 0
+    private val fileManager = FileManager()
     private lateinit var downloadApiService: DownloadApiService
     private lateinit var updatesApiService: UpdatesApiService
 
@@ -39,9 +36,14 @@ class DownloadService : IntentService("DownloadInfo Service") {
             updatesApiService = ApiServiceProvider.getApiService()
             downloadApiService = ApiServiceProvider.getDownloadApiService()
 
+            val apkFileName = name.replace(" ", "-") +
+                    "-" + appConfig.lastBuildId + ".apk"
+
+            // TODO check if file exits
+
             val buildToken = getBuildToken(appConfig.lastBuildId)
             if (buildToken.isNotEmpty()) {
-                initDownload(buildToken)
+                initDownload(apkFileName, buildToken)
             }
         } ?: also {
             // TODO update log
@@ -66,11 +68,11 @@ class DownloadService : IntentService("DownloadInfo Service") {
         }
     }
 
-    private fun initDownload(buildToken: String) {
+    private fun initDownload(apkFileName: String, buildToken: String) {
         showNotification()
         try {
             val request = downloadApiService.downloadBuild(buildToken)
-            request.execute().body()?.run { downloadFile(this) }
+            request.execute().body()?.run { downloadFile(apkFileName, this) }
         } catch (e: IOException) {
             notificationManager?.cancel(0)
             // TODO update log
@@ -79,48 +81,17 @@ class DownloadService : IntentService("DownloadInfo Service") {
     }
 
     @Throws(IOException::class)
-    private fun downloadFile(body: ResponseBody) {
+    private fun downloadFile(apkFileName: String, body: ResponseBody) {
 
-        // TODO update file name
-        val apkFileName = "TODO_874ywfuhsd"
+        val outputFile = File(cacheDir, apkFileName)
 
-        val fileSize = body.contentLength()
-        val bis = BufferedInputStream(body.byteStream())
-        val outputFile = File(cacheDir, "$apkFileName.apk")
-        val output = FileOutputStream(outputFile)
-
-        val startTime = System.currentTimeMillis()
-        var total: Long = 0
-        var timeCount = 1
-
-        var count: Int
-        val data = ByteArray(fileSize.toInt())
-        val download = DownloadInfo(outputFile.path)
-
-        while (bis.read(data) != -1) {
-            count = bis.read(data)
-            total += count.toLong()
-            totalFileSize = (fileSize / 1024.0.pow(2.0)).toInt()
-            val current = (total / 1024.0.pow(2.0)).roundToInt().toDouble()
-
-            val progress = (total * 100 / fileSize).toInt()
-
-            val currentTime = System.currentTimeMillis() - startTime
-            download.totalFileSize = totalFileSize
-
-            if (currentTime > 1000 * timeCount) {
-                download.currentFileSize = current.toInt()
-                download.progress = progress
-                sendNotification(download)
-                timeCount++
-            }
-
-            output.write(data, 0, count)
-        }
-        onDownloadComplete(download)
-        output.flush()
-        output.close()
-        bis.close()
+        fileManager.writeResponseBodyToDisk(body = body,
+            file = outputFile,
+            onUpdate = { downloadInfo -> sendNotification(downloadInfo) },
+            onFinish = { onDownloadComplete(outputFile.path) },
+            onError = {
+                Log.d("ERROR", "file download error")
+            })
     }
 
     private fun showNotification() {
@@ -147,9 +118,9 @@ class DownloadService : IntentService("DownloadInfo Service") {
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder!!.build())
     }
 
-    private fun onDownloadComplete(downloadInfo: DownloadInfo) {
+    private fun onDownloadComplete(filePath: String) {
         clearNotification()
-        ApkInstaller.installApplication(this, downloadInfo.filePath)
+        ApkInstaller.installApplication(this, filePath)
     }
 
     override fun onTaskRemoved(rootIntent: Intent) {
