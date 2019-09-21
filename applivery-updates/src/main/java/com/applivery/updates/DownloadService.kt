@@ -6,9 +6,9 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.applivery.base.AppliveryDataManager
+import com.applivery.base.util.AppliveryLog
 import com.applivery.updates.data.ApiServiceProvider
 import com.applivery.updates.data.DownloadApiService
 import com.applivery.updates.data.UpdatesApiService
@@ -20,7 +20,6 @@ import java.io.IOException
 
 private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_87234"
 private const val NOTIFICATION_ID = 0x21
-private const val BYTE_LENGTH = 1024
 
 class DownloadService : IntentService("DownloadInfo Service") {
 
@@ -46,8 +45,7 @@ class DownloadService : IntentService("DownloadInfo Service") {
                 initDownload(apkFileName, buildToken)
             }
         } ?: also {
-            // TODO update log
-            Log.e("DownloadService", "null AppliveryDataManager.appData")
+            AppliveryLog.error("The download cannot be started with null app data")
         }
     }
 
@@ -58,12 +56,12 @@ class DownloadService : IntentService("DownloadInfo Service") {
             if (tokenResponse.isSuccessful) {
                 tokenResponse.body()?.data?.token as String
             } else {
-                // TODO parse error
+                // TODO parse error to show the error
+                AppliveryLog.error("Invalid config. Cannot get the build token")
                 ""
             }
         } catch (e: Exception) {
-            // TODO update log
-            Log.e("DownloadService", "getBuildToken", e)
+            AppliveryLog.error("Cannot get the build token")
             ""
         }
     }
@@ -75,8 +73,7 @@ class DownloadService : IntentService("DownloadInfo Service") {
             request.execute().body()?.run { downloadFile(apkFileName, this) }
         } catch (e: IOException) {
             notificationManager?.cancel(0)
-            // TODO update log
-            Log.e("DownloadService", "initDownload", e)
+            AppliveryLog.error("Error downloading the apk")
         }
     }
 
@@ -90,7 +87,7 @@ class DownloadService : IntentService("DownloadInfo Service") {
             onUpdate = { downloadInfo -> sendNotification(downloadInfo) },
             onFinish = { onDownloadComplete(outputFile.path) },
             onError = {
-                Log.d("ERROR", "file download error")
+                AppliveryLog.error("Error saving the apk")
             })
     }
 

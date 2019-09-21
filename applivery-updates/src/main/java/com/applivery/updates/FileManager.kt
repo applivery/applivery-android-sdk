@@ -1,6 +1,6 @@
 package com.applivery.updates
 
-import android.util.Log
+import com.applivery.base.util.AppliveryLog
 import com.applivery.updates.domain.DownloadInfo
 import okhttp3.ResponseBody
 import java.io.*
@@ -8,8 +8,6 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 
 class FileManager {
-
-    private val TAG = "Hola"
 
     internal fun writeResponseBodyToDisk(
         body: ResponseBody,
@@ -42,8 +40,7 @@ class FileManager {
 
                     outputStream.write(fileReader, 0, read)
                     fileSizeDownloaded += read.toLong()
-
-
+                    
                     val totalFileSize = (fileSize / 1024.0.pow(2.0)).toInt()
                     val current = (fileSizeDownloaded / 1024.0.pow(2.0)).roundToInt().toDouble()
                     val progress = (fileSizeDownloaded * 100 / fileSize).toInt()
@@ -60,7 +57,7 @@ class FileManager {
                         timeCount++
                     }
 
-                    Log.d(TAG, "file download: $fileSizeDownloaded of $fileSize")
+                    AppliveryLog.debug("File download: $fileSizeDownloaded of $fileSize")
                 }
 
                 outputStream.flush()
