@@ -18,6 +18,7 @@ import okhttp3.ResponseBody
 import java.io.File
 import java.io.IOException
 
+
 private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_87234"
 private const val NOTIFICATION_ID = 0x21
 
@@ -30,8 +31,15 @@ class DownloadService : IntentService("Download apk service") {
     private lateinit var updatesApiService: UpdatesApiService
 
     override fun onHandleIntent(intent: Intent?) {
+
+        if (isDownloadStarted) {
+            AppliveryLog.warn("The download is started")
+            return
+        }
+
         AppliveryDataManager.appData?.run {
 
+            isDownloadStarted = true
             updatesApiService = ApiServiceProvider.getApiService()
             downloadApiService = ApiServiceProvider.getDownloadApiService()
 
@@ -45,6 +53,7 @@ class DownloadService : IntentService("Download apk service") {
                 initDownload(name, apkFileName, buildToken)
             }
         } ?: also {
+            isDownloadStarted = false
             AppliveryLog.error("The download cannot be started with null app data")
         }
     }
@@ -85,8 +94,12 @@ class DownloadService : IntentService("Download apk service") {
         fileManager.writeResponseBodyToDisk(body = body,
             file = outputFile,
             onUpdate = { downloadInfo -> sendNotification(downloadInfo) },
-            onFinish = { onDownloadComplete(outputFile.path) },
+            onFinish = {
+                isDownloadStarted = false
+                onDownloadComplete(outputFile.path)
+            },
             onError = {
+                isDownloadStarted = false
                 AppliveryLog.error("Error saving apk")
             })
     }
@@ -140,5 +153,9 @@ class DownloadService : IntentService("Download apk service") {
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager!!.createNotificationChannel(channel)
         }
+    }
+
+    companion object {
+        private var isDownloadStarted = false
     }
 }
