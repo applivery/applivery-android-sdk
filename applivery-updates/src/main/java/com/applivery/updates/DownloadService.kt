@@ -21,7 +21,7 @@ import java.io.IOException
 private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_87234"
 private const val NOTIFICATION_ID = 0x21
 
-class DownloadService : IntentService("DownloadInfo Service") {
+class DownloadService : IntentService("Download apk service") {
 
     private var notificationBuilder: NotificationCompat.Builder? = null
     private var notificationManager: NotificationManager? = null
@@ -42,7 +42,7 @@ class DownloadService : IntentService("DownloadInfo Service") {
 
             val buildToken = getBuildToken(appConfig.lastBuildId)
             if (buildToken.isNotEmpty()) {
-                initDownload(apkFileName, buildToken)
+                initDownload(name, apkFileName, buildToken)
             }
         } ?: also {
             AppliveryLog.error("The download cannot be started with null app data")
@@ -66,14 +66,14 @@ class DownloadService : IntentService("DownloadInfo Service") {
         }
     }
 
-    private fun initDownload(apkFileName: String, buildToken: String) {
-        showNotification()
+    private fun initDownload(appName: String, apkFileName: String, buildToken: String) {
+        showNotification(appName)
         try {
             val request = downloadApiService.downloadBuild(buildToken)
             request.execute().body()?.run { downloadFile(apkFileName, this) }
         } catch (e: IOException) {
             notificationManager?.cancel(0)
-            AppliveryLog.error("Error downloading the apk")
+            AppliveryLog.error("Error downloading apk")
         }
     }
 
@@ -87,27 +87,29 @@ class DownloadService : IntentService("DownloadInfo Service") {
             onUpdate = { downloadInfo -> sendNotification(downloadInfo) },
             onFinish = { onDownloadComplete(outputFile.path) },
             onError = {
-                AppliveryLog.error("Error saving the apk")
+                AppliveryLog.error("Error saving apk")
             })
     }
 
-    private fun showNotification() {
+    private fun showNotification(appName: String) {
         createNotificationChannel()
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_download)
-            .setContentTitle("DownloadInfo")
-            .setContentText("Downloading File")
-            .setAutoCancel(true)
+            .setSmallIcon(R.drawable.ic_applivery_blue)
+            .setContentTitle(getString(R.string.applivery_updates_app_name))
+            .setContentText(getString(R.string.applivery_updates_notification_text, appName))
+            .setAutoCancel(false)
+            .setOngoing(true)
+            .setProgress(100, 0, true)
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder?.build())
     }
 
     private fun sendNotification(downloadInfo: DownloadInfo) {
         notificationBuilder?.setProgress(100, downloadInfo.progress, false)
         notificationBuilder?.setContentText(
-            String.format(
-                "Downloaded (%d/%d) MB",
+            getString(
+                R.string.applivery_updates_notification_progress,
                 downloadInfo.currentFileSize,
                 downloadInfo.totalFileSize
             )
@@ -130,8 +132,8 @@ class DownloadService : IntentService("DownloadInfo Service") {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.channel_name)
-            val description = getString(R.string.channel_description)
+            val name = getString(R.string.applivery_updates_channel_name)
+            val description = getString(R.string.applivery_updates_channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance)
             channel.description = description
