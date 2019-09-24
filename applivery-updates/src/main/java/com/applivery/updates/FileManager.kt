@@ -30,7 +30,7 @@ class FileManager(private val context: Context) {
                 var fileSizeDownloaded: Long = 0
 
                 inputStream = body.byteStream()
-                val outputStream = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                outputStream = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     FileOutputStream(file)
                 } else {
                     context.openFileOutput(file.name, MODE_WORLD_READABLE)
@@ -45,7 +45,7 @@ class FileManager(private val context: Context) {
                         break
                     }
 
-                    outputStream.write(fileReader, 0, read)
+                    outputStream?.write(fileReader, 0, read)
                     fileSizeDownloaded += read.toLong()
 
                     val totalFileSize = (fileSize / 1024.0.pow(2.0)).toInt()
@@ -67,7 +67,7 @@ class FileManager(private val context: Context) {
                     AppliveryLog.debug("File download: $fileSizeDownloaded of $fileSize")
                 }
 
-                outputStream.flush()
+                outputStream?.flush()
                 onFinish()
             } catch (e: IOException) {
                 onError(e)
