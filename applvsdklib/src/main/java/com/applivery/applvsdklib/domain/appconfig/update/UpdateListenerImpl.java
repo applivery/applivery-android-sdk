@@ -17,7 +17,6 @@
 package com.applivery.applvsdklib.domain.appconfig.update;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.model.AppConfig;
@@ -58,8 +57,7 @@ public class UpdateListenerImpl implements UpdateListener {
     private void updateApp() {
         if (AppliverySdk.isContextAvailable()) {
             Context context = AppliverySdk.getApplicationContext();
-            Intent intent = new Intent(context, DownloadService.class);
-            context.startService(intent);
+            DownloadService.Companion.startDownloadService(context);
         } else {
             AppliveryLog.error("Cannot init Download service");
         }

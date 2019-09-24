@@ -26,20 +26,15 @@ class DownloadService : IntentService("Download apk service") {
 
     private var notificationBuilder: NotificationCompat.Builder? = null
     private var notificationManager: NotificationManager? = null
-    private val fileManager = FileManager()
+    private lateinit var fileManager: FileManager
     private lateinit var downloadApiService: DownloadApiService
     private lateinit var updatesApiService: UpdatesApiService
 
     override fun onHandleIntent(intent: Intent?) {
-
-        if (isDownloadStarted) {
-            AppliveryLog.warn("The download is started")
-            return
-        }
-
         AppliveryDataManager.appData?.run {
 
             isDownloadStarted = true
+            fileManager = FileManager()
             updatesApiService = ApiServiceProvider.getApiService()
             downloadApiService = ApiServiceProvider.getDownloadApiService()
 
@@ -89,7 +84,12 @@ class DownloadService : IntentService("Download apk service") {
     @Throws(IOException::class)
     private fun downloadFile(apkFileName: String, body: ResponseBody) {
 
-        val outputFile = File(cacheDir, apkFileName)
+
+        val outputFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            File(cacheDir, apkFileName)
+        } else {
+            File(filesDir, apkFileName)
+        }
 
         fileManager.writeResponseBodyToDisk(body = body,
             file = outputFile,
@@ -157,5 +157,12 @@ class DownloadService : IntentService("Download apk service") {
 
     companion object {
         private var isDownloadStarted = false
+
+        fun startDownloadService(context: Context) {
+            if (!isDownloadStarted) {
+                val intent = Intent(context, DownloadService::class.java)
+                context.startService(intent)
+            }
+        }
     }
 }
