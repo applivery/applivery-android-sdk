@@ -1,5 +1,8 @@
 package com.applivery.updates
 
+import android.content.Context
+import android.content.Context.MODE_WORLD_READABLE
+import android.os.Build
 import com.applivery.base.util.AppliveryLog
 import com.applivery.updates.domain.DownloadInfo
 import okhttp3.ResponseBody
@@ -7,7 +10,7 @@ import java.io.*
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class FileManager {
+class FileManager(private val context: Context) {
 
     internal fun writeResponseBodyToDisk(
         body: ResponseBody,
@@ -27,7 +30,11 @@ class FileManager {
                 var fileSizeDownloaded: Long = 0
 
                 inputStream = body.byteStream()
-                outputStream = FileOutputStream(file)
+                val outputStream = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    FileOutputStream(file)
+                } else {
+                    context.openFileOutput(file.name, MODE_WORLD_READABLE)
+                }
 
                 val startTime = System.currentTimeMillis()
                 var timeCount = 1

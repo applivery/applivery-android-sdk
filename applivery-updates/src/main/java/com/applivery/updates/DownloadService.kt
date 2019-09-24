@@ -34,7 +34,7 @@ class DownloadService : IntentService("Download apk service") {
         AppliveryDataManager.appData?.run {
 
             isDownloadStarted = true
-            fileManager = FileManager()
+            fileManager = FileManager(applicationContext)
             updatesApiService = ApiServiceProvider.getApiService()
             downloadApiService = ApiServiceProvider.getDownloadApiService()
 
@@ -83,7 +83,6 @@ class DownloadService : IntentService("Download apk service") {
 
     @Throws(IOException::class)
     private fun downloadFile(apkFileName: String, body: ResponseBody) {
-
 
         val outputFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             File(cacheDir, apkFileName)
