@@ -16,7 +16,6 @@
 
 package com.applivery.applvsdklib.domain.feedback;
 
-import android.support.annotation.NonNull;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
@@ -32,46 +31,52 @@ import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppI
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidDeviceDetailsInfo;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackPresenter;
 
+import androidx.annotation.NonNull;
+
 public class FeedbackInteractor extends BaseInteractor<FeedbackResult> {
 
-  private final FeedbackRequest feedbackRequest;
-  private final InteractorCallback feedbackCallback;
+    private final FeedbackRequest feedbackRequest;
+    private final InteractorCallback feedbackCallback;
 
-  private FeedbackInteractor(@NonNull AppliveryApiService appliveryApiService,
-      @NonNull Feedback feedback, @NonNull InteractorCallback interactorCallback) {
+    private FeedbackInteractor(@NonNull AppliveryApiService appliveryApiService,
+                               @NonNull Feedback feedback, @NonNull InteractorCallback interactorCallback) {
 
-    this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedback);
-    this.feedbackCallback = interactorCallback;
-  }
+        this.feedbackRequest = new FeedbackRequest(appliveryApiService, feedback);
+        this.feedbackCallback = interactorCallback;
+    }
 
-  @Override protected void receivedResponse(BusinessObject result) {
-    super.receivedResponse(result, FeedbackResult.class);
-  }
+    @Override
+    protected void receivedResponse(BusinessObject result) {
+        super.receivedResponse(result, FeedbackResult.class);
+    }
 
-  @Override protected void error(ErrorObject error) {
-    feedbackCallback.onError(error);
-  }
+    @Override
+    protected void error(ErrorObject error) {
+        feedbackCallback.onError(error);
+    }
 
-  @Override protected void success(FeedbackResult response) {
-    feedbackCallback.onSuccess(response);
-  }
+    @Override
+    protected void success(FeedbackResult response) {
+        feedbackCallback.onSuccess(response);
+    }
 
-  @Override protected BusinessObject performRequest() {
-    return feedbackRequest.execute();
-  }
+    @Override
+    protected BusinessObject performRequest() {
+        return feedbackRequest.execute();
+    }
 
-  public static Runnable getInstance(@NonNull AppliveryApiService service, @NonNull String message,
-      @NonNull String screenshot, @NonNull String type,
-      @NonNull UserFeedbackPresenter userFeedbackPresenter) {
+    public static Runnable getInstance(@NonNull AppliveryApiService service, @NonNull String message,
+                                       @NonNull String screenshot, @NonNull String type,
+                                       @NonNull UserFeedbackPresenter userFeedbackPresenter) {
 
-    PackageInfo packageInfo =
-        AndroidCurrentAppInfo.Companion.getPackageInfo(AppliverySdk.getApplicationContext());
+        PackageInfo packageInfo =
+                AndroidCurrentAppInfo.Companion.getPackageInfo(AppliverySdk.getApplicationContext());
 
-    AndroidDeviceDetailsInfo androidDeviceDetailsInfo = new AndroidDeviceDetailsInfo();
-    DeviceInfo deviceInfo = androidDeviceDetailsInfo.getDeviceInfo();
+        AndroidDeviceDetailsInfo androidDeviceDetailsInfo = new AndroidDeviceDetailsInfo();
+        DeviceInfo deviceInfo = androidDeviceDetailsInfo.getDeviceInfo();
 
-    Feedback feedback = new Feedback(deviceInfo, message, packageInfo, screenshot, type);
+        Feedback feedback = new Feedback(deviceInfo, message, packageInfo, screenshot, type);
 
-    return new FeedbackInteractor(service, feedback, userFeedbackPresenter);
-  }
+        return new FeedbackInteractor(service, feedback, userFeedbackPresenter);
+    }
 }

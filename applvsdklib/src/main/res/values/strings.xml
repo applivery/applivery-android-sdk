@@ -19,12 +19,12 @@
     <string name="applivery_name">Applivery</string>
     <string name="appliveryUpdate">Update</string>
     <string name="appliveryLater">Later</string>
-    <string name="applivery_download_message">Current download progress...</string>
+    <string name="applivery_download_message">Current downloadInfo progress...</string>
     <string name="applivery_download_title">Downloading</string>
 
     <string name="applivery_continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>
     <string name="applivery_continueRequestPermissionSettingsDeniedFeedback">SETTINGS</string>
-    <string name="applivery_continueRequestPermissionDeniedFeedback">Write permission denied, this permission is compulsory for download and store the new app version.</string>
+    <string name="applivery_continueRequestPermissionDeniedFeedback">Write permission denied, this permission is compulsory for downloadInfo and store the new app version.</string>
     <string name="applivery_continueRequestPermissionRationaleMessage">Permissions denied are necessary for doing some tasks, allow it!</string>
     <string name="applivery_continueRequestPermissionRationaleTitle">Permission Request</string>
 
@@ -66,7 +66,7 @@
 
     <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
 
-    <string name="appliveryUpdateMsg">There is a new version available for download. Do you want to update to the latest version?</string>
+    <string name="appliveryUpdateMsg">There is a new version available for downloadInfo. Do you want to update to the latest version?</string>
     <string name="applivery_error_subscription">SDK usage is not allowed under your current subscription plan. Please upgrade or contact us at support@applivery.com</string>
 
     <string name="appliveryMustUpdateAppLocked">Sorry this App is outdated. Please, update the App to continue using it</string>

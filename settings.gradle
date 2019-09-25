@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-include ':applvsdklib', ':sample'
+include ':applvsdklib', ':sample', ':applivery-updates', ':applivery-base'

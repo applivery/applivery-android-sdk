@@ -3,80 +3,73 @@ package com.applivery.sample
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.applivery.applvsdklib.Applivery
 import com.applivery.applvsdklib.BindUserCallback
-import kotlinx.android.synthetic.main.activity_user.bindUserButton
-import kotlinx.android.synthetic.main.activity_user.emailEditText
-import kotlinx.android.synthetic.main.activity_user.firstNameEditText
-import kotlinx.android.synthetic.main.activity_user.lastNameEditText
-import kotlinx.android.synthetic.main.activity_user.tagsEditText
-import kotlinx.android.synthetic.main.activity_user.toolbar
-import kotlinx.android.synthetic.main.activity_user.unBindUserButton
-
+import kotlinx.android.synthetic.main.activity_user.*
 
 class UserActivity : AppCompatActivity() {
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_user)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_user)
 
-    initViews()
-  }
-
-  private fun initViews() {
-    setSupportActionBar(toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    supportActionBar?.setDisplayShowHomeEnabled(true)
-    toolbar.setNavigationOnClickListener { onBackPressed() }
-
-    bindUserButton.setOnClickListener { bindUser() }
-    unBindUserButton.setOnClickListener { Applivery.unbindUser() }
-  }
-
-  private fun bindUser() {
-
-    if (emailEditText.text.isEmpty()) {
-      emailEditText.error = getString(R.string.field_required)
-      return
-    }
-    val email = emailEditText.text.toString()
-
-    val firstName = if (firstNameEditText.text.isNotEmpty()) {
-      firstNameEditText.text.toString()
-    } else {
-      null
+        initViews()
     }
 
-    val lastName = if (lastNameEditText.text.isNotEmpty()) {
-      lastNameEditText.text.toString()
-    } else {
-      null
+    private fun initViews() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+
+        bindUserButton.setOnClickListener { bindUser() }
+        unBindUserButton.setOnClickListener { Applivery.unbindUser() }
     }
 
-    val tags = if (tagsEditText.text.isNotEmpty()) {
-      tagsEditText.text.toString().split(",")
-    } else {
-      null
+    private fun bindUser() {
+
+        if (emailEditText.text.isEmpty()) {
+            emailEditText.error = getString(R.string.field_required)
+            return
+        }
+        val email = emailEditText.text.toString()
+
+        val firstName = if (firstNameEditText.text.isNotEmpty()) {
+            firstNameEditText.text.toString()
+        } else {
+            null
+        }
+
+        val lastName = if (lastNameEditText.text.isNotEmpty()) {
+            lastNameEditText.text.toString()
+        } else {
+            null
+        }
+
+        val tags = if (tagsEditText.text.isNotEmpty()) {
+            tagsEditText.text.toString().split(",")
+        } else {
+            null
+        }
+
+        Applivery.bindUser(email, firstName, lastName, tags, object : BindUserCallback {
+            override fun onSuccess() {
+                Toast.makeText(this@UserActivity, "Success", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onError(message: String) {
+                Toast.makeText(this@UserActivity, "Error: $message", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    Applivery.bindUser(email, firstName, lastName, tags, object : BindUserCallback {
-      override fun onSuccess() {
-        Toast.makeText(this@UserActivity, "Success", Toast.LENGTH_SHORT).show()
-      }
+    companion object Navigator {
 
-      override fun onError(message: String) {
-        Toast.makeText(this@UserActivity, "Error: $message", Toast.LENGTH_SHORT).show()
-      }
-    })
-  }
-
-  companion object Navigator {
-
-    fun open(context: Context) {
-      val intent = Intent(context, UserActivity::class.java)
-      context.startActivity(intent)
+        fun open(context: Context) {
+            val intent = Intent(context, UserActivity::class.java)
+            context.startActivity(intent)
+        }
     }
-  }
 }

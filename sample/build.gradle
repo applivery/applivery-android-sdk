@@ -65,11 +65,11 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
-    implementation "com.android.support:design:${androidSupportVersion}"
+    implementation "androidx.appcompat:appcompat:${appcompatVersion}"
+    implementation "com.google.android.material:material:1.1.0-alpha10"
 
     implementation project(':applvsdklib')
-    //  compile 'com.applivery:applvsdklib:2.4.2'
+//    implementation 'com.applivery:applivery-sdk:3.0.1.7-Snapshot'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -79,4 +79,5 @@ dependencies {
 
 repositories {
     mavenCentral()
+    maven { url "https://dl.bintray.com/applivery/applivery-android-snapshots" }
 }
