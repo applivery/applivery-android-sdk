@@ -92,8 +92,12 @@ class DownloadService : IntentService("Download apk service") {
 
         fileManager.writeResponseBodyToDisk(body = body,
             file = outputFile,
-            onUpdate = { downloadInfo -> sendNotification(downloadInfo) },
+            onUpdate = { downloadInfo ->
+                updateProgress(downloadInfo)
+                ProgressListener.downloadInfo = downloadInfo
+            },
             onFinish = {
+                ProgressListener.onFinish?.invoke()
                 isDownloadStarted = false
                 onDownloadComplete(outputFile.path)
             },
@@ -117,7 +121,7 @@ class DownloadService : IntentService("Download apk service") {
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder?.build())
     }
 
-    private fun sendNotification(downloadInfo: DownloadInfo) {
+    private fun updateProgress(downloadInfo: DownloadInfo) {
         notificationBuilder?.setProgress(100, downloadInfo.progress, false)
         notificationBuilder?.setContentText(
             getString(
@@ -127,6 +131,8 @@ class DownloadService : IntentService("Download apk service") {
             )
         )
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder!!.build())
+
+
     }
 
     private fun onDownloadComplete(filePath: String) {

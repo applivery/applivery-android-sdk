@@ -28,6 +28,7 @@ class FileManager(private val context: Context) {
 
                 val fileSize = body.contentLength()
                 var fileSizeDownloaded: Long = 0
+                val totalFileSize = (fileSize / 1024.0.pow(2.0)).toInt()
 
                 inputStream = body.byteStream()
                 outputStream = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -39,6 +40,8 @@ class FileManager(private val context: Context) {
                 val startTime = System.currentTimeMillis()
                 var timeCount = 1
 
+                onUpdate(DownloadInfo(totalFileSize = totalFileSize))
+
                 while (true) {
                     val read = inputStream!!.read(fileReader)
                     if (read == -1) {
@@ -48,7 +51,6 @@ class FileManager(private val context: Context) {
                     outputStream?.write(fileReader, 0, read)
                     fileSizeDownloaded += read.toLong()
 
-                    val totalFileSize = (fileSize / 1024.0.pow(2.0)).toInt()
                     val current = (fileSizeDownloaded / 1024.0.pow(2.0)).roundToInt().toDouble()
                     val progress = (fileSizeDownloaded * 100 / fileSize).toInt()
                     val currentTime = System.currentTimeMillis() - startTime

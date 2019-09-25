@@ -19,6 +19,7 @@ package com.applivery.applvsdklib.ui.views.update;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -40,9 +41,14 @@ import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.ui.model.UpdateInfo;
+import com.applivery.updates.ProgressListener;
+import com.applivery.updates.domain.DownloadInfo;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -139,11 +145,39 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
                 @Override
                 public void onClick(View v) {
                     updateListener.onUpdateButtonClick();
+                    showDownloadInProgress();
+                    initListener();
                 }
             });
         } else {
             update.setVisibility(View.GONE);
         }
+    }
+
+    private void initListener() {
+        ProgressListener.INSTANCE.setOnUpdate(new Function1<DownloadInfo, Unit>() {
+            @Override
+            public Unit invoke(DownloadInfo downloadInfo) {
+                showDownloadInProgress();
+                updateProgress(downloadInfo.component1());
+                return null;
+            }
+        });
+
+        ProgressListener.INSTANCE.setOnFinish(new Function0<Unit>() {
+            @Override
+            public Unit invoke() {
+                dismiss();
+                hideDownloadInProgress();
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        ProgressListener.INSTANCE.clearListener();
     }
 
     @Override
@@ -163,15 +197,32 @@ public class MustUpdateViewImpl extends DialogFragment implements UpdateView {
 
     @Override
     public void hideDownloadInProgress() {
-        AppliverySdk.isUpdating(false);
+        Handler handler = new Handler(getLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                AppliverySdk.isUpdating(false);
+                permissionsDenied.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                update.setVisibility(View.VISIBLE);
+            }
+        };
+        handler.post(myRunnable);
     }
 
     @Override
     public void showDownloadInProgress() {
-        AppliverySdk.isUpdating(true);
-        update.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        permissionsDenied.setVisibility(View.GONE);
+        Handler handler = new Handler(getLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                AppliverySdk.isUpdating(true);
+                update.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                permissionsDenied.setVisibility(View.GONE);
+            }
+        };
+        handler.post(myRunnable);
     }
 
     @Override
