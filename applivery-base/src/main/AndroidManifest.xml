@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.applivery.base">
+
+    <application>
+        <provider
+            android:name=".util.AppliveryContentProvider"
+            android:authorities="${applicationId}.coil"
+            android:exported="false" />
+    </application>
+</manifest>

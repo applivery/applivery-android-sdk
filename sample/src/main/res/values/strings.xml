@@ -1,13 +1,14 @@
 <resources>
   <string name="app_name">Applivery Sdk Sample</string>
 
-  <string name="appliveryMustUpdateAppLocked">Debes actualizar la app.</string>
+  <!--<string name="appliveryMustUpdateAppLocked">Debes actualizar la app.</string>-->
 
-  <string name="appliveryUpdateMsg">Opcionalmente podrías actualizar la app</string>
-  <string name="appliveryUpdate">Actualizar</string>
+  <!--<string name="appliveryUpdateMsg">Opcionalmente podrías actualizar la app</string>-->
+  <!--<string name="appliveryUpdate">Actualizar</string>-->
   <string name="check_for_updates_background">Check for updates background</string>
   <string name="enable_shake_feedback">Enable shake feedback</string>
   <string name="enable_screenshot_feedback">Enable screenshot feedback</string>
+  <string name="main_view_check_for_updates">Check for updates</string>
   <string name="show_user">Show user</string>
   <string name="bind_user">Bind user</string>
   <string name="unbind_user">Unbind user</string>

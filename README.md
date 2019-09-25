@@ -1,13 +1,10 @@
 
-![Applivery Logo](https://www.applivery.com/img/icons/applivery-header-1200x627px.png)
+![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/05/applivery-logo-dark.png)
 
-[![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
-![Language](https://img.shields.io/badge/Language-Java-orange.svg)
-![MinSDK](https://img.shields.io/badge/Min%20SDK-14-green.svg)
+[ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 [![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
 
-### Quality checks
-[![Build Status](https://travis-ci.org/applivery/applivery-android-sdk.svg?branch=develop)](https://travis-ci.org/applivery/applivery-android-sdk) 
+### Quality checks 
 [![codecov.io](https://codecov.io/github/applivery/applivery-android-sdk/coverage.svg?branch=develop)](https://codecov.io/github/applivery/applivery-android-sdk)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android Apps.
@@ -53,7 +50,7 @@ You can get your APP TOKEN in the `Settings` section.
 ## Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-implementation 'com.applivery:applvsdklib:3.0.1'
+implementation 'com.applivery:applivery-sdk:3.0.3'
 ```
 
 ## Gradle with JitPack Maven dependency
@@ -74,7 +71,7 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v3.0.1'
+      compile 'com.github.Applivery:applivery-android-sdk:v3.0.3'
     }
   ```
 
@@ -85,7 +82,7 @@ Add the following dependency to your app gradle:
 add the following dependency to your app gradle:
 
  ```groovy
-  compile 'com.applivery:applivery-android-sdk:3.0.1'
+  compile 'com.applivery:applivery-android-sdk:3.0.3'
  ```
 
 ## Downloading source code
@@ -233,7 +230,7 @@ In order to customize the appearance of the UI, you can make a new resource file
   <color name="applivery_drawing_color">#ffbb33</color>
 
   <string name="appliveryUpdate">Update!</string>
-  <string name="appliveryUpdateMsg">There is a new version available for download! Do you want to update to the latest version?</string>
+  <string name="appliveryUpdateMsg">There is a new version available for downloadInfo! Do you want to update to the latest version?</string>
   <string name="appliveryMustUpdateAppLocked">You must update.</string>
   
   <string name="appliveryLoginFailDielogTitle">Invalid credentials</string>

@@ -21,57 +21,67 @@ import android.widget.Toast
 import com.applivery.applvsdklib.AppliverySdk
 import com.applivery.applvsdklib.R
 import com.applivery.applvsdklib.domain.model.ErrorObject
+import com.applivery.applvsdklib.domain.model.ErrorObject.SUBSCRIPTION_ERROR
+import com.applivery.applvsdklib.domain.model.ErrorObject.UNAUTHORIZED_ERROR
 import com.applivery.applvsdklib.ui.views.login.LoginView
 
 class ShowErrorAlert {
 
-  fun showError(error: ErrorObject) = if (error.isBusinessError) {
+    fun showError(error: ErrorObject) = if (error.isBusinessError) {
 
-    when (error.businessCode) {
-      ErrorObject.UNAUTHORIZED_ERROR -> showLoginDialog(error.message)
-      else -> showAlertDialog(error.message)
-    }
-  } else {
-    AppliverySdk.Logger.loge(error.message)
-  }
-
-  private fun showAlertDialog(message: String) {
-    if (AppliverySdk.isContextAvailable()) {
-      val builder = AlertDialog.Builder(AppliverySdk.getCurrentActivity())
-      builder.setTitle(R.string.appliveryError)
-        .setCancelable(true)
-        .setMessage(message)
-        .setPositiveButton(
-          R.string.appliveryAcceptButton
-        ) { dialog, _ -> dialog.dismiss() }
-        .show()
-    } else {
-      Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
-        .show()
-    }
-  }
-
-  private fun showLoginDialog(message: String) {
-    if (AppliverySdk.isContextAvailable()) {
-      val builder = AlertDialog.Builder(AppliverySdk.getCurrentActivity())
-      builder.setTitle(R.string.appliveryError)
-        .setCancelable(false)
-        .setMessage(message)
-        .setPositiveButton(R.string.appliveryLogin) { dialog, _ ->
-          dialog.dismiss()
-          requestLogin()
+        when (error.businessCode) {
+            UNAUTHORIZED_ERROR -> showLoginDialog(error.message)
+            SUBSCRIPTION_ERROR -> {
+                if (AppliverySdk.isContextAvailable()) {
+                    AppliverySdk.Logger.loge(
+                            AppliverySdk.getApplicationContext()
+                                    .getString(R.string.applivery_error_subscription))
+                }
+                AppliverySdk.Logger.loge(error.message)
+            }
+            else -> showAlertDialog(error.message)
         }
-        .show()
     } else {
-      Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
-        .show()
+        AppliverySdk.Logger.loge(error.message)
     }
-  }
 
-  private fun requestLogin() {
-    val loginView = LoginView(AppliverySdk.getCurrentActivity()) {
-      AppliverySdk.obtainAppConfigForCheckUpdates()
+    private fun showAlertDialog(message: String) {
+        if (AppliverySdk.isContextAvailable()) {
+            val builder = AlertDialog.Builder(AppliverySdk.getCurrentActivity())
+            builder.setTitle(R.string.appliveryError)
+                    .setCancelable(true)
+                    .setMessage(message)
+                    .setPositiveButton(
+                            R.string.appliveryAcceptButton
+                    ) { dialog, _ -> dialog.dismiss() }
+                    .show()
+        } else {
+            Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
+                    .show()
+        }
     }
-    loginView.presenter.requestLogin()
-  }
+
+    private fun showLoginDialog(message: String) {
+        if (AppliverySdk.isContextAvailable()) {
+            val builder = AlertDialog.Builder(AppliverySdk.getCurrentActivity())
+            builder.setTitle(R.string.appliveryError)
+                    .setCancelable(false)
+                    .setMessage(message)
+                    .setPositiveButton(R.string.appliveryLogin) { dialog, _ ->
+                        dialog.dismiss()
+                        requestLogin()
+                    }
+                    .show()
+        } else {
+            Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
+                    .show()
+        }
+    }
+
+    private fun requestLogin() {
+        val loginView = LoginView(AppliverySdk.getCurrentActivity()) {
+            AppliverySdk.obtainAppConfigForCheckUpdates()
+        }
+        loginView.presenter.requestLogin()
+    }
 }

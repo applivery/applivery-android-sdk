@@ -17,6 +17,7 @@
 package com.applivery.applvsdklib.domain.appconfig;
 
 import android.util.Log;
+
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.appconfig.update.LastConfigWriter;
@@ -26,8 +27,6 @@ import com.applivery.applvsdklib.domain.model.Android;
 import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.PackageInfo;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
-import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
 import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.tools.session.SessionManager;
@@ -41,111 +40,112 @@ import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
  */
 public class ObtainAppConfigInteractorCallback implements InteractorCallback<AppConfig> {
 
-  private static final String TAG = "ObtainAppConfigICb";
-  private final PackageInfo packageInfo;
-  private final AppliveryApiService appliveryApiService;
-  private final DownloadApiService downloadApiService;
-  private final SessionManager sessionManager;
-  private final LastConfigWriter lastConfigWriter;
+    private static final String TAG = "ObtainAppConfigICb";
+    private final PackageInfo packageInfo;
+    private final SessionManager sessionManager;
+    private final LastConfigWriter lastConfigWriter;
+    private final Boolean checkForUpdates;
 
-  public ObtainAppConfigInteractorCallback(AppliveryApiService appliveryApiService,
-      DownloadApiService downloadApiService, SessionManager sessionManager,
-      PackageInfo packageInfo) {
-    this.packageInfo = packageInfo;
-    this.sessionManager = sessionManager;
-    this.appliveryApiService = appliveryApiService;
-    this.downloadApiService = downloadApiService;
-    this.lastConfigWriter = new AndroidLastConfigWriterImpl();
-  }
-
-  @Override public void onSuccess(AppConfig appConfig) {
-    Injection.INSTANCE.setAppConfig(appConfig);
-    UpdateType updateType = checkForUpdates(appConfig);
-    lastConfigWriter.writeLastConfigCheckTimeStamp(System.currentTimeMillis());
-    UpdateViewPresenter presenter = new UpdateViewPresenter(getUpdateListener(appConfig));
-    showUpdate(presenter, updateType, appConfig);
-  }
-
-  @Override public void onError(ErrorObject error) {
-    ShowErrorAlert showErrorAlert = new ShowErrorAlert();
-    showErrorAlert.showError(error);
-  }
-
-  private UpdateType checkForUpdates(AppConfig appConfig) {
-    Android android = appConfig.getSdk().getAndroid();
-
-    long minVersion = -1;
-    long lastVersion = -1;
-
-    long currentVersion = packageInfo.getVersion();
-    boolean forceUpdate = android.getForceUpdate();
-    boolean ota = android.getOta();
-
-    try {
-      if (forceUpdate) {
-        minVersion = Integer.valueOf(android.getMinVersion());
-      }
-      lastVersion = Integer.valueOf(android.getLastBuildVersion());
-    } catch (NumberFormatException n) {
-      Log.e(TAG, "checkForUpdates() - value " + android.getLastBuildVersion());
+    public ObtainAppConfigInteractorCallback(SessionManager sessionManager,
+                                             PackageInfo packageInfo, Boolean checkForUpdates) {
+        this.packageInfo = packageInfo;
+        this.sessionManager = sessionManager;
+        this.checkForUpdates = checkForUpdates;
+        this.lastConfigWriter = new AndroidLastConfigWriterImpl();
     }
 
-    UpdateType updateType =
-        obtainUpdateType(minVersion, lastVersion, currentVersion, ota, forceUpdate);
+    @Override
+    public void onSuccess(AppConfig appConfig) {
+        Injection.INSTANCE.setAppConfig(appConfig);
+        lastConfigWriter.writeLastConfigCheckTimeStamp(System.currentTimeMillis());
 
-    if (updateType == UpdateType.FORCED_UPDATE) {
-      AppliverySdk.lockApp();
-    } else {
-      AppliverySdk.unlockApp();
+        if (checkForUpdates) {
+            UpdateType updateType = checkForUpdates(appConfig);
+            UpdateViewPresenter presenter = new UpdateViewPresenter(getUpdateListener(appConfig));
+            showUpdate(presenter, updateType, appConfig);
+        }
     }
 
-    return updateType;
-  }
-
-  private UpdateType obtainUpdateType(long minVersion, long lastVersion, long currentVersion,
-      boolean ota, boolean forceUpdate) {
-
-    UpdateType updateType = UpdateType.NO_UPDATE;
-
-    if (forceUpdate) {
-      if (minVersion > currentVersion) {
-        updateType = UpdateType.FORCED_UPDATE;
-      } else {
-        AppliverySdk.Logger.log(
-            "ForceUpdate is true but App version and last uploaded are both same");
-      }
-    } else if (ota) {
-      if (lastVersion > currentVersion) {
-        updateType = UpdateType.SUGGESTED_UPDATE;
-      } else {
-        AppliverySdk.Logger.log("Ota is true but App version and last uploaded are both same");
-      }
-    } else {
-      AppliverySdk.Logger.log("Not forceUpdate Neither Ota are activated");
+    @Override
+    public void onError(ErrorObject error) {
+        ShowErrorAlert showErrorAlert = new ShowErrorAlert();
+        showErrorAlert.showError(error);
     }
 
-    return updateType;
-  }
+    private UpdateType checkForUpdates(AppConfig appConfig) {
+        Android android = appConfig.getSdk().getAndroid();
 
-  private void showUpdate(UpdateViewPresenter updateViewPresenter, UpdateType updateType,
-      AppConfig appConfig) {
-    switch (updateType) {
-      case FORCED_UPDATE:
-        //TODO add update msg
-        updateViewPresenter.showForcedUpdate(appConfig.getName(), "");
-        break;
-      case SUGGESTED_UPDATE:
-        //TODO add update msg
-        updateViewPresenter.showSuggestedUpdate(appConfig.getName(), "TODO");
-        break;
-      case NO_UPDATE:
-      default:
-        break;
+        long minVersion = -1;
+        long lastVersion = -1;
+
+        long currentVersion = packageInfo.getVersion();
+        boolean forceUpdate = android.getForceUpdate();
+        boolean ota = android.getOta();
+
+        try {
+            if (forceUpdate) {
+                minVersion = Integer.valueOf(android.getMinVersion());
+            }
+            lastVersion = Integer.valueOf(android.getLastBuildVersion());
+        } catch (NumberFormatException n) {
+            Log.e(TAG, "checkForUpdates() - value " + android.getLastBuildVersion());
+        }
+
+        UpdateType updateType =
+                obtainUpdateType(minVersion, lastVersion, currentVersion, ota, forceUpdate);
+
+        if (updateType == UpdateType.FORCED_UPDATE) {
+            AppliverySdk.lockApp();
+        } else {
+            AppliverySdk.unlockApp();
+        }
+
+        return updateType;
     }
-  }
 
-  private UpdateListener getUpdateListener(AppConfig appConfig) {
-    return new UpdateListenerImpl(appConfig, sessionManager, appliveryApiService,
-        downloadApiService);
-  }
+    private UpdateType obtainUpdateType(long minVersion, long lastVersion, long currentVersion,
+                                        boolean ota, boolean forceUpdate) {
+
+        UpdateType updateType = UpdateType.NO_UPDATE;
+
+        if (forceUpdate) {
+            if (minVersion > currentVersion) {
+                updateType = UpdateType.FORCED_UPDATE;
+            } else {
+                AppliverySdk.Logger.log(
+                        "ForceUpdate is true but App version and last uploaded are both same");
+            }
+        } else if (ota) {
+            if (lastVersion > currentVersion) {
+                updateType = UpdateType.SUGGESTED_UPDATE;
+            } else {
+                AppliverySdk.Logger.log("Ota is true but App version and last uploaded are both same");
+            }
+        } else {
+            AppliverySdk.Logger.log("Not forceUpdate Neither Ota are activated");
+        }
+
+        return updateType;
+    }
+
+    private void showUpdate(UpdateViewPresenter updateViewPresenter, UpdateType updateType,
+                            AppConfig appConfig) {
+        switch (updateType) {
+            case FORCED_UPDATE:
+                //TODO add update msg
+                updateViewPresenter.showForcedUpdate(appConfig.getName(), "");
+                break;
+            case SUGGESTED_UPDATE:
+                //TODO add update msg
+                updateViewPresenter.showSuggestedUpdate(appConfig.getName(), "TODO");
+                break;
+            case NO_UPDATE:
+            default:
+                break;
+        }
+    }
+
+    private UpdateListener getUpdateListener(AppConfig appConfig) {
+        return new UpdateListenerImpl(appConfig, sessionManager);
+    }
 }

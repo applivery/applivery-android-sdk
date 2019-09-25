@@ -61,4 +61,5 @@ public class ErrorObject implements BusinessObject<ErrorObject> {
   }
 
   public static final int UNAUTHORIZED_ERROR=4004;
+  public static final int SUBSCRIPTION_ERROR=5004;
 }

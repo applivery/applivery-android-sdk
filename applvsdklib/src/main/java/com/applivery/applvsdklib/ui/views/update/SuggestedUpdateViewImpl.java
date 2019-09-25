@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -31,11 +30,13 @@ import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.ui.model.UpdateInfo;
 
+import androidx.annotation.NonNull;
+
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 3/1/16.
  */
-public class SuggestedUpdateViewImpl implements UpdateView {
+public class SuggestedUpdateViewImpl implements UpdateView, DialogInterface.OnDismissListener {
 
   private final Builder builder;
   private final AlertDialog alertDialog;
@@ -77,7 +78,8 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     builder.setTitle(updateInfo.getAppName())
         .setCancelable(true)
         .setPositiveButton(context.getString(R.string.appliveryUpdate), onUpdateClick())
-        .setNegativeButton(context.getString(R.string.appliveryLater), onCancelClick());
+        .setNegativeButton(context.getString(R.string.appliveryLater), onCancelClick())
+        .setOnDismissListener(this);
     return builder;
   }
 
@@ -85,7 +87,6 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     return new DialogInterface.OnClickListener() {
       @Override public void onClick(DialogInterface dialog, int id) {
         updateListener.onUpdateButtonClick();
-        isVisible = false;
         alertDialog.dismiss();
       }
     };
@@ -94,10 +95,13 @@ public class SuggestedUpdateViewImpl implements UpdateView {
   private DialogInterface.OnClickListener onCancelClick() {
     return new DialogInterface.OnClickListener() {
       @Override public void onClick(DialogInterface dialog, int id) {
-        isVisible = false;
         alertDialog.dismiss();
       }
     };
+  }
+
+  @Override public void onDismiss(DialogInterface dialogInterface) {
+    isVisible = false;
   }
 
   @Override public void showUpdateDialog() {
@@ -130,7 +134,8 @@ public class SuggestedUpdateViewImpl implements UpdateView {
     progress.dismiss();
   }
 
-  @NonNull @Override public Boolean isActive() {
+  @NonNull
+  @Override public Boolean isActive() {
     return isVisible;
   }
 

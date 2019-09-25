@@ -21,8 +21,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import com.applivery.applvsdklib.AppliverySdk;
-import com.applivery.applvsdklib.domain.appconfig.update.AppConfigChecker;
-import com.applivery.applvsdklib.domain.appconfig.update.LastConfigReader;
 import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
 import com.applivery.applvsdklib.tools.permissions.ContextProvider;
 import java.util.HashSet;
@@ -38,15 +36,12 @@ public class AppliveryActivityLifecycleCallbacks
     implements Application.ActivityLifecycleCallbacks, ContextProvider {
 
   private Stack<ActivityLifecyleWrapper> activityStack = new Stack<>();
-  private final AppConfigChecker appConfigChecker;
   private final Context applicationContext;
   private final SensorEventsController sensorEventsController;
   private final ScreenshotObserver screenshotObserver;
-  private final Set<String> activitiesOnRotation = new HashSet();
+  private final Set<String> activitiesOnRotation = new HashSet<>();
 
   public AppliveryActivityLifecycleCallbacks(Context applicationContext) {
-    LastConfigReader lastConfigReader = new AndroidLastConfigReaderImpl();
-    this.appConfigChecker = new AppConfigChecker(lastConfigReader);
     this.applicationContext = applicationContext;
     this.sensorEventsController = SensorEventsController.getInstance(applicationContext);
     this.screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
@@ -77,19 +72,19 @@ public class AppliveryActivityLifecycleCallbacks
   }
 
   @Override public boolean isApplicationContextAvailable() {
-    return (applicationContext != null) ? true : false;
+    return applicationContext != null;
   }
 
   //region Activity lifecycle Management
-
-  @Override public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
+  @Override public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+  }
 
   @Override public void onActivityStarted(Activity activity) {
 
-    if (activitiesOnRotation.contains(activity.getPackageName() + activity.getLocalClassName())){
+    if (activitiesOnRotation.contains(activity.getPackageName() + activity.getLocalClassName())) {
       activitiesOnRotation.remove(activity.getPackageName() + activity.getLocalClassName());
-    }else{
-      if (activityStack.empty() && !activity.isChangingConfigurations()){
+    } else {
+      if (activityStack.empty() && !activity.isChangingConfigurations()) {
         appWillReturnfromBackground();
       }
     }
@@ -104,7 +99,7 @@ public class AppliveryActivityLifecycleCallbacks
   }
 
   private void checkForUpdates() {
-    if (appConfigChecker.shouldCheckAppConfigForUpdate()) {
+    if (AppliverySdk.getCheckForUpdatesBackground()) {
       AppliverySdk.obtainAppConfigForCheckUpdates();
       AppliverySdk.continuePendingPermissionsRequestsIfPossible();
     }
@@ -117,7 +112,6 @@ public class AppliveryActivityLifecycleCallbacks
     } catch (Exception e) {
       AppliverySdk.Logger.log(e.getMessage());
     }
-
   }
 
   @Override public void onActivityPaused(Activity activity) {
@@ -130,10 +124,10 @@ public class AppliveryActivityLifecycleCallbacks
 
   @Override public void onActivityStopped(Activity activity) {
     try {
-      if (activity.isChangingConfigurations()){
+      if (activity.isChangingConfigurations()) {
         activitiesOnRotation.add(activity.getPackageName() + activity.getLocalClassName());
-      }else if (activityStack.size() <= 1){
-          appWillEnterBackground();
+      } else if (activityStack.size() <= 1) {
+        appWillEnterBackground();
       }
       removeActivityFromStack(activity);
     } catch (Exception e) {
@@ -146,7 +140,8 @@ public class AppliveryActivityLifecycleCallbacks
     screenshotObserver.stopObserving();
   }
 
-  @Override public void onActivityDestroyed(Activity activity) {}
+  @Override public void onActivityDestroyed(Activity activity) {
+  }
 
   @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
   }

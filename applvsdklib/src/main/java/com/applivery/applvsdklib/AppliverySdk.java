@@ -25,9 +25,8 @@ import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
 import com.applivery.applvsdklib.domain.appconfig.ObtainAppConfigInteractor;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.domain.login.BindUserInteractor;
@@ -36,7 +35,6 @@ import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.UserData;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.AppliveryApiServiceBuilder;
-import com.applivery.applvsdklib.network.api.DownloadApiService;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
@@ -48,8 +46,13 @@ import com.applivery.applvsdklib.tools.utils.Validate;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
+import com.applivery.base.AppliveryDataManager;
+
 import java.util.Collection;
 import java.util.concurrent.Executor;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
@@ -69,7 +72,6 @@ public class AppliverySdk {
   private static volatile String fileProviderAuthority;
   private static boolean lockedApp = false;
   private static volatile AppliveryApiService appliveryApiService;
-  private static volatile DownloadApiService downloadApiService;
   private static volatile boolean isDebugEnabled = BuildConfig.DEBUG;
   private static Context applicationContext;
   private static PermissionChecker permissionRequestManager;
@@ -77,29 +79,18 @@ public class AppliverySdk {
   private static final Object LOCK = new Object();
 
   private static Boolean sdkInitialized = false;
-  private static Boolean sdkFirstTime;
-  private static Boolean sdkRestarted = true;
   private static Boolean checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
   private static Boolean isUpdating = false;
   private static SharedPreferences sharedPreferences;
 
   public static synchronized void sdkInitialize(Application app, String appToken,
       boolean isStoreRelease) {
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-      init(app, appToken, isStoreRelease);
-    } else {
-      Logger.log(
-          "Despite Applivery SDK compiles from API level 10 and forward, it is not compatible for API levels under 14");
-    }
+    init(app, appToken, isStoreRelease);
   }
 
   @TargetApi(14)
   private static void init(Application app, String appToken, boolean isStoreRelease) {
     if (!sdkInitialized) {
-
-      sdkFirstTime = true;
-      sdkRestarted = true;
       sdkInitialized = true;
 
       initializeAppliveryConstants(app, appToken, isStoreRelease);
@@ -126,22 +117,6 @@ public class AppliverySdk {
     }
   }
 
-  public static synchronized void setSdkFirstTimeFalse() {
-    sdkFirstTime = false;
-  }
-
-  public static synchronized boolean isSdkFirstTime() {
-    return sdkFirstTime;
-  }
-
-  public static synchronized void setSdkRestartedFalse() {
-    sdkRestarted = false;
-  }
-
-  public static synchronized boolean isSdkRestarted() {
-    return sdkRestarted;
-  }
-
   public static synchronized void isUpdating(Boolean updating) {
     isUpdating = updating;
   }
@@ -162,6 +137,7 @@ public class AppliverySdk {
     //endregion
 
     AppliverySdk.appToken = appToken;
+    AppliveryDataManager.INSTANCE.setAppToken(appToken);
     AppliverySdk.isStoreRelease = isStoreRelease;
 
     AppliverySdk.fileProviderAuthority = composeFileProviderAuthority(app);
@@ -169,18 +145,18 @@ public class AppliverySdk {
     AppliverySdk.applicationContext = applicationContext;
 
     AppliverySdk.appliveryApiService = AppliveryApiServiceBuilder.getAppliveryApiInstance();
-    AppliverySdk.downloadApiService = AppliveryApiServiceBuilder.getDownloadApiServiceInstance();
     AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
     AppliverySdk.permissionRequestManager =
         new AndroidPermissionCheckerImpl(AppliverySdk.activityLifecycle);
   }
 
-  private static void obtainAppConfig(boolean requestConfig) {
-    if (!isStoreRelease && requestConfig) {
+  private static void obtainAppConfig(boolean checkForUpdates) {
+    if (!isStoreRelease) {
       getExecutor().execute(
-          ObtainAppConfigInteractor.getInstance(appliveryApiService, downloadApiService,
+          ObtainAppConfigInteractor.getInstance(appliveryApiService,
               Injection.INSTANCE.provideSessionManager(),
-              AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext())));
+              AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext()),
+                  checkForUpdates));
     }
   }
 
@@ -291,6 +267,7 @@ public class AppliverySdk {
   }
 
   public static FeedbackView requestForUserFeedBack() {
+    obtainAppConfig(false);
     FeedbackView feedbackView = null;
     if (!lockedApp) {
       feedbackView = UserFeedbackView.getInstance(appliveryApiService);
@@ -361,7 +338,7 @@ public class AppliverySdk {
   }
 
   static void bindUser(@NonNull String email, @Nullable String firstName, @Nullable String lastName,
-      @Nullable Collection<String> tags, final @Nullable BindUserCallback callback) {
+                       @Nullable Collection<String> tags, final @Nullable BindUserCallback callback) {
 
     BindUserInteractor bindUserInteractor = Injection.INSTANCE.provideBindUserInteractor();
     UserData userData = new UserData(email, firstName, lastName, tags, "", "");

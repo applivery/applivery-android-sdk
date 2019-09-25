@@ -16,21 +16,17 @@
 
 package com.applivery.applvsdklib.domain.appconfig.update;
 
+import android.content.Context;
+
 import com.applivery.applvsdklib.AppliverySdk;
-import com.applivery.applvsdklib.domain.InteractorCallback;
-import com.applivery.applvsdklib.domain.download.app.AppInstaller;
-import com.applivery.applvsdklib.domain.download.app.ExternalStorageReader;
-import com.applivery.applvsdklib.domain.download.token.ObtainAppBuildDownloadTokenInteractor;
-import com.applivery.applvsdklib.domain.download.token.ObtainBuildTokenInteractorCallback;
 import com.applivery.applvsdklib.domain.model.AppConfig;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
-import com.applivery.applvsdklib.network.api.DownloadApiService;
-import com.applivery.applvsdklib.tools.androidimplementations.AndroidAppInstallerImpl;
-import com.applivery.applvsdklib.tools.androidimplementations.AndroidExternalStorageReaderImpl;
 import com.applivery.applvsdklib.tools.session.SessionManager;
 import com.applivery.applvsdklib.ui.views.login.LoginView;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateView;
+import com.applivery.base.util.AppliveryLog;
+import com.applivery.updates.DownloadService;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
@@ -40,72 +36,51 @@ import kotlin.jvm.functions.Function0;
  */
 public class UpdateListenerImpl implements UpdateListener {
 
-  private final AppConfig appConfig;
-  private final SessionManager sessionManager;
-  private final AppliveryApiService apiService;
-  private final DownloadApiService downloadApiService;
-  private final ExternalStorageReader externalStorageReader;
-  private UpdateView updateView;
+    private final AppConfig appConfig;
+    private final SessionManager sessionManager;
+    private UpdateView updateView;
 
-  public UpdateListenerImpl(AppConfig appConfig, SessionManager sessionManager,
-      AppliveryApiService apiService, DownloadApiService downloadApiService) {
-    this.appConfig = appConfig;
-    this.sessionManager = sessionManager;
-    this.apiService = apiService;
-    this.downloadApiService = downloadApiService;
-    this.externalStorageReader = new AndroidExternalStorageReaderImpl();
-  }
-
-  @Override public void onUpdateButtonClick() {
-    if (needLogin(appConfig)) {
-      showLogin();
-    } else {
-      updateApp();
+    public UpdateListenerImpl(AppConfig appConfig, SessionManager sessionManager) {
+        this.appConfig = appConfig;
+        this.sessionManager = sessionManager;
     }
-  }
 
-  private void updateApp() {
-    String buildId = appConfig.getSdk().getAndroid().getLastBuildId();
-    if (appBuildNotDownloaded(appConfig.getName() + "_" + buildId)) {
-      InteractorCallback interactorCallback =
-          new ObtainBuildTokenInteractorCallback(downloadApiService, appConfig.getName(),
-              updateView);
-
-      Runnable r = ObtainAppBuildDownloadTokenInteractor.getInstance(apiService, buildId,
-          interactorCallback);
-
-      AppliverySdk.getExecutor().execute(r);
-    } else {
-      installApp(appConfig.getName() + "_" + buildId);
+    @Override
+    public void onUpdateButtonClick() {
+        if (needLogin(appConfig)) {
+            showLogin();
+        } else {
+            updateApp();
+        }
     }
-  }
 
-  private boolean appBuildNotDownloaded(String apkFileName) {
-    return !externalStorageReader.fileExists(apkFileName);
-  }
+    private void updateApp() {
+        if (AppliverySdk.isContextAvailable()) {
+            Context context = AppliverySdk.getApplicationContext();
+            DownloadService.Companion.startDownloadService(context);
+        } else {
+            AppliveryLog.error("Cannot init Download service");
+        }
+    }
 
-  private Boolean needLogin(AppConfig appConfig) {
-    Boolean isAuthUpdate = appConfig.getSdk().getAndroid().getForceAuth();
-    return isAuthUpdate && !sessionManager.hasSession();
-  }
+    private Boolean needLogin(AppConfig appConfig) {
+        Boolean isAuthUpdate = appConfig.getSdk().getAndroid().getForceAuth();
+        return isAuthUpdate && !sessionManager.hasSession();
+    }
 
-  private void showLogin() {
-    LoginView loginView = new LoginView(AppliverySdk.getCurrentActivity(), new Function0<Unit>() {
-      @Override public Unit invoke() {
-        updateApp();
-        return null;
-      }
-    });
-    loginView.getPresenter().requestLogin();
-  }
+    private void showLogin() {
+        LoginView loginView = new LoginView(AppliverySdk.getCurrentActivity(), new Function0<Unit>() {
+            @Override
+            public Unit invoke() {
+                updateApp();
+                return null;
+            }
+        });
+        loginView.getPresenter().requestLogin();
+    }
 
-  private void installApp(String apkFileName) {
-    AppInstaller appInstaller = new AndroidAppInstallerImpl(AppliverySdk.getApplicationContext(),
-        AppliverySdk.getFileProviderAuthority());
-    appInstaller.installApp(apkFileName);
-  }
-
-  @Override public void setUpdateView(UpdateView updateView) {
-    this.updateView = updateView;
-  }
+    @Override
+    public void setUpdateView(UpdateView updateView) {
+        this.updateView = updateView;
+    }
 }
