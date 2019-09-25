@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.applivery.applvsdklib.domain.appconfig;
 
 import com.applivery.applvsdklib.domain.BaseInteractor;
@@ -24,7 +23,7 @@ import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.requests.ObtainAppConfigRequest;
-import com.applivery.applvsdklib.tools.session.SessionManager;
+import com.applivery.base.domain.SessionManager;
 
 /**
  * Created by Sergio Martinez Rodriguez

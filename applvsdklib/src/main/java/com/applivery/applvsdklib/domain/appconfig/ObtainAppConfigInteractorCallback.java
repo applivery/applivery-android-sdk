@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Applivery
+ * Copyright (c) 2019 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.applivery.applvsdklib.domain.appconfig;
 
 import android.util.Log;
@@ -29,10 +28,10 @@ import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidLastConfigWriterImpl;
 import com.applivery.applvsdklib.tools.injection.Injection;
-import com.applivery.applvsdklib.tools.session.SessionManager;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter;
+import com.applivery.base.domain.SessionManager;
 
 /**
  * Created by Sergio Martinez Rodriguez
