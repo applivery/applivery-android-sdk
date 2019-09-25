@@ -37,10 +37,11 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
 
     private ObtainAppConfigInteractor(AppliveryApiService apiService,
                                       SessionManager sessionManager,
-                                      PackageInfo packageInfo) {
+                                      PackageInfo packageInfo,
+                                      Boolean checkForUpdates) {
         this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService);
         this.appConfigInteractorCallback =
-                new ObtainAppConfigInteractorCallback(sessionManager, packageInfo);
+                new ObtainAppConfigInteractorCallback(sessionManager, packageInfo, checkForUpdates);
     }
 
     @Override
@@ -65,9 +66,10 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
 
     public static Runnable getInstance(AppliveryApiService appliveryApiService,
                                        SessionManager sessionManager,
-                                       PackageInfo packageInfo) {
+                                       PackageInfo packageInfo,
+                                       Boolean checkForUpdates) {
 
         return new ObtainAppConfigInteractor(appliveryApiService, sessionManager,
-                packageInfo);
+                packageInfo, checkForUpdates);
     }
 }

@@ -150,12 +150,13 @@ public class AppliverySdk {
         new AndroidPermissionCheckerImpl(AppliverySdk.activityLifecycle);
   }
 
-  private static void obtainAppConfig(boolean requestConfig) {
-    if (!isStoreRelease && requestConfig) {
+  private static void obtainAppConfig(boolean checkForUpdates) {
+    if (!isStoreRelease) {
       getExecutor().execute(
           ObtainAppConfigInteractor.getInstance(appliveryApiService,
               Injection.INSTANCE.provideSessionManager(),
-              AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext())));
+              AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext()),
+                  checkForUpdates));
     }
   }
 
@@ -266,6 +267,7 @@ public class AppliverySdk {
   }
 
   public static FeedbackView requestForUserFeedBack() {
+    obtainAppConfig(false);
     FeedbackView feedbackView = null;
     if (!lockedApp) {
       feedbackView = UserFeedbackView.getInstance(appliveryApiService);

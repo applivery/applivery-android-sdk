@@ -19,59 +19,59 @@ import com.applivery.applvsdklib.ui.views.login.LoginPresenter
 
 internal object Injection {
 
-  var appConfig: AppConfig? = null
+    var appConfig: AppConfig? = null
 
-  fun provideLoginPresenter(): LoginPresenter {
-    return LoginPresenter(provideLoginInteractor())
-  }
+    fun provideLoginPresenter(): LoginPresenter {
+        return LoginPresenter(provideLoginInteractor())
+    }
 
-  fun provideFeedbackPresenter(feedbackView: FeedbackView): UserFeedbackPresenter {
-    return UserFeedbackPresenter(appConfig, feedbackView, provideSessionManager())
-  }
+    fun provideFeedbackPresenter(feedbackView: FeedbackView): UserFeedbackPresenter {
+        return UserFeedbackPresenter(feedbackView, provideSessionManager())
+    }
 
-  private fun provideLoginInteractor(): LoginInteractor {
-    val interactorExecutor = provideInteractorExecutor()
-    val mainThread = provideMainThread()
-    val apiService = provideAppliveryApiService()
-    val sessionManager = provideSessionManager()
+    private fun provideLoginInteractor(): LoginInteractor {
+        val interactorExecutor = provideInteractorExecutor()
+        val mainThread = provideMainThread()
+        val apiService = provideAppliveryApiService()
+        val sessionManager = provideSessionManager()
 
-    return LoginInteractor(interactorExecutor, mainThread, apiService, sessionManager)
-  }
+        return LoginInteractor(interactorExecutor, mainThread, apiService, sessionManager)
+    }
 
-  fun provideBindUserInteractor(): BindUserInteractor {
-    val interactorExecutor = provideInteractorExecutor()
-    val mainThread = provideMainThread()
-    val apiService = provideAppliveryApiService()
-    val sessionManager = provideSessionManager()
+    fun provideBindUserInteractor(): BindUserInteractor {
+        val interactorExecutor = provideInteractorExecutor()
+        val mainThread = provideMainThread()
+        val apiService = provideAppliveryApiService()
+        val sessionManager = provideSessionManager()
 
-    return BindUserInteractor(interactorExecutor, mainThread, apiService, sessionManager)
-  }
+        return BindUserInteractor(interactorExecutor, mainThread, apiService, sessionManager)
+    }
 
-  fun provideUnBindUserInteractor(): UnBindUserInteractor {
-    val interactorExecutor = provideInteractorExecutor()
-    val mainThread = provideMainThread()
-    val sessionManager = provideSessionManager()
+    fun provideUnBindUserInteractor(): UnBindUserInteractor {
+        val interactorExecutor = provideInteractorExecutor()
+        val mainThread = provideMainThread()
+        val sessionManager = provideSessionManager()
 
-    return UnBindUserInteractor(interactorExecutor, mainThread, sessionManager)
-  }
+        return UnBindUserInteractor(interactorExecutor, mainThread, sessionManager)
+    }
 
-  private fun provideInteractorExecutor(): InteractorExecutor {
-    return ThreadExecutor()
-  }
+    private fun provideInteractorExecutor(): InteractorExecutor {
+        return ThreadExecutor()
+    }
 
-  private fun provideMainThread(): MainThread {
-    return MainThreadImp()
-  }
+    private fun provideMainThread(): MainThread {
+        return MainThreadImp()
+    }
 
-  private fun provideAppliveryApiService(): AppliveryApiService {
-    return AppliveryApiServiceBuilder.getAppliveryApiInstance()
-  }
+    private fun provideAppliveryApiService(): AppliveryApiService {
+        return AppliveryApiServiceBuilder.getAppliveryApiInstance()
+    }
 
-  fun provideSessionManager(): SessionManager {
-    return SessionManager.create(AppliverySdk.getSharedPreferences())
-  }
+    fun provideSessionManager(): SessionManager {
+        return SessionManager.create(AppliverySdk.getSharedPreferences())
+    }
 
-  fun provideSessionInterceptor(): SessionInterceptor {
-    return SessionInterceptor(provideSessionManager())
-  }
+    fun provideSessionInterceptor(): SessionInterceptor {
+        return SessionInterceptor(provideSessionManager())
+    }
 }

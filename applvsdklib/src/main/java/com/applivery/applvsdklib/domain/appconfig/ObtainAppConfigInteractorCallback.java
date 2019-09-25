@@ -44,21 +44,26 @@ public class ObtainAppConfigInteractorCallback implements InteractorCallback<App
     private final PackageInfo packageInfo;
     private final SessionManager sessionManager;
     private final LastConfigWriter lastConfigWriter;
+    private final Boolean checkForUpdates;
 
     public ObtainAppConfigInteractorCallback(SessionManager sessionManager,
-                                             PackageInfo packageInfo) {
+                                             PackageInfo packageInfo, Boolean checkForUpdates) {
         this.packageInfo = packageInfo;
         this.sessionManager = sessionManager;
+        this.checkForUpdates = checkForUpdates;
         this.lastConfigWriter = new AndroidLastConfigWriterImpl();
     }
 
     @Override
     public void onSuccess(AppConfig appConfig) {
         Injection.INSTANCE.setAppConfig(appConfig);
-        UpdateType updateType = checkForUpdates(appConfig);
         lastConfigWriter.writeLastConfigCheckTimeStamp(System.currentTimeMillis());
-        UpdateViewPresenter presenter = new UpdateViewPresenter(getUpdateListener(appConfig));
-        showUpdate(presenter, updateType, appConfig);
+
+        if (checkForUpdates) {
+            UpdateType updateType = checkForUpdates(appConfig);
+            UpdateViewPresenter presenter = new UpdateViewPresenter(getUpdateListener(appConfig));
+            showUpdate(presenter, updateType, appConfig);
+        }
     }
 
     @Override
