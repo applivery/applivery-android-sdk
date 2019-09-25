@@ -1,7 +1,7 @@
 
 ![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/05/applivery-logo-dark.png)
 
-[![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/downloadInfo.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 [![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
 
 ### Quality checks 
@@ -48,9 +48,9 @@ You can get your APP TOKEN in the `Settings` section.
 ## SDK Installation
 
 ## Gradle with jCenter dependency
-[ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/downloadInfo.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-implementation 'com.applivery:applvsdklib:3.0.1'
+implementation 'com.applivery:applivery-sdk:3.0.2'
 ```
 
 ## Gradle with JitPack Maven dependency
@@ -71,7 +71,7 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      compile 'com.github.Applivery:applivery-android-sdk:v3.0.1'
+      compile 'com.github.Applivery:applivery-android-sdk:v3.0.2'
     }
   ```
 
@@ -82,7 +82,7 @@ Add the following dependency to your app gradle:
 add the following dependency to your app gradle:
 
  ```groovy
-  compile 'com.applivery:applivery-android-sdk:3.0.1'
+  compile 'com.applivery:applivery-android-sdk:3.0.2'
  ```
 
 ## Downloading source code
