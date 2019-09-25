@@ -1,6 +1,5 @@
 package com.applivery.applvsdklib.tools.injection
 
-import com.applivery.applvsdklib.AppliverySdk
 import com.applivery.applvsdklib.domain.login.BindUserInteractor
 import com.applivery.applvsdklib.domain.login.LoginInteractor
 import com.applivery.applvsdklib.domain.login.UnBindUserInteractor
@@ -12,10 +11,11 @@ import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.applvsdklib.tools.executor.MainThreadImp
 import com.applivery.applvsdklib.tools.executor.ThreadExecutor
-import com.applivery.applvsdklib.tools.session.SessionManager
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackPresenter
 import com.applivery.applvsdklib.ui.views.login.LoginPresenter
+import com.applivery.base.di.SessionManagerProvider
+import com.applivery.base.domain.SessionManager
 
 internal object Injection {
 
@@ -68,7 +68,7 @@ internal object Injection {
     }
 
     fun provideSessionManager(): SessionManager {
-        return SessionManager.create(AppliverySdk.getSharedPreferences())
+        return SessionManagerProvider.provideSessionManager()
     }
 
     fun provideSessionInterceptor(): SessionInterceptor {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Applivery
+ * Copyright (c) 2019 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.applivery.applvsdklib.domain.appconfig.update;
 
 import android.content.Context;
 
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.model.AppConfig;
-import com.applivery.applvsdklib.tools.session.SessionManager;
 import com.applivery.applvsdklib.ui.views.login.LoginView;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateView;
+import com.applivery.base.domain.SessionManager;
 import com.applivery.base.util.AppliveryLog;
 import com.applivery.updates.DownloadService;
 
