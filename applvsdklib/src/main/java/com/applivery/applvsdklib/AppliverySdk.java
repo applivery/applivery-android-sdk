@@ -46,6 +46,7 @@ import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
 import com.applivery.base.AppliveryDataManager;
+import com.applivery.base.AppliveryLifecycleCallbacks;
 
 import java.util.Collection;
 import java.util.concurrent.Executor;
@@ -91,16 +92,9 @@ public class AppliverySdk {
   private static void init(Application app, String appToken, boolean isStoreRelease) {
     if (!sdkInitialized) {
       sdkInitialized = true;
-
+      app.registerActivityLifecycleCallbacks(new AppliveryLifecycleCallbacks());
       initializeAppliveryConstants(app, appToken, isStoreRelease);
-
-      boolean requestConfig;
-
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-        requestConfig = !registerActivityLifecyleCallbacks(app);
-      } else {
-        requestConfig = true;
-      }
+      obtainAppConfig(false);
     }
   }
 
@@ -230,6 +224,11 @@ public class AppliverySdk {
   public static void obtainAppConfigForCheckUpdates() {
     Validate.sdkInitialized();
     obtainAppConfig(true);
+  }
+
+  public static void updateAppConfig() {
+    Validate.sdkInitialized();
+    obtainAppConfig(false);
   }
 
   public static void continuePendingPermissionsRequestsIfPossible() {

@@ -16,6 +16,7 @@
 
 package com.applivery.applvsdklib.ui.views
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.widget.Toast
 import com.applivery.applvsdklib.AppliverySdk
@@ -24,6 +25,8 @@ import com.applivery.applvsdklib.domain.model.ErrorObject
 import com.applivery.applvsdklib.domain.model.ErrorObject.SUBSCRIPTION_ERROR
 import com.applivery.applvsdklib.domain.model.ErrorObject.UNAUTHORIZED_ERROR
 import com.applivery.applvsdklib.ui.views.login.LoginView
+import com.applivery.base.AppliveryLifecycleCallbacks
+import com.applivery.base.util.AppliveryLog
 
 class ShowErrorAlert {
 
@@ -34,8 +37,9 @@ class ShowErrorAlert {
             SUBSCRIPTION_ERROR -> {
                 if (AppliverySdk.isContextAvailable()) {
                     AppliverySdk.Logger.loge(
-                            AppliverySdk.getApplicationContext()
-                                    .getString(R.string.applivery_error_subscription))
+                        AppliverySdk.getApplicationContext()
+                            .getString(R.string.applivery_error_subscription)
+                    )
                 }
                 AppliverySdk.Logger.loge(error.message)
             }
@@ -49,38 +53,37 @@ class ShowErrorAlert {
         if (AppliverySdk.isContextAvailable()) {
             val builder = AlertDialog.Builder(AppliverySdk.getCurrentActivity())
             builder.setTitle(R.string.appliveryError)
-                    .setCancelable(true)
-                    .setMessage(message)
-                    .setPositiveButton(
-                            R.string.appliveryAcceptButton
-                    ) { dialog, _ -> dialog.dismiss() }
-                    .show()
+                .setCancelable(true)
+                .setMessage(message)
+                .setPositiveButton(
+                    R.string.appliveryAcceptButton
+                ) { dialog, _ -> dialog.dismiss() }
+                .show()
         } else {
             Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
-                    .show()
+                .show()
         }
     }
 
     private fun showLoginDialog(message: String) {
-        if (AppliverySdk.isContextAvailable()) {
-            val builder = AlertDialog.Builder(AppliverySdk.getCurrentActivity())
+        AppliveryLifecycleCallbacks.activity?.let {
+            val builder = AlertDialog.Builder(it)
             builder.setTitle(R.string.appliveryError)
-                    .setCancelable(false)
-                    .setMessage(message)
-                    .setPositiveButton(R.string.appliveryLogin) { dialog, _ ->
-                        dialog.dismiss()
-                        requestLogin()
-                    }
-                    .show()
-        } else {
-            Toast.makeText(AppliverySdk.getApplicationContext(), message, Toast.LENGTH_LONG)
-                    .show()
+                .setCancelable(false)
+                .setMessage(message)
+                .setPositiveButton(R.string.appliveryLogin) { dialog, _ ->
+                    dialog.dismiss()
+                    requestLogin(it)
+                }
+                .show()
+        } ?: also {
+            AppliveryLog.error("Session Error with out valid activity")
         }
     }
 
-    private fun requestLogin() {
-        val loginView = LoginView(AppliverySdk.getCurrentActivity()) {
-            AppliverySdk.obtainAppConfigForCheckUpdates()
+    private fun requestLogin(activity: Activity) {
+        val loginView = LoginView(activity) {
+            AppliverySdk.updateAppConfig()
         }
         loginView.presenter.requestLogin()
     }
