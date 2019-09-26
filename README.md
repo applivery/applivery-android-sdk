@@ -21,8 +21,6 @@ Framework to support [Applivery.com Mobile App distribution](http://www.appliver
 	* [Gradle with jCenter dependency](#gradle-with-jcenter-dependency)
 	* [Gradle with JitPack Maven dependency](#gradle-with-jitpack-maven-dependency)
 	* [Gradle with Nexus/MavenCentral dependency](#gradle-with-nexusmavencentral-dependency)
-	* [Downloading source code](#downloading-source-code)
-	* [Downloading aar package as a lib](#downloading-aar-package-as-a-lib)
 * [SDK Setup](#sdk-setup)
 	* [Step 1](#step-1)
 	* [Step 2](#step-2)
@@ -77,50 +75,6 @@ Add the following dependency to your app gradle:
       compile 'com.github.Applivery:applivery-android-sdk:v3.0.4'
     }
   ```
-
-## Downloading source code
-
-Dowload the zip called [Zipped SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.zip "applvsdklib.zip") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads")
- folder. 
- 
- Unzip all the content at the same level of your "app" folder.  
- 
- ![FILES](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/project_files.png)
- 
- Go to settings.gradle file: 
- 
- ![Settings](https://github.com/applivery/applivery-android-sdk/blob/master/documentation/setting_gradle.png)
- 
- And include your new module as follows:
- 
- ```groovy
- include ':app', ':applvsdklib'
- ```
- Now include this line into your app folder `buld.gradle` dependencies 
-
- ```groovy
- compile project(":applvsdklib")
- ```
-
-## Downloading aar package as a lib
-
-Dowload the zip aar called [aar SDK](https://github.com/applivery/applivery-android-sdk/blob/master/downloads/applvsdklib.aar "applvsdklib.aar") from [downloads](https://github.com/applivery/applivery-android-sdk/blob/master/downloads "downloads") folder. 
-Now you can import a local aar file using the File --> New --> New Module -->Import .JAR/.AAR Package option in Android Studio and add this dependency to your app build.gradle in this way:
-
- ```groovy
-  compile project(":applvsdklib")
- ```
-
-Do not forget that using this method you have to import the following libraries that Applivery SDK is using:
-
-```groovy
-  compile 'com.android.support:appcompat-v7:23.1.1'
-  compile 'com.squareup.retrofit2:retrofit:2.0.0'
-  compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-  compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-  compile 'com.google.code.gson:gson:2.6.2'
-  compile 'com.karumi:dexter:5.0.0'
-```
 
 ## SDK Setup
 
