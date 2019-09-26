@@ -92,8 +92,9 @@ public class AppliverySdk {
   private static void init(Application app, String appToken, boolean isStoreRelease) {
     if (!sdkInitialized) {
       sdkInitialized = true;
-      app.registerActivityLifecycleCallbacks(new AppliveryLifecycleCallbacks());
       initializeAppliveryConstants(app, appToken, isStoreRelease);
+      app.registerActivityLifecycleCallbacks(new AppliveryLifecycleCallbacks());
+      registerActivityLifecyleCallbacks(app);
       obtainAppConfig(false);
     }
   }
