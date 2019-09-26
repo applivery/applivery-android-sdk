@@ -133,6 +133,8 @@ class DownloadService : IntentService("Download apk service") {
             .setContentText(getString(R.string.applivery_updates_notification_text, appName))
             .setAutoCancel(false)
             .setOngoing(true)
+            .setSound(null)
+            .setVibrate(null)
             .setProgress(MAX_PROGRESS, 0, true)
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder?.build())
     }
@@ -170,6 +172,8 @@ class DownloadService : IntentService("Download apk service") {
             val description = getString(R.string.applivery_updates_channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance)
+            channel.setSound(null, null)
+            channel.enableVibration(false)
             channel.description = description
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager!!.createNotificationChannel(channel)
