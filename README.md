@@ -1,7 +1,11 @@
 
 ![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/05/applivery-logo-dark.png)
 
-[ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
+<p align="left">
+  <a href="https://github.com/actions/setup-node"><img alt="GitHub Actions status" src="https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg"></a>
+</p>
+
+[![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg)](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 [![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
 
 ### Quality checks 
