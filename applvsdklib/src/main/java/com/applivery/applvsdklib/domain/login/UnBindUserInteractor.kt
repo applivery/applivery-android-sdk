@@ -20,6 +20,7 @@ import com.applivery.applvsdklib.domain.model.ErrorObject
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.base.domain.SessionManager
+import java.io.IOException
 
 class UnBindUserInteractor(
     private val interactorExecutor: InteractorExecutor,
@@ -41,13 +42,10 @@ class UnBindUserInteractor(
     }
 
     override fun run() {
-
         try {
-
             sessionManager.clearSession()
             notifySuccess()
-        } catch (exception: Exception) {
-
+        } catch (exception: IOException) {
             Log.e(TAG, "unBindUser() -> ${exception.message}")
             notifyError(ErrorObject())
         }
