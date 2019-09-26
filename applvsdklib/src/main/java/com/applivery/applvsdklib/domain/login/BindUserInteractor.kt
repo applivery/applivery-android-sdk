@@ -23,6 +23,7 @@ import com.applivery.applvsdklib.network.api.requests.BindUserRequest
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.base.domain.SessionManager
+import java.io.IOException
 
 class BindUserInteractor(
     private val interactorExecutor: InteractorExecutor,
@@ -62,7 +63,7 @@ class BindUserInteractor(
                 Log.e(TAG, "Bind user response error")
                 notifyError(ErrorObject())
             }
-        } catch (exception: Exception) {
+        } catch (exception: IOException) {
             Log.e(TAG, "bindUser() -> ${exception.message}")
             notifyError(ErrorObject())
         }

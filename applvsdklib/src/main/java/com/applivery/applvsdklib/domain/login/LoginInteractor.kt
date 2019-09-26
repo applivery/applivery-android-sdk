@@ -23,6 +23,7 @@ import com.applivery.applvsdklib.network.api.model.LoginEntity
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.base.domain.SessionManager
+import java.io.IOException
 
 class LoginInteractor(
     private val interactorExecutor: InteractorExecutor,
@@ -62,7 +63,7 @@ class LoginInteractor(
                 Log.e(TAG, "Make login response error")
                 notifyError(ErrorObject())
             }
-        } catch (exception: Exception) {
+        } catch (exception: IOException) {
             Log.e(TAG, "makeLogin() -> ${exception.message}")
             notifyError(ErrorObject())
         }

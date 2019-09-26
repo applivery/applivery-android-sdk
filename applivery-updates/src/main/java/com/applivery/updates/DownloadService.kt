@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2019 Applivery
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.applivery.updates
 
 import android.app.IntentService
@@ -21,6 +36,7 @@ import java.io.IOException
 
 private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_87234"
 private const val NOTIFICATION_ID = 0x21
+private const val MAX_PROGRESS = 100
 
 class DownloadService : IntentService("Download apk service") {
 
@@ -64,7 +80,7 @@ class DownloadService : IntentService("Download apk service") {
                 AppliveryLog.error("Invalid config. Cannot get the build token")
                 ""
             }
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             AppliveryLog.error("Cannot get the build token")
             ""
         }
@@ -117,12 +133,14 @@ class DownloadService : IntentService("Download apk service") {
             .setContentText(getString(R.string.applivery_updates_notification_text, appName))
             .setAutoCancel(false)
             .setOngoing(true)
-            .setProgress(100, 0, true)
+            .setSound(null)
+            .setVibrate(null)
+            .setProgress(MAX_PROGRESS, 0, true)
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder?.build())
     }
 
     private fun updateProgress(downloadInfo: DownloadInfo) {
-        notificationBuilder?.setProgress(100, downloadInfo.progress, false)
+        notificationBuilder?.setProgress(MAX_PROGRESS, downloadInfo.progress, false)
         notificationBuilder?.setContentText(
             getString(
                 R.string.applivery_updates_notification_progress,
@@ -154,6 +172,8 @@ class DownloadService : IntentService("Download apk service") {
             val description = getString(R.string.applivery_updates_channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance)
+            channel.setSound(null, null)
+            channel.enableVibration(false)
             channel.description = description
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager!!.createNotificationChannel(channel)
