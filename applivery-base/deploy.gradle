@@ -23,21 +23,31 @@ def getBintrayKey() {
 }
 
 apply plugin: 'com.jfrog.bintray'
+Properties properties = new Properties()
 
 bintray {
     user = getBintrayUser()
     key = getBintrayKey()
     configurations = ['archives']
     pkg {
-        repo = 'maven'
-        name = 'applivery-android-sdk'
+        repo = bintrayRepo
+        name = bintrayName
         userOrg = 'applivery'
-        vcsUrl = 'https://github.com/applivery/applivery-android-sdk.git'
-        licenses = ['Apache-2.0']
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = true
 
         version {
             name = project.version
+            desc = libraryDescription
             released = new Date()
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
         }
     }
 }
