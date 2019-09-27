@@ -49,7 +49,7 @@ task clean(type: Delete) {
 
 subprojects { project ->
     group = 'com.applivery'
-    version = '3.0.5'
+    version = '3.0.9'
 
     repositories {
         google()
@@ -62,5 +62,24 @@ subprojects { project ->
                 targetSdk : 28,
                 compileSdk: 28,
         ]
+
+        bintrayRepo = 'maven'
+        bintrayName = 'applivery-android-sdk'
+
+        publishedGroupId = rootProject.group
+        libraryName = 'applivery-android-sdk'
+
+        libraryDescription = 'Applivery android sdk'
+
+        siteUrl = 'https://github.com/applivery/applivery-android-sdk'
+        gitUrl = 'https://github.com/applivery/applivery-android-sdk.git'
+
+        developerId = 'applivery'
+        developerName = 'Applivery'
+        developerEmail = 'info@applivery.com'
+
+        licenseName = 'The Apache Software License, Version 2.0'
+        licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        allLicenses = ["Apache-2.0"]
     }
 }
