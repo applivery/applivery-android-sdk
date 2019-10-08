@@ -77,8 +77,8 @@ dependencies {
 
     implementation "com.karumi:dexter:${dexterVersion}"
 
-    api(project(":applivery-base"))
-    api(project(":applivery-updates"))
+    implementation(project(":applivery-base"))
+    implementation(project(":applivery-updates"))
 
     // Test dependencies
     testImplementation "junit:junit:${junitVersion}"
