@@ -58,7 +58,7 @@ subprojects { project ->
 
     ext {
         versions = [
-                minSdk    : 21,
+                minSdk    : 15,
                 targetSdk : 28,
                 compileSdk: 28,
         ]
