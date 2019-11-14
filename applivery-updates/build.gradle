@@ -24,12 +24,12 @@ apply from: rootProject.file('gradle/checkstyle.gradle')
 def STRING = "String"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion versions.compileSdk
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -75,7 +75,6 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
-    implementation "androidx.work:work-runtime:2.3.0-alpha01"
 
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"

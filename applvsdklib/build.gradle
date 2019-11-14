@@ -26,6 +26,7 @@ def BOOLEAN = "Boolean"
 
 android {
     compileSdkVersion versions.compileSdk
+    buildToolsVersion "29.0.2"
 
     defaultConfig {
         minSdkVersion versions.minSdk
