@@ -1,10 +1,7 @@
 
-![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/05/applivery-logo-dark.png)
+![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/06/applivery-og.png)
 
-<p align="left">
-  <a href="https://github.com/actions/setup-node"><img alt="GitHub Actions status" src="https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg"></a>
-</p>
-
+[![Download](https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg)](https://github.com/actions/setup-node)
 [![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg)](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 [![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
 
@@ -45,17 +42,17 @@ First of all, you should create an account on [Applivery.io](https://dashboard.a
 
 **APP TOKEN**: that identifies and grants access to your app in order to use the SDK.
 
-You can get your APP TOKEN in the `Settings` section.
+You can get your APP TOKEN in your App -> Settings -> Integrations section.
 
 ## SDK Installation
 
-## Gradle with jCenter dependency
+### Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-implementation 'com.applivery:applivery-sdk:3.0.9'
+implementation 'com.applivery:applivery-sdk:3.0.10'
 ```
 
-## Gradle with JitPack Maven dependency
+### Gradle with JitPack Maven dependency
 [![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
 
 Add the following repository to your's root gradle:
@@ -72,14 +69,24 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      implementation 'com.github.Applivery:applivery-android-sdk:v3.0.9'
+      implementation 'com.github.Applivery:applivery-android-sdk:v3.0.10'
     }
   ```
+  
+### Gradle with Nexus/MavenCentral dependency
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Capplivery)
+
+add the following dependency to your app gradle:
+
+ ```groovy
+  compile 'com.applivery:applivery-android-sdk:3.0.10'
+ ```
 
 ## SDK Setup
 
 ### Step 1
-At your application startup, in a class extending from `Application`, you must call the init method:
+At your application startup, in a class extending from `Application`, you must call the `Applivery.init()` method:
 
  ```java
  public class AppliveryApplication extends Application{
@@ -89,14 +96,10 @@ At your application startup, in a class extending from `Application`, you must c
 	 }
  }
  ```
- 
-After that make sure to call the following Applivery public methods:
- ```java
-Applivery.init(this, BuildConfig.APP_TOKEN, false);
- ```
+
 This method is intended to initialize the Applivery SDK. The only thing you have to take care about is that this call **MUST** be performed in App's `onCreate()` Method.
  
-**IMPORTANT:** As you can suspect, you should replace the strings `APP_TOKEN` with you app token. Easy! Don't you think so?
+**IMPORTANT:** As you can suspect, you should replace the `APP_TOKEN` string with you app token. Easy! Don't you think so?
  
 ### Step 2
 Once initialized the SDK and **once your App is stable in the Home Screen** you have to call proactivelly the following method in order to check for new updates:
@@ -201,7 +204,7 @@ You can also override the following drawable resources:
 
 ### Sample App
 
-As a sample integration you can take a look at: [our sample app](https://github.com/applivery/applivery-android-sdk/tree/master/sample)
+As a sample integration you can take a look at [our sample app](https://github.com/applivery/applivery-android-sdk/tree/master/sample)
 
 # Acknowledgements
 
