@@ -150,7 +150,7 @@ public class AppliverySdk {
           ObtainAppConfigInteractor.getInstance(appliveryApiService,
               Injection.INSTANCE.provideSessionManager(),
               AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext()),
-                  checkForUpdates));
+                  checkForUpdates, null));
     }
   }
 
@@ -372,16 +372,11 @@ public class AppliverySdk {
   }
 
   static void isUpToDate(IsUpToDateCallback isUpToDateCallback) {
-
-
-//      getExecutor().execute(
-//              ObtainAppConfigInteractor.getInstance(appliveryApiService,
-//                      Injection.INSTANCE.provideSessionManager(),
-//                      AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext()),
-//                      checkForUpdates));
-
-    isUpToDateCallback.onIsUpToDateCheck(false);
-
+      getExecutor().execute(
+              ObtainAppConfigInteractor.getInstance(appliveryApiService,
+                      Injection.INSTANCE.provideSessionManager(),
+                      AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext()),
+                      false,isUpToDateCallback));
   }
 
   public static class Logger {
