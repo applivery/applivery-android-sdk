@@ -371,8 +371,17 @@ public class AppliverySdk {
     });
   }
 
-  public static SharedPreferences getSharedPreferences() {
-    return sharedPreferences;
+  static void isUpToDate(IsUpToDateCallback isUpToDateCallback) {
+
+
+//      getExecutor().execute(
+//              ObtainAppConfigInteractor.getInstance(appliveryApiService,
+//                      Injection.INSTANCE.provideSessionManager(),
+//                      AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext()),
+//                      checkForUpdates));
+
+    isUpToDateCallback.onIsUpToDateCheck(false);
+
   }
 
   public static class Logger {

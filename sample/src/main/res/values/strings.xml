@@ -17,4 +17,6 @@
   <string name="first_name">First name</string>
   <string name="tags">Tags</string>
   <string name="field_required">This field is required</string>
+  <string name="is_up_to_date_text_updated">Your app is updated</string>
+  <string name="is_up_to_date_text_no_updated">There is a new version of your app</string>
 </resources>

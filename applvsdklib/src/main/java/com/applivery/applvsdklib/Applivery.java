@@ -154,4 +154,13 @@ public class Applivery {
     public static void unbindUser() {
         AppliverySdk.unbindUser();
     }
+
+    /**
+     * Check if the application is updated to the latest version available.
+     *
+     * @param isUpToDateCallback the callback interface with the with the result
+     */
+    public static void isUpToDate(IsUpToDateCallback isUpToDateCallback) {
+        AppliverySdk.isUpToDate(isUpToDateCallback);
+    }
 }
