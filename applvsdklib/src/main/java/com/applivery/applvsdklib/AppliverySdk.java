@@ -47,6 +47,7 @@ import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
 import com.applivery.base.AppliveryDataManager;
 import com.applivery.base.AppliveryLifecycleCallbacks;
+import com.applivery.base.util.AppliveryLog;
 
 import java.util.Collection;
 import java.util.concurrent.Executor;
@@ -150,7 +151,7 @@ public class AppliverySdk {
           ObtainAppConfigInteractor.getInstance(appliveryApiService,
               Injection.INSTANCE.provideSessionManager(),
               AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext()),
-                  checkForUpdates));
+                  checkForUpdates, null));
     }
   }
 
@@ -371,8 +372,16 @@ public class AppliverySdk {
     });
   }
 
-  public static SharedPreferences getSharedPreferences() {
-    return sharedPreferences;
+  static void isUpToDate(IsUpToDateCallback isUpToDateCallback) {
+    if (!isStoreRelease) {
+      getExecutor().execute(
+              ObtainAppConfigInteractor.getInstance(appliveryApiService,
+                      Injection.INSTANCE.provideSessionManager(),
+                      AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext()),
+                      false, isUpToDateCallback));
+    } else {
+        AppliveryLog.info("isUpToDate with isStoreRelease true");
+    }
   }
 
   public static class Logger {
