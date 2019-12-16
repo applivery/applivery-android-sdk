@@ -34,6 +34,9 @@ With Applivery you can massively distribute your Android Apps (both Ad-hoc or In
 * **Force update** if App version is lower than the minimum version configured in Applivery.
 * **Send feedback**. Your test users can report a bug or send improvements feedback by simply taking a screenshot.
 
+### Support
+Applivery SDK is fully compatible with Android v5.0 (API 21) and higher versions. However it will build properly from Android 4.1 (API 16) but the with limited functionality.
+
 ## Getting Started
 
 First of all, you should create an account on [Applivery.io](https://dashboard.applivery.io/) and then add a new Application.
