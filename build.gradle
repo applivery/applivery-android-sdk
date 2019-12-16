@@ -49,7 +49,7 @@ task clean(type: Delete) {
 
 subprojects { project ->
     group = 'com.applivery'
-    version = '3.0.10'
+    version = '3.1.0'
 
     repositories {
         google()
@@ -58,7 +58,7 @@ subprojects { project ->
 
     ext {
         versions = [
-                minSdk    : 21,
+                minSdk    : 16,
                 targetSdk : 29,
                 compileSdk: 29,
         ]
