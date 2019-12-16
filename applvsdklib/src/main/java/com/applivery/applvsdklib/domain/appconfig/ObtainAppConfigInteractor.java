@@ -15,6 +15,9 @@
  */
 package com.applivery.applvsdklib.domain.appconfig;
 
+import androidx.annotation.Nullable;
+
+import com.applivery.applvsdklib.IsUpToDateCallback;
 import com.applivery.applvsdklib.domain.BaseInteractor;
 import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.model.AppConfig;
@@ -33,14 +36,20 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
 
     private final ObtainAppConfigRequest obtainAppConfigRequest;
     private final InteractorCallback appConfigInteractorCallback;
+    private final PackageInfo packageInfo;
+    private final @Nullable
+    IsUpToDateCallback isUpToDateCallback;
 
     private ObtainAppConfigInteractor(AppliveryApiService apiService,
                                       SessionManager sessionManager,
                                       PackageInfo packageInfo,
-                                      Boolean checkForUpdates) {
+                                      Boolean checkForUpdates,
+                                      @Nullable IsUpToDateCallback isUpToDateCallback) {
         this.obtainAppConfigRequest = new ObtainAppConfigRequest(apiService);
         this.appConfigInteractorCallback =
                 new ObtainAppConfigInteractorCallback(sessionManager, packageInfo, checkForUpdates);
+        this.packageInfo = packageInfo;
+        this.isUpToDateCallback = isUpToDateCallback;
     }
 
     @Override
@@ -55,6 +64,11 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
 
     @Override
     protected void success(AppConfig appConfig) {
+
+        if (isUpToDateCallback != null) {
+            isUpToDateCallback.onIsUpToDateCheck(
+                    appConfig.getSdk().getAndroid().isUpdated(packageInfo.getVersion()));
+        }
         appConfigInteractorCallback.onSuccess(appConfig);
     }
 
@@ -66,9 +80,10 @@ public class ObtainAppConfigInteractor extends BaseInteractor<AppConfig> {
     public static Runnable getInstance(AppliveryApiService appliveryApiService,
                                        SessionManager sessionManager,
                                        PackageInfo packageInfo,
-                                       Boolean checkForUpdates) {
+                                       Boolean checkForUpdates,
+                                       @Nullable IsUpToDateCallback isUpToDateCallback) {
 
         return new ObtainAppConfigInteractor(appliveryApiService, sessionManager,
-                packageInfo, checkForUpdates);
+                packageInfo, checkForUpdates, isUpToDateCallback);
     }
 }

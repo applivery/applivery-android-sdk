@@ -55,6 +55,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Applivery.isUpToDate { isUpToDate ->
+            if (isUpToDate) {
+                isUpToDateTextView.text = getString(R.string.is_up_to_date_text_updated)
+            } else {
+                isUpToDateTextView.text = getString(R.string.is_up_to_date_text_no_updated)
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.user_menu, menu)

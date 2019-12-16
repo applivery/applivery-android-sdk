@@ -22,42 +22,51 @@ import java.io.IOException
 
 
 data class ErrorDataEntityResponse(
-  val error: ErrorEntity,
-  val status: Boolean
+    val error: ErrorEntity,
+    val status: Boolean
 ) {
 
-  companion object {
+    companion object {
 
-    fun parseError(response: Response<*>): ErrorEntity {
+        fun parseError(response: Response<*>): ErrorEntity {
 
-      val gson = Gson()
+            val gson = Gson()
 
-      return try {
-        val response =
-          gson.fromJson(response.errorBody()?.string(), ErrorDataEntityResponse::class.java)
-        response?.error ?: ErrorEntity(0, "", null)
+            return try {
+                val errorResponse =
+                    gson.fromJson(
+                        response.errorBody()?.string(),
+                        ErrorDataEntityResponse::class.java
+                    )
 
-      } catch (e: IOException) {
-        ErrorEntity(0, "empty", null)
-      }
+                errorResponse?.error ?: ErrorEntity(
+                    0, "Null error response",
+                    null, false
+                )
+            } catch (e: IOException) {
+                ErrorEntity(
+                    0, "Parse error exception: ${e.message}",
+                    null, false
+                )
+            }
+        }
     }
-  }
 }
 
 data class ErrorEntity(
-  val code: Int,
-  val message: String,
-  val data: ErrorDataEntity?
+    val code: Int,
+    val message: String,
+    val data: ErrorDataEntity?,
+    val businessCode: Boolean = true
 ) {
 
-  fun toErrorObject() = ErrorObject(
-    true,
-    message,
-    code
-  )
+    fun toErrorObject() = ErrorObject(
+        businessCode,
+        message,
+        code
+    )
 }
 
-
 data class ErrorDataEntity(
-  val providers: List<String>
+    val providers: List<String>
 )

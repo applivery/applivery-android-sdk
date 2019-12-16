@@ -20,41 +20,44 @@ import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.network.api.model.ErrorDataEntityResponse;
 import com.applivery.applvsdklib.network.api.model.ErrorEntity;
 import com.applivery.applvsdklib.network.api.responses.ServerResponse;
+
 import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Response;
 
 public abstract class ServerRequest {
 
-  public final BusinessObject execute() {
-    try {
-      return performRequest();
-    } catch (RequestHttpException re) {
-      return re.getErrorEntity().toErrorObject();
+    public final BusinessObject execute() {
+        try {
+            return performRequest();
+        } catch (RequestHttpException re) {
+            return re.getErrorEntity().toErrorObject();
+        }
     }
-  }
 
-  protected abstract BusinessObject performRequest();
+    protected abstract BusinessObject performRequest();
 
-  public <T extends ServerResponse> T performRequest(Call<T> call) {
+    public <T extends ServerResponse> T performRequest(Call<T> call) {
 
-    Response<T> apiResponse = null;
+        Response<T> apiResponse;
 
-    try {
+        try {
 
-      apiResponse = call.execute();
+            apiResponse = call.execute();
 
-      if (apiResponse.isSuccessful()) {
-        T response = apiResponse.body();
-        response.setHttpCode(apiResponse.code());
-        return response;
-      } else {
+            if (apiResponse.isSuccessful()) {
+                T response = apiResponse.body();
+                response.setHttpCode(apiResponse.code());
+                return response;
+            } else {
 
-        ErrorEntity error = ErrorDataEntityResponse.Companion.parseError(apiResponse);
-        throw new RequestHttpException(error);
-      }
-    } catch (IOException exception) {
-      throw new RequestHttpException(new ErrorEntity(0, "Exception", null));
+                ErrorEntity error = ErrorDataEntityResponse.Companion.parseError(apiResponse);
+                throw new RequestHttpException(error);
+            }
+        } catch (IOException exception) {
+            throw new RequestHttpException(new ErrorEntity(0,
+                    "Exception: " + exception.getMessage(), null, false));
+        }
     }
-  }
 }
