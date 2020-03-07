@@ -8,6 +8,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.provider.MediaStore;
+
+import androidx.annotation.Nullable;
+
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 
@@ -93,7 +96,11 @@ public class ScreenshotObserver implements FileResolver {
     };
   }
 
-  @Override public void pathResolved(String resolvedPath) {
+  @Override public void pathResolved(@Nullable String resolvedPath) {
+    if(resolvedPath == null){
+      AppliverySdk.Logger.log("Resolved path is null.");
+      return;
+    }
     Bitmap screenshot = screenshotResolver.resolveBitmapFrom(resolvedPath);
     if (screenshot == null) {
       AppliverySdk.Logger.log("Resolved bitmap is null.");

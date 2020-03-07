@@ -1,14 +1,13 @@
 package com.applivery.applvsdklib.tools.androidimplementations;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
-import com.applivery.applvsdklib.domain.download.permissions.ReadExternalPermission;
 import com.applivery.applvsdklib.domain.download.permissions.ReadScreenshotFolderPermission;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
@@ -18,11 +17,6 @@ import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponse
  */
 public class ScreenshotResolver {
 
-  private static final String[] FIELDS = new String[] {
-      MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.DATA,
-      MediaStore.Images.Media.DATE_ADDED
-  };
-  private static final String SORT_ORDER = MediaStore.Images.Media.DATE_ADDED + " DESC";
   private static final long DEFAULT_DETECT_WINDOW_SECONDS = 10;
 
   private final Context applicationContext;
@@ -70,36 +64,28 @@ public class ScreenshotResolver {
   }
 
   private void resolvePath(Uri uri) {
-    String path = "";
+    String path = null;
 
     if (!uri.toString().startsWith(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())) {
       return;
     }
 
-    Cursor cursor = null;
-    cursor = applicationContext.getContentResolver().query(uri, FIELDS, null, null, SORT_ORDER);
+    ScreenShotPathResolver pathResolver = ScreenShotInfoPathResolverFactory.get(applicationContext);
+    ScreenShotPathInfo pathInfo = pathResolver.resolvePath(uri);
 
-    if (cursor == null || !cursor.moveToFirst()) {
-      return;
-    }
-
-    String tempPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-    long dateAdded = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED));
-
-    if (matchPath(tempPath) && matchTime(currentTime, dateAdded)) {
-      path = tempPath;
+    if(pathInfo != null
+            && matchPath(pathInfo.getPath())
+            && matchTime(currentTime, pathInfo.getAddedAt())){
+      path = pathInfo.getPath();
     }
 
     currentTime = 0;
-    cursor.close();
-
     fileResolver.pathResolved(path);
   }
 
   public Bitmap resolveBitmapFrom(String path) {
     try {
-      Bitmap bitmap = BitmapFactory.decodeFile(path);
-      return bitmap;
+      return BitmapFactory.decodeFile(path);
     } catch (Throwable e) {
       AppliverySdk.Logger.log(e.getMessage());
       return BitmapFactory.decodeResource(null, R.drawable.applivery_icon);
