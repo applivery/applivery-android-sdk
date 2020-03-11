@@ -37,7 +37,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField STRING, "API_URL", '"https://sdk-api-develop.sandbox.applivery.io"'
+            buildConfigField STRING, "API_URL", '"https://sdk-api.s.applivery.io"'
             buildConfigField STRING, "DOWNLOAD_API_URL",
                     '"https://download-api-develop.sandbox.applivery.io"'
             testCoverageEnabled true
