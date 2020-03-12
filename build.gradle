@@ -19,11 +19,14 @@ buildscript {
     repositories {
         jcenter()
         google()
+        mavenLocal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
+
+        classpath "com.applivery.gradle:applivery-deploy:2.0.0"
     }
 }
 
@@ -49,7 +52,7 @@ task clean(type: Delete) {
 
 subprojects { project ->
     group = 'com.applivery'
-    version = '3.1.0'
+    version = '3.1.1'
 
     repositories {
         google()
