@@ -18,6 +18,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: '../dependencies.gradle'
+apply plugin: "applivery-plugin"
 
 def STRING = "String"
 
@@ -29,8 +30,8 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
 
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "3.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -80,4 +81,9 @@ dependencies {
 repositories {
     mavenCentral()
     maven { url "https://dl.bintray.com/applivery/applivery-android-snapshots" }
+}
+
+applivery {
+    appToken = "UrpxwlDpQjK1zKpRtDMKSzY8"
+    buildPath = "./sample/release/sample-release.apk"
 }

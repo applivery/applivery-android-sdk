@@ -39,3 +39,6 @@ Thumbs.db
 
 keys.properties
 test_keystore.jks
+applivery-demo.jks
+
+sample/release/
