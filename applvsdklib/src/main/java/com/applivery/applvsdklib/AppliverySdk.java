@@ -15,6 +15,7 @@
  */
 package com.applivery.applvsdklib;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
@@ -82,7 +83,6 @@ public class AppliverySdk {
   private static Boolean sdkInitialized = false;
   private static Boolean checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
   private static Boolean isUpdating = false;
-  private static SharedPreferences sharedPreferences;
 
   public static synchronized void sdkInitialize(Application app, String appToken,
       boolean isStoreRelease) {
@@ -122,8 +122,6 @@ public class AppliverySdk {
 
   private static void initializeAppliveryConstants(Application app, String appToken,
       boolean isStoreRelease) {
-
-    AppliverySdk.sharedPreferences = app.getSharedPreferences("applivery", Context.MODE_PRIVATE);
 
     //region validate some requirements
     Context applicationContext = Validate.notNull(app, "Application").getApplicationContext();
@@ -205,6 +203,7 @@ public class AppliverySdk {
     return (activityLifecycle.getCurrentActivity() != null);
   }
 
+  @SuppressLint("SourceLockedOrientationActivity")
   public static void lockRotationToPortrait() {
     Activity activity = activityLifecycle.getCurrentActivity();
     if (activity != null) {
@@ -270,7 +269,7 @@ public class AppliverySdk {
     obtainAppConfig(false);
     FeedbackView feedbackView = null;
     if (!lockedApp) {
-      feedbackView = UserFeedbackView.getInstance(appliveryApiService);
+      feedbackView = UserFeedbackView.getInstance();
       if (feedbackView.isNotShowing()) {
         try {
           feedbackView.lockRotationOnParentScreen(getCurrentActivity());

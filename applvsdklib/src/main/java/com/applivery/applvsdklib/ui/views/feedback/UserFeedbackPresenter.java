@@ -26,6 +26,7 @@ import com.applivery.applvsdklib.domain.model.FeedBackType;
 import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
+import com.applivery.applvsdklib.network.api.AppliveryApiServiceImp;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenCaptureUtils;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
@@ -44,7 +45,7 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
 
     private final FeedbackView feedbackView;
     private final UserFeedback feedback;
-    private AppliveryApiService appliveryApiService;
+    private final AppliveryApiService appliveryApiService;
     private ScreenCapture screenCapture;
     final private PermissionChecker permissionRequestExecutor;
     final private AccessNetworkStatePermission accessNetworkStatePermission;
@@ -57,10 +58,8 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
         this.feedback = new UserFeedback();
         this.permissionRequestExecutor = AppliverySdk.getPermissionRequestManager();
         this.accessNetworkStatePermission = new AccessNetworkStatePermission();
-    }
 
-    public void setAppliveryApiService(AppliveryApiService appliveryApiService) {
-        this.appliveryApiService = appliveryApiService;
+        this.appliveryApiService = AppliveryApiServiceImp.Companion.getInstance();
     }
 
     public void setScreenCapture(ScreenCapture screenCapture) {
