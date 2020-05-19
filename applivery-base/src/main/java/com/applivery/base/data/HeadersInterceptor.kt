@@ -2,8 +2,8 @@ package com.applivery.base.data
 
 import android.annotation.SuppressLint
 import android.os.Build
-import com.applivery.base.util.AndroidCurrentAppInfo
 import com.applivery.base.BuildConfig
+import com.applivery.base.util.AndroidCurrentAppInfo
 import com.applivery.base.util.AppliveryContentProvider
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -35,7 +35,16 @@ class HeadersInterceptor : Interceptor {
             .addHeader("Accept-Language", Locale.getDefault().language)
             .addHeader("x-sdk-version", "ANDROID_" + BuildConfig.VERSION_NAME)
             .addHeader("x-app-version", packageInfo.versionName)
-            .addHeader("User-Agent", userAgent)
+
+            .addHeader("x-os-version", Build.VERSION.RELEASE)
+            .addHeader("x-os-name", "android")
+            .addHeader("x-device-vendor", Build.MANUFACTURER)
+            .addHeader("x-device-model", Build.MODEL)
+            .addHeader("x-package-name", packageInfo.name)
+            .addHeader("x-package-version", packageInfo.version.toString())
+            .addHeader("x-os-minsdkversion", Build.VERSION.SDK_INT.toString())
+            .addHeader("x-os-targetsdkversion", BuildConfig.VERSION_NAME)
+
             .method(original.method(), original.body())
             .build()
     }

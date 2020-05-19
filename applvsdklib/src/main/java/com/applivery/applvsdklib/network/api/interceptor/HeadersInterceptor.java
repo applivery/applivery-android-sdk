@@ -16,13 +16,15 @@
 
 package com.applivery.applvsdklib.network.api.interceptor;
 
-import android.annotation.SuppressLint;
 import android.os.Build;
+
 import com.applivery.applvsdklib.BuildConfig;
 import com.applivery.applvsdklib.domain.model.PackageInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
+
 import java.io.IOException;
 import java.util.Locale;
+
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -35,32 +37,37 @@ import static com.applivery.applvsdklib.AppliverySdk.getApplicationContext;
  */
 public class HeadersInterceptor implements Interceptor {
 
-  public HeadersInterceptor() {
+    public HeadersInterceptor() {
 
-  }
+    }
 
-  @Override public Response intercept(Chain chain) throws IOException {
-    return chain.proceed(composeRequest(chain));
-  }
+    @Override
+    public Response intercept(Chain chain) throws IOException {
+        return chain.proceed(composeRequest(chain));
+    }
 
-  private Request composeRequest(Chain chain) {
-    Request original = chain.request();
+    private Request composeRequest(Chain chain) {
+        Request original = chain.request();
 
-    PackageInfo packageInfo =
-        AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext());
+        PackageInfo packageInfo =
+                AndroidCurrentAppInfo.Companion.getPackageInfo(getApplicationContext());
 
-    return original.newBuilder()
-        .url(chain.request().url())
-        .addHeader("Accept-Language", Locale.getDefault().getLanguage())
-        .addHeader("x-sdk-version", "ANDROID_" + BuildConfig.VERSION_NAME)
-        .addHeader("x-app-version", packageInfo.getVersionName())
-        .addHeader("User-Agent", getUserAgent())
-        .method(original.method(), original.body())
-        .build();
-  }
+        return original.newBuilder()
+                .url(chain.request().url())
+                .addHeader("Accept-Language", Locale.getDefault().getLanguage())
+                .addHeader("x-sdk-version", "ANDROID_" + BuildConfig.VERSION_NAME)
+                .addHeader("x-app-version", packageInfo.getVersionName())
 
-  @SuppressLint("DefaultLocale") private String getUserAgent() {
-    return String.format("Android/%s; vendor/%s; model/%s; build/%d;", Build.VERSION.RELEASE,
-        Build.MANUFACTURER, Build.MODEL, BuildConfig.VERSION_CODE);
-  }
+                .addHeader("x-os-version", Build.VERSION.RELEASE)
+                .addHeader("x-os-name", "android")
+                .addHeader("x-device-vendor", Build.MANUFACTURER)
+                .addHeader("x-device-model", Build.MODEL)
+                .addHeader("x-package-name", packageInfo.getName())
+                .addHeader("x-package-version", String.valueOf(packageInfo.getVersion()))
+                .addHeader("x-os-minsdkversion", String.valueOf(Build.VERSION.SDK_INT))
+                .addHeader("x-os-targetsdkversion", String.valueOf(Build.VERSION.SDK_INT))
+
+                .method(original.method(), original.body())
+                .build();
+    }
 }
