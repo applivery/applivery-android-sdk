@@ -69,7 +69,7 @@ dependencies {
     implementation "com.google.android.material:material:1.1.0-alpha10"
 
     implementation project(':applvsdklib')
-//    implementation 'com.applivery:applivery-sdk:3.1.0'
+//    implementation 'com.applivery:applivery-sdk:3.2'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {

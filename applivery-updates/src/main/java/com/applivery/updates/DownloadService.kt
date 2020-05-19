@@ -33,6 +33,7 @@ import com.applivery.updates.data.response.ApiBuildToken
 import com.applivery.updates.domain.DownloadInfo
 import com.applivery.updates.util.ApkInstaller
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.File
@@ -106,8 +107,7 @@ class DownloadService : IntentService("Download apk service") {
                 AppliveryLog.error("Cannot get the build token. ${error.message}")
             }
 
-        } catch (exception: Exception) {
-            exception.printStackTrace()
+        } catch (exception: JsonSyntaxException) {
             AppliveryLog.error("Cannot get the build token. Invalid config")
         }
     }
@@ -180,15 +180,11 @@ class DownloadService : IntentService("Download apk service") {
     }
 
     private fun onDownloadComplete(filePath: String) {
-        clearNotification()
+        notificationManager?.cancel(NOTIFICATION_ID)
         ApkInstaller.installApplication(this, filePath)
     }
 
     override fun onTaskRemoved(rootIntent: Intent) {
-        clearNotification()
-    }
-
-    private fun clearNotification() {
         notificationManager?.cancel(NOTIFICATION_ID)
     }
 

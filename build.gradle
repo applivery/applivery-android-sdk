@@ -50,7 +50,7 @@ task clean(type: Delete) {
 
 subprojects { project ->
     group = 'com.applivery'
-    version = '3.1.1'
+    version = '3.2'
 
     repositories {
         google()
