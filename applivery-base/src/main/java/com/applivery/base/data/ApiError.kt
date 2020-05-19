@@ -16,6 +16,9 @@
 package com.applivery.base.data
 
 data class ApiError(
-    val code: String,
-    val message: String
+    val code: Int,
+    val message: String,
+    val data: Map<String, String>?
 )
+
+const val LIMIT_EXCEEDED_ERROR = 5003

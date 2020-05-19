@@ -23,13 +23,18 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.applivery.base.AppliveryDataManager
+import com.applivery.base.data.LIMIT_EXCEEDED_ERROR
+import com.applivery.base.data.ServerResponse
 import com.applivery.base.util.AppliveryLog
 import com.applivery.updates.data.ApiServiceProvider
 import com.applivery.updates.data.DownloadApiService
 import com.applivery.updates.data.UpdatesApiService
+import com.applivery.updates.data.response.ApiBuildToken
 import com.applivery.updates.domain.DownloadInfo
 import com.applivery.updates.util.ApkInstaller
+import com.google.gson.Gson
 import okhttp3.ResponseBody
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
 
@@ -71,18 +76,39 @@ class DownloadService : IntentService("Download apk service") {
 
     private fun getBuildToken(buildId: String): String {
         return try {
-            val tokenResponse = updatesApiService.obtainBuildToken(buildId).execute()
+            val tokenResponse: Response<ServerResponse<ApiBuildToken>> =
+                updatesApiService.obtainBuildToken(buildId).execute()
 
             if (tokenResponse.isSuccessful) {
                 tokenResponse.body()?.data?.token as String
             } else {
-                // TODO parse error to show the error
-                AppliveryLog.error("Invalid config. Cannot get the build token")
+                handleError(tokenResponse)
                 ""
             }
         } catch (e: IOException) {
             AppliveryLog.error("Cannot get the build token")
             ""
+        }
+    }
+
+    private fun handleError(response: Response<ServerResponse<ApiBuildToken>>) {
+        try {
+            val error = Gson().fromJson<ServerResponse<ApiBuildToken>>(
+                response.errorBody()?.string(),
+                ServerResponse::class.java
+            ).error
+
+            if (error.code == LIMIT_EXCEEDED_ERROR) {
+                val limit = error.data?.get("limit") ?: "-1"
+                AppliveryLog.error("Installations limit exceeded. Limit: $limit/month")
+
+            } else {
+                AppliveryLog.error("Cannot get the build token. ${error.message}")
+            }
+
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            AppliveryLog.error("Cannot get the build token. Invalid config")
         }
     }
 
