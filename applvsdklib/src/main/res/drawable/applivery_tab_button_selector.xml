@@ -23,5 +23,5 @@
   <item android:state_enabled="true"
       android:state_selected="true" android:drawable="@drawable/applivery_selected_tab_button" />
   <item
-      android:drawable="@color/white" />
+      android:drawable="@color/applivery_white" />
 </selector>
