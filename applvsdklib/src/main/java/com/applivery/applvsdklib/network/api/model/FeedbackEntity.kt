@@ -96,7 +96,7 @@ data class DeviceEntity(
 
   companion object {
     fun fromDevice(device: Device) = DeviceEntity(
-      device.battery,
+      device.battery.toString(),
       device.batteryStatus,
       device.diskFree,
       device.model,

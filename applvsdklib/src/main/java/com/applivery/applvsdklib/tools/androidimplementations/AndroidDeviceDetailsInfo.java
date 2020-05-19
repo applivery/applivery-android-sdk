@@ -127,15 +127,13 @@ public class AndroidDeviceDetailsInfo implements DeviceDetailsInfo {
     return secureAndroidId;
   }
 
-  @Override public String getBatteryPercentage() {
+  @Override public int getBatteryPercentage() {
     Context context = AppliverySdk.getApplicationContext();
     Intent batteryStatus = getBatteryStatus(context);
     int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
     int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
-    String batteryPercentage = String.valueOf((level / (float) scale) * 100);
-
-    return batteryPercentage;
+    return  Math.round((level / (float) scale) * 100);
   }
 
   @Override public boolean isBatteryCharging() {

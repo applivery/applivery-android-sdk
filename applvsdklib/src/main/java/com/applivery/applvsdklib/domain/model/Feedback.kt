@@ -29,7 +29,7 @@ data class DeviceInfo(
 )
 
 data class Device(
-  val battery: String,
+  val battery: Int,
   val batteryStatus: Boolean,
   val diskFree: String,
   val model: String,

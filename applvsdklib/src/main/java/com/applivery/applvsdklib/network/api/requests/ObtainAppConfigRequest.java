@@ -17,10 +17,12 @@
 package com.applivery.applvsdklib.network.api.requests;
 
 import com.applivery.applvsdklib.domain.model.BusinessObject;
+import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.network.api.model.AppDataEntity;
 import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse;
 import com.applivery.base.AppliveryDataManager;
+import com.google.gson.JsonParseException;
 
 import retrofit2.Call;
 
@@ -30,19 +32,29 @@ import retrofit2.Call;
  */
 public class ObtainAppConfigRequest extends ServerRequest {
 
-  private final AppliveryApiService apiService;
+    private final AppliveryApiService apiService;
 
-  public ObtainAppConfigRequest(AppliveryApiService apiService) {
-    this.apiService = apiService;
-  }
+    public ObtainAppConfigRequest(AppliveryApiService apiService) {
+        this.apiService = apiService;
+    }
 
-  @Override protected BusinessObject performRequest() {
-    Call<ApiAppConfigResponse> response = apiService.obtainAppConfig();
-    ApiAppConfigResponse apiAppConfigResponse = super.performRequest(response);
+    @Override
+    protected BusinessObject performRequest() {
 
-    AppDataEntity appDataEntity = apiAppConfigResponse.getData();
+        BusinessObject appConfig;
 
-    AppliveryDataManager.INSTANCE.setAppData(appDataEntity.toAppData());
-    return appDataEntity.toAppConfig();
-  }
+        try {
+            Call<ApiAppConfigResponse> response = apiService.obtainAppConfig();
+
+            ApiAppConfigResponse apiAppConfigResponse = super.performRequest(response);
+            AppDataEntity appDataEntity = apiAppConfigResponse.getData();
+            AppliveryDataManager.INSTANCE.setAppData(appDataEntity.toAppData());
+
+            appConfig = appDataEntity.toAppConfig();
+        } catch (JsonParseException exception) {
+            appConfig = new ErrorObject();
+        }
+
+        return appConfig;
+    }
 }
