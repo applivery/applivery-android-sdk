@@ -1,7 +1,7 @@
 
 ![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/06/applivery-og.png)
 
-[![Download](https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg)](https://github.com/actions/setup-node)
+![Android CI](https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg)
 [![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg)](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 [![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
 
@@ -52,7 +52,7 @@ You can get your APP TOKEN in your App -> Settings -> Integrations section.
 ### Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-implementation 'com.applivery:applivery-sdk:3.1.1'
+implementation 'com.applivery:applivery-sdk:3.2'
 ```
 
 ### Gradle with JitPack Maven dependency
@@ -72,7 +72,7 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      implementation 'com.github.Applivery:applivery-android-sdk:v3.1.1'
+      implementation 'com.github.Applivery:applivery-android-sdk:v3.2'
     }
   ```
   
@@ -83,7 +83,7 @@ Add the following dependency to your app gradle:
 add the following dependency to your app gradle:
 
  ```groovy
-  compile 'com.applivery:applivery-android-sdk:3.1.1'
+  compile 'com.applivery:applivery-android-sdk:3.2'
  ```
 
 ## SDK Setup
@@ -218,7 +218,7 @@ We would like to mention every open source lib authors:
 * Thank's to [Karumi](http://www.karumi.com/) for his great contributions to developers community in general. We are using [Dexter](https://github.com/Karumi/Dexter) from Karumi as well.
 
 # License
-Copyright (C) 2019 Applivery
+Copyright (C) 2020 Applivery
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

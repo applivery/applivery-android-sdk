@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +39,6 @@ import android.widget.RelativeLayout;
 
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
 import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.DrawingImageView;
@@ -54,9 +54,9 @@ import kotlin.jvm.functions.Function0;
  * Date 9/4/16.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class UserFeedbackView extends DialogFragment
-        implements FeedbackView, View.OnClickListener {
+public class UserFeedbackView extends DialogFragment implements FeedbackView, View.OnClickListener {
 
+    private static final String VIEW_TAG = "feedback_view";
     private static UserFeedbackView userFeedbackView;
 
     private ImageButton cancelButton;
@@ -70,9 +70,7 @@ public class UserFeedbackView extends DialogFragment
     private ImageView feedbackImage;
     private SwitchCompat screenShotSwitch;
 
-    private AppCompatEditText feedbackMessage;
-
-    private LinearLayout feedbackFormContainer;
+    private EditText feedbackMessage;
 
     private UserFeedbackPresenter userFeedbackPresenter;
 
@@ -80,10 +78,9 @@ public class UserFeedbackView extends DialogFragment
         this.userFeedbackPresenter = Injection.INSTANCE.provideFeedbackPresenter(this);
     }
 
-    public static FeedbackView getInstance(AppliveryApiService appliveryApiService) {
+    public static FeedbackView getInstance() {
         if (userFeedbackView == null) {
             userFeedbackView = new UserFeedbackView();
-            userFeedbackView.userFeedbackPresenter.setAppliveryApiService(appliveryApiService);
         }
 
         return userFeedbackView;
@@ -135,7 +132,6 @@ public class UserFeedbackView extends DialogFragment
         screenshot = (DrawingImageView) view.findViewById(R.id.appliveryScreenShot);
         feedbackImage = (ImageView) view.findViewById(R.id.applivery_feedback_image);
         feedbackMessage = (AppCompatEditText) view.findViewById(R.id.applivery_feedback_description);
-        feedbackFormContainer = (LinearLayout) view.findViewById(R.id.applivery_feedback_form);
         screenShotSwitch = (SwitchCompat) view.findViewById(R.id.attach_screenshot_switch);
 
         initViewState();
@@ -174,10 +170,12 @@ public class UserFeedbackView extends DialogFragment
     }
 
     private void initFeedbackMessageCustomStyle() {
-        int appliveryPrimaryColor =
-                getActivity().getResources().getColor(R.color.applivery_primary_color);
-        ColorStateList colorStateList = ColorStateList.valueOf(appliveryPrimaryColor);
-        feedbackMessage.setSupportBackgroundTintList(colorStateList);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int appliveryPrimaryColor =
+                    getActivity().getResources().getColor(R.color.applivery_primary_color);
+            ColorStateList colorStateList = ColorStateList.valueOf(appliveryPrimaryColor);
+            feedbackMessage.setBackgroundTintList(colorStateList);
+        }
     }
 
     private void initElementActions() {
@@ -192,8 +190,16 @@ public class UserFeedbackView extends DialogFragment
 
     @Override
     public void show() {
-        FragmentManager fragmentManager = AppliverySdk.getCurrentActivity().getFragmentManager();
-        fragmentManager.beginTransaction().add(this, "").commitAllowingStateLoss();
+        if (!isAdded()) {
+            FragmentManager fragmentManager = AppliverySdk.getCurrentActivity().getFragmentManager();
+            fragmentManager.beginTransaction().add(this, "VIEW_TAG").commitAllowingStateLoss();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        userFeedbackView = null;
     }
 
     @Override
