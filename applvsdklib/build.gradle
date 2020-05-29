@@ -80,6 +80,7 @@ dependencies {
 
     implementation(project(":applivery-base"))
     implementation(project(":applivery-updates"))
+    api(project(":applivery-data"))
 
     // Test dependencies
     testImplementation "junit:junit:${junitVersion}"
