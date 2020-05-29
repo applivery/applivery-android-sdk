@@ -15,5 +15,6 @@
  */
 package com.applivery.data.response
 
-class ApiFeedback {
-}
+data class ApiFeedback(
+    val name: String?
+)

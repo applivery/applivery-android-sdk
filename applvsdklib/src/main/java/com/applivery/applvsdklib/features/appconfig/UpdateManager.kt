@@ -62,24 +62,17 @@ class UpdateManager(
     }
 
     private fun AppConfig.getUpdateType() = with(this) {
-
         if (forceUpdate) {
             if (minVersion > packageInfo.version) {
                 UpdateType.FORCED_UPDATE
-            } else {
-                UpdateType.NO_UPDATE
             }
-
         } else if (ota) {
             if (lastBuildVersion > packageInfo.version) {
                 UpdateType.SUGGESTED_UPDATE
-            } else {
-                UpdateType.NO_UPDATE
             }
-
-        } else {
-            UpdateType.NO_UPDATE
         }
+
+        UpdateType.NO_UPDATE
     }
 
     companion object {

@@ -15,7 +15,11 @@
  */
 package com.applivery.data.request
 
-import com.applivery.base.domain.model.*
+import com.applivery.base.domain.model.Device
+import com.applivery.base.domain.model.DeviceInfo
+import com.applivery.base.domain.model.Feedback
+import com.applivery.base.domain.model.Os
+import com.applivery.base.domain.model.PackageInfo
 import com.google.gson.annotations.SerializedName
 
 data class FeedbackRequest(
