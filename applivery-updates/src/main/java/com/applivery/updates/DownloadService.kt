@@ -26,10 +26,9 @@ import com.applivery.base.AppliveryDataManager
 import com.applivery.base.data.LIMIT_EXCEEDED_ERROR
 import com.applivery.base.data.ServerResponse
 import com.applivery.base.util.AppliveryLog
-import com.applivery.updates.data.ApiServiceProvider
-import com.applivery.updates.data.DownloadApiService
-import com.applivery.updates.data.UpdatesApiService
-import com.applivery.updates.data.response.ApiBuildToken
+import com.applivery.data.AppliveryApiService
+import com.applivery.data.DownloadApiService
+import com.applivery.data.response.ApiBuildToken
 import com.applivery.updates.domain.DownloadInfo
 import com.applivery.updates.util.ApkInstaller
 import com.google.gson.Gson
@@ -38,7 +37,6 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
-
 
 private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_87234"
 private const val NOTIFICATION_ID = 0x21
@@ -50,15 +48,15 @@ class DownloadService : IntentService("Download apk service") {
     private var notificationManager: NotificationManager? = null
     private lateinit var fileManager: FileManager
     private lateinit var downloadApiService: DownloadApiService
-    private lateinit var updatesApiService: UpdatesApiService
+    private lateinit var apiService: AppliveryApiService
 
     override fun onHandleIntent(intent: Intent?) {
         AppliveryDataManager.appData?.run {
 
             isDownloadStarted = true
             fileManager = FileManager(applicationContext)
-            updatesApiService = ApiServiceProvider.getApiService()
-            downloadApiService = ApiServiceProvider.getDownloadApiService()
+            apiService = AppliveryApiService.getInstance()
+            downloadApiService = DownloadApiService.getInstance()
 
             val apkFileName = name.replace(" ", "-") +
                     "-" + appConfig.lastBuildId + ".apk"
@@ -78,7 +76,7 @@ class DownloadService : IntentService("Download apk service") {
     private fun getBuildToken(buildId: String): String {
         return try {
             val tokenResponse: Response<ServerResponse<ApiBuildToken>> =
-                updatesApiService.obtainBuildToken(buildId).execute()
+                apiService.obtainBuildToken(buildId).execute()
 
             if (tokenResponse.isSuccessful) {
                 tokenResponse.body()?.data?.token as String

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Applivery
+ * Copyright (c) 2020 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,8 +76,12 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.1.0'
     api 'androidx.core:core-ktx:1.3.0'
 
+    api "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    api "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    api "com.squareup.okhttp3:logging-interceptor:${loggingInterceptorVersion}"
+    api "com.google.code.gson:gson:${gsonVersion}"
+
     api(project(":applivery-base"))
-    api(project(":applivery-data"))
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
@@ -88,7 +92,7 @@ install {
     repositories.mavenInstaller {
         pom.project {
             groupId project.group
-            artifactId 'applivery-updates'
+            artifactId 'applivery-data'
             packaging 'aar'
 
             name libraryName

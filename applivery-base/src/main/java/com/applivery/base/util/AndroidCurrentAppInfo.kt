@@ -15,13 +15,13 @@
  */
 package com.applivery.base.util
 
-import android.content.Context
 import com.applivery.base.domain.model.PackageInfo
 
 class AndroidCurrentAppInfo {
 
     companion object {
-        fun getPackageInfo(context: Context): PackageInfo {
+        fun getPackageInfo(): PackageInfo {
+            val context = AppliveryContentProvider.context
             val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
             return PackageInfo(
                 name = context.packageName,
