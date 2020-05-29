@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Applivery
+ * Copyright (c) 2020 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.applivery.applvsdklib.network.api.model
+package com.applivery.data.response
 
-import com.applivery.applvsdklib.domain.model.Android
-import com.applivery.applvsdklib.domain.model.AppConfig
-import com.applivery.applvsdklib.domain.model.Sdk
+import com.applivery.base.domain.model.AppConfig
 import com.applivery.base.domain.model.AppData
 import com.google.gson.annotations.SerializedName
 
-data class AppDataEntity(
+data class ApiAppConfig(
     @SerializedName("description")
     val description: String?,
     @SerializedName("id")
@@ -35,21 +33,13 @@ data class AppDataEntity(
     @SerializedName("slug")
     val slug: String?
 ) {
-    fun toAppConfig() = AppConfig(
-        description ?: "",
-        id ?: "",
-        name ?: "",
-        oss ?: emptyList(),
-        sdk.toSdk(),
-        slug ?: ""
-    )
 
     fun toAppData() = AppData(
         id = id ?: "",
         name = name ?: "",
         description = description ?: "",
         slug = slug ?: "",
-        appConfig = com.applivery.base.domain.model.AppConfig(
+        appConfig = AppConfig(
             forceAuth = sdk.android.forceAuth ?: false,
             forceUpdate = sdk.android.forceUpdate ?: false,
             lastBuildId = sdk.android.lastBuildId ?: "",
@@ -63,9 +53,7 @@ data class AppDataEntity(
 data class SdkEntity(
     @SerializedName("android")
     val android: AndroidEntity
-) {
-    fun toSdk() = Sdk(android.toAndroid())
-}
+)
 
 data class AndroidEntity(
     @SerializedName("forceAuth")
@@ -80,13 +68,4 @@ data class AndroidEntity(
     val minVersion: String?,
     @SerializedName("ota")
     val ota: Boolean?
-) {
-    fun toAndroid() = Android(
-        forceAuth ?: false,
-        forceUpdate ?: false,
-        lastBuildId ?: "",
-        lastBuildVersion ?: "",
-        minVersion ?: "",
-        ota ?: false
-    )
-}
+)

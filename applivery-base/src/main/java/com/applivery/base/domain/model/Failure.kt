@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Applivery
+ * Copyright (c) 2020 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.applivery.base.data
+package com.applivery.base.domain.model
 
-class ServerResponse<T>(
-    val status: Boolean,
-    val data: T,
-    val error: ApiError
-)
+/**
+ * Base Class for handling errors/failures/exceptions.
+ * Every feature specific failure should extend [FeatureFailure] class.
+ */
+sealed class Failure {
+    object NetworkConnection : Failure()
+    object ServerError : Failure()
+    class BusinessError(message: String) : Failure()
+
+    abstract class InternalFailure : Failure()
+
+    object ParseError : InternalFailure()
+    class ConfigError(message: String) : InternalFailure()
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Applivery
+ * Copyright (c) 2020 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.applivery.applvsdklib.domain.appconfig.update
+package com.applivery.base.domain.model
 
 enum class UpdateType {
-  FORCED_UPDATE,
-  SUGGESTED_UPDATE,
-  NO_UPDATE
+    FORCED_UPDATE,
+    SUGGESTED_UPDATE,
+    NO_UPDATE
 }

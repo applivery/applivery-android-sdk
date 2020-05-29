@@ -15,21 +15,38 @@
  */
 package com.applivery.data
 
-import com.applivery.base.data.ServerResponse
 import com.applivery.data.di.InjectorUtils
-import com.applivery.data.response.ApiBuildToken
+import com.applivery.data.request.BindUserRequest
+import com.applivery.data.request.FeedbackRequest
+import com.applivery.data.request.LoginRequest
+import com.applivery.data.response.*
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 private const val API_VERSION = "/v1"
 
 interface AppliveryApiService {
 
+    @GET("$API_VERSION/app")
+    suspend fun obtainAppConfig(): ServerResponse<ApiAppConfig>
+
+    @POST("$API_VERSION/feedback")
+    suspend fun sendFeedback(@Body feedback: FeedbackRequest): ServerResponse<ApiFeedback>
+
+    @POST("$API_VERSION//auth/login")
+    fun makeLogin(@Body loginEntity: LoginRequest): Call<ServerResponse<ApiLogin>>
+
+    @POST("$API_VERSION/auth/customLogin")
+    fun bindUser(@Body bindUserRequest: BindUserRequest): Call<ServerResponse<ApiLogin>>
+
     @GET("$API_VERSION/build/{build_id}/downloadToken")
     fun obtainBuildToken(@Path("build_id") buildId: String): Call<ServerResponse<ApiBuildToken>>
+
 
     companion object {
         @Volatile

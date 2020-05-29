@@ -13,13 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.applivery.base.domain.model
+package com.applivery.data.response
 
-data class AppConfig(
-    val forceAuth: Boolean,
-    val forceUpdate: Boolean,
-    val lastBuildId: String,
-    val lastBuildVersion: Int,
-    val minVersion: Int,
-    val ota: Boolean
-)
+class ApiFeedback {
+}

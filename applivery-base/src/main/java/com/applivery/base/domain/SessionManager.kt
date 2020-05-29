@@ -17,6 +17,7 @@ package com.applivery.base.domain
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import com.applivery.base.di.InjectorUtils
 
 class SessionManager(private val sharedPreferences: SharedPreferences) {
 
@@ -50,5 +51,15 @@ class SessionManager(private val sharedPreferences: SharedPreferences) {
 
     companion object {
         private const val TOKEN_KEY = "token_key"
+
+        @Volatile
+        private var instance: SessionManager? = null
+
+        fun getInstance() =
+            instance ?: synchronized(this) {
+                instance ?: SessionManager(InjectorUtils.provideSharedPreferences()).also {
+                    instance = it
+                }
+            }
     }
 }

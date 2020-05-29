@@ -15,8 +15,8 @@
  */
 package com.applivery.data.di
 
-import com.applivery.base.di.SessionManagerProvider
 import com.applivery.base.domain.AppliveryIdManager
+import com.applivery.base.domain.SessionManager
 import com.applivery.data.BuildConfig
 import com.applivery.data.interceptor.HeadersInterceptor
 import com.applivery.data.interceptor.SessionInterceptor
@@ -44,7 +44,7 @@ internal object InjectorUtils {
 
     private fun provideSessionInterceptor(): SessionInterceptor {
         return SessionInterceptor(
-            SessionManagerProvider.provideSessionManager(),
+            SessionManager.getInstance(),
             AppliveryIdManager.getInstance()
         )
     }

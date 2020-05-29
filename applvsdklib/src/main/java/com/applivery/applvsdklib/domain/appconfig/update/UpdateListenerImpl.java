@@ -18,11 +18,11 @@ package com.applivery.applvsdklib.domain.appconfig.update;
 import android.content.Context;
 
 import com.applivery.applvsdklib.AppliverySdk;
-import com.applivery.applvsdklib.domain.model.AppConfig;
 import com.applivery.applvsdklib.ui.views.login.LoginView;
 import com.applivery.applvsdklib.ui.views.update.UpdateListener;
 import com.applivery.applvsdklib.ui.views.update.UpdateView;
 import com.applivery.base.domain.SessionManager;
+import com.applivery.base.domain.model.AppConfig;
 import com.applivery.base.util.AppliveryLog;
 import com.applivery.updates.DownloadService;
 
@@ -63,7 +63,7 @@ public class UpdateListenerImpl implements UpdateListener {
     }
 
     private Boolean needLogin(AppConfig appConfig) {
-        Boolean isAuthUpdate = appConfig.getSdk().getAndroid().getForceAuth();
+        boolean isAuthUpdate = appConfig.getForceAuth();
         return isAuthUpdate && !sessionManager.hasSession();
     }
 

@@ -16,36 +16,21 @@
 
 package com.applivery.applvsdklib.network.api
 
-import com.applivery.applvsdklib.network.api.model.FeedbackEntity
 import com.applivery.applvsdklib.network.api.model.LoginEntity
 import com.applivery.applvsdklib.network.api.requests.BindUserRequest
-import com.applivery.applvsdklib.network.api.responses.ApiAppConfigResponse
-import com.applivery.applvsdklib.network.api.responses.ApiBuildTokenResponse
-import com.applivery.applvsdklib.network.api.responses.ApiFeedbackResponse
 import com.applivery.applvsdklib.network.api.responses.ApiLoginResponse
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 private const val API_VERSION = "/v1"
 
 interface AppliveryApiService {
 
-  @GET("$API_VERSION/app")
-  fun obtainAppConfig(): Call<ApiAppConfigResponse>
+    @POST("$API_VERSION//auth/login")
+    fun makeLogin(@Body loginEntity: LoginEntity): Call<ApiLoginResponse>
 
-  @POST("$API_VERSION/feedback")
-  fun sendFeedback(@Body feedback: FeedbackEntity): Call<ApiFeedbackResponse>
-
-  @GET("$API_VERSION/build/{build_id}/downloadToken")
-  fun obtainBuildToken(@Path("build_id") buildId: String): Call<ApiBuildTokenResponse>
-
-  @POST("$API_VERSION//auth/login")
-  fun makeLogin(@Body loginEntity: LoginEntity): Call<ApiLoginResponse>
-
-  @POST("$API_VERSION/auth/customLogin")
-  fun bindUser(@Body bindUserRequest: BindUserRequest): Call<ApiLoginResponse>
+    @POST("$API_VERSION/auth/customLogin")
+    fun bindUser(@Body bindUserRequest: BindUserRequest): Call<ApiLoginResponse>
 }
 

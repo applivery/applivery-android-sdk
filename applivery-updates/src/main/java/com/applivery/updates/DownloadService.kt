@@ -23,12 +23,12 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.applivery.base.AppliveryDataManager
-import com.applivery.base.data.LIMIT_EXCEEDED_ERROR
-import com.applivery.base.data.ServerResponse
 import com.applivery.base.util.AppliveryLog
 import com.applivery.data.AppliveryApiService
 import com.applivery.data.DownloadApiService
 import com.applivery.data.response.ApiBuildToken
+import com.applivery.data.response.LIMIT_EXCEEDED_ERROR
+import com.applivery.data.response.ServerResponse
 import com.applivery.updates.domain.DownloadInfo
 import com.applivery.updates.util.ApkInstaller
 import com.google.gson.Gson

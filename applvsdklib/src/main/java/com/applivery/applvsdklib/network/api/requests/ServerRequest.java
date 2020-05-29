@@ -19,7 +19,7 @@ package com.applivery.applvsdklib.network.api.requests;
 import com.applivery.applvsdklib.domain.model.BusinessObject;
 import com.applivery.applvsdklib.network.api.model.ErrorDataEntityResponse;
 import com.applivery.applvsdklib.network.api.model.ErrorEntity;
-import com.applivery.applvsdklib.network.api.responses.ServerResponse;
+import com.applivery.data.response.ServerResponse;
 
 import java.io.IOException;
 
@@ -47,11 +47,8 @@ public abstract class ServerRequest {
             apiResponse = call.execute();
 
             if (apiResponse.isSuccessful()) {
-                T response = apiResponse.body();
-                response.setHttpCode(apiResponse.code());
-                return response;
+                return apiResponse.body();
             } else {
-
                 ErrorEntity error = ErrorDataEntityResponse.Companion.parseError(apiResponse);
                 throw new RequestHttpException(error);
             }

@@ -29,7 +29,6 @@ import com.applivery.applvsdklib.tools.executor.ThreadExecutor
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackPresenter
 import com.applivery.applvsdklib.ui.views.login.LoginPresenter
-import com.applivery.base.di.SessionManagerProvider
 import com.applivery.base.domain.SessionManager
 
 internal object Injection {
@@ -83,7 +82,7 @@ internal object Injection {
     }
 
     fun provideSessionManager(): SessionManager {
-        return SessionManagerProvider.provideSessionManager()
+        return SessionManager.getInstance()
     }
 
     fun provideSessionInterceptor(): SessionInterceptor {

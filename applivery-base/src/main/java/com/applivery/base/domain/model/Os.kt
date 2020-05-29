@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Applivery
+ * Copyright (c) 2020 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.applivery.base.di
+package com.applivery.base.domain.model
 
-import android.content.Context
-import com.applivery.base.domain.SessionManager
-import com.applivery.base.util.AppliveryContentProvider
-
-object SessionManagerProvider {
-    fun provideSessionManager(): SessionManager {
-        return SessionManager(
-            AppliveryContentProvider.context
-                .getSharedPreferences("applivery-session", Context.MODE_PRIVATE)
-        )
-    }
-}
+data class Os(
+    val name: String,
+    val version: String
+)

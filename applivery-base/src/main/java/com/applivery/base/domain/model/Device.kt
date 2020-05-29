@@ -15,11 +15,16 @@
  */
 package com.applivery.base.domain.model
 
-data class AppConfig(
-    val forceAuth: Boolean,
-    val forceUpdate: Boolean,
-    val lastBuildId: String,
-    val lastBuildVersion: Int,
-    val minVersion: Int,
-    val ota: Boolean
+data class Device(
+    val battery: Int,
+    val batteryStatus: Boolean,
+    val diskFree: String,
+    val model: String,
+    val network: String,
+    val orientation: String,
+    val ramTotal: String,
+    val ramUsed: String,
+    val resolution: String,
+    val type: String,
+    val vendor: String
 )

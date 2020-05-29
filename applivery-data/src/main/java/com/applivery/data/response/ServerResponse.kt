@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Applivery
+ * Copyright (c) 2020 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.applivery.data.response
 
-package com.applivery.applvsdklib.domain.appconfig.update;
-
-/**
- * Created by Sergio Martinez Rodriguez
- * Date 11/1/16.
- */
-public interface LastConfigReader {
-  long readLastConfigCheckTimeStamp();
-
-  boolean notExistsLastConfig();
-}
+class ServerResponse<T>(
+    val status: Boolean,
+    val data: T,
+    val error: ApiError
+)
