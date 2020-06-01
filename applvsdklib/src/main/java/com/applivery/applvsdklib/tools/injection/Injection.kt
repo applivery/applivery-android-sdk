@@ -18,7 +18,6 @@ package com.applivery.applvsdklib.tools.injection
 import com.applivery.applvsdklib.domain.login.BindUserInteractor
 import com.applivery.applvsdklib.domain.login.LoginInteractor
 import com.applivery.applvsdklib.domain.login.UnBindUserInteractor
-import com.applivery.applvsdklib.domain.model.AppConfig
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.applvsdklib.tools.executor.MainThreadImp
@@ -30,8 +29,6 @@ import com.applivery.base.domain.SessionManager
 import com.applivery.data.AppliveryApiService
 
 internal object Injection {
-
-    var appConfig: AppConfig? = null
 
     fun provideLoginPresenter(): LoginPresenter {
         return LoginPresenter(provideLoginInteractor())

@@ -17,7 +17,7 @@
 package com.applivery.applvsdklib.tools.androidimplementations
 
 import android.content.Context
-import com.applivery.applvsdklib.domain.model.PackageInfo
+import com.applivery.base.domain.model.PackageInfo
 
 class AndroidCurrentAppInfo {
 

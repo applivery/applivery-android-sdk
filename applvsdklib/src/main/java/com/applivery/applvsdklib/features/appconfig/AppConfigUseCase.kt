@@ -17,11 +17,11 @@ package com.applivery.applvsdklib.features.appconfig
 
 import com.applivery.applvsdklib.AppliverySdk
 import com.applivery.applvsdklib.IsUpToDateCallback
-import com.applivery.applvsdklib.domain.model.PackageInfo
 import com.applivery.applvsdklib.presentation.ErrorManager
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo
 import com.applivery.base.AppliveryDataManager
 import com.applivery.base.domain.model.AppConfig
+import com.applivery.base.domain.model.PackageInfo
 import com.applivery.base.util.AppliveryLog
 import com.applivery.data.AppliveryApiService
 import com.applivery.data.response.ServerResponse
