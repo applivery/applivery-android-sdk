@@ -15,10 +15,23 @@
  */
 package com.applivery.data.response
 
+import com.applivery.base.domain.model.Failure
+
 data class ApiError(
     val code: Int,
     val message: String,
-    val data: Map<String, String>?
-)
+    val data: Map<String, Any>?
+) {
+    fun toFailure(): Failure {
+        return when (code) {
+            LIMIT_EXCEEDED_ERROR -> Failure.LimitExceededError(message)
+            UNAUTHORIZED_ERROR -> Failure.UnauthorizedError(message)
+            SUBSCRIPTION_ERROR -> Failure.SubscriptionError(message)
+            else -> Failure.InternalError(message)
+        }
+    }
+}
 
 const val LIMIT_EXCEEDED_ERROR = 5003
+const val UNAUTHORIZED_ERROR = 4004
+const val SUBSCRIPTION_ERROR = 5004

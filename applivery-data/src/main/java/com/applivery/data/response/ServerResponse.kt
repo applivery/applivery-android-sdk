@@ -15,11 +15,33 @@
  */
 package com.applivery.data.response
 
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
+import retrofit2.HttpException
 
 class ServerResponse<T>(
     @SerializedName("status")
     val successful: Boolean,
     val data: T,
     val error: ApiError
-)
+) {
+    companion object {
+
+        fun parseError(error: HttpException): ApiError? {
+            val gson = Gson()
+            val type = object : TypeToken<ServerResponse<Any>>() {}.type
+
+            val errorBody = error.response()?.errorBody()?.string()
+
+            val errorResponse: ServerResponse<Any>? = try {
+                gson.fromJson(errorBody, type)
+            } catch (jsonSyntaxException: JsonSyntaxException) {
+                null
+            }
+
+            return errorResponse?.error
+        }
+    }
+}

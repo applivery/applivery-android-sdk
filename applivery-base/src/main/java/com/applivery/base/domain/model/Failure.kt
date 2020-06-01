@@ -19,13 +19,12 @@ package com.applivery.base.domain.model
  * Base Class for handling errors/failures/exceptions.
  * Every feature specific failure should extend [FeatureFailure] class.
  */
-sealed class Failure {
-    object NetworkConnection : Failure()
-    object ServerError : Failure()
-    class BusinessError(message: String) : Failure()
+sealed class Failure(val message: String) {
+    class InternalError(message: String) : Failure(message)
 
-    abstract class InternalFailure : Failure()
+    class UnauthorizedError(message: String) : Failure(message)
 
-    object ParseError : InternalFailure()
-    class ConfigError(message: String) : InternalFailure()
+    abstract class DevError(message: String) : Failure(message)
+    class SubscriptionError(message: String) : DevError(message)
+    class LimitExceededError(message: String) : DevError(message)
 }

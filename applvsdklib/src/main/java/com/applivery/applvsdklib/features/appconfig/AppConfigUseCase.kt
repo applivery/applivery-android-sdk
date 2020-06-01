@@ -18,11 +18,13 @@ package com.applivery.applvsdklib.features.appconfig
 import com.applivery.applvsdklib.AppliverySdk
 import com.applivery.applvsdklib.IsUpToDateCallback
 import com.applivery.applvsdklib.domain.model.PackageInfo
+import com.applivery.applvsdklib.presentation.ErrorManager
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo
 import com.applivery.base.AppliveryDataManager
 import com.applivery.base.domain.model.AppConfig
 import com.applivery.base.util.AppliveryLog
 import com.applivery.data.AppliveryApiService
+import com.applivery.data.response.ServerResponse
 import com.google.gson.JsonParseException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,15 +36,16 @@ import java.io.IOException
 class AppConfigUseCase(
     private val apiService: AppliveryApiService,
     private val updateManager: UpdateManager,
+    private val errorManager: ErrorManager,
     private val packageInfo: PackageInfo
 ) {
 
     fun getAppConfig(checkForUpdates: Boolean, upToDateCallback: IsUpToDateCallback?) =
         GlobalScope.launch(Dispatchers.Main) {
             try {
-                val appConfig = withContext(Dispatchers.IO) { apiService.obtainAppConfig() }.data
-                AppliveryDataManager.appData = appConfig.toAppData()
-                val appData = appConfig.toAppData()
+                val appConfigResponse = withContext(Dispatchers.IO) { apiService.obtainAppConfig() }
+                val appData = appConfigResponse.data.toAppData()
+                AppliveryDataManager.appData = appData
 
                 upToDateCallback?.onIsUpToDateCheck(appData.appConfig.isUpdated())
 
@@ -54,6 +57,7 @@ class AppConfigUseCase(
                 AppliveryLog.error("Parse app config error", parseException)
             } catch (httpException: HttpException) {
                 AppliveryLog.error("Get config - Network error", httpException)
+                handleError(httpException)
             } catch (ioException: IOException) {
                 AppliveryLog.error("Get app config error", ioException)
             }
@@ -61,6 +65,11 @@ class AppConfigUseCase(
 
     private fun AppConfig.isUpdated() = with(this) {
         packageInfo.version >= lastBuildVersion
+    }
+
+    private fun handleError(exception: HttpException) {
+        val error = ServerResponse.parseError(exception)
+        error?.toFailure()?.let { errorManager.showError(it) }
     }
 
     companion object {
@@ -77,6 +86,7 @@ class AppConfigUseCase(
         private fun buildAppConfigUseCase() = AppConfigUseCase(
             apiService = AppliveryApiService.getInstance(),
             updateManager = UpdateManager.getInstance(),
+            errorManager = ErrorManager(),
             packageInfo = AndroidCurrentAppInfo.getPackageInfo(AppliverySdk.getApplicationContext())
         )
     }

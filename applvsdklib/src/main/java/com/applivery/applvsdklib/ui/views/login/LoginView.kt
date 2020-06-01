@@ -31,11 +31,16 @@ class LoginView(private val activity: Activity, private val onSuccess: () -> Uni
   }
 
   fun showLoginDialog() {
+
+    if (activity.fragmentManager.findFragmentByTag(TAG) != null) {
+      return
+    }
+
     val loginDialog = LoginDialog()
     loginDialog.listener = { username, password ->
       presenter.makeLogin(UserData(username = username, password = password))
     }
-    loginDialog.show(activity.fragmentManager, "login_dialog")
+    loginDialog.show(activity.fragmentManager, TAG)
   }
 
   fun showLoginSuccess() {
