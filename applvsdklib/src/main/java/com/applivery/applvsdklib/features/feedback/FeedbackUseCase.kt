@@ -16,20 +16,27 @@ class FeedbackUseCase(
     private val apiService: AppliveryApiService
 ) {
 
-    fun sendFeedback(feedback: Feedback) = GlobalScope.launch(Dispatchers.Main) {
+    fun sendFeedback(feedback: Feedback, callback: (Boolean) -> Unit) =
+        GlobalScope.launch(Dispatchers.Main) {
 
-        try {
-            val feedbackRequest = FeedbackRequest.fromFeedback(feedback)
-            val response = withContext(Dispatchers.IO) { apiService.sendFeedback(feedbackRequest) }
+            try {
+                val feedbackRequest = FeedbackRequest.fromFeedback(feedback)
+                val response =
+                    withContext(Dispatchers.IO) { apiService.sendFeedback(feedbackRequest) }
 
-        } catch (parseException: JsonParseException) {
-            AppliveryLog.error("feedback parse error", parseException)
-        } catch (httpException: HttpException) {
-            AppliveryLog.error("Send feedback - Network error", httpException)
-        } catch (ioException: IOException) {
-            AppliveryLog.error("Send feedback config error", ioException)
+                callback(response.successful)
+
+            } catch (parseException: JsonParseException) {
+                AppliveryLog.error("feedback parse error", parseException)
+                callback(false)
+            } catch (httpException: HttpException) {
+                AppliveryLog.error("Send feedback - Network error", httpException)
+                callback(false)
+            } catch (ioException: IOException) {
+                AppliveryLog.error("Send feedback config error", ioException)
+                callback(false)
+            }
         }
-    }
 
     companion object {
         @Volatile

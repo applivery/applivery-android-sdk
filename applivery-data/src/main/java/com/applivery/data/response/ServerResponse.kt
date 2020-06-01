@@ -15,8 +15,11 @@
  */
 package com.applivery.data.response
 
+import com.google.gson.annotations.SerializedName
+
 class ServerResponse<T>(
-    val status: Boolean,
+    @SerializedName("status")
+    val successful: Boolean,
     val data: T,
     val error: ApiError
 )

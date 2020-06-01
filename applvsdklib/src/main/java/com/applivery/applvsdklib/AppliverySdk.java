@@ -29,9 +29,7 @@ import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailabl
 import com.applivery.applvsdklib.domain.login.BindUserInteractor;
 import com.applivery.applvsdklib.domain.login.UnBindUserInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
-import com.applivery.applvsdklib.domain.model.UserData;
 import com.applivery.applvsdklib.features.appconfig.AppConfigUseCase;
-import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
 import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
@@ -44,8 +42,8 @@ import com.applivery.applvsdklib.ui.views.feedback.FeedbackView;
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
 import com.applivery.base.AppliveryDataManager;
 import com.applivery.base.AppliveryLifecycleCallbacks;
+import com.applivery.base.domain.model.UserData;
 import com.applivery.base.util.AppliveryLog;
-import com.applivery.data.AppliveryApiService;
 
 import java.util.Collection;
 import java.util.concurrent.Executor;

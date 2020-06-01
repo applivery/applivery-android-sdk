@@ -16,5 +16,9 @@
 package com.applivery.data.response
 
 data class ApiFeedback(
-    val name: String?
+    val id: String,
+    val message: String,
+    val createdAt: String,
+    val type: String,
+    val status: String
 )

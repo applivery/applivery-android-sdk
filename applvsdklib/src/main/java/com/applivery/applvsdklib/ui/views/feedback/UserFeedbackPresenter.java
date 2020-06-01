@@ -18,11 +18,9 @@ package com.applivery.applvsdklib.ui.views.feedback;
 import android.graphics.Bitmap;
 
 import com.applivery.applvsdklib.AppliverySdk;
-import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.download.permissions.AccessNetworkStatePermission;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.FeedBackType;
-import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
 import com.applivery.applvsdklib.features.feedback.FeedbackUseCase;
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidDeviceDetailsInfo;
@@ -40,11 +38,14 @@ import com.applivery.base.domain.model.PackageInfo;
 import com.applivery.base.util.AndroidCurrentAppInfo;
 import com.applivery.base.util.AppliveryLog;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 10/4/16.
  */
-public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult> {
+public class UserFeedbackPresenter {
 
     private final FeedbackView feedbackView;
     private final UserFeedback userFeedback;
@@ -173,15 +174,13 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
         }
     }
 
-    @Override
-    public void onSuccess(FeedbackResult businessObject) {
+    private void onSuccess() {
         screenCapture = null;
         feedbackView.cleanScreenData();
         feedbackView.dismissFeedBack();
     }
 
-    @Override
-    public void onError(ErrorObject error) {
+    private void onError(ErrorObject error) {
         ShowErrorAlert showErrorAlert = new ShowErrorAlert();
         showErrorAlert.showError(error);
     }
@@ -218,6 +217,17 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
                 packageInfo, userFeedback.getBase64ScreenCapture(),
                 userFeedback.getType().getStringValue());
 
-        feedbackUseCase.sendFeedback(feedback);
+        feedbackUseCase.sendFeedback(feedback, new Function1<Boolean, Unit>() {
+            @Override
+            public Unit invoke(Boolean aBoolean) {
+
+                if (aBoolean) {
+                    onSuccess();
+                } else {
+                    onError(new ErrorObject());
+                }
+                return null;
+            }
+        });
     }
 }

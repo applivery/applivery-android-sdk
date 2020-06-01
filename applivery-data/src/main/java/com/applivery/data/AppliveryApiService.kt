@@ -24,6 +24,7 @@ import com.applivery.data.response.ApiBuildToken
 import com.applivery.data.response.ApiFeedback
 import com.applivery.data.response.ApiLogin
 import com.applivery.data.response.ServerResponse
+import com.applivery.data.response.UserDataResponse
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -43,10 +44,10 @@ interface AppliveryApiService {
     suspend fun sendFeedback(@Body feedback: FeedbackRequest): ServerResponse<ApiFeedback>
 
     @POST("$API_VERSION//auth/login")
-    fun makeLogin(@Body loginEntity: LoginRequest): Call<ServerResponse<ApiLogin>>
+    fun makeLogin(@Body loginEntity: LoginRequest): Call<ServerResponse<UserDataResponse>>
 
     @POST("$API_VERSION/auth/customLogin")
-    fun bindUser(@Body bindUserRequest: BindUserRequest): Call<ServerResponse<ApiLogin>>
+    fun bindUser(@Body bindUserRequest: BindUserRequest): Call<ServerResponse<UserDataResponse>>
 
     @GET("$API_VERSION/build/{build_id}/downloadToken")
     fun obtainBuildToken(@Path("build_id") buildId: String): Call<ServerResponse<ApiBuildToken>>

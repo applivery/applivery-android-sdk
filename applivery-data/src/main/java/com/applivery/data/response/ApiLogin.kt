@@ -37,7 +37,7 @@ data class Payload(
     val password: String
 )
 
-data class UserDataEntity(
+data class UserDataResponse(
     @SerializedName("bearer")
     val bearer: String = "",
     @SerializedName("user")

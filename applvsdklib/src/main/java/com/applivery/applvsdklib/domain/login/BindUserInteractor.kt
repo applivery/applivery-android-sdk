@@ -17,12 +17,12 @@ package com.applivery.applvsdklib.domain.login
 
 import android.util.Log
 import com.applivery.applvsdklib.domain.model.ErrorObject
-import com.applivery.applvsdklib.domain.model.UserData
-import com.applivery.applvsdklib.network.api.AppliveryApiService
-import com.applivery.applvsdklib.network.api.requests.BindUserRequest
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.base.domain.SessionManager
+import com.applivery.base.domain.model.UserData
+import com.applivery.data.AppliveryApiService
+import com.applivery.data.request.BindUserRequest
 import java.io.IOException
 
 class BindUserInteractor(
@@ -56,7 +56,7 @@ class BindUserInteractor(
                 BindUserRequest.fromUserData(userData)
             ).execute().body()
 
-            if (apiLoginResponse != null && apiLoginResponse.data != null) {
+            if (apiLoginResponse?.data != null) {
                 sessionManager.saveSession(apiLoginResponse.data.bearer)
                 notifySuccess()
             } else {
