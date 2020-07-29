@@ -21,7 +21,7 @@ ext {
     loggingInterceptorVersion = "3.11.0"
     gsonVersion = "2.8.5"
 
-    dexterVersion = "5.0.0"
+    dexterVersion = "6.2.1"
 
     junitVersion = "4.12"
     mockitoVersion = "2.0.2-beta"
