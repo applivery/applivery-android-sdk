@@ -36,13 +36,9 @@ public class Applivery {
      * @param app            your app instance, it can't be null.
      * @param appToken       your app tokenoken. You can find this value at applivery dashboard in your
      *                       app settings section
-     * @param isStoreRelease this flag MUST be true when application is candidate to be store
-     *                       release, because otherwise app can show dialogs from applivery about updates that
-     *                       can redirect end users to applivery beta versions.
      */
-    public static void init(@NonNull Application app, @NonNull String appToken,
-                            boolean isStoreRelease) {
-        AppliverySdk.sdkInitialize(app, appToken, isStoreRelease);
+    public static void init(@NonNull Application app, @NonNull String appToken) {
+        AppliverySdk.sdkInitialize(app, appToken);
     }
 
     /**
