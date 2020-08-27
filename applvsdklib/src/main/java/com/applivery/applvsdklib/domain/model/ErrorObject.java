@@ -20,7 +20,7 @@ package com.applivery.applvsdklib.domain.model;
  * Created by Sergio Martinez Rodriguez
  * Date 8/11/15.
  */
-public class ErrorObject implements BusinessObject<ErrorObject> {
+public class ErrorObject {
 
   private final boolean businessError;
   private final String message;
@@ -42,10 +42,6 @@ public class ErrorObject implements BusinessObject<ErrorObject> {
     this.businessCode = -99;
     this.message = message;
     this.businessError = false;
-  }
-
-  @Override public ErrorObject getObject() {
-    return this;
   }
 
   public String getMessage() {

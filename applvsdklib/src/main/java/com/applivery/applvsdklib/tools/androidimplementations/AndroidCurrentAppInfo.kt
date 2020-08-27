@@ -17,18 +17,19 @@
 package com.applivery.applvsdklib.tools.androidimplementations
 
 import android.content.Context
-import com.applivery.applvsdklib.domain.model.PackageInfo
+import com.applivery.base.domain.model.PackageInfo
 
 class AndroidCurrentAppInfo {
 
-  companion object {
-    fun getPackageInfo(context: Context): PackageInfo {
-      val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-      return PackageInfo(
-        name = context.packageName,
-        version = pInfo.versionCode,
-        versionName = pInfo.versionName
-      )
+    companion object {
+        fun getPackageInfo(context: Context?): PackageInfo {
+            val pInfo = context?.packageManager?.getPackageInfo(context.packageName, 0)
+
+            return PackageInfo(
+                name = context?.packageName ?: "",
+                version = pInfo?.versionCode ?: -1,
+                versionName = pInfo?.versionName ?: ""
+            )
+        }
     }
-  }
 }

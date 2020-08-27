@@ -35,12 +35,10 @@ class ShowErrorAlert {
         when (error.businessCode) {
             UNAUTHORIZED_ERROR -> showLoginDialog(error.message)
             SUBSCRIPTION_ERROR -> {
-                if (AppliverySdk.isContextAvailable()) {
-                    AppliverySdk.Logger.loge(
-                        AppliverySdk.getApplicationContext()
-                            .getString(R.string.applivery_error_subscription)
-                    )
-                }
+                AppliverySdk.getApplicationContext()
+                    ?.getString(R.string.applivery_error_subscription)?.let { text ->
+                        AppliverySdk.Logger.loge(text)
+                    }
                 AppliverySdk.Logger.loge(error.message)
             }
             else -> showAlertDialog(error.message)

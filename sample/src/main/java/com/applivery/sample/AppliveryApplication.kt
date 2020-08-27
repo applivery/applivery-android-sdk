@@ -24,8 +24,10 @@ class AppliveryApplication : Application() {
         super.onCreate()
         appPreferences = AppPreferences(applicationContext)
 
-        Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN, false)
-        Applivery.setCheckForUpdatesBackground(appPreferences.checkForUpdatesBackground)
+        if (BuildConfig.BUILD_TYPE != "release") {
+            Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN)
+            Applivery.setCheckForUpdatesBackground(appPreferences.checkForUpdatesBackground)
+        }
     }
 
     companion object {

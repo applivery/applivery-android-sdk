@@ -15,3 +15,4 @@
  */
 
 include ':applvsdklib', ':sample', ':applivery-updates', ':applivery-base'
+include ':applivery-data'

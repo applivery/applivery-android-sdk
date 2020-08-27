@@ -69,6 +69,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
     implementation "androidx.appcompat:appcompat:${appcompatVersion}"
+    implementation "com.google.android.material:material:${androidMaterialVersion}"
 
     // Network dependencies
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
@@ -80,6 +81,7 @@ dependencies {
 
     implementation(project(":applivery-base"))
     implementation(project(":applivery-updates"))
+    api(project(":applivery-data"))
 
     // Test dependencies
     testImplementation "junit:junit:${junitVersion}"

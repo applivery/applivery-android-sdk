@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Applivery
+ * Copyright (c) 2020 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ data class AppConfig(
     val forceAuth: Boolean,
     val forceUpdate: Boolean,
     val lastBuildId: String,
-    val lastBuildVersion: String,
-    val minVersion: String,
+    val lastBuildVersion: Int,
+    val minVersion: Int,
     val ota: Boolean
 )

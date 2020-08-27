@@ -18,15 +18,12 @@ package com.applivery.applvsdklib.ui.views.feedback;
 import android.graphics.Bitmap;
 
 import com.applivery.applvsdklib.AppliverySdk;
-import com.applivery.applvsdklib.domain.InteractorCallback;
 import com.applivery.applvsdklib.domain.download.permissions.AccessNetworkStatePermission;
-import com.applivery.applvsdklib.domain.feedback.FeedbackInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.FeedBackType;
-import com.applivery.applvsdklib.domain.model.FeedbackResult;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
-import com.applivery.applvsdklib.network.api.AppliveryApiService;
-import com.applivery.applvsdklib.network.api.AppliveryApiServiceImp;
+import com.applivery.applvsdklib.features.feedback.FeedbackUseCase;
+import com.applivery.applvsdklib.tools.androidimplementations.AndroidDeviceDetailsInfo;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenCaptureUtils;
 import com.applivery.applvsdklib.tools.permissions.PermissionChecker;
 import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponseListener;
@@ -35,31 +32,38 @@ import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.base.AppliveryDataManager;
 import com.applivery.base.domain.SessionManager;
 import com.applivery.base.domain.model.AppData;
+import com.applivery.base.domain.model.DeviceInfo;
+import com.applivery.base.domain.model.Feedback;
+import com.applivery.base.domain.model.PackageInfo;
+import com.applivery.base.util.AndroidCurrentAppInfo;
 import com.applivery.base.util.AppliveryLog;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 10/4/16.
  */
-public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult> {
+public class UserFeedbackPresenter {
 
     private final FeedbackView feedbackView;
-    private final UserFeedback feedback;
-    private final AppliveryApiService appliveryApiService;
+    private final UserFeedback userFeedback;
     private ScreenCapture screenCapture;
     final private PermissionChecker permissionRequestExecutor;
     final private AccessNetworkStatePermission accessNetworkStatePermission;
     private final SessionManager sessionManager;
+    private final FeedbackUseCase feedbackUseCase;
 
     public UserFeedbackPresenter(FeedbackView feedbackView,
                                  SessionManager sessionManager) {
         this.feedbackView = feedbackView;
         this.sessionManager = sessionManager;
-        this.feedback = new UserFeedback();
+        this.userFeedback = new UserFeedback();
         this.permissionRequestExecutor = AppliverySdk.getPermissionRequestManager();
         this.accessNetworkStatePermission = new AccessNetworkStatePermission();
 
-        this.appliveryApiService = AppliveryApiServiceImp.Companion.getInstance();
+        this.feedbackUseCase = FeedbackUseCase.Companion.getInstance();
     }
 
     public void setScreenCapture(ScreenCapture screenCapture) {
@@ -91,17 +95,17 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     }
 
     public void feedbackButtonPressed() {
-        feedback.setType(FeedBackType.FEEDBACK);
+        userFeedback.setType(FeedBackType.FEEDBACK);
         feedbackView.setFeedbackButtonSelected();
     }
 
     public void bugButtonPressed() {
-        feedback.setType(FeedBackType.BUG);
+        userFeedback.setType(FeedBackType.BUG);
         feedbackView.setBugButtonSelected();
     }
 
     public void screenshotSwitchPressed(boolean activated) {
-        feedback.attachScreenshot(activated);
+        userFeedback.attachScreenshot(activated);
 
         if (activated) {
             feedbackView.showFeedbackImage();
@@ -139,13 +143,13 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
             return;
         }
 
-        feedback.setMessage(feedbackMessage);
-        feedback.setScreen(screen);
+        userFeedback.setMessage(feedbackMessage);
+        userFeedback.setScreen(screen);
 
-        if (feedback.mustAttachScreenshot()) {
-            feedback.setScreenCapture(screenCapture);
+        if (userFeedback.mustAttachScreenshot()) {
+            userFeedback.setScreenCapture(screenCapture);
         } else {
-            feedback.setScreenCapture(null);
+            userFeedback.setScreenCapture(null);
         }
 
         if (!permissionRequestExecutor.isGranted(accessNetworkStatePermission)) {
@@ -170,15 +174,13 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
         }
     }
 
-    @Override
-    public void onSuccess(FeedbackResult businessObject) {
+    private void onSuccess() {
         screenCapture = null;
         feedbackView.cleanScreenData();
         feedbackView.dismissFeedBack();
     }
 
-    @Override
-    public void onError(ErrorObject error) {
+    private void onError(ErrorObject error) {
         ShowErrorAlert showErrorAlert = new ShowErrorAlert();
         showErrorAlert.showError(error);
     }
@@ -205,13 +207,27 @@ public class UserFeedbackPresenter implements InteractorCallback<FeedbackResult>
     }
 
     private void sendFeedback() {
-        if (appliveryApiService != null) {
+        PackageInfo packageInfo = AndroidCurrentAppInfo.Companion.getPackageInfo();
+        AndroidDeviceDetailsInfo androidDeviceDetailsInfo = new AndroidDeviceDetailsInfo();
+        DeviceInfo deviceInfo = androidDeviceDetailsInfo.getDeviceInfo();
 
-            AppliverySdk.getExecutor()
-                    .execute(FeedbackInteractor.getInstance(appliveryApiService, feedback.getMessage(),
-                            feedback.getBase64ScreenCapture(), feedback.getType().getStringValue(), this));
-        } else {
-            AppliverySdk.Logger.loge("sendFeedback() with null appliveryApiService");
-        }
+        Feedback feedback = new Feedback(
+                deviceInfo,
+                userFeedback.getMessage(),
+                packageInfo, userFeedback.getBase64ScreenCapture(),
+                userFeedback.getType().getStringValue());
+
+        feedbackUseCase.sendFeedback(feedback, new Function1<Boolean, Unit>() {
+            @Override
+            public Unit invoke(Boolean aBoolean) {
+
+                if (aBoolean) {
+                    onSuccess();
+                } else {
+                    onError(new ErrorObject());
+                }
+                return null;
+            }
+        });
     }
 }

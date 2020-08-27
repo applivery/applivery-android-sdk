@@ -52,7 +52,7 @@ You can get your APP TOKEN in your App -> Settings -> Integrations section.
 ### Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-implementation 'com.applivery:applivery-sdk:3.2'
+implementation 'com.applivery:applivery-sdk:3.2.2'
 ```
 
 ### Gradle with JitPack Maven dependency
@@ -72,7 +72,7 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      implementation 'com.github.Applivery:applivery-android-sdk:v3.2'
+      implementation 'com.github.Applivery:applivery-android-sdk:v3.2.2'
     }
   ```
   
@@ -83,7 +83,7 @@ Add the following dependency to your app gradle:
 add the following dependency to your app gradle:
 
  ```groovy
-  compile 'com.applivery:applivery-android-sdk:3.2'
+  compile 'com.applivery:applivery-android-sdk:3.2.2'
  ```
 
 ## SDK Setup
@@ -91,22 +91,26 @@ add the following dependency to your app gradle:
 ### Step 1
 At your application startup, in a class extending from `Application`, you must call the `Applivery.init()` method:
 
- ```java
- public class AppliveryApplication extends Application{
-	 @Override public void onCreate() {
-	   super.onCreate();
-	   Applivery.init(this, BuildConfig.APP_TOKEN, false);
-	 }
- }
+ ```kotlin
+class AppliveryApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        if (BuildConfig.BUILD_TYPE != "release") {
+            Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN)
+        }
+    }
+}
  ```
 
 This method is intended to initialize the Applivery SDK. The only thing you have to take care about is that this call **MUST** be performed in App's `onCreate()` Method.
  
-**IMPORTANT:** As you can suspect, you should replace the `APP_TOKEN` string with you app token. Easy! Don't you think so?
+**IMPORTANT: Don't init Applivery on `release` builds** 
  
 ### Step 2
 Once initialized the SDK and **once your App is stable in the Home Screen** you have to call proactivelly the following method in order to check for new updates:
-```java
+```kotlin
 Applivery.checkForUpdates()
 ```
 
@@ -114,9 +118,6 @@ Applivery.checkForUpdates()
 
 - **app**: Your app instance.
 - **appToken**: Your app token from applivery dashboard
-- **isStoreRelease**: is the last param and the aim of this flag is to mark if the build will be submitted to Store. This is needed to prevent unwanted behavior like prompt to a final user that a new version is available on Applivery.com.
-	* True: Applivery SDK will not trigger automatic updates anymore. **Use this for Play Store**
-	* False: Applivery SDK will normally. Use this with builds distributed through Applivery. 
 
 ## Advanced concepts
 

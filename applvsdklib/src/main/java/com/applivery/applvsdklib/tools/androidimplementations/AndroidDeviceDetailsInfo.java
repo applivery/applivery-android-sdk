@@ -35,9 +35,10 @@ import android.view.Display;
 import android.view.WindowManager;
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.feedback.DeviceDetailsInfo;
-import com.applivery.applvsdklib.domain.model.Device;
-import com.applivery.applvsdklib.domain.model.DeviceInfo;
-import com.applivery.applvsdklib.domain.model.Os;
+import com.applivery.base.domain.model.Device;
+import com.applivery.base.domain.model.DeviceInfo;
+import com.applivery.base.domain.model.Os;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
