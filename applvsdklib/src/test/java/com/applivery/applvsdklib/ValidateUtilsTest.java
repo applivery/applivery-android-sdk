@@ -18,7 +18,6 @@ package com.applivery.applvsdklib;
 
 import android.content.Context;
 
-import com.applivery.applvsdklib.domain.exceptions.AppliverySdkNotInitializedException;
 import com.applivery.applvsdklib.tools.utils.Validate;
 
 import org.junit.Test;
@@ -148,11 +147,6 @@ public class ValidateUtilsTest {
     }
     //endregion
 
-    //region Applivery Sdk Initialized
-    @Test(expected = AppliverySdkNotInitializedException.class)
-    public void tryToTestSdkInitialize() throws Exception {
-        Validate.sdkInitialized();
-    }
     //endregion
 
     //region Internet Permissions
@@ -175,6 +169,4 @@ public class ValidateUtilsTest {
         Validate.hasInternetPermissions(context);
         assertTrue(true);
     }
-
-
 }

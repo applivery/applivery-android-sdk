@@ -42,11 +42,9 @@ class ErrorManager {
     private fun showDevError(error: Failure.DevError) {
         when (error) {
             is Failure.SubscriptionError -> {
-                if (AppliverySdk.isContextAvailable()) {
-                    AppliverySdk.Logger.loge(
-                        AppliverySdk.getApplicationContext()
-                            .getString(R.string.applivery_error_subscription)
-                    )
+                AppliverySdk.getApplicationContext()
+                    ?.getString(R.string.applivery_error_subscription)?.let { text ->
+                    AppliverySdk.Logger.loge(text)
                 }
             }
             else -> {

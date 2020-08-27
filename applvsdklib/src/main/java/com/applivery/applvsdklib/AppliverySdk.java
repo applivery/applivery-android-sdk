@@ -22,7 +22,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
@@ -133,47 +132,27 @@ public class AppliverySdk {
     }
 
     private static void obtainAppConfig(boolean checkForUpdates) {
-        AppConfigUseCase appConfigUseCase = AppConfigUseCase.Companion.getInstance();
-        appConfigUseCase.getAppConfig(checkForUpdates, null);
+        if (isInitialized()) {
+            AppConfigUseCase appConfigUseCase = AppConfigUseCase.Companion.getInstance();
+            appConfigUseCase.getAppConfig(checkForUpdates, null);
+        }
     }
 
     private static String composeFileProviderAuthority(Application application) {
         return application.getPackageName() + ".provider";
     }
 
-    public static String getAppToken() {
-        Validate.sdkInitialized();
-        return appToken;
-    }
-
-    public static Executor getExecutor() {
-        synchronized (LOCK) {
-            if (AppliverySdk.executor == null) {
-                AppliverySdk.executor = AsyncTask.THREAD_POOL_EXECUTOR;
-            }
-        }
-        return AppliverySdk.executor;
-    }
-
-    public static void setExecutor(Executor executor) {
-        Validate.notNull(executor, "executor");
-        synchronized (LOCK) {
-            AppliverySdk.executor = executor;
-        }
-    }
-
+    @Nullable
     public static Context getApplicationContext() {
-        Validate.sdkInitialized();
         return applicationContext;
     }
 
+    @Nullable
     public static PermissionChecker getPermissionRequestManager() {
-        Validate.sdkInitialized();
         return permissionRequestManager;
     }
 
     public static Activity getCurrentActivity() throws NotForegroundActivityAvailable {
-        Validate.sdkInitialized();
         Activity activity = activityLifecycle.getCurrentActivity();
         if (activity != null) {
             return activity;
@@ -183,7 +162,6 @@ public class AppliverySdk {
     }
 
     public static boolean isContextAvailable() {
-        Validate.sdkInitialized();
         return (activityLifecycle.getCurrentActivity() != null);
     }
 
@@ -207,31 +185,19 @@ public class AppliverySdk {
     }
 
     public static void obtainAppConfigForCheckUpdates() {
-        Validate.sdkInitialized();
-        obtainAppConfig(true);
+        if (isInitialized()) {
+            obtainAppConfig(true);
+        }
     }
 
     public static void updateAppConfig() {
-        Validate.sdkInitialized();
         obtainAppConfig(false);
     }
 
     public static void continuePendingPermissionsRequestsIfPossible() {
-        Validate.sdkInitialized();
-        permissionRequestManager.continuePendingPermissionsRequestsIfPossible();
-    }
-
-    public static String getFileProviderAuthority() {
-        return fileProviderAuthority;
-    }
-
-    public static void cleanAllStatics() {
-        executor = null;
-        appToken = null;
-        applicationContext = null;
-        permissionRequestManager = null;
-        activityLifecycle = null;
-        checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
+        if (isInitialized()) {
+            permissionRequestManager.continuePendingPermissionsRequestsIfPossible();
+        }
     }
 
     public static Boolean getCheckForUpdatesBackground() {
@@ -239,8 +205,9 @@ public class AppliverySdk {
     }
 
     public static void setCheckForUpdatesBackground(Boolean checkForUpdatesBackground) {
-        Validate.sdkInitialized();
-        AppliverySdk.checkForUpdatesBackground = checkForUpdatesBackground;
+        if (isInitialized()) {
+            AppliverySdk.checkForUpdatesBackground = checkForUpdatesBackground;
+        }
     }
 
     public static FeedbackView requestForUserFeedBack() {
@@ -271,46 +238,38 @@ public class AppliverySdk {
         }
     }
 
-    public static void lockApp() {
-        lockedApp = true;
-    }
-
-    public static void unlockApp() {
-        lockedApp = false;
-    }
-
-    public static boolean isAppLocked() {
-        return lockedApp;
-    }
-
     static void disableShakeFeedback() {
-        Validate.sdkInitialized();
-        SensorEventsController sensorController =
-                SensorEventsController.getInstance(applicationContext);
-        sensorController.disableSensor(Sensor.TYPE_ACCELEROMETER);
+        if (isInitialized()) {
+            SensorEventsController sensorController =
+                    SensorEventsController.getInstance(applicationContext);
+            sensorController.disableSensor(Sensor.TYPE_ACCELEROMETER);
+        }
     }
 
     static void enableShakeFeedback() {
-        Validate.sdkInitialized();
-        SensorEventsController sensorController =
-                SensorEventsController.getInstance(applicationContext);
-        sensorController.enableSensor(Sensor.TYPE_ACCELEROMETER);
+        if (isInitialized()) {
+            SensorEventsController sensorController =
+                    SensorEventsController.getInstance(applicationContext);
+            sensorController.enableSensor(Sensor.TYPE_ACCELEROMETER);
+        }
     }
 
     static void disableScreenshotFeedback() {
-        Validate.sdkInitialized();
-        ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
-        screenshotObserver.stopObserving();
-        screenshotObserver.disableScreenshotObserver();
+        if (isInitialized()) {
+            ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
+            screenshotObserver.stopObserving();
+            screenshotObserver.disableScreenshotObserver();
+        }
     }
 
     static void enableScreenshotFeedback() {
-        Validate.sdkInitialized();
-        ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
-        screenshotObserver.enableScreenshotObserver();
+        if (isInitialized()) {
+            ScreenshotObserver screenshotObserver = ScreenshotObserver.getInstance(applicationContext);
+            screenshotObserver.enableScreenshotObserver();
 
-        if (activityLifecycle.isActivityContextAvailable()) {
-            screenshotObserver.startObserving();
+            if (activityLifecycle.isActivityContextAvailable()) {
+                screenshotObserver.startObserving();
+            }
         }
     }
 
@@ -354,8 +313,10 @@ public class AppliverySdk {
     }
 
     static void isUpToDate(IsUpToDateCallback isUpToDateCallback) {
-        AppConfigUseCase appConfigUseCase = AppConfigUseCase.Companion.getInstance();
-        appConfigUseCase.getAppConfig(false, isUpToDateCallback);
+        if (isInitialized()) {
+            AppConfigUseCase appConfigUseCase = AppConfigUseCase.Companion.getInstance();
+            appConfigUseCase.getAppConfig(false, isUpToDateCallback);
+        }
     }
 
     public static class Logger {

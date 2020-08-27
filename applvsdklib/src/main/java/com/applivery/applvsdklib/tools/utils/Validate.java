@@ -20,8 +20,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
-import com.applivery.applvsdklib.AppliverySdk;
-import com.applivery.applvsdklib.domain.exceptions.AppliverySdkNotInitializedException;
 import java.util.Collection;
 
 /**
@@ -92,14 +90,6 @@ public final class Validate {
       } else {
         Log.w(TAG, NO_INTERNET_PERMISSION_REASON);
       }
-    }
-  }
-
-  public static void sdkInitialized() {
-    if (!AppliverySdk.isInitialized()) {
-      throw new AppliverySdkNotInitializedException(
-          "The SDK has not been initialized, make sure to call "
-              + "AppliverySdk.sdkInitialize() first.");
     }
   }
 }
