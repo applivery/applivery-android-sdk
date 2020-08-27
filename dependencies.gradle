@@ -15,7 +15,8 @@
  */
 
 ext {
-    appcompatVersion = "1.1.0"
+    appcompatVersion = "1.2.0"
+    androidMaterialVersion = "1.2.0"
 
     retrofitVersion = "2.6.0"
     loggingInterceptorVersion = "3.11.0"
