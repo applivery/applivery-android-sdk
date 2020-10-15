@@ -53,6 +53,10 @@ class MainActivity : AppCompatActivity() {
         checkForUpdatesButton.setOnClickListener {
             Applivery.checkForUpdates()
         }
+
+        downloadLastBuildButton.setOnClickListener {
+            Applivery.downloadLastBuild()
+        }
     }
 
     override fun onResume() {

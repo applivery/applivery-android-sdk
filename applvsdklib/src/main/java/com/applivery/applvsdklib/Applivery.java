@@ -68,6 +68,13 @@ public class Applivery {
     }
 
     /**
+     * Start the download of the last app version.
+     */
+    public static void downloadLastBuild() {
+        AppliverySdk.obtainAppConfigForCheckUpdates();
+    }
+
+    /**
      * Enables feedback on shake, call it having your app in foreground whenever you want.
      */
     public static void enableShakeFeedback() {
