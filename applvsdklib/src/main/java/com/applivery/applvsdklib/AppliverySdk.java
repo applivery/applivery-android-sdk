@@ -29,6 +29,7 @@ import com.applivery.applvsdklib.domain.login.BindUserInteractor;
 import com.applivery.applvsdklib.domain.login.UnBindUserInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.features.appconfig.AppConfigUseCase;
+import com.applivery.applvsdklib.features.download.DownloadBuildUseCase;
 import com.applivery.applvsdklib.tools.androidimplementations.AppliveryActivityLifecycleCallbacks;
 import com.applivery.applvsdklib.tools.androidimplementations.ScreenshotObserver;
 import com.applivery.applvsdklib.tools.androidimplementations.sensors.SensorEventsController;
@@ -192,8 +193,8 @@ public class AppliverySdk {
 
     public static void downloadLastBuild() {
         if (isInitialized()) {
-            AppConfigUseCase appConfigUseCase = AppConfigUseCase.Companion.getInstance();
-            appConfigUseCase.downloadLastBuild();
+            DownloadBuildUseCase downloadBuildUseCase = DownloadBuildUseCase.Companion.getInstance();
+            downloadBuildUseCase.downloadLastBuild();
         }
     }
 

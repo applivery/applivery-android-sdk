@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.applivery.applvsdklib.features.appconfig
+package com.applivery.applvsdklib.features.download
 
 import com.applivery.applvsdklib.AppliverySdk
-import com.applivery.applvsdklib.IsUpToDateCallback
 import com.applivery.applvsdklib.presentation.ErrorManager
-import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo
+import com.applivery.applvsdklib.ui.views.login.LoginView
 import com.applivery.base.AppliveryDataManager
+import com.applivery.base.domain.SessionManager
 import com.applivery.base.domain.model.AppConfig
-import com.applivery.base.domain.model.PackageInfo
+import com.applivery.base.domain.model.AppData
 import com.applivery.base.util.AppliveryLog
 import com.applivery.data.AppliveryApiService
 import com.applivery.data.response.ServerResponse
+import com.applivery.updates.DownloadService.Companion.startDownloadService
 import com.google.gson.JsonParseException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,25 +34,19 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
-class AppConfigUseCase(
+class DownloadBuildUseCase(
     private val apiService: AppliveryApiService,
-    private val updateManager: UpdateManager,
     private val errorManager: ErrorManager,
-    private val packageInfo: PackageInfo
+    private val sessionManager: SessionManager
 ) {
 
-    fun getAppConfig(checkForUpdates: Boolean, upToDateCallback: IsUpToDateCallback?) =
+    fun downloadLastBuild() {
         GlobalScope.launch(Dispatchers.Main) {
             try {
                 val appConfigResponse = withContext(Dispatchers.IO) { apiService.obtainAppConfig() }
                 val appData = appConfigResponse.data.toAppData()
                 AppliveryDataManager.appData = appData
-
-                upToDateCallback?.onIsUpToDateCheck(appData.appConfig.isUpdated())
-
-                if (checkForUpdates) {
-                    updateManager.checkForUpdates(appData)
-                }
+                checkLoginAndInitDownload(appData)
 
             } catch (parseException: JsonParseException) {
                 AppliveryLog.error("Parse app config error", parseException)
@@ -62,9 +57,35 @@ class AppConfigUseCase(
                 AppliveryLog.error("Get app config error", ioException)
             }
         }
+    }
 
-    private fun AppConfig.isUpdated() = with(this) {
-        packageInfo.version >= lastBuildVersion
+    private fun checkLoginAndInitDownload(appData: AppData) {
+        if (needLogin(appData.appConfig)) {
+            showLogin()
+        } else {
+            updateApp()
+        }
+    }
+
+    private fun updateApp() {
+        if (AppliverySdk.isContextAvailable()) {
+            val context = AppliverySdk.getApplicationContext()
+            startDownloadService(context!!)
+        } else {
+            AppliveryLog.error("Cannot init Download service")
+        }
+    }
+
+    private fun needLogin(appConfig: AppConfig): Boolean {
+        val isAuthUpdate = appConfig.forceAuth
+        return isAuthUpdate && !sessionManager.hasSession()
+    }
+
+    private fun showLogin() {
+        val loginView = LoginView(AppliverySdk.getCurrentActivity()) {
+            updateApp()
+        }
+        loginView.presenter.requestLogin()
     }
 
     private fun handleError(exception: HttpException) {
@@ -74,20 +95,19 @@ class AppConfigUseCase(
 
     companion object {
         @Volatile
-        private var instance: AppConfigUseCase? = null
+        private var instance: DownloadBuildUseCase? = null
 
         fun getInstance() =
             instance ?: synchronized(this) {
-                instance ?: buildAppConfigUseCase().also {
+                instance ?: buildDownloadBuildUseCase().also {
                     instance = it
                 }
             }
 
-        private fun buildAppConfigUseCase() = AppConfigUseCase(
+        private fun buildDownloadBuildUseCase() = DownloadBuildUseCase(
             apiService = AppliveryApiService.getInstance(),
-            updateManager = UpdateManager.getInstance(),
             errorManager = ErrorManager(),
-            packageInfo = AndroidCurrentAppInfo.getPackageInfo(AppliverySdk.getApplicationContext())
+            sessionManager = SessionManager.getInstance()
         )
     }
 }
