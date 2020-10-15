@@ -59,6 +59,10 @@ class DownloadBuildUseCase(
         }
     }
 
+    fun downloadLastBuild(appData: AppData) {
+        checkLoginAndInitDownload(appData)
+    }
+
     private fun checkLoginAndInitDownload(appData: AppData) {
         if (needLogin(appData.appConfig)) {
             showLogin()
