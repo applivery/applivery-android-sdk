@@ -38,6 +38,11 @@ class UpdateManager(
         showUpdate(presenter, updateType, appData.name)
     }
 
+    fun downloadLastBuild(appData: AppData) {
+        val updateListener = getUpdateListener(appData.appConfig)
+        updateListener.onUpdateButtonClick()
+    }
+
     private fun showUpdate(
         updateViewPresenter: UpdateViewPresenter,
         updateType: UpdateType,

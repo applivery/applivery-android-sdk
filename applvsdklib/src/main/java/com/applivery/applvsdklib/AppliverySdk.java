@@ -190,6 +190,13 @@ public class AppliverySdk {
         }
     }
 
+    public static void downloadLastBuild() {
+        if (isInitialized()) {
+            AppConfigUseCase appConfigUseCase = AppConfigUseCase.Companion.getInstance();
+            appConfigUseCase.downloadLastBuild();
+        }
+    }
+
     public static void updateAppConfig() {
         obtainAppConfig(false);
     }

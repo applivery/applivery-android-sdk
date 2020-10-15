@@ -63,6 +63,26 @@ class AppConfigUseCase(
             }
         }
 
+    fun downloadLastBuild() {
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                val appConfigResponse = withContext(Dispatchers.IO) { apiService.obtainAppConfig() }
+                val appData = appConfigResponse.data.toAppData()
+                AppliveryDataManager.appData = appData
+
+                updateManager.downloadLastBuild(appData)
+
+            } catch (parseException: JsonParseException) {
+                AppliveryLog.error("Parse app config error", parseException)
+            } catch (httpException: HttpException) {
+                AppliveryLog.error("Get config - Network error", httpException)
+                handleError(httpException)
+            } catch (ioException: IOException) {
+                AppliveryLog.error("Get app config error", ioException)
+            }
+        }
+    }
+
     private fun AppConfig.isUpdated() = with(this) {
         packageInfo.version >= lastBuildVersion
     }
