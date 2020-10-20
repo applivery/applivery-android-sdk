@@ -124,34 +124,38 @@ Applivery.checkForUpdates()
 ### Updates
 You will find that the following public methods are available:
 
-Manually check for updates:
-```java
+#### Check for updates
+```kotlin
 Applivery.checkForUpdates()
 ```
 
-Check for updates when coming from background 
-```java
+#### Check for updates when coming from background
+
+Check for updates coming back to the App from the home screen or another App if the App has been previously opened) 
+```kotlin
 Applivery.setCheckForUpdatesBackground(true)
 ```
 
-Start the download of the last app version:
+#### Implement your own update process
+You can fully implement your own update process to be fully controlled by your app. We highy recommend to first disable automatic updates in the settings of your app in Applivery's dashboard. Then you can use the following SDK method:
+
 ```kotlin
 Applivery.downloadLastBuild()
 ```
 
-### Feedback Reporting
+### Feedback & Bug Reporting
 
 You can either take a screenshot or shake your phone if you want to send activate the Feedback Reproting feature
 
 You can enable or disable the screenshot feedback by using the following methods:
 
-```java
+```kotlin
 Applivery.enableScreenshotFeedback();
 Applivery.disableScreenshotFeedback();
 ```
 ... and the shake event by using:
 
-```java
+```kotlin
 Applivery.enableShakeFeedback();
 Applivery.disableShakeFeedback();
 ```
