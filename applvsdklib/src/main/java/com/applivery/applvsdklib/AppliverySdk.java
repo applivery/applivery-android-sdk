@@ -191,7 +191,7 @@ public class AppliverySdk {
         }
     }
 
-    public static void downloadLastBuild() {
+    public static void update() {
         if (isInitialized()) {
             DownloadBuildUseCase downloadBuildUseCase = DownloadBuildUseCase.Companion.getInstance();
             downloadBuildUseCase.downloadLastBuild();

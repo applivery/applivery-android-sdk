@@ -70,8 +70,8 @@ public class Applivery {
     /**
      * Start the download of the last app version.
      */
-    public static void downloadLastBuild() {
-        AppliverySdk.downloadLastBuild();
+    public static void update() {
+        AppliverySdk.update();
     }
 
     /**

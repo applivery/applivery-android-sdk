@@ -136,7 +136,7 @@ Applivery.setCheckForUpdatesBackground(true)
 
 Start the download of the last app version:
 ```kotlin
-Applivery.downloadLastBuild()
+Applivery.update()
 ```
 
 ### Feedback Reporting

@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         downloadLastBuildButton.setOnClickListener {
-            Applivery.downloadLastBuild()
+            Applivery.update()
         }
     }
 
