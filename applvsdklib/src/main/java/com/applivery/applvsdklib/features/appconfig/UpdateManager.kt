@@ -33,7 +33,7 @@ class UpdateManager(
 
     fun checkForUpdates(appData: AppData) {
         val updateType = appData.appConfig.getUpdateType()
-        val presenter = UpdateViewPresenter(getUpdateListener(appData.appConfig))
+        val presenter = UpdateViewPresenter(getUpdateListener(appData))
 
         showUpdate(presenter, updateType, appData.name)
     }
@@ -57,8 +57,8 @@ class UpdateManager(
         }
     }
 
-    private fun getUpdateListener(appConfig: AppConfig): UpdateListener {
-        return UpdateListenerImpl(appConfig, sessionManager)
+    private fun getUpdateListener(appData: AppData): UpdateListener {
+        return UpdateListenerImpl.getInstance(appData)
     }
 
     private fun AppConfig.getUpdateType(): UpdateType = with(this) {

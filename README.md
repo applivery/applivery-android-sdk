@@ -134,6 +134,11 @@ Check for updates when coming from background
 Applivery.setCheckForUpdatesBackground(true)
 ```
 
+Start the download of the last app version:
+```kotlin
+Applivery.update()
+```
+
 ### Feedback Reporting
 
 You can either take a screenshot or shake your phone if you want to send activate the Feedback Reproting feature
