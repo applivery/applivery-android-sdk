@@ -21,7 +21,5 @@ package com.applivery.applvsdklib.ui.views.update;
  * Date 10/1/16.
  */
 public interface UpdateListener {
-  void onUpdateButtonClick();
-
-  void setUpdateView(UpdateView updateView);
+    void onUpdateButtonClick();
 }

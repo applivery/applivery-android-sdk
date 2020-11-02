@@ -33,9 +33,9 @@ public class Applivery {
      * instance when onCreate method is called. Pay attention to description of isPlayStoreRelease
      * param.
      *
-     * @param app            your app instance, it can't be null.
-     * @param appToken       your app tokenoken. You can find this value at applivery dashboard in your
-     *                       app settings section
+     * @param app      your app instance, it can't be null.
+     * @param appToken your app tokenoken. You can find this value at applivery dashboard in your
+     *                 app settings section
      */
     public static void init(@NonNull Application app, @NonNull String appToken) {
         AppliverySdk.sdkInitialize(app, appToken);
@@ -65,6 +65,13 @@ public class Applivery {
      */
     public static void checkForUpdates() {
         AppliverySdk.obtainAppConfigForCheckUpdates();
+    }
+
+    /**
+     * Start the download of the last app version.
+     */
+    public static void update() {
+        AppliverySdk.update();
     }
 
     /**
