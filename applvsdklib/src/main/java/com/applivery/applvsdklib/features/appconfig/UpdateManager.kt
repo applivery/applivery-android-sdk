@@ -20,15 +20,13 @@ import com.applivery.applvsdklib.domain.appconfig.update.UpdateListenerImpl
 import com.applivery.applvsdklib.tools.androidimplementations.AndroidCurrentAppInfo.Companion.getPackageInfo
 import com.applivery.applvsdklib.ui.views.update.UpdateListener
 import com.applivery.applvsdklib.ui.views.update.UpdateViewPresenter
-import com.applivery.base.domain.SessionManager
 import com.applivery.base.domain.model.AppConfig
 import com.applivery.base.domain.model.AppData
 import com.applivery.base.domain.model.PackageInfo
 import com.applivery.base.domain.model.UpdateType
 
 class UpdateManager(
-    private val packageInfo: PackageInfo,
-    private val sessionManager: SessionManager
+    private val packageInfo: PackageInfo
 ) {
 
     fun checkForUpdates(appData: AppData) {
@@ -85,8 +83,7 @@ class UpdateManager(
             }
 
         private fun buildUpdateManager() = UpdateManager(
-            packageInfo = getPackageInfo(AppliverySdk.getApplicationContext()),
-            sessionManager = SessionManager.getInstance()
+            packageInfo = getPackageInfo(AppliverySdk.getApplicationContext())
         )
     }
 }

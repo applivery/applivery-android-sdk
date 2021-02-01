@@ -44,14 +44,14 @@ android {
         prerelease {
             signingConfig signingConfigs.debug
             debuggable true
-            minifyEnabled false
+            minifyEnabled true
             testCoverageEnabled true
 
             buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
         }

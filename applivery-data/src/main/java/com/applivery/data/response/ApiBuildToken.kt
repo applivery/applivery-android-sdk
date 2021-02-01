@@ -15,7 +15,11 @@
  */
 package com.applivery.data.response
 
+import com.google.gson.annotations.SerializedName
+
 data class ApiBuildToken(
+    @SerializedName("token")
     val token: String,
+    @SerializedName("expiresAt")
     val expiresAt: String
 )

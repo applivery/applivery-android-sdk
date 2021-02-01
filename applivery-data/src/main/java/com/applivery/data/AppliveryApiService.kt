@@ -22,7 +22,6 @@ import com.applivery.data.request.LoginRequest
 import com.applivery.data.response.ApiAppConfig
 import com.applivery.data.response.ApiBuildToken
 import com.applivery.data.response.ApiFeedback
-import com.applivery.data.response.ApiLogin
 import com.applivery.data.response.ServerResponse
 import com.applivery.data.response.UserDataResponse
 import retrofit2.Call
