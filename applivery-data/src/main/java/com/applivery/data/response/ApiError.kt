@@ -16,10 +16,14 @@
 package com.applivery.data.response
 
 import com.applivery.base.domain.model.Failure
+import com.google.gson.annotations.SerializedName
 
 data class ApiError(
+    @SerializedName("code")
     val code: Int,
+    @SerializedName("message")
     val message: String,
+    @SerializedName("data")
     val data: Map<String, Any>?
 ) {
     fun toFailure(): Failure {

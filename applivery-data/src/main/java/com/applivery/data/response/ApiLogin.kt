@@ -17,26 +17,6 @@ package com.applivery.data.response
 
 import com.google.gson.annotations.SerializedName
 
-data class ApiLogin(
-    @SerializedName("payload")
-    val payload: Payload,
-    @SerializedName("provider")
-    val provider: String = "traditional"
-) {
-    companion object {
-        fun fromUserData(email: String, password: String) = ApiLogin(
-            Payload(email, password)
-        )
-    }
-}
-
-data class Payload(
-    @SerializedName("user")
-    val email: String,
-    @SerializedName("password")
-    val password: String
-)
-
 data class UserDataResponse(
     @SerializedName("bearer")
     val bearer: String = "",

@@ -24,7 +24,9 @@ import retrofit2.HttpException
 class ServerResponse<T>(
     @SerializedName("status")
     val successful: Boolean,
+    @SerializedName("data")
     val data: T,
+    @SerializedName("error")
     val error: ApiError
 ) {
     companion object {

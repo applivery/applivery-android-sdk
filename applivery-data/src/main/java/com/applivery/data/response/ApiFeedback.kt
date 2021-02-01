@@ -15,10 +15,17 @@
  */
 package com.applivery.data.response
 
+import com.google.gson.annotations.SerializedName
+
 data class ApiFeedback(
+    @SerializedName("id")
     val id: String,
+    @SerializedName("message")
     val message: String,
+    @SerializedName("createdAt")
     val createdAt: String,
+    @SerializedName("type")
     val type: String,
+    @SerializedName("status")
     val status: String
 )
