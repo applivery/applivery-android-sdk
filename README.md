@@ -52,7 +52,7 @@ You can get your APP TOKEN in your App -> Settings -> Integrations section.
 ### Gradle with jCenter dependency
 [ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
 ```groovy
-implementation 'com.applivery:applivery-sdk:3.3'
+implementation 'com.applivery:applivery-sdk:3.4'
 ```
 
 ### Gradle with JitPack Maven dependency
@@ -72,7 +72,7 @@ Add the following dependency to your app gradle:
 
   ```groovy
     dependencies {
-      implementation 'com.github.Applivery:applivery-android-sdk:v3.3'
+      implementation 'com.github.Applivery:applivery-android-sdk:v3.4'
     }
   ```
   
@@ -83,7 +83,7 @@ Add the following dependency to your app gradle:
 add the following dependency to your app gradle:
 
  ```groovy
-  compile 'com.applivery:applivery-android-sdk:3.3'
+  compile 'com.applivery:applivery-android-sdk:3.4'
  ```
 
 ## SDK Setup

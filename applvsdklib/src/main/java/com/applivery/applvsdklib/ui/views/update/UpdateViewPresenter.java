@@ -25,35 +25,35 @@ import com.applivery.applvsdklib.ui.model.UpdateInfo;
  */
 public class UpdateViewPresenter {
 
-  private UpdateView updateView;
-  private final UpdateListener updateListener;
+    private UpdateView updateView;
+    private final UpdateListener updateListener;
 
-  public UpdateViewPresenter(UpdateListener updateListener) {
-    this.updateListener = updateListener;
-  }
-
-  public void showForcedUpdate(String appName, String updateMessage) {
-    if (AppliverySdk.isContextAvailable()) {
-      UpdateInfo updateInfo = new UpdateInfo(appName, updateMessage);
-      MustUpdateViewImpl mustUpdateView = new MustUpdateViewImpl();
-      mustUpdateView.setUpdateInfo(updateInfo);
-      mustUpdateView.setUpdateListener(updateListener);
-      mustUpdateView.lockRotationOnParentScreen();
-      this.updateView = mustUpdateView;
-
-      if (!this.updateView.isActive()) {
-        this.updateView.showUpdateDialog();
-      }
+    public UpdateViewPresenter(UpdateListener updateListener) {
+        this.updateListener = updateListener;
     }
-  }
 
-  public void showSuggestedUpdate(String appName, String updateMessage) {
-    if (AppliverySdk.isContextAvailable()) {
-      UpdateInfo updateInfo = new UpdateInfo(appName, updateMessage);
-      this.updateView = new SuggestedUpdateViewImpl(updateInfo, updateListener);
-      if (!this.updateView.isActive()) {
-        this.updateView.showUpdateDialog();
-      }
+    public void showForcedUpdate(String appName, String updateMessage) {
+        if (AppliverySdk.isContextAvailable()) {
+            UpdateInfo updateInfo = new UpdateInfo(appName, updateMessage);
+            MustUpdateViewImpl mustUpdateView = new MustUpdateViewImpl();
+            mustUpdateView.setUpdateInfo(updateInfo);
+            mustUpdateView.setUpdateListener(updateListener);
+            mustUpdateView.lockRotationOnParentScreen();
+            this.updateView = mustUpdateView;
+
+            if (!this.updateView.isActive()) {
+                this.updateView.showUpdateDialog();
+            }
+        }
     }
-  }
+
+    public void showSuggestedUpdate(String appName, String updateMessage) {
+        if (AppliverySdk.isContextAvailable()) {
+            UpdateInfo updateInfo = new UpdateInfo(appName, updateMessage);
+            this.updateView = new SuggestedUpdateViewImpl(updateInfo, updateListener);
+            if (!this.updateView.isActive()) {
+                this.updateView.showUpdateDialog();
+            }
+        }
+    }
 }

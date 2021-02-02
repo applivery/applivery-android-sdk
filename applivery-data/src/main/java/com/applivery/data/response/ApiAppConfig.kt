@@ -15,10 +15,12 @@
  */
 package com.applivery.data.response
 
+import androidx.annotation.Keep
 import com.applivery.base.domain.model.AppConfig
 import com.applivery.base.domain.model.AppData
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class ApiAppConfig(
     @SerializedName("description")
     val description: String?,
@@ -50,11 +52,13 @@ data class ApiAppConfig(
     )
 }
 
+@Keep
 data class SdkEntity(
     @SerializedName("android")
     val android: AndroidEntity
 )
 
+@Keep
 data class AndroidEntity(
     @SerializedName("forceAuth")
     val forceAuth: Boolean?,
