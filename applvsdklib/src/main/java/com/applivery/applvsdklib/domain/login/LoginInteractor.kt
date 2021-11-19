@@ -56,8 +56,9 @@ class LoginInteractor(
                 LoginRequest.fromUserData(userData.username, userData.password)
             ).execute().body()
 
-            if (apiLoginResponse?.data != null) {
-                sessionManager.saveSession(apiLoginResponse.data.bearer)
+            val token = apiLoginResponse?.data?.bearer
+            if (token != null) {
+                sessionManager.saveSession(token)
                 notifySuccess()
             } else {
                 Log.e(TAG, "Make login response error")

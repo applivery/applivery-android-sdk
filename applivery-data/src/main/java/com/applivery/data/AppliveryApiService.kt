@@ -19,11 +19,7 @@ import com.applivery.data.di.InjectorUtils
 import com.applivery.data.request.BindUserRequest
 import com.applivery.data.request.FeedbackRequest
 import com.applivery.data.request.LoginRequest
-import com.applivery.data.response.ApiAppConfig
-import com.applivery.data.response.ApiBuildToken
-import com.applivery.data.response.ApiFeedback
-import com.applivery.data.response.ServerResponse
-import com.applivery.data.response.UserDataResponse
+import com.applivery.data.response.*
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -51,6 +47,8 @@ interface AppliveryApiService {
     @GET("$API_VERSION/build/{build_id}/downloadToken")
     fun obtainBuildToken(@Path("build_id") buildId: String): Call<ServerResponse<ApiBuildToken>>
 
+    @GET("$API_VERSION/auth/profile")
+    fun getProfile(): Call<ServerResponse<UserEntity>>
 
     companion object {
         @Volatile
