@@ -174,6 +174,15 @@ Logout a previously binded user
 Applivery.unbindUser();
 ```
 
+### Get user
+
+This public method returns the user profile from Applivery API. 
+It will be required that the user has previously logged in or has been bound to the platform through the `bindUser() method. In case it does not exist it will return an unauthorized error.
+
+```java
+Applivery.getProfile(@NonNull GetProfileCallback getProfileCallback);
+```
+
 ### Styling the UI
 
 In order to customize the appearance of the UI, you can make a new resource file called `applivery.xml` under your `res/values` folder overwriting the Applivery default attributes.

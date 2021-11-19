@@ -168,7 +168,11 @@ public class Applivery {
     }
 
     /**
+     * <p>
      * Gets the logged user profile if available.
+     * </p>
+     * - Since: 3.5
+     * - Version: 3.5
      *
      * @param getProfileCallback the callback interface with the result
      */
