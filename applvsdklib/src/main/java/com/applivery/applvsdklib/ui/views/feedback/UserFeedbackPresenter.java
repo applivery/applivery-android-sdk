@@ -20,7 +20,7 @@ import android.text.TextUtils;
 
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.download.permissions.AccessNetworkStatePermission;
-import com.applivery.applvsdklib.domain.login.GetProfileInteractor;
+import com.applivery.applvsdklib.domain.login.GetUserProfileInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.FeedBackType;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
@@ -56,7 +56,7 @@ public class UserFeedbackPresenter {
     final private AccessNetworkStatePermission accessNetworkStatePermission;
     private final SessionManager sessionManager;
     private final FeedbackUseCase feedbackUseCase;
-    private final GetProfileInteractor getProfileInteractor;
+    private final GetUserProfileInteractor getUserProfileInteractor;
     private final MailValidator mailValidator = new MailValidator();
     private ScreenCapture screenCapture;
     private String email;
@@ -64,7 +64,7 @@ public class UserFeedbackPresenter {
     public UserFeedbackPresenter(
             FeedbackView feedbackView,
             SessionManager sessionManager,
-            GetProfileInteractor getProfileInteractor
+            GetUserProfileInteractor getUserProfileInteractor
     ) {
         this.feedbackView = feedbackView;
         this.sessionManager = sessionManager;
@@ -73,7 +73,7 @@ public class UserFeedbackPresenter {
         this.accessNetworkStatePermission = new AccessNetworkStatePermission();
 
         this.feedbackUseCase = FeedbackUseCase.Companion.getInstance();
-        this.getProfileInteractor = getProfileInteractor;
+        this.getUserProfileInteractor = getUserProfileInteractor;
     }
 
     public void initUi() {
@@ -84,7 +84,7 @@ public class UserFeedbackPresenter {
             feedbackView.showScheenShotPreview();
             feedbackView.checkScreenshotSwitch(true);
         }
-        getProfileInteractor.getProfile(new Function1<UserProfile, Unit>() {
+        getUserProfileInteractor.getUser(new Function1<UserProfile, Unit>() {
             @Override
             public Unit invoke(UserProfile userProfile) {
                 feedbackView.onUserProfileLoaded(userProfile);

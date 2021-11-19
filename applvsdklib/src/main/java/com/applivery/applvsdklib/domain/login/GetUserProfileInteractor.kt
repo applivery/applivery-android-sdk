@@ -10,7 +10,7 @@ import com.applivery.data.AppliveryApiService
 import com.applivery.data.response.toDomain
 import java.io.IOException
 
-class GetProfileInteractor(
+class GetUserProfileInteractor(
     private val interactorExecutor: InteractorExecutor,
     private val mainThread: MainThread,
     private val apiService: AppliveryApiService,
@@ -20,7 +20,7 @@ class GetProfileInteractor(
     lateinit var onSuccess: (UserProfile) -> Unit
     lateinit var onError: (error: ErrorObject) -> Unit
 
-    fun getProfile(
+    fun getUser(
         onSuccess: (UserProfile) -> Unit = {},
         onError: (error: ErrorObject) -> Unit = {}
     ) {
@@ -38,7 +38,7 @@ class GetProfileInteractor(
                 notifyError(ErrorObject("Unauthorized"))
                 return
             }
-            val user = apiService.getProfile().execute().body()?.data?.toDomain()
+            val user = apiService.getUser().execute().body()?.data?.toDomain()
             if (user != null) {
                 notifySuccess(user)
             } else {

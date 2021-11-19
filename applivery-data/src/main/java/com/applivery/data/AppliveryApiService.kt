@@ -53,7 +53,7 @@ interface AppliveryApiService {
     fun obtainBuildToken(@Path("build_id") buildId: String): Call<ServerResponse<ApiBuildToken>>
 
     @GET("$API_VERSION/auth/profile")
-    fun getProfile(): Call<ServerResponse<UserEntity>>
+    fun getUser(): Call<ServerResponse<UserEntity>>
 
     companion object {
         @Volatile

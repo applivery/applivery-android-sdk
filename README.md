@@ -180,7 +180,7 @@ This public method returns the user profile from Applivery API.
 It will be required that the user has previously logged in or has been bound to the platform through the `bindUser() method. In case it does not exist it will return an unauthorized error.
 
 ```java
-Applivery.getProfile(@NonNull GetProfileCallback getProfileCallback);
+Applivery.getUser(@NonNull GetUserCallback getUserCallback);
 ```
 
 ### Styling the UI
