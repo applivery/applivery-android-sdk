@@ -31,6 +31,8 @@ class ServerResponse<T>(
 ) {
     companion object {
 
+        const val ApiDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
         fun parseError(error: HttpException): ApiError? {
             val gson = Gson()
             val type = object : TypeToken<ServerResponse<Any>>() {}.type

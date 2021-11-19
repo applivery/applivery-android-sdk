@@ -23,9 +23,11 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.util.Log;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.domain.login.BindUserInteractor;
+import com.applivery.applvsdklib.domain.login.GetProfileInteractor;
 import com.applivery.applvsdklib.domain.login.UnBindUserInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.features.appconfig.AppConfigUseCase;
@@ -43,12 +45,9 @@ import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackView;
 import com.applivery.base.AppliveryDataManager;
 import com.applivery.base.AppliveryLifecycleCallbacks;
 import com.applivery.base.domain.model.UserData;
-
+import com.applivery.base.domain.model.UserProfile;
 import java.util.Collection;
 import java.util.concurrent.Executor;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
@@ -327,7 +326,29 @@ public class AppliverySdk {
         }
     }
 
+    static void getProfile(final @NonNull GetProfileCallback callback) {
+
+        GetProfileInteractor getProfileInteractor = Injection.INSTANCE.provideGetProfileInteractor();
+        getProfileInteractor.getProfile(
+                new Function1<UserProfile, Unit>() {
+                    @Override
+                    public Unit invoke(UserProfile userProfile) {
+                        callback.onSuccess(userProfile);
+                        return null;
+                    }
+                }, new Function1<ErrorObject, Unit>() {
+                    @Override
+                    public Unit invoke(ErrorObject errorObject) {
+                        callback.onError(errorObject.getMessage());
+                        return null;
+                    }
+                }
+        );
+    }
+
+
     public static class Logger {
+
         private static volatile boolean debug = isDebugEnabled;
 
         public static void log(String text) {
