@@ -5,8 +5,6 @@ import com.applivery.base.domain.model.UserType
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-private const val ApiDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-
 fun UserEntity.toDomain(): UserProfile = UserProfile(
     id = id.orEmpty(),
     email = email,
@@ -15,7 +13,12 @@ fun UserEntity.toDomain(): UserProfile = UserProfile(
     lastName = lastName,
     type = type?.toDomain(),
     createdAt = createdAt?.let {
-        runCatching { SimpleDateFormat(ApiDateFormat, Locale.getDefault()).parse(it) }.getOrNull()
+        runCatching {
+            SimpleDateFormat(
+                ServerResponse.ApiDateFormat,
+                Locale.getDefault()
+            ).parse(it)
+        }.getOrNull()
     }
 )
 
