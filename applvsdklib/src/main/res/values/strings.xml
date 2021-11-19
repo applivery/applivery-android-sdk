@@ -57,6 +57,9 @@
 
     <string name="appliveryBugSelectorText">Bug</string>
     <string name="appliveryFeedbackSelectorText">Feedback</string>
+    <string name="appliveryFeedbackEmailLabel">Email</string>
+    <string name="appliveryFeedbackEmailHint">Optional email</string>
+    <string name="appliveryFeedbackEmailError">Wrong format</string>
 
     <string name="appliveryLogoImageDesc">Applivery Logo</string>
     <string name="appliveryCancelFeedbackButtonDesc">Cancel feedback button</string>

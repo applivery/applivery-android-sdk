@@ -16,9 +16,11 @@
 package com.applivery.applvsdklib.ui.views.feedback;
 
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.domain.download.permissions.AccessNetworkStatePermission;
+import com.applivery.applvsdklib.domain.login.GetProfileInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.domain.model.FeedBackType;
 import com.applivery.applvsdklib.domain.model.UserFeedback;
@@ -35,6 +37,7 @@ import com.applivery.base.domain.model.AppData;
 import com.applivery.base.domain.model.DeviceInfo;
 import com.applivery.base.domain.model.Feedback;
 import com.applivery.base.domain.model.PackageInfo;
+import com.applivery.base.domain.model.UserProfile;
 import com.applivery.base.util.AndroidCurrentAppInfo;
 import com.applivery.base.util.AppliveryLog;
 
@@ -49,14 +52,20 @@ public class UserFeedbackPresenter {
 
     private final FeedbackView feedbackView;
     private final UserFeedback userFeedback;
-    private ScreenCapture screenCapture;
     final private PermissionChecker permissionRequestExecutor;
     final private AccessNetworkStatePermission accessNetworkStatePermission;
     private final SessionManager sessionManager;
     private final FeedbackUseCase feedbackUseCase;
+    private final GetProfileInteractor getProfileInteractor;
+    private final MailValidator mailValidator = new MailValidator();
+    private ScreenCapture screenCapture;
+    private String email;
 
-    public UserFeedbackPresenter(FeedbackView feedbackView,
-                                 SessionManager sessionManager) {
+    public UserFeedbackPresenter(
+            FeedbackView feedbackView,
+            SessionManager sessionManager,
+            GetProfileInteractor getProfileInteractor
+    ) {
         this.feedbackView = feedbackView;
         this.sessionManager = sessionManager;
         this.userFeedback = new UserFeedback();
@@ -64,10 +73,7 @@ public class UserFeedbackPresenter {
         this.accessNetworkStatePermission = new AccessNetworkStatePermission();
 
         this.feedbackUseCase = FeedbackUseCase.Companion.getInstance();
-    }
-
-    public void setScreenCapture(ScreenCapture screenCapture) {
-        this.screenCapture = screenCapture;
+        this.getProfileInteractor = getProfileInteractor;
     }
 
     public void initUi() {
@@ -78,6 +84,18 @@ public class UserFeedbackPresenter {
             feedbackView.showScheenShotPreview();
             feedbackView.checkScreenshotSwitch(true);
         }
+        getProfileInteractor.getProfile(new Function1<UserProfile, Unit>() {
+            @Override
+            public Unit invoke(UserProfile userProfile) {
+                feedbackView.onUserProfileLoaded(userProfile);
+                return null;
+            }
+        }, new Function1<ErrorObject, Unit>() {
+            @Override
+            public Unit invoke(ErrorObject errorObject) {
+                return null;
+            }
+        });
     }
 
     public void cancelButtonPressed() {
@@ -125,6 +143,10 @@ public class UserFeedbackPresenter {
         return screenCapture;
     }
 
+    public void setScreenCapture(ScreenCapture screenCapture) {
+        this.screenCapture = screenCapture;
+    }
+
     public void updateScreenCaptureWith(Bitmap screenshot) {
         if (screenshot == null) {
             AppliverySdk.Logger.log("Cannot update ScreenCapture with a null bitmap.");
@@ -161,6 +183,11 @@ public class UserFeedbackPresenter {
                 sendFeedback();
             }
         }
+    }
+
+    public void onEmailEntered(String email) {
+        this.email = !TextUtils.isEmpty(email) ? email : null;
+        feedbackView.onEmailError(false);
     }
 
     private Boolean needLogin() {
@@ -211,11 +238,18 @@ public class UserFeedbackPresenter {
         AndroidDeviceDetailsInfo androidDeviceDetailsInfo = new AndroidDeviceDetailsInfo();
         DeviceInfo deviceInfo = androidDeviceDetailsInfo.getDeviceInfo();
 
+        if (!TextUtils.isEmpty(email) && !mailValidator.isValid(email)) {
+            feedbackView.onEmailError(true);
+            return;
+        }
+
         Feedback feedback = new Feedback(
                 deviceInfo,
                 userFeedback.getMessage(),
                 packageInfo, userFeedback.getBase64ScreenCapture(),
-                userFeedback.getType().getStringValue());
+                userFeedback.getType().getStringValue(),
+                email
+        );
 
         feedbackUseCase.sendFeedback(feedback, new Function1<Boolean, Unit>() {
             @Override

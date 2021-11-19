@@ -36,7 +36,11 @@ internal object Injection {
     }
 
     fun provideFeedbackPresenter(feedbackView: FeedbackView): UserFeedbackPresenter {
-        return UserFeedbackPresenter(feedbackView, provideSessionManager())
+        return UserFeedbackPresenter(
+            feedbackView,
+            provideSessionManager(),
+            provideGetProfileInteractor()
+        )
     }
 
     private fun provideLoginInteractor(): LoginInteractor {

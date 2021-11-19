@@ -37,17 +37,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.SwitchCompat;
+
 import com.applivery.applvsdklib.AppliverySdk;
 import com.applivery.applvsdklib.R;
 import com.applivery.applvsdklib.tools.injection.Injection;
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.DrawingImageView;
+import com.applivery.applvsdklib.ui.views.TextChangedListener;
 import com.applivery.applvsdklib.ui.views.login.LoginView;
+import com.applivery.base.domain.model.UserProfile;
 
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.SwitchCompat;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -71,6 +75,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     private SwitchCompat screenShotSwitch;
 
     private EditText feedbackMessage;
+    private EditText feedbackEmail;
 
     private UserFeedbackPresenter userFeedbackPresenter;
 
@@ -133,6 +138,7 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
         feedbackImage = (ImageView) view.findViewById(R.id.applivery_feedback_image);
         feedbackMessage = (AppCompatEditText) view.findViewById(R.id.applivery_feedback_description);
         screenShotSwitch = (SwitchCompat) view.findViewById(R.id.attach_screenshot_switch);
+        feedbackEmail = (AppCompatEditText) view.findViewById(R.id.applivery_feedback_email);
 
         initViewState();
 
@@ -186,6 +192,13 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
         bugButton.setOnClickListener(this);
         screenShotSwitch.setOnClickListener(this);
         feedbackImage.setOnClickListener(this);
+        feedbackEmail.addTextChangedListener(new TextChangedListener(new Function1<String, Unit>() {
+            @Override
+            public Unit invoke(String s) {
+                userFeedbackPresenter.onEmailEntered(s);
+                return null;
+            }
+        }));
     }
 
     @Override
@@ -318,5 +331,19 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
             }
         });
         loginView.getPresenter().requestLogin();
+    }
+
+    @Override
+    public void onUserProfileLoaded(UserProfile userProfile) {
+        if (userProfile.getEmail() != null) {
+            feedbackEmail.setText(userProfile.getEmail());
+            feedbackEmail.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onEmailError(boolean hasError) {
+        String error = hasError ? getString(R.string.appliveryFeedbackEmailError) : null;
+        feedbackEmail.setError(error);
     }
 }
