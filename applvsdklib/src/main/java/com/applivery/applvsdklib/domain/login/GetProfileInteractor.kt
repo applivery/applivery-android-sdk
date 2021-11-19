@@ -36,6 +36,7 @@ class GetProfileInteractor(
         try {
             if (!sessionManager.hasSession()) {
                 notifyError(ErrorObject("Unauthorized"))
+                return
             }
             val user = apiService.getProfile().execute().body()?.data?.toDomain()
             if (user != null) {
