@@ -14,48 +14,36 @@
  * limitations under the License.
  */
 
-plugins { id 'com.github.dcendents.android-maven' version '2.1' }
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
-def STRING = "String"
 def BOOLEAN = "Boolean"
 
 android {
     compileSdkVersion versions.compileSdk
-    buildToolsVersion "29.0.2"
 
     defaultConfig {
         minSdkVersion versions.minSdk
-        versionName version
+        targetSdkVersion versions.targetSdk
 
         buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
     }
 
     buildTypes {
         debug {
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://sdk-api.applivery.io"'
             testCoverageEnabled true
         }
 
         prerelease {
-            debuggable true
-            minifyEnabled false
             testCoverageEnabled true
-
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
         }
 
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
         }
     }
 
@@ -66,21 +54,18 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
-    implementation "androidx.appcompat:appcompat:${appcompatVersion}"
-    implementation "com.google.android.material:material:${androidMaterialVersion}"
+    api(project(":applivery-base"))
+    api(project(":applivery-updates"))
+    api(project(":applivery-data"))
 
-    // Network dependencies
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "com.google.android.material:material:${androidMaterialVersion}"
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
-    implementation "com.squareup.okhttp3:logging-interceptor:${loggingInterceptorVersion}"
-    implementation "com.google.code.gson:gson:${gsonVersion}"
-
     implementation "com.karumi:dexter:${dexterVersion}"
-
-    implementation(project(":applivery-base"))
-    implementation(project(":applivery-updates"))
-    api(project(":applivery-data"))
 
     // Test dependencies
     testImplementation "junit:junit:${junitVersion}"
@@ -88,7 +73,7 @@ dependencies {
     testImplementation "com.squareup.okhttp:mockwebserver:${mockwebserverVersion}"
 }
 
-install {
+/*install {
     repositories.mavenInstaller {
         pom.project {
             groupId project.group
@@ -119,6 +104,4 @@ install {
             }
         }
     }
-}
-
-apply from: 'deploy.gradle'
+}*/

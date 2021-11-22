@@ -15,16 +15,16 @@
  */
 
 ext {
-    appcompatVersion = "1.2.0"
-    androidMaterialVersion = "1.2.0"
+    appcompatVersion = "1.4.0"
+    androidMaterialVersion = "1.4.0"
 
-    retrofitVersion = "2.6.0"
-    loggingInterceptorVersion = "3.11.0"
-    gsonVersion = "2.8.5"
+    retrofitVersion = "2.9.0"
+    loggingInterceptorVersion = "4.9.0"
+    gsonVersion = "2.8.8"
 
-    dexterVersion = "6.2.1"
+    dexterVersion = "6.2.2"
 
-    junitVersion = "4.12"
+    junitVersion = "4.13.2"
     mockitoVersion = "2.0.2-beta"
     mockwebserverVersion = "2.6.0"
 }

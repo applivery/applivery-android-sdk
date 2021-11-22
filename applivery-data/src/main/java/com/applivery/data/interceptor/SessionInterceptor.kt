@@ -42,7 +42,7 @@ class SessionInterceptor(
         val request = requestBuilder.build()
         val response = chain.proceed(request)
 
-        if (response.code() == UNAUTHORIZED) {
+        if (response.code == UNAUTHORIZED) {
             sessionManager.clearSession()
         }
 
