@@ -79,3 +79,5 @@ signing {
     )
     sign publishing.publications
 }
+
+/*publishReleasePublicationToSonatypeRepository*/
