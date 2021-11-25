@@ -15,7 +15,14 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.6.0'
+    ext{
+        kotlin_version = '1.6.0'
+        versions = [
+                minSdk    : 16,
+                targetSdk : 31,
+                compileSdk: 31,
+        ]
+    }
     repositories {
         google()
         mavenCentral()
@@ -23,13 +30,14 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.18.0'
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.10.2'
     }
 }
 
 plugins {
     id "io.gitlab.arturbosch.detekt" version "1.0.0-RC16"
     id "com.github.ben-manes.versions" version "0.21.0"
+    id"io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 allprojects {
@@ -46,34 +54,4 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-subprojects { project ->
-    group = 'com.applivery'
-    version = '3.5'
-
-    ext {
-        versions = [
-                minSdk    : 16,
-                targetSdk : 31,
-                compileSdk: 31,
-        ]
-
-        bintrayRepo = 'maven'
-        bintrayName = 'applivery-android-sdk'
-
-        publishedGroupId = rootProject.group
-        libraryName = 'applivery-android-sdk'
-
-        libraryDescription = 'Applivery android sdk'
-
-        siteUrl = 'https://github.com/applivery/applivery-android-sdk'
-        gitUrl = 'https://github.com/applivery/applivery-android-sdk.git'
-
-        developerId = 'applivery'
-        developerName = 'Applivery'
-        developerEmail = 'info@applivery.com'
-
-        licenseName = 'The Apache Software License, Version 2.0'
-        licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-        allLicenses = ["Apache-2.0"]
-    }
-}
+apply from: "${rootDir}/scripts/publish-root.gradle"

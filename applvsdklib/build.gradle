@@ -20,6 +20,14 @@ apply plugin: 'kotlin-android-extensions'
 apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
+ext {
+    PUBLISH_GROUP_ID = 'com.applivery'
+    PUBLISH_ARTIFACT_ID = 'applivery-android-sdk'
+    PUBLISH_VERSION = '3.5'
+}
+
+apply from: "${rootDir}/scripts/publish-module.gradle"
+
 def BOOLEAN = "Boolean"
 
 android {
