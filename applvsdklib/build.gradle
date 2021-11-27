@@ -67,8 +67,8 @@ dependencies {
     api(project(":applivery-data"))
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "com.google.android.material:material:${androidMaterialVersion}"
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
@@ -80,36 +80,3 @@ dependencies {
     testImplementation "org.mockito:mockito-all:${mockitoVersion}"
     testImplementation "com.squareup.okhttp:mockwebserver:${mockwebserverVersion}"
 }
-
-/*install {
-    repositories.mavenInstaller {
-        pom.project {
-            groupId project.group
-            artifactId 'applivery-sdk'
-            packaging 'aar'
-
-            name libraryName
-            description libraryDescription
-            url siteUrl
-
-            licenses {
-                license {
-                    name licenseName
-                    url licenseUrl
-                }
-            }
-            developers {
-                developer {
-                    id developerId
-                    name developerName
-                    email developerEmail
-                }
-            }
-            scm {
-                connection gitUrl
-                developerConnection gitUrl
-                url siteUrl
-            }
-        }
-    }
-}*/

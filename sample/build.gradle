@@ -69,12 +69,9 @@ dependencies {
     implementation "com.google.android.material:material:$androidMaterialVersion"
 
     implementation project(':applvsdklib')
-//    implementation 'com.applivery:applivery-sdk:3.3'
 
     testImplementation "junit:junit:$junitVersion"
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 }
 
 repositories {

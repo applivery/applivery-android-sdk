@@ -19,8 +19,8 @@ buildscript {
         kotlin_version = '1.6.0'
         versions = [
                 minSdk    : 16,
-                targetSdk : 31,
-                compileSdk: 31,
+                targetSdk : 29,
+                compileSdk: 29,
         ]
     }
     repositories {
