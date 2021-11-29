@@ -65,9 +65,11 @@ dependencies {
     api(project(":applivery-data"))
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
-    implementation "androidx.core:core-ktx:$androidCoreVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "androidx.core:core-ktx:$androidCoreVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "com.google.android.material:material:${androidMaterialVersion}"
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     implementation "com.karumi:dexter:${dexterVersion}"
