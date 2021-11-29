@@ -21,9 +21,7 @@ apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
 ext {
-    PUBLISH_GROUP_ID = 'com.applivery'
-    PUBLISH_ARTIFACT_ID = 'applivery-android-sdk'
-    PUBLISH_VERSION = '3.5'
+    PUBLISH_ARTIFACT_ID = 'applivery-sdk'
 }
 
 apply from: "${rootDir}/scripts/publish-module.gradle"
@@ -67,10 +65,9 @@ dependencies {
     api(project(":applivery-data"))
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
+    implementation "androidx.core:core-ktx:$androidCoreVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-    implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    implementation "com.google.android.material:material:${androidMaterialVersion}"
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     implementation "com.karumi:dexter:${dexterVersion}"

@@ -20,6 +20,11 @@ apply plugin: 'kotlin-android-extensions'
 apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
+ext {
+    PUBLISH_ARTIFACT_ID = 'applivery-base'
+}
+apply from: "${rootDir}/scripts/publish-module.gradle"
+
 android {
     compileSdkVersion versions.compileSdk
 

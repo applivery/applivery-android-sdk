@@ -20,7 +20,10 @@ apply plugin: 'kotlin-android-extensions'
 apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
-def STRING = "String"
+ext {
+    PUBLISH_ARTIFACT_ID = 'applivery-updates'
+}
+apply from: "${rootDir}/scripts/publish-module.gradle"
 
 android {
     compileSdkVersion versions.compileSdk

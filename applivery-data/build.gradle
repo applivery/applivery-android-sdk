@@ -22,6 +22,11 @@ apply from: rootProject.file('gradle/checkstyle.gradle')
 
 def STRING = "String"
 
+ext {
+    PUBLISH_ARTIFACT_ID = 'applivery-data'
+}
+apply from: "${rootDir}/scripts/publish-module.gradle"
+
 android {
     compileSdkVersion versions.compileSdk
 
