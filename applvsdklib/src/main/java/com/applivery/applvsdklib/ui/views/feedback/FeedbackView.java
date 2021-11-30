@@ -17,7 +17,9 @@
 package com.applivery.applvsdklib.ui.views.feedback;
 
 import android.app.Activity;
+
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
+import com.applivery.base.domain.model.UserProfile;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -58,4 +60,8 @@ public interface FeedbackView {
   void retrieveEditedScreenshot();
 
   void requestLogin();
+
+  void onUserProfileLoaded(UserProfile userProfile);
+
+  void onEmailError(boolean hasError);
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 Applivery
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,196 +15,219 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/applivery_white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:background="@color/applivery_white">
 
 
     <RelativeLayout
-        android:animateLayoutChanges="true"
         android:id="@+id/applivery_feedback_toolbar"
-        android:background="@color/applivery_primary_color"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/appliveryTitleHeight">
+        android:layout_height="@dimen/appliveryTitleHeight"
+        android:layout_alignParentTop="true"
+        android:animateLayoutChanges="true"
+        android:background="@color/applivery_primary_color">
 
         <ImageButton
             android:id="@+id/applivery_feedback_cancel_button"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/applivery_close_selector"
             android:layout_width="@dimen/appliveryTitleIconButton"
             android:layout_height="@dimen/appliveryTitleIconButton"
-            android:padding="@dimen/appliveryTitleIconPaddingMedium"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/appliveryIconbuttonMarginRight"
             android:layout_marginRight="@dimen/appliveryIconbuttonMarginRight"
+            android:background="@drawable/applivery_close_selector"
             android:contentDescription="@string/appliveryCancelFeedbackButtonDesc"
-            />
+            android:padding="@dimen/appliveryTitleIconPaddingMedium" />
 
         <TextView
-            android:layout_toRightOf="@+id/applivery_feedback_cancel_button"
-            android:textColor="@color/applivery_primary_font_color"
             android:id="@+id/must_update_title"
-            android:gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/appliveryTitleHeight"
-            android:textSize="@dimen/appNameTextSize"
+            android:layout_toRightOf="@+id/applivery_feedback_cancel_button"
+            android:gravity="center_vertical"
             android:text="@string/applivery_name"
-            />
+            android:textColor="@color/applivery_primary_font_color"
+            android:textSize="@dimen/appNameTextSize" />
 
         <ImageButton
             android:id="@+id/applivery_feedback_send_button"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:layout_width="@dimen/appliveryTitleIconButton"
             android:layout_height="@dimen/appliveryTitleIconButton"
-            android:background="@drawable/applivery_send_selector"
-            android:contentDescription="@string/appliverySendFeedbackButtonDesc"
-            android:layout_marginRight="@dimen/appliveryFabButtonMargin"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/appliveryFabButtonMargin"
-            />
+            android:layout_marginRight="@dimen/appliveryFabButtonMargin"
+            android:background="@drawable/applivery_send_selector"
+            android:contentDescription="@string/appliverySendFeedbackButtonDesc" />
 
         <ImageButton
-            android:animateLayoutChanges="true"
-            android:visibility="gone"
             android:id="@+id/applivery_feedback_ok_button"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:layout_width="@dimen/appliveryTitleIconButton"
             android:layout_height="@dimen/appliveryTitleIconButton"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/appliveryFabButtonMargin"
+            android:layout_marginRight="@dimen/appliveryFabButtonMargin"
+            android:animateLayoutChanges="true"
             android:background="@drawable/applivery_done_selector"
             android:contentDescription="@string/appliverynextFeedbackButtonDesc"
-            android:layout_marginRight="@dimen/appliveryFabButtonMargin"
-            android:layout_marginEnd="@dimen/appliveryFabButtonMargin"
-            />
+            android:visibility="gone" />
 
     </RelativeLayout>
 
     <LinearLayout
-        android:animateLayoutChanges="true"
         android:id="@+id/applivery_feedback_form"
-        android:layout_below="@+id/applivery_feedback_toolbar"
-        android:orientation="vertical"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/applivery_feedback_toolbar"
+        android:layout_gravity="center"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:animateLayoutChanges="true"
             android:id="@+id/feedbackSelector"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/appliveryTabButtonsHeight">
+            android:layout_height="@dimen/appliveryTabButtonsHeight"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/applivery_tab_button_selector_feedback"
-                android:background="@drawable/applivery_tab_button_selector"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="100"
-                android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:background="@drawable/applivery_tab_button_selector">
 
                 <TextView
-                    android:text="@string/appliveryFeedbackSelectorText"
-                    android:gravity="center"
-                    android:textSize="@dimen/appliveryTabButtonTextSize"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    />
+                    android:gravity="center"
+                    android:text="@string/appliveryFeedbackSelectorText"
+                    android:textSize="@dimen/appliveryTabButtonTextSize" />
 
             </LinearLayout>
 
             <View
                 android:id="@+id/applivery_tab_button_selector_separator"
-                android:background="@android:color/darker_gray"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
+                android:layout_height="@dimen/appliveryTabButtonSeparatorHeight"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:layout_height="@dimen/appliveryTabButtonSeparatorHeight">
+                android:background="@android:color/darker_gray">
 
             </View>
 
             <LinearLayout
                 android:id="@+id/applivery_tab_button_selector_bug"
-                android:layout_weight="100"
-                android:layout_gravity="center"
-                android:background="@drawable/applivery_tab_button_selector"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="100"
+                android:background="@drawable/applivery_tab_button_selector">
 
                 <TextView
-                    android:text="@string/appliveryBugSelectorText"
-                    android:gravity="center"
-                    android:textSize="@dimen/appliveryTabButtonTextSize"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    />
+                    android:gravity="center"
+                    android:text="@string/appliveryBugSelectorText"
+                    android:textSize="@dimen/appliveryTabButtonTextSize" />
 
             </LinearLayout>
 
         </LinearLayout>
 
         <RelativeLayout
-            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/appliveryFeedbackFormSidePadding"
             android:layout_marginLeft="@dimen/appliveryFeedbackFormSidePadding"
-            android:layout_marginBottom="@dimen/appliveryFeedbackTextBoxBottomMargin"
             android:layout_marginTop="@dimen/appliveryFeedbackTextBoxTopMargin"
-            >
+            android:layout_marginRight="@dimen/appliveryFeedbackFormSidePadding"
+            android:layout_marginBottom="@dimen/appliveryFeedbackTextBoxBottomMargin"
+            android:animateLayoutChanges="true">
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/applivery_feedback_description"
-                android:layout_centerVertical="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:textCursorDrawable="@drawable/applivery_cursor_drawable"
-                android:layout_toLeftOf="@+id/applivery_feedback_image"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center_horizontal"
-                />
+                android:layout_toLeftOf="@+id/applivery_feedback_image"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:textCursorDrawable="@drawable/applivery_cursor_drawable" />
+
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/applivery_feedback_image"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="@dimen/appliveryFeedbackFormSidePadding"
                 android:layout_width="@dimen/appliveryScreenShotWidthSize"
                 android:layout_height="@dimen/appliveryScreenShotHeightSize"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/appliveryFeedbackFormSidePadding"
                 android:src="@drawable/applivery_icon"
-                />
+                android:visibility="gone" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/appliveryFeedbackFormSidePadding"
+            android:layout_marginTop="@dimen/appliveryFeedbackTextBoxTopMargin"
+            android:layout_marginRight="@dimen/appliveryFeedbackFormSidePadding"
+            android:layout_marginBottom="@dimen/appliveryFeedbackTextBoxBottomMargin">
+
+            <TextView
+                android:id="@+id/applivery_feedback_email_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/applivery_feedback_email"
+                android:paddingEnd="@dimen/appliveryFeedbackFormSidePadding"
+                android:text="@string/appliveryFeedbackEmailLabel"
+                android:textColor="@color/applivery_secondary_font_color" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/applivery_feedback_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/appliveryFeedbackEmailHint"
+                android:inputType="textEmailAddress"
+                android:textCursorDrawable="@drawable/applivery_cursor_drawable" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
     <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/attach_screenshot_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/appliveryFeedbackFormSidePadding"
+        android:layout_marginTop="@dimen/appliveryFeedbackFormSidePadding"
+        android:layout_marginRight="@dimen/appliveryFeedbackFormSidePadding"
+        android:layout_marginBottom="@dimen/appliveryFeedbackFormSidePadding"
         android:background="@android:color/transparent"
         android:shadowColor="@color/applivery_primary_color"
         android:text="@string/appliveryAttachScreenshotSwithText"
         android:textSize="@dimen/appNameTextSize"
-        android:layout_margin="@dimen/appliveryFeedbackFormSidePadding"
-        android:id="@+id/attach_screenshot_switch"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:theme="@style/AppliverySwitch"
-        />
+        android:theme="@style/AppliverySwitch" />
 
     <com.applivery.applvsdklib.ui.views.DrawingImageView
-        android:visibility="gone"
+        android:id="@+id/appliveryScreenShot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:layout_below="@+id/applivery_feedback_toolbar"
-        android:contentDescription="@string/appliveryScreenshotImageDesc"
-        android:id="@+id/appliveryScreenShot"
         android:animateLayoutChanges="true"
-        />
+        android:background="@android:color/white"
+        android:contentDescription="@string/appliveryScreenshotImageDesc"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -15,26 +15,15 @@
  */
 package com.applivery.data.interceptor
 
-import android.annotation.SuppressLint
 import android.os.Build
-import com.applivery.base.BuildConfig
 import com.applivery.base.util.AndroidCurrentAppInfo
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import java.io.IOException
-import java.util.*
+import java.util.Locale
 
 class HeadersInterceptor : Interceptor {
 
-    private val userAgent: String
-        @SuppressLint("DefaultLocale") get() =
-            String.format(
-                "Android/%s; vendor/%s; model/%s; build/%d;", Build.VERSION.RELEASE,
-                Build.MANUFACTURER, Build.MODEL, BuildConfig.VERSION_CODE
-            )
-
-    @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         return chain.proceed(composeRequest(chain))
     }
@@ -45,21 +34,17 @@ class HeadersInterceptor : Interceptor {
         val packageInfo = AndroidCurrentAppInfo.getPackageInfo()
 
         return original.newBuilder()
-            .url(chain.request().url())
             .addHeader("Accept-Language", Locale.getDefault().language)
-            .addHeader("x-sdk-version", "ANDROID_" + BuildConfig.VERSION_NAME)
+            .addHeader("x-sdk-version", "ANDROID_" + Build.VERSION.SDK_INT)
             .addHeader("x-app-version", packageInfo.versionName)
-
             .addHeader("x-os-version", Build.VERSION.RELEASE)
             .addHeader("x-os-name", "android")
             .addHeader("x-device-vendor", Build.MANUFACTURER)
             .addHeader("x-device-model", Build.MODEL)
             .addHeader("x-package-name", packageInfo.name)
             .addHeader("x-package-version", packageInfo.version.toString())
-            .addHeader("x-os-minsdkversion", Build.VERSION.SDK_INT.toString())
-            .addHeader("x-os-targetsdkversion", BuildConfig.VERSION_NAME)
-
-            .method(original.method(), original.body())
+            .addHeader("x-os-minsdkversion", "TBD") //TODO
+            .addHeader("x-os-targetsdkversion", "TBD") //TODO
             .build()
     }
 }

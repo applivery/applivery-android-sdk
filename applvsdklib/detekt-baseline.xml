@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>UnusedPrivateMember:LoginDialog.kt$LoginDialog.Companion$private const val TAG = "LoginDialog"</ID>
+    <ID>UtilityClassWithPublicConstructor:AndroidCurrentAppInfo.kt$AndroidCurrentAppInfo</ID>
+  </CurrentIssues>
+</SmellBaseline>

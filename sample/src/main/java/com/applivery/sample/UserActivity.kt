@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.applivery.applvsdklib.Applivery
 import com.applivery.applvsdklib.BindUserCallback
+import com.applivery.applvsdklib.GetUserCallback
+import com.applivery.base.domain.model.UserProfile
 import kotlinx.android.synthetic.main.activity_user.*
 
 class UserActivity : AppCompatActivity() {
@@ -16,6 +18,7 @@ class UserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
 
         initViews()
+        getUser()
     }
 
     private fun initViews() {
@@ -62,6 +65,20 @@ class UserActivity : AppCompatActivity() {
             override fun onError(message: String) {
                 Toast.makeText(this@UserActivity, "Error: $message", Toast.LENGTH_SHORT).show()
             }
+        })
+    }
+
+    private fun getUser() {
+
+        Applivery.getUser(object : GetUserCallback {
+
+            override fun onSuccess(userProfile: UserProfile) {
+                emailEditText.setText(userProfile.email)
+                firstNameEditText.setText(userProfile.firstName)
+                lastNameEditText.setText(userProfile.lastName)
+            }
+
+            override fun onError(message: String) = Unit
         })
     }
 

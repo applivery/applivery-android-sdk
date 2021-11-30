@@ -20,5 +20,6 @@ data class Feedback(
     val message: String?,
     val packageInfo: PackageInfo,
     val screenshot: String?,
-    val type: String
+    val type: String,
+    val email: String?
 )

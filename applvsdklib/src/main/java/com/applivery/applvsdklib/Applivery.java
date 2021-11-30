@@ -18,10 +18,10 @@ package com.applivery.applvsdklib;
 
 import android.app.Application;
 
-import java.util.Collection;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.Collection;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -165,5 +165,18 @@ public class Applivery {
      */
     public static void isUpToDate(IsUpToDateCallback isUpToDateCallback) {
         AppliverySdk.isUpToDate(isUpToDateCallback);
+    }
+
+    /**
+     * <p>
+     * Gets the logged user profile if available.
+     * </p>
+     * - Since: 3.5
+     * - Version: 3.5
+     *
+     * @param getUserCallback the callback interface with the result
+     */
+    public static void getUser(@NonNull GetUserCallback getUserCallback) {
+        AppliverySdk.getUser(getUserCallback);
     }
 }

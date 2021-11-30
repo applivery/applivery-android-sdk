@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>WildcardImport:MainActivity.kt$import kotlinx.android.synthetic.main.activity_main.*</ID>
+    <ID>WildcardImport:UserActivity.kt$import kotlinx.android.synthetic.main.activity_user.*</ID>
+  </CurrentIssues>
+</SmellBaseline>

@@ -23,16 +23,12 @@ import com.applivery.base.domain.model.PackageInfo
 import com.google.gson.annotations.SerializedName
 
 data class FeedbackRequest(
-    @SerializedName("deviceInfo")
-    val deviceInfo: DeviceInfoEntity?,
-    @SerializedName("message")
-    val message: String?,
-    @SerializedName("packageInfo")
-    val packageInfo: PackageInfoEntity?,
-    @SerializedName("screenshot")
-    val screenshot: String?,
-    @SerializedName("type")
-    val type: String?
+    @SerializedName("deviceInfo") val deviceInfo: DeviceInfoEntity?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("packageInfo") val packageInfo: PackageInfoEntity?,
+    @SerializedName("screenshot") val screenshot: String?,
+    @SerializedName("type") val type: String?,
+    @SerializedName("email") val email: String?
 ) {
     companion object {
         fun fromFeedback(feedback: Feedback) = FeedbackRequest(
@@ -40,7 +36,8 @@ data class FeedbackRequest(
             feedback.message,
             PackageInfoEntity.fromPackageInfo(feedback.packageInfo),
             getScreenshotData(feedback.screenshot),
-            feedback.type
+            feedback.type,
+            feedback.email
         )
 
         private fun getScreenshotData(screenshot: String?): String? {

@@ -15,22 +15,29 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.3.72'
+    ext {
+        kotlin_version = '1.6.0'
+        versions = [
+                minSdk    : 16,
+                targetSdk : 29,
+                compileSdk: 29,
+        ]
+    }
     repositories {
-        jcenter()
         google()
-        mavenLocal()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.10.2'
     }
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0-RC16"
+    id "io.gitlab.arturbosch.detekt" version "1.19.0-RC2"
     id "com.github.ben-manes.versions" version "0.21.0"
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 allprojects {
@@ -38,9 +45,8 @@ allprojects {
     apply from: "$rootDir/detekt.gradle"
 
     repositories {
-        jcenter()
         google()
-        maven { url "https://dl.bintray.com/applivery/maven" }
+        mavenCentral()
     }
 }
 
@@ -48,39 +54,9 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-subprojects { project ->
-    group = 'com.applivery'
-    version = '3.4'
+apply from: "${rootDir}/scripts/publish-root.gradle"
 
-    repositories {
-        google()
-        jcenter()
-    }
-
-    ext {
-        versions = [
-                minSdk    : 16,
-                targetSdk : 29,
-                compileSdk: 29,
-        ]
-
-        bintrayRepo = 'maven'
-        bintrayName = 'applivery-android-sdk'
-
-        publishedGroupId = rootProject.group
-        libraryName = 'applivery-android-sdk'
-
-        libraryDescription = 'Applivery android sdk'
-
-        siteUrl = 'https://github.com/applivery/applivery-android-sdk'
-        gitUrl = 'https://github.com/applivery/applivery-android-sdk.git'
-
-        developerId = 'applivery'
-        developerName = 'Applivery'
-        developerEmail = 'info@applivery.com'
-
-        licenseName = 'The Apache Software License, Version 2.0'
-        licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-        allLicenses = ["Apache-2.0"]
-    }
+ext {
+    PUBLISH_GROUP_ID = 'com.applivery'
+    PUBLISH_VERSION = '3.5'
 }
