@@ -19,13 +19,15 @@ import android.util.Log
 import com.applivery.applvsdklib.domain.model.ErrorObject
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
+import com.applivery.base.domain.PreferencesManager
 import com.applivery.base.domain.SessionManager
 import java.io.IOException
 
 class UnBindUserInteractor(
     private val interactorExecutor: InteractorExecutor,
     private val mainThread: MainThread,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val preferencesManager: PreferencesManager
 ) : Runnable {
 
     lateinit var onSuccess: () -> Unit
@@ -44,6 +46,7 @@ class UnBindUserInteractor(
     override fun run() {
         try {
             sessionManager.clearSession()
+            preferencesManager.anonymousEmail = null
             notifySuccess()
         } catch (exception: IOException) {
             Log.e(TAG, "unBindUser() -> ${exception.message}")

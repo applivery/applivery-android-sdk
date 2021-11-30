@@ -17,6 +17,7 @@ package com.applivery.data.interceptor
 
 import android.os.Build
 import com.applivery.base.util.AndroidCurrentAppInfo
+import com.applivery.data.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -35,7 +36,7 @@ class HeadersInterceptor : Interceptor {
 
         return original.newBuilder()
             .addHeader("Accept-Language", Locale.getDefault().language)
-            .addHeader("x-sdk-version", "ANDROID_" + Build.VERSION.SDK_INT)
+            .addHeader("x-sdk-version", "ANDROID_" + BuildConfig.LibraryVersion)
             .addHeader("x-app-version", packageInfo.versionName)
             .addHeader("x-os-version", Build.VERSION.RELEASE)
             .addHeader("x-os-name", "android")
@@ -43,8 +44,8 @@ class HeadersInterceptor : Interceptor {
             .addHeader("x-device-model", Build.MODEL)
             .addHeader("x-package-name", packageInfo.name)
             .addHeader("x-package-version", packageInfo.version.toString())
-            .addHeader("x-os-minsdkversion", "TBD") //TODO
-            .addHeader("x-os-targetsdkversion", "TBD") //TODO
+            .addHeader("x-os-minsdkversion", BuildConfig.MinSdk)
+            .addHeader("x-os-targetsdkversion", BuildConfig.TargetSdk)
             .build()
     }
 }

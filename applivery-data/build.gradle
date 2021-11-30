@@ -36,6 +36,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+
+        buildConfigField STRING, "LibraryVersion", "\"$PUBLISH_VERSION\""
+        buildConfigField STRING, "MinSdk", "\"$versions.minSdk\""
+        buildConfigField STRING, "TargetSdk", "\"$versions.targetSdk\""
     }
 
     buildTypes {

@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -47,11 +48,9 @@ import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.DrawingImageView;
 import com.applivery.applvsdklib.ui.views.TextChangedListener;
 import com.applivery.applvsdklib.ui.views.login.LoginView;
-import com.applivery.base.domain.model.UserProfile;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
-import kotlin.jvm.functions.Function1;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -192,12 +191,9 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
         bugButton.setOnClickListener(this);
         screenShotSwitch.setOnClickListener(this);
         feedbackImage.setOnClickListener(this);
-        feedbackEmail.addTextChangedListener(new TextChangedListener(new Function1<String, Unit>() {
-            @Override
-            public Unit invoke(String s) {
-                userFeedbackPresenter.onEmailEntered(s);
-                return null;
-            }
+        feedbackEmail.addTextChangedListener(new TextChangedListener(s -> {
+            userFeedbackPresenter.onEmailEntered(s);
+            return null;
         }));
     }
 
@@ -334,11 +330,9 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
     }
 
     @Override
-    public void onUserProfileLoaded(UserProfile userProfile) {
-        if (userProfile.getEmail() != null) {
-            feedbackEmail.setText(userProfile.getEmail());
-            feedbackEmail.setEnabled(false);
-        }
+    public void onUserEmailLoaded(@Nullable String email, boolean editable) {
+        if (email != null) feedbackEmail.setText(email);
+        feedbackEmail.setEnabled(editable);
     }
 
     @Override
