@@ -21,10 +21,6 @@ apply from: '../dependencies.gradle'
 
 def STRING = "String"
 
-repositories{
-    mavenLocal()
-}
-
 android {
     compileSdkVersion = versions.compileSdk
 
@@ -72,8 +68,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "com.google.android.material:material:$androidMaterialVersion"
 
-    implementation project(':applvsdklib')
-    //implementation 'com.applivery:applivery-sdk:3.5'
+    implementation 'com.applivery:applivery-sdk:3.5'
 
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
