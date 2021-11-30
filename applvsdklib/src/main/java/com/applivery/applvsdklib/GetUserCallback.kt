@@ -2,7 +2,7 @@ package com.applivery.applvsdklib
 
 import com.applivery.base.domain.model.UserProfile
 
-interface GetProfileCallback {
+interface GetUserCallback {
 
     fun onSuccess(userProfile: UserProfile)
 

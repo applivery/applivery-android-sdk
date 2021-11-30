@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.applivery.applvsdklib.Applivery
 import com.applivery.applvsdklib.BindUserCallback
-import com.applivery.applvsdklib.GetProfileCallback
+import com.applivery.applvsdklib.GetUserCallback
 import com.applivery.base.domain.model.UserProfile
 import kotlinx.android.synthetic.main.activity_user.*
 
@@ -18,7 +18,7 @@ class UserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
 
         initViews()
-        getProfile()
+        getUser()
     }
 
     private fun initViews() {
@@ -68,9 +68,9 @@ class UserActivity : AppCompatActivity() {
         })
     }
 
-    private fun getProfile() {
+    private fun getUser() {
 
-        Applivery.getProfile(object : GetProfileCallback {
+        Applivery.getUser(object : GetUserCallback {
 
             override fun onSuccess(userProfile: UserProfile) {
                 emailEditText.setText(userProfile.email)

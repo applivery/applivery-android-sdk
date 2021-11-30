@@ -168,11 +168,15 @@ public class Applivery {
     }
 
     /**
+     * <p>
      * Gets the logged user profile if available.
+     * </p>
+     * - Since: 3.5
+     * - Version: 3.5
      *
-     * @param getProfileCallback the callback interface with the result
+     * @param getUserCallback the callback interface with the result
      */
-    public static void getProfile(@NonNull GetProfileCallback getProfileCallback) {
-        AppliverySdk.getProfile(getProfileCallback);
+    public static void getUser(@NonNull GetUserCallback getUserCallback) {
+        AppliverySdk.getUser(getUserCallback);
     }
 }

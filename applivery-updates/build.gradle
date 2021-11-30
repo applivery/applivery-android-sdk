@@ -14,48 +14,32 @@
  * limitations under the License.
  */
 
-plugins { id 'com.github.dcendents.android-maven' version '2.1' }
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
-def STRING = "String"
+ext {
+    PUBLISH_ARTIFACT_ID = 'applivery-updates'
+}
+apply from: "${rootDir}/scripts/publish-module.gradle"
 
 android {
     compileSdkVersion versions.compileSdk
-    buildToolsVersion "29.0.2"
 
     defaultConfig {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
-        debug {
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://sdk-api.applivery.io"'
-
-            debuggable true
-        }
-
-        prerelease {
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
-
-            debuggable true
-        }
+        prerelease {}
 
         release {
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
-
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -67,53 +51,16 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'
-
-    api 'androidx.appcompat:appcompat:1.1.0'
-    api 'androidx.core:core-ktx:1.3.0'
-
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     api(project(":applivery-base"))
     api(project(":applivery-data"))
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.core:core-ktx:$androidCoreVersion"
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 }
-
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            groupId project.group
-            artifactId 'applivery-updates'
-            packaging 'aar'
-
-            name libraryName
-            description libraryDescription
-            url siteUrl
-
-            licenses {
-                license {
-                    name licenseName
-                    url licenseUrl
-                }
-            }
-            developers {
-                developer {
-                    id developerId
-                    name developerName
-                    email developerEmail
-                }
-            }
-            scm {
-                connection gitUrl
-                developerConnection gitUrl
-                url siteUrl
-            }
-        }
-    }
-}
-
-apply from: 'deploy.gradle'

@@ -27,7 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.domain.login.BindUserInteractor;
-import com.applivery.applvsdklib.domain.login.GetProfileInteractor;
+import com.applivery.applvsdklib.domain.login.GetUserProfileInteractor;
 import com.applivery.applvsdklib.domain.login.UnBindUserInteractor;
 import com.applivery.applvsdklib.domain.model.ErrorObject;
 import com.applivery.applvsdklib.features.appconfig.AppConfigUseCase;
@@ -326,10 +326,10 @@ public class AppliverySdk {
         }
     }
 
-    static void getProfile(final @NonNull GetProfileCallback callback) {
+    static void getUser(final @NonNull GetUserCallback callback) {
 
-        GetProfileInteractor getProfileInteractor = Injection.INSTANCE.provideGetProfileInteractor();
-        getProfileInteractor.getProfile(
+        GetUserProfileInteractor getUserProfileInteractor = Injection.INSTANCE.provideGetUserProfileInteractor();
+        getUserProfileInteractor.getUser(
                 new Function1<UserProfile, Unit>() {
                     @Override
                     public Unit invoke(UserProfile userProfile) {
