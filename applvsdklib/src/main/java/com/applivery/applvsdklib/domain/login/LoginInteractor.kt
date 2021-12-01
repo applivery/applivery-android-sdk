@@ -20,6 +20,7 @@ import com.applivery.applvsdklib.domain.model.ErrorObject
 import com.applivery.applvsdklib.domain.model.UserData
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
+import com.applivery.base.domain.PreferencesManager
 import com.applivery.base.domain.SessionManager
 import com.applivery.data.AppliveryApiService
 import com.applivery.data.request.LoginRequest
@@ -29,7 +30,8 @@ class LoginInteractor(
     private val interactorExecutor: InteractorExecutor,
     private val mainThread: MainThread,
     private val apiService: AppliveryApiService,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val preferencesManager: PreferencesManager
 ) : Runnable {
 
     lateinit var userData: UserData
@@ -59,6 +61,7 @@ class LoginInteractor(
             val token = apiLoginResponse?.data?.bearer
             if (token != null) {
                 sessionManager.saveSession(token)
+                preferencesManager.anonymousEmail = null
                 notifySuccess()
             } else {
                 Log.e(TAG, "Make login response error")

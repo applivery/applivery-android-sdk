@@ -58,5 +58,5 @@ apply from: "${rootDir}/scripts/publish-root.gradle"
 
 ext {
     PUBLISH_GROUP_ID = 'com.applivery'
-    PUBLISH_VERSION = '3.5'
+    PUBLISH_VERSION = '3.5.1'
 }
