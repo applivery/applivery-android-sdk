@@ -80,4 +80,4 @@ signing {
     sign publishing.publications
 }
 
-/*publishReleasePublicationToSonatypeRepository*/
+/*./gradlew publishReleasePublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository*/

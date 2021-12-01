@@ -2,7 +2,8 @@
 ![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/06/applivery-og.png)
 
 ![Android CI](https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg)
-[![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg)](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/)
+[![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
 [![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
 
 ### Quality checks 
@@ -49,13 +50,6 @@ You can get your APP TOKEN in your App -> Settings -> Integrations section.
 
 ## SDK Installation
 
-<!--
-### Gradle with jCenter dependency
-[ ![Download](https://api.bintray.com/packages/applivery/maven/applivery-android-sdk/images/download.svg) ](https://bintray.com/applivery/maven/applivery-android-sdk/_latestVersion)
-```groovy
-implementation 'com.applivery:applivery-sdk:3.4'
-```-->
-
 ### Gradle with JitPack Maven dependency
 [![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
 
@@ -72,19 +66,17 @@ Add the following repository to your's root gradle:
 Add the following dependency to your app gradle:
 
   ```groovy
-    dependencies {
-      implementation 'com.github.Applivery:applivery-android-sdk:v3.4'
-    }
+implementation 'com.github.Applivery:applivery-android-sdk:${latestVersion}'
   ```
   
 ### Gradle with Nexus/MavenCentral dependency
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Capplivery)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/)
 
 add the following dependency to your app gradle:
 
  ```groovy
-  compile 'com.applivery:applivery-android-sdk:3.4'
+implementation 'com.applivery:applivery-android-sdk:${latestVersion}'
  ```
 
 ## SDK Setup
