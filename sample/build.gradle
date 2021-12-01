@@ -68,7 +68,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "com.google.android.material:material:$androidMaterialVersion"
 
-    implementation 'com.applivery:applivery-sdk:3.5'
+    implementation project(':applvsdklib')
 
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"

@@ -32,12 +32,12 @@ import com.applivery.applvsdklib.tools.permissions.UserPermissionRequestResponse
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
 import com.applivery.applvsdklib.ui.views.ShowErrorAlert;
 import com.applivery.base.AppliveryDataManager;
+import com.applivery.base.domain.PreferencesManager;
 import com.applivery.base.domain.SessionManager;
 import com.applivery.base.domain.model.AppData;
 import com.applivery.base.domain.model.DeviceInfo;
 import com.applivery.base.domain.model.Feedback;
 import com.applivery.base.domain.model.PackageInfo;
-import com.applivery.base.domain.model.UserProfile;
 import com.applivery.base.util.AndroidCurrentAppInfo;
 import com.applivery.base.util.AppliveryLog;
 
@@ -57,6 +57,7 @@ public class UserFeedbackPresenter {
     private final SessionManager sessionManager;
     private final FeedbackUseCase feedbackUseCase;
     private final GetUserProfileInteractor getUserProfileInteractor;
+    private final PreferencesManager preferencesManager;
     private final MailValidator mailValidator = new MailValidator();
     private ScreenCapture screenCapture;
     private String email;
@@ -64,7 +65,8 @@ public class UserFeedbackPresenter {
     public UserFeedbackPresenter(
             FeedbackView feedbackView,
             SessionManager sessionManager,
-            GetUserProfileInteractor getUserProfileInteractor
+            GetUserProfileInteractor getUserProfileInteractor,
+            PreferencesManager preferencesManager
     ) {
         this.feedbackView = feedbackView;
         this.sessionManager = sessionManager;
@@ -74,6 +76,7 @@ public class UserFeedbackPresenter {
 
         this.feedbackUseCase = FeedbackUseCase.Companion.getInstance();
         this.getUserProfileInteractor = getUserProfileInteractor;
+        this.preferencesManager = preferencesManager;
     }
 
     public void initUi() {
@@ -84,18 +87,16 @@ public class UserFeedbackPresenter {
             feedbackView.showScheenShotPreview();
             feedbackView.checkScreenshotSwitch(true);
         }
-        getUserProfileInteractor.getUser(new Function1<UserProfile, Unit>() {
-            @Override
-            public Unit invoke(UserProfile userProfile) {
-                feedbackView.onUserProfileLoaded(userProfile);
-                return null;
-            }
-        }, new Function1<ErrorObject, Unit>() {
-            @Override
-            public Unit invoke(ErrorObject errorObject) {
-                return null;
-            }
-        });
+        getUserProfileInteractor.getUser(
+                userProfile -> {
+                    feedbackView.onUserEmailLoaded(userProfile.getEmail(), false);
+                    return null;
+                },
+                errorObject -> {
+                    feedbackView.onUserEmailLoaded(preferencesManager.getAnonymousEmail(), true);
+                    return null;
+                }
+        );
     }
 
     public void cancelButtonPressed() {
@@ -241,6 +242,9 @@ public class UserFeedbackPresenter {
         if (!TextUtils.isEmpty(email) && !mailValidator.isValid(email)) {
             feedbackView.onEmailError(true);
             return;
+        }
+        if (!TextUtils.isEmpty(email) && !sessionManager.hasSession()) {
+            preferencesManager.setAnonymousEmail(email);
         }
 
         Feedback feedback = new Feedback(

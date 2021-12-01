@@ -18,8 +18,9 @@ package com.applivery.applvsdklib.ui.views.feedback;
 
 import android.app.Activity;
 
+import androidx.annotation.Nullable;
+
 import com.applivery.applvsdklib.ui.model.ScreenCapture;
-import com.applivery.base.domain.model.UserProfile;
 
 /**
  * Created by Sergio Martinez Rodriguez
@@ -27,41 +28,41 @@ import com.applivery.base.domain.model.UserProfile;
  */
 public interface FeedbackView {
 
-  void show();
+    void show();
 
-  void showFeedbackFormView();
+    void showFeedbackFormView();
 
-  void dismissFeedBack();
+    void dismissFeedBack();
 
-  void cleanScreenData();
+    void cleanScreenData();
 
-  void takeDataFromScreen();
+    void takeDataFromScreen();
 
-  void setBugButtonSelected();
+    void setBugButtonSelected();
 
-  void setFeedbackButtonSelected();
+    void setFeedbackButtonSelected();
 
-  void showFeedbackImage();
+    void showFeedbackImage();
 
-  void hideFeedbackImage();
+    void hideFeedbackImage();
 
-  boolean isNotShowing();
+    boolean isNotShowing();
 
-  void lockRotationOnParentScreen(Activity currentActivity);
+    void lockRotationOnParentScreen(Activity currentActivity);
 
-  void hideScheenShotPreview();
+    void hideScheenShotPreview();
 
-  void showScheenShotPreview();
+    void showScheenShotPreview();
 
-  void setScreenCapture(ScreenCapture screenCapture);
+    void setScreenCapture(ScreenCapture screenCapture);
 
-  void checkScreenshotSwitch(boolean isChecked);
+    void checkScreenshotSwitch(boolean isChecked);
 
-  void retrieveEditedScreenshot();
+    void retrieveEditedScreenshot();
 
-  void requestLogin();
+    void requestLogin();
 
-  void onUserProfileLoaded(UserProfile userProfile);
+    void onUserEmailLoaded(@Nullable String email, boolean editable);
 
-  void onEmailError(boolean hasError);
+    void onEmailError(boolean hasError);
 }

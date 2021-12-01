@@ -26,6 +26,7 @@ import com.applivery.applvsdklib.tools.executor.ThreadExecutor
 import com.applivery.applvsdklib.ui.views.feedback.FeedbackView
 import com.applivery.applvsdklib.ui.views.feedback.UserFeedbackPresenter
 import com.applivery.applvsdklib.ui.views.login.LoginPresenter
+import com.applivery.base.domain.PreferencesManager
 import com.applivery.base.domain.SessionManager
 import com.applivery.data.AppliveryApiService
 
@@ -39,7 +40,8 @@ internal object Injection {
         return UserFeedbackPresenter(
             feedbackView,
             provideSessionManager(),
-            provideGetUserProfileInteractor()
+            provideGetUserProfileInteractor(),
+            providePreferencesManager()
         )
     }
 
@@ -48,8 +50,15 @@ internal object Injection {
         val mainThread = provideMainThread()
         val apiService = AppliveryApiService.getInstance()
         val sessionManager = provideSessionManager()
+        val preferencesManager = providePreferencesManager()
 
-        return LoginInteractor(interactorExecutor, mainThread, apiService, sessionManager)
+        return LoginInteractor(
+            interactorExecutor,
+            mainThread,
+            apiService,
+            sessionManager,
+            preferencesManager
+        )
     }
 
     fun provideBindUserInteractor(): BindUserInteractor {
@@ -57,16 +66,29 @@ internal object Injection {
         val mainThread = provideMainThread()
         val apiService = AppliveryApiService.getInstance()
         val sessionManager = provideSessionManager()
+        val preferencesManager = providePreferencesManager()
 
-        return BindUserInteractor(interactorExecutor, mainThread, apiService, sessionManager)
+        return BindUserInteractor(
+            interactorExecutor,
+            mainThread,
+            apiService,
+            sessionManager,
+            preferencesManager
+        )
     }
 
     fun provideUnBindUserInteractor(): UnBindUserInteractor {
         val interactorExecutor = provideInteractorExecutor()
         val mainThread = provideMainThread()
         val sessionManager = provideSessionManager()
+        val preferencesManager = providePreferencesManager()
 
-        return UnBindUserInteractor(interactorExecutor, mainThread, sessionManager)
+        return UnBindUserInteractor(
+            interactorExecutor,
+            mainThread,
+            sessionManager,
+            preferencesManager
+        )
     }
 
     fun provideGetUserProfileInteractor(): GetUserProfileInteractor {
@@ -88,5 +110,9 @@ internal object Injection {
 
     fun provideSessionManager(): SessionManager {
         return SessionManager.getInstance()
+    }
+
+    fun providePreferencesManager(): PreferencesManager {
+        return PreferencesManager.getInstance()
     }
 }

@@ -19,6 +19,7 @@ import android.util.Log
 import com.applivery.applvsdklib.domain.model.ErrorObject
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
+import com.applivery.base.domain.PreferencesManager
 import com.applivery.base.domain.SessionManager
 import com.applivery.base.domain.model.UserData
 import com.applivery.data.AppliveryApiService
@@ -29,7 +30,8 @@ class BindUserInteractor(
     private val interactorExecutor: InteractorExecutor,
     private val mainThread: MainThread,
     private val apiService: AppliveryApiService,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val preferencesManager: PreferencesManager
 ) : Runnable {
 
     lateinit var userData: UserData
@@ -59,6 +61,7 @@ class BindUserInteractor(
             val token = apiLoginResponse?.data?.bearer
             if (token != null) {
                 sessionManager.saveSession(token)
+                preferencesManager.anonymousEmail = null
                 notifySuccess()
             } else {
                 Log.e(TAG, "Bind user response error")
