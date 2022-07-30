@@ -132,6 +132,14 @@ Start the download of the last app version:
 Applivery.update()
 ```
 
+### Notice for versions prior 3.5.2
+
+Versions up to 3.5.1 contains a FileProvider needed to support in-app updates.
+This FileProvider builds its authorities by using the host app package name plus ".fileprovider" literal, giving us something like "com.foo.bar.fileprovider".
+If you are using another FileProvider in your app, check that its authorities are not conflicting with the SDK's ones, if so please change it to avoid issues.
+
+Versions 3.5.2 and above do not have this limitation.
+
 ### Feedback Reporting
 
 You can either take a screenshot or shake your phone if you want to send activate the Feedback Reproting feature
