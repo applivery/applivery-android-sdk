@@ -27,7 +27,7 @@ class AppliveryFileProvider : FileProvider() {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             getUriForFile(
                 context,
-                context.packageName + ".fileprovider",
+                "${context.packageName}.applivery.fileprovider",
                 file
             )
         } else {

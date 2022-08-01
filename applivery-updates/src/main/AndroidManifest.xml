@@ -10,7 +10,7 @@
 
         <provider
             android:name=".util.AppliveryFileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:authorities="${applicationId}.applivery.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
 
