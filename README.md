@@ -76,7 +76,7 @@ implementation 'com.github.Applivery:applivery-android-sdk:${latestVersion}'
 add the following dependency to your app gradle:
 
  ```groovy
-implementation 'com.applivery:applivery-android-sdk:${latestVersion}'
+implementation 'com.applivery:applivery-sdk:${latestVersion}'
  ```
 
 ## SDK Setup
