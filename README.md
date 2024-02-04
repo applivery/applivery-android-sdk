@@ -1,5 +1,5 @@
 
-![Applivery Logo](https://www.applivery.com/wp-content/uploads/2019/06/applivery-og.png)
+![Applivery Logo](https://www.applivery.com/wp-content/uploads/2021/08/logo-dark-app.svg)
 
 ![Android CI](https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/)
@@ -76,7 +76,7 @@ implementation 'com.github.Applivery:applivery-android-sdk:${latestVersion}'
 add the following dependency to your app gradle:
 
  ```groovy
-implementation 'com.applivery:applivery-android-sdk:${latestVersion}'
+implementation 'com.applivery:applivery-sdk:${latestVersion}'
  ```
 
 ## SDK Setup
