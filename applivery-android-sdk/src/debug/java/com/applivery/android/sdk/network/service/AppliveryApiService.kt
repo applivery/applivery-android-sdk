@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Applivery
+ * Copyright (c) 2020 Applivery
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.applivery.android.sdk.network.service
 
-include ':applvsdklib', ':sample', ':applivery-updates', ':applivery-base'
-include ':applivery-data'
-include ':applivery-android-sdk'
+import com.applivery.android.sdk.network.models.AppConfigApi
+import com.applivery.android.sdk.network.models.ServerResponseSchema
+import retrofit2.http.GET
+
+interface AppliveryApiService {
+
+    @GET("v1/app")
+    suspend fun getConfig(): ServerResponseSchema<AppConfigApi>
+}
