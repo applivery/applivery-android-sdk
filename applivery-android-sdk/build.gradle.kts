@@ -12,6 +12,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val PUBLISH_VERSION: String by rootProject.extra
+        buildConfigField("String", "LibraryVersion", "\"$PUBLISH_VERSION\"")
     }
 
     buildTypes {

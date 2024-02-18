@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.applivery.android.sdk.network.service
+package com.applivery.android.sdk.data.service
 
-import com.applivery.android.sdk.network.models.AppConfigApi
-import com.applivery.android.sdk.network.models.ServerResponseSchema
+import arrow.core.Either
+import com.applivery.android.sdk.data.models.ApiError
+import com.applivery.android.sdk.data.models.AppConfigApi
+import com.applivery.android.sdk.data.models.ServerResponseSchema
 import retrofit2.http.GET
 
 interface AppliveryApiService {
 
     @GET("v1/app")
-    suspend fun getConfig(): ServerResponseSchema<AppConfigApi>
+    suspend fun getConfig(): Either<ApiError, ServerResponseSchema<AppConfigApi>>
 }

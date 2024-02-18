@@ -1,6 +1,7 @@
 package com.applivery.android.sdk
 
 import android.content.Context
+import com.applivery.android.sdk.updates.IsUpToDateCallback
 
 interface Applivery {
 
@@ -9,6 +10,8 @@ interface Applivery {
     fun checkForUpdatesInBackground(check: Boolean)
 
     fun checkForUpdates()
+
+    fun isUpToDate(callback: IsUpToDateCallback)
 
     companion object {
         private var sInstance: Applivery? = null

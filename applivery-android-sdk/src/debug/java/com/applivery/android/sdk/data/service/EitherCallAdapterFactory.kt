@@ -1,13 +1,13 @@
-package com.applivery.android.sdk.network.service
+package com.applivery.android.sdk.data.service
 
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.applivery.android.sdk.network.base.JsonMapper
-import com.applivery.android.sdk.network.models.ApiError
-import com.applivery.android.sdk.network.models.ApiErrorSchema
-import com.applivery.android.sdk.network.models.IOError
-import com.applivery.android.sdk.network.models.InternalError
+import com.applivery.android.sdk.data.base.JsonMapper
+import com.applivery.android.sdk.data.models.ApiError
+import com.applivery.android.sdk.data.models.ApiErrorSchema
+import com.applivery.android.sdk.data.models.IOError
+import com.applivery.android.sdk.data.models.InternalError
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
@@ -83,8 +83,9 @@ class EitherCallSuspendAdapter<T : Any>(
     private val jsonMapper: JsonMapper
 ) : CallAdapter<T, Call<Either<ApiError, T>>> {
 
-    override fun adapt(call: Call<T>): Call<Either<ApiError, T>> =
-        EitherCallMapper(call, jsonMapper)
+    override fun adapt(call: Call<T>): Call<Either<ApiError, T>> {
+        return EitherCallMapper(call, jsonMapper)
+    }
 
     override fun responseType(): Type = returnType
 }

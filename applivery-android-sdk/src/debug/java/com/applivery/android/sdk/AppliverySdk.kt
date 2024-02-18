@@ -5,7 +5,9 @@ import android.content.Context
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.applivery.android.sdk.di.AppliveryDiContext
 import com.applivery.android.sdk.di.Properties
+import com.applivery.android.sdk.di.domainModules
 import com.applivery.android.sdk.di.networkModules
+import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.updates.UpdatesLifecycleObserver
 import org.koin.android.ext.koin.androidContext
 
@@ -23,7 +25,10 @@ internal class AppliverySdk : Applivery {
         AppliveryDiContext.koinApp.apply {
             androidContext(app)
             // TODO: modules
-            modules(networkModules)
+            modules(
+                networkModules,
+                domainModules
+            )
             // TODO: map properties from build config correctly
             properties(
                 mapOf(
@@ -44,6 +49,10 @@ internal class AppliverySdk : Applivery {
     }
 
     override fun checkForUpdates() {
+        TODO("Not yet implemented")
+    }
+
+    override fun isUpToDate(callback: IsUpToDateCallback) {
         TODO("Not yet implemented")
     }
 }

@@ -1,4 +1,4 @@
-package com.applivery.android.sdk.network.base
+package com.applivery.android.sdk.data.base
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
