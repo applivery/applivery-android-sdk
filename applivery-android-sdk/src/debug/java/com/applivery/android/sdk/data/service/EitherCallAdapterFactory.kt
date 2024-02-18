@@ -38,19 +38,15 @@ class EitherCallAdapterFactory(private val jsonMapper: JsonMapper) : CallAdapter
         if (getRawType(returnType) == Call::class.java) {
             val enclosingType = getParameterUpperBound(0, returnType)
             if (getRawType(enclosingType) == Either::class.java) {
-                return EitherCallSuspendAdapter<Any>(
-                    getParameterUpperBound(0, enclosingType as ParameterizedType),
-                    jsonMapper
-                )
+                val responseType = getParameterUpperBound(1, enclosingType as ParameterizedType)
+                return EitherCallSuspendAdapter<Any>(responseType, jsonMapper)
             }
         }
 
         /*The return type is directly Either, so handle it normally*/
         if (getRawType(returnType) == Either::class.java) {
-            return EitherCallAdapter<Any>(
-                getParameterUpperBound(0, returnType),
-                jsonMapper
-            )
+            val responseType = getParameterUpperBound(1, returnType)
+            return EitherCallAdapter<Any>(responseType, jsonMapper)
         }
 
         return null
