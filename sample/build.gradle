@@ -16,7 +16,6 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply from: '../dependencies.gradle'
 
 def STRING = "String"
@@ -60,6 +59,10 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -69,6 +72,7 @@ dependencies {
     implementation "com.google.android.material:material:$androidMaterialVersion"
 
     implementation project(':applvsdklib')
+    implementation project(':applivery-android-sdk')
 
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"

@@ -4,14 +4,21 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.applivery.android.sdk.di.AppliveryDiContext
+import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.di.Properties
 import com.applivery.android.sdk.di.domainModules
 import com.applivery.android.sdk.di.networkModules
+import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.updates.UpdatesLifecycleObserver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.component.get
 
-internal class AppliverySdk : Applivery {
+internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
     private val currentActivityProvider: CurrentActivityProvider = CurrentActivityProvider()
     private val processLifecycle get() = ProcessLifecycleOwner.get().lifecycle
@@ -53,6 +60,12 @@ internal class AppliverySdk : Applivery {
     }
 
     override fun isUpToDate(callback: IsUpToDateCallback) {
-        TODO("Not yet implemented")
+        // TODO: create a scope and offer another way to work with coroutines
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = get<IsUpToDateUseCase>()()
+                callback.onResponse(result.getOrNull() ?: false)
+            }
+        }
     }
 }

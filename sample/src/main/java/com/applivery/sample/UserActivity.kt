@@ -9,50 +9,53 @@ import com.applivery.applvsdklib.Applivery
 import com.applivery.applvsdklib.BindUserCallback
 import com.applivery.applvsdklib.GetUserCallback
 import com.applivery.base.domain.model.UserProfile
-import kotlinx.android.synthetic.main.activity_user.*
+import com.applivery.sample.databinding.ActivityUserBinding
 
 class UserActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityUserBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
+        binding = ActivityUserBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         initViews()
         getUser()
     }
 
     private fun initViews() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        bindUserButton.setOnClickListener { bindUser() }
-        unBindUserButton.setOnClickListener { Applivery.unbindUser() }
+        binding.bindUserButton.setOnClickListener { bindUser() }
+        binding.unBindUserButton.setOnClickListener { Applivery.unbindUser() }
     }
 
     private fun bindUser() {
 
-        if (emailEditText.text.isEmpty()) {
-            emailEditText.error = getString(R.string.field_required)
+        if (binding.emailEditText.text.isEmpty()) {
+            binding.emailEditText.error = getString(R.string.field_required)
             return
         }
-        val email = emailEditText.text.toString()
+        val email = binding.emailEditText.text.toString()
 
-        val firstName = if (firstNameEditText.text.isNotEmpty()) {
-            firstNameEditText.text.toString()
+        val firstName = if (binding.firstNameEditText.text.isNotEmpty()) {
+            binding.firstNameEditText.text.toString()
         } else {
             null
         }
 
-        val lastName = if (lastNameEditText.text.isNotEmpty()) {
-            lastNameEditText.text.toString()
+        val lastName = if (binding.lastNameEditText.text.isNotEmpty()) {
+            binding.lastNameEditText.text.toString()
         } else {
             null
         }
 
-        val tags = if (tagsEditText.text.isNotEmpty()) {
-            tagsEditText.text.toString().split(",")
+        val tags = if (binding.tagsEditText.text.isNotEmpty()) {
+            binding.tagsEditText.text.toString().split(",")
         } else {
             null
         }
@@ -73,9 +76,9 @@ class UserActivity : AppCompatActivity() {
         Applivery.getUser(object : GetUserCallback {
 
             override fun onSuccess(userProfile: UserProfile) {
-                emailEditText.setText(userProfile.email)
-                firstNameEditText.setText(userProfile.firstName)
-                lastNameEditText.setText(userProfile.lastName)
+                binding.emailEditText.setText(userProfile.email)
+                binding.firstNameEditText.setText(userProfile.firstName)
+                binding.lastNameEditText.setText(userProfile.lastName)
             }
 
             override fun onError(message: String) = Unit

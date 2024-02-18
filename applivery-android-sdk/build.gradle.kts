@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.applivery.android.sdk"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 24
@@ -53,10 +53,9 @@ dependencies {
     val gsonVersion = "2.8.8"
     val arrowVersion = "1.2.0"
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.core:core-ktx:1.6.0")
+    implementation("androidx.appcompat:appcompat:1.3.0")
+    implementation("com.google.android.material:material:1.6.0")
     implementation("io.insert-koin:koin-android:3.5.3")
     implementation("androidx.lifecycle:lifecycle-process:2.7.0")
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")

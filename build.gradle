@@ -16,11 +16,11 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.6.0'
+        kotlin_version = '1.8.0'
         versions = [
-                minSdk    : 16,
-                targetSdk : 29,
-                compileSdk: 29,
+                minSdk    : 24,
+                targetSdk : 33,
+                compileSdk: 34,
         ]
     }
     repositories {

@@ -16,8 +16,8 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply from: '../dependencies.gradle'
+apply plugin: 'kotlin-parcelize'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
 ext {
@@ -43,10 +43,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-
-    androidExtensions {
-        experimental = true
     }
 }
 

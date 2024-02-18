@@ -6,8 +6,6 @@ import arrow.core.right
 import com.applivery.android.sdk.data.base.JsonMapper
 import com.applivery.android.sdk.data.models.ApiError
 import com.applivery.android.sdk.data.models.ApiErrorSchema
-import com.applivery.android.sdk.data.models.IOError
-import com.applivery.android.sdk.data.models.InternalError
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
@@ -63,8 +61,8 @@ class EitherCallAdapter<T : Any>(
 
     override fun adapt(call: Call<T>): Either<ApiError, T> {
         return runCatching { EitherCallMapper(call, jsonMapper).execute() }.fold(
-            onSuccess = { it.body() ?: InternalError().left() },
-            onFailure = { IOError().left() }
+            onSuccess = { it.body() ?: ApiError.Internal().left() },
+            onFailure = { ApiError.IO().left() }
         )
     }
 
@@ -109,17 +107,17 @@ class EitherCallMapper<T : Any>(
 
     private fun <T : Any> Response<T>.handle(): Either<ApiError, T> {
         return if (isSuccessful) {
-            body()?.right() ?: InternalError().left()
+            body()?.right() ?: ApiError.Internal().left()
         } else {
             val errorSchema = jsonMapper.run { errorBody()?.string()?.fromJson<ApiErrorSchema>() }
-            errorSchema?.toApiError()?.left() ?: InternalError().left()
+            errorSchema?.toApiError()?.left() ?: ApiError.Internal().left()
         }
     }
 
     override fun execute(): Response<Either<ApiError, T>> {
         return runCatching { source.execute() }.fold(
             onSuccess = { Response.success(it.handle()) },
-            onFailure = { Response.success(IOError().left()) }
+            onFailure = { Response.success(ApiError.IO().left()) }
         )
     }
 
@@ -137,7 +135,7 @@ class EitherCallMapper<T : Any>(
             override fun onFailure(call: Call<T>, t: Throwable) {
                 callback.onResponse(
                     this@EitherCallMapper,
-                    Response.success(IOError().left())
+                    Response.success(ApiError.IO().left())
                 )
             }
         })

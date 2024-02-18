@@ -1,21 +1,22 @@
 package com.applivery.android.sdk.domain.usecases
 
 import arrow.core.Either
-import com.applivery.android.sdk.data.service.AppliveryApiService
-import com.applivery.android.sdk.domain.model.Error
-import java.util.concurrent.ExecutorService
+import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
+import com.applivery.android.sdk.domain.model.DomainError
+import com.applivery.android.sdk.domain.repository.AppliveryRepository
 
 interface IsUpToDateUseCase {
 
-    suspend operator fun invoke(): Either<Error, Boolean>
+    suspend operator fun invoke(): Either<DomainError, Boolean>
 }
 
 class IsUpToDate(
-    private val service: AppliveryApiService
-) : IsUpToDateUseCase{
+    private val repository: AppliveryRepository,
+    private val hostAppPackageInfoProvider: HostAppPackageInfoProvider
+) : IsUpToDateUseCase {
 
-    override suspend fun invoke(): Either<Error, Boolean> {
-        TODO()
+    override suspend fun invoke(): Either<DomainError, Boolean> {
+        val currentAppVersion = hostAppPackageInfoProvider.packageInfo.versionCode
+        return repository.getConfig().map { currentAppVersion >= it.lastBuildVersion }
     }
-
 }

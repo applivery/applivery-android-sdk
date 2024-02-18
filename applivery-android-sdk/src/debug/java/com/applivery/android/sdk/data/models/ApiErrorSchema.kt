@@ -2,8 +2,15 @@ package com.applivery.android.sdk.data.models
 
 import com.google.gson.annotations.SerializedName
 
-abstract class ApiError(message: String?) : Throwable(message)
+sealed class ApiError(message: String?) : Throwable(message){
+    class LimitExceeded(message: String?) : ApiError(message)
+    class Unauthorized(message: String?) : ApiError(message)
+    class Subscription(message: String?) : ApiError(message)
+    class Internal(message: String? = null) : ApiError(message)
+    class IO : ApiError(null)
+}
 
+// TODO: test with real call if this is the expected schema
 data class ApiErrorSchema(
     @SerializedName("code") val code: Int,
     @SerializedName("message") val message: String,
@@ -11,10 +18,10 @@ data class ApiErrorSchema(
 ) {
     fun toApiError(): ApiError {
         return when (code) {
-            LIMIT_EXCEEDED_ERROR -> LimitExceededError(message)
-            UNAUTHORIZED_ERROR -> UnauthorizedError(message)
-            SUBSCRIPTION_ERROR -> SubscriptionError(message)
-            else -> InternalError(message)
+            LIMIT_EXCEEDED_ERROR -> ApiError.LimitExceeded(message)
+            UNAUTHORIZED_ERROR -> ApiError.Unauthorized(message)
+            SUBSCRIPTION_ERROR -> ApiError.Subscription(message)
+            else -> ApiError.Internal(message)
         }
     }
 }
@@ -23,8 +30,3 @@ private const val LIMIT_EXCEEDED_ERROR = 5003
 private const val UNAUTHORIZED_ERROR = 4004
 private const val SUBSCRIPTION_ERROR = 5004
 
-class LimitExceededError(message: String?) : ApiError(message)
-class UnauthorizedError(message: String?) : ApiError(message)
-class SubscriptionError(message: String?) : ApiError(message)
-class InternalError(message: String? = null) : ApiError(message)
-class IOError : ApiError(null)

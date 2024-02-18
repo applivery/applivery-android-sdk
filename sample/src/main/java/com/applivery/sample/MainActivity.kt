@@ -5,25 +5,27 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.applivery.applvsdklib.Applivery
-import kotlinx.android.synthetic.main.activity_main.*
+import com.applivery.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appPreferences: AppPreferences
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         appPreferences = AppliveryApplication.appPreferences
         initViews()
     }
 
     private fun initViews() {
-        setSupportActionBar(toolbar)
-        chronometer.start()
-        checkForUpdatesBackgroundSwitch.isChecked = Applivery.getCheckForUpdatesBackground()
-        checkForUpdatesBackgroundSwitch.setOnCheckedChangeListener { _, isChecked ->
+        setSupportActionBar(binding.toolbar)
+        binding.chronometer.start()
+        binding.checkForUpdatesBackgroundSwitch.isChecked = Applivery.getCheckForUpdatesBackground()
+        binding.checkForUpdatesBackgroundSwitch.setOnCheckedChangeListener { _, isChecked ->
             appPreferences.checkForUpdatesBackground = isChecked
             Applivery.setCheckForUpdatesBackground(isChecked)
         }
@@ -31,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         Applivery.disableShakeFeedback()
         Applivery.disableScreenshotFeedback()
 
-        feedbackSwitch.isChecked = false
-        feedbackSwitch.setOnCheckedChangeListener { _, isChecked ->
+        binding.feedbackSwitch.isChecked = false
+        binding.feedbackSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 Applivery.enableShakeFeedback()
             } else {
@@ -41,8 +43,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        screenshotSwitch.isChecked = false
-        screenshotSwitch.setOnCheckedChangeListener { _, isChecked ->
+        binding.screenshotSwitch.isChecked = false
+        binding.screenshotSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 Applivery.enableScreenshotFeedback()
             } else {
@@ -50,11 +52,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        checkForUpdatesButton.setOnClickListener {
+        binding.checkForUpdatesButton.setOnClickListener {
             Applivery.checkForUpdates()
         }
 
-        downloadLastBuildButton.setOnClickListener {
+        binding.downloadLastBuildButton.setOnClickListener {
             Applivery.update()
         }
     }
@@ -63,9 +65,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Applivery.isUpToDate { isUpToDate ->
             if (isUpToDate) {
-                isUpToDateTextView.text = getString(R.string.is_up_to_date_text_updated)
+                binding.isUpToDateTextView.text = getString(R.string.is_up_to_date_text_updated)
             } else {
-                isUpToDateTextView.text = getString(R.string.is_up_to_date_text_no_updated)
+                binding.isUpToDateTextView.text = getString(R.string.is_up_to_date_text_no_updated)
             }
         }
     }

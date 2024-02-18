@@ -7,15 +7,15 @@ data class AppConfigApi(
     @SerializedName("id") val id: String?,
     @SerializedName("name") val name: String?,
     @SerializedName("oss") val oss: List<String>?,
-    @SerializedName("sdk") val sdk: SdkEntityApi,
+    @SerializedName("sdk") val sdk: SdkApi,
     @SerializedName("slug") val slug: String?
 )
 
-data class SdkEntityApi(
-    @SerializedName("android") val android: AndroidEntityApi
+data class SdkApi(
+    @SerializedName("android") val android: AndroidApi
 )
 
-data class AndroidEntityApi(
+data class AndroidApi(
     @SerializedName("forceAuth") val forceAuth: Boolean?,
     @SerializedName("forceUpdate") val forceUpdate: Boolean?,
     @SerializedName("lastBuildId") val lastBuildId: String?,
