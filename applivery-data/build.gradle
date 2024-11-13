@@ -28,6 +28,8 @@ ext {
 apply from: "${rootDir}/scripts/publish-module.gradle"
 
 android {
+    namespace 'com.applivery.data'
+
     compileSdkVersion versions.compileSdk
 
     defaultConfig {
