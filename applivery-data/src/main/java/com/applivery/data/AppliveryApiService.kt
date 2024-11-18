@@ -15,6 +15,8 @@
  */
 package com.applivery.data
 
+import com.applivery.base.AppliveryDataManager
+import com.applivery.data.ApiUriBuilder.buildUponTenant
 import com.applivery.data.di.InjectorUtils
 import com.applivery.data.request.BindUserRequest
 import com.applivery.data.request.FeedbackRequest
@@ -67,7 +69,8 @@ interface AppliveryApiService {
             }
 
         private fun provideAppliveryApiService(): AppliveryApiService {
-            return Retrofit.Builder().baseUrl(BuildConfig.API_URL)
+            val url = BuildConfig.API_URL.buildUponTenant(AppliveryDataManager.tenant)
+            return Retrofit.Builder().baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(InjectorUtils.provideOkHttpClient())
                 .build()

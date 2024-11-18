@@ -28,6 +28,7 @@ import java.util.Collection;
  * Date 17/1/16.
  */
 public class Applivery {
+
     /**
      * Initializes Sdk for the current app and developer. Call this method from your application
      * instance when onCreate method is called. Pay attention to description of isPlayStoreRelease
@@ -38,7 +39,21 @@ public class Applivery {
      *                 app settings section
      */
     public static void init(@NonNull Application app, @NonNull String appToken) {
-        AppliverySdk.sdkInitialize(app, appToken);
+        AppliverySdk.sdkInitialize(app, appToken, null);
+    }
+
+    /**
+     * Initializes Sdk for the current app and developer. Call this method from your application
+     * instance when onCreate method is called. Pay attention to description of isPlayStoreRelease
+     * param.
+     *
+     * @param app      your app instance, it can't be null.
+     * @param appToken your app tokenoken. You can find this value at applivery dashboard in your
+     *                 app settings section
+     * @param tenant   tenant for private Applivery instances
+     */
+    public static void init(@NonNull Application app, @NonNull String appToken, @NonNull String tenant) {
+        AppliverySdk.sdkInitialize(app, appToken, tenant);
     }
 
     /**

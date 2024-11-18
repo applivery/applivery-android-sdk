@@ -16,15 +16,16 @@
 package com.applivery.applvsdklib;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.applivery.applvsdklib.domain.exceptions.NotForegroundActivityAvailable;
 import com.applivery.applvsdklib.domain.login.BindUserInteractor;
 import com.applivery.applvsdklib.domain.login.GetUserProfileInteractor;
@@ -46,8 +47,9 @@ import com.applivery.base.AppliveryDataManager;
 import com.applivery.base.AppliveryLifecycleCallbacks;
 import com.applivery.base.domain.model.UserData;
 import com.applivery.base.domain.model.UserProfile;
+
 import java.util.Collection;
-import java.util.concurrent.Executor;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
@@ -61,9 +63,6 @@ public class AppliverySdk {
     // TODO This class is already using too many Static fields, consider redesign.
     // TODO Hold static reference only to AppliverySdk object and wrap smaller objects inside
     private static final String TAG = AppliverySdk.class.getCanonicalName();
-    private static volatile Executor executor;
-    private static volatile String appToken;
-    private static volatile String fileProviderAuthority;
     private static boolean lockedApp = false;
     private static volatile boolean isDebugEnabled = BuildConfig.DEBUG;
     private static Context applicationContext;
@@ -75,15 +74,14 @@ public class AppliverySdk {
     private static Boolean checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
     private static Boolean isUpdating = false;
 
-    public static synchronized void sdkInitialize(Application app, String appToken) {
-        init(app, appToken);
+    public static synchronized void sdkInitialize(Application app, String appToken, String tenant) {
+        init(app, appToken, tenant);
     }
 
-    @TargetApi(14)
-    private static void init(Application app, String appToken) {
+    private static void init(Application app, String appToken, String tenant) {
         if (!sdkInitialized) {
             sdkInitialized = true;
-            initializeAppliveryConstants(app, appToken);
+            initializeAppliveryConstants(app, appToken, tenant);
             app.registerActivityLifecycleCallbacks(new AppliveryLifecycleCallbacks());
             registerActivityLifecyleCallbacks(app);
             obtainAppConfig(false);
@@ -93,7 +91,6 @@ public class AppliverySdk {
     /**
      * @return true if success false otherwise
      */
-    @TargetApi(14)
     private static boolean registerActivityLifecyleCallbacks(Application app) {
         try {
             app.registerActivityLifecycleCallbacks(activityLifecycle);
@@ -111,7 +108,7 @@ public class AppliverySdk {
         return isUpdating;
     }
 
-    private static void initializeAppliveryConstants(Application app, String appToken) {
+    private static void initializeAppliveryConstants(Application app, String appToken, String tenant) {
 
         //region validate some requirements
         Context applicationContext = Validate.notNull(app, "Application").getApplicationContext();
@@ -119,16 +116,13 @@ public class AppliverySdk {
         Validate.hasInternetPermissions(applicationContext, false);
         //endregion
 
-        AppliverySdk.appToken = appToken;
         AppliveryDataManager.INSTANCE.setAppToken(appToken);
-
-        AppliverySdk.fileProviderAuthority = composeFileProviderAuthority(app);
+        AppliveryDataManager.INSTANCE.setTenant(tenant);
 
         AppliverySdk.applicationContext = applicationContext;
 
         AppliverySdk.activityLifecycle = new AppliveryActivityLifecycleCallbacks(applicationContext);
-        AppliverySdk.permissionRequestManager =
-                new AndroidPermissionCheckerImpl(AppliverySdk.activityLifecycle);
+        AppliverySdk.permissionRequestManager = new AndroidPermissionCheckerImpl(AppliverySdk.activityLifecycle);
     }
 
     private static void obtainAppConfig(boolean checkForUpdates) {
@@ -136,10 +130,6 @@ public class AppliverySdk {
             AppConfigUseCase appConfigUseCase = AppConfigUseCase.Companion.getInstance();
             appConfigUseCase.getAppConfig(checkForUpdates, null);
         }
-    }
-
-    private static String composeFileProviderAuthority(Application application) {
-        return application.getPackageName() + ".provider";
     }
 
     @Nullable
