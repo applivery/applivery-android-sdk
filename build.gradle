@@ -16,7 +16,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.6.0'
+        kotlin_version = '1.6.21'
         versions = [
                 minSdk    : 16,
                 targetSdk : 29,
@@ -28,7 +28,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -57,5 +57,5 @@ apply from: "${rootDir}/scripts/publish-root.gradle"
 
 ext {
     PUBLISH_GROUP_ID = 'com.applivery'
-    PUBLISH_VERSION = '3.5.2'
+    PUBLISH_VERSION = '3.6.0'
 }

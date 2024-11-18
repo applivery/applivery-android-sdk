@@ -20,4 +20,5 @@ import com.applivery.base.domain.model.AppData
 object AppliveryDataManager {
     var appData: AppData? = null
     var appToken: String? = null
+    var tenant: String? = null
 }

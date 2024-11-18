@@ -26,6 +26,8 @@ ext {
 apply from: "${rootDir}/scripts/publish-module.gradle"
 
 android {
+    namespace 'com.applivery.base'
+
     compileSdkVersion versions.compileSdk
 
     defaultConfig {
@@ -45,7 +47,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
