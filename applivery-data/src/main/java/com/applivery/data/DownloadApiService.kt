@@ -1,5 +1,7 @@
 package com.applivery.data
 
+import com.applivery.base.AppliveryDataManager
+import com.applivery.data.ApiUriBuilder.buildUponTenant
 import com.applivery.data.di.InjectorUtils
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -29,7 +31,8 @@ interface DownloadApiService {
             }
 
         private fun provideDownloadApiService(): DownloadApiService {
-            return Retrofit.Builder().baseUrl(BuildConfig.DOWNLOAD_API_URL)
+            val url = BuildConfig.DOWNLOAD_API_URL.buildUponTenant(AppliveryDataManager.tenant)
+            return Retrofit.Builder().baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(InjectorUtils.provideOkHttpClient())
                 .build()
