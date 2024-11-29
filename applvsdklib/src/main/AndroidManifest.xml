@@ -16,33 +16,34 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <uses-feature
-      android:name="android.hardware.sensor.accelerometer"
-      android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
 
-  <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
-  <!--Using Android M request permissions System-->
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <!--Using Android M request permissions System-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-  <application
-      android:supportsRtl="true">
+    <application android:supportsRtl="true">
 
-    <provider
-        android:name=".tools.androidimplementations.AppliveryFileProviderLeg"
-        android:authorities="${applicationId}.provider"
-        android:exported="false"
-        android:grantUriPermissions="true">
+        <activity android:name=".ui.views.login.LoginActivity" />
 
-      <meta-data
-          android:name="android.support.FILE_PROVIDER_PATHS"
-          android:resource="@xml/applivery_provider_paths_leg"/>
+        <provider
+            android:name=".tools.androidimplementations.AppliveryFileProviderLeg"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
 
-    </provider>
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/applivery_provider_paths_leg" />
 
-  </application>
+        </provider>
+
+    </application>
 
 </manifest>

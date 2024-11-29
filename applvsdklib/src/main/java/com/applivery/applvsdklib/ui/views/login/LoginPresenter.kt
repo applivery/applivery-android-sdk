@@ -15,20 +15,23 @@
  */
 package com.applivery.applvsdklib.ui.views.login
 
-import com.applivery.applvsdklib.domain.login.LoginInteractor
-import com.applivery.applvsdklib.domain.model.UserData
+import com.applivery.applvsdklib.features.auth.GetAuthenticationUriUseCase
+import com.applivery.base.domain.PreferencesManager
+import com.applivery.base.domain.SessionManager
+import com.applivery.base.domain.model.AuthenticationUri
 
-class LoginPresenter(private val loginInteractor: LoginInteractor) {
+class LoginPresenter(
+    private val getAuthenticationUri: GetAuthenticationUriUseCase,
+    private val sessionManager: SessionManager,
+    private val preferencesManager: PreferencesManager
+) {
 
-  var view: LoginView? = null
+    suspend fun getAuthenticationUri(): Result<AuthenticationUri> {
+        return getAuthenticationUri.invoke()
+    }
 
-  fun makeLogin(userData: UserData) {
-    loginInteractor.makeLogin(userData,
-        onSuccess = { view?.showLoginSuccess() },
-        onError = { view?.showLoginError() })
-  }
-
-  fun requestLogin() {
-    view?.showLoginDialog()
-  }
+    fun onAuthenticated(bearer: String) {
+        sessionManager.saveSession(bearer)
+        preferencesManager.anonymousEmail = null
+    }
 }

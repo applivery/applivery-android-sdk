@@ -44,9 +44,10 @@ class ErrorManager {
             is Failure.SubscriptionError -> {
                 AppliverySdk.getApplicationContext()
                     ?.getString(R.string.applivery_error_subscription)?.let { text ->
-                    AppliverySdk.Logger.loge(text)
-                }
+                        AppliverySdk.Logger.loge(text)
+                    }
             }
+
             else -> {
                 AppliverySdk.Logger.loge(error.message)
             }
@@ -61,6 +62,6 @@ class ErrorManager {
         val loginView = LoginView(activity) {
             AppliverySdk.updateAppConfig()
         }
-        loginView.presenter.requestLogin()
+        loginView.show()
     }
 }

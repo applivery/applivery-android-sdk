@@ -20,7 +20,7 @@ buildscript {
         versions = [
                 minSdk    : 16,
                 targetSdk : 29,
-                compileSdk: 29,
+                compileSdk: 31,
         ]
     }
     repositories {

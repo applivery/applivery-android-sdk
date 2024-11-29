@@ -1,10 +1,12 @@
 package com.applivery.sample
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.applivery.applvsdklib.Applivery
+import com.applivery.base.util.AppliveryLog
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         Applivery.disableShakeFeedback()
         Applivery.disableScreenshotFeedback()
+        AppliveryLog.setLogLevel(Log.DEBUG)
 
         feedbackSwitch.isChecked = false
         feedbackSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -82,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                 UserActivity.open(this)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
