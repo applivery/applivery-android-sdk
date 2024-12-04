@@ -49,9 +49,6 @@ import com.applivery.applvsdklib.ui.views.DrawingImageView;
 import com.applivery.applvsdklib.ui.views.TextChangedListener;
 import com.applivery.applvsdklib.ui.views.login.LoginView;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
-
 /**
  * Created by Sergio Martinez Rodriguez
  * Date 9/4/16.
@@ -319,14 +316,11 @@ public class UserFeedbackView extends DialogFragment implements FeedbackView, Vi
 
     @Override
     public void requestLogin() {
-        LoginView loginView = new LoginView(AppliverySdk.getCurrentActivity(), new Function0<Unit>() {
-            @Override
-            public Unit invoke() {
-                takeDataFromScreen();
-                return null;
-            }
+        LoginView loginView = new LoginView(AppliverySdk.getCurrentActivity(), () -> {
+            takeDataFromScreen();
+            return null;
         });
-        loginView.getPresenter().requestLogin();
+        loginView.show();
     }
 
     @Override

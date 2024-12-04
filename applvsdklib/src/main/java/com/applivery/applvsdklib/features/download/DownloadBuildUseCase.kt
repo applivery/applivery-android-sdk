@@ -86,10 +86,8 @@ class DownloadBuildUseCase(
     }
 
     private fun showLogin() {
-        val loginView = LoginView(AppliverySdk.getCurrentActivity()) {
-            updateApp()
-        }
-        loginView.presenter.requestLogin()
+        val loginView = LoginView(AppliverySdk.getCurrentActivity(), ::updateApp)
+        loginView.show()
     }
 
     private fun handleError(exception: HttpException) {

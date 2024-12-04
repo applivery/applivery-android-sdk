@@ -97,6 +97,21 @@ class AppliveryApplication : Application() {
 }
  ```
 
+For private Applivery instances, tenants can be configured passing it as parameter in the `Applivery.init()` method:
+
+ ```kotlin
+class AppliveryApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        if (BuildConfig.BUILD_TYPE != "release") {
+            Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN, "tenant")
+        }
+    }
+}
+ ```
+
 This method is intended to initialize the Applivery SDK. The only thing you have to take care about is that this call **MUST** be performed in App's `onCreate()` Method.
  
 **IMPORTANT: Don't init Applivery on `release` builds** 

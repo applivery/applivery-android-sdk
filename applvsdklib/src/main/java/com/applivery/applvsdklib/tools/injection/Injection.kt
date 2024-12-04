@@ -17,8 +17,8 @@ package com.applivery.applvsdklib.tools.injection
 
 import com.applivery.applvsdklib.domain.login.BindUserInteractor
 import com.applivery.applvsdklib.domain.login.GetUserProfileInteractor
-import com.applivery.applvsdklib.domain.login.LoginInteractor
 import com.applivery.applvsdklib.domain.login.UnBindUserInteractor
+import com.applivery.applvsdklib.features.auth.GetAuthenticationUriUseCase
 import com.applivery.applvsdklib.tools.executor.InteractorExecutor
 import com.applivery.applvsdklib.tools.executor.MainThread
 import com.applivery.applvsdklib.tools.executor.MainThreadImp
@@ -33,7 +33,11 @@ import com.applivery.data.AppliveryApiService
 internal object Injection {
 
     fun provideLoginPresenter(): LoginPresenter {
-        return LoginPresenter(provideLoginInteractor())
+        return LoginPresenter(
+            getAuthenticationUri = GetAuthenticationUriUseCase.getInstance(),
+            sessionManager = provideSessionManager(),
+            preferencesManager = providePreferencesManager()
+        )
     }
 
     fun provideFeedbackPresenter(feedbackView: FeedbackView): UserFeedbackPresenter {
@@ -42,22 +46,6 @@ internal object Injection {
             provideSessionManager(),
             provideGetUserProfileInteractor(),
             providePreferencesManager()
-        )
-    }
-
-    private fun provideLoginInteractor(): LoginInteractor {
-        val interactorExecutor = provideInteractorExecutor()
-        val mainThread = provideMainThread()
-        val apiService = AppliveryApiService.getInstance()
-        val sessionManager = provideSessionManager()
-        val preferencesManager = providePreferencesManager()
-
-        return LoginInteractor(
-            interactorExecutor,
-            mainThread,
-            apiService,
-            sessionManager,
-            preferencesManager
         )
     }
 
