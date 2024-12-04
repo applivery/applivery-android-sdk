@@ -49,7 +49,7 @@ android {
     buildTypes {
         debug {
             buildConfigField STRING, "API_URL", "\"https://sdk-api.${tenantPlaceholder}applivery.io/\""
-            buildConfigField STRING, "DOWNLOAD_API_URL", "\"https://sdk-api.${tenantPlaceholder}applivery.io/\""
+            buildConfigField STRING, "DOWNLOAD_API_URL", "\"https://download-api.${tenantPlaceholder}applivery.io/\""
         }
 
         prerelease {

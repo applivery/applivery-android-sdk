@@ -41,6 +41,7 @@ class ShowErrorAlert {
                     }
                 AppliverySdk.Logger.loge(error.message)
             }
+
             else -> showAlertDialog(error.message)
         }
     } else {
@@ -83,6 +84,6 @@ class ShowErrorAlert {
         val loginView = LoginView(activity) {
             AppliverySdk.updateAppConfig()
         }
-        loginView.presenter.requestLogin()
+        loginView.show()
     }
 }
