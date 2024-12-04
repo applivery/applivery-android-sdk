@@ -19,7 +19,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
@@ -43,7 +45,7 @@ class LoginActivity : ComponentActivity() {
                 javaScriptEnabled = true
                 allowFileAccess = false
                 allowContentAccess = false
-                cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
+                cacheMode = WebSettings.LOAD_NO_CACHE
                 databaseEnabled = true
                 domStorageEnabled = true
                 userAgentString = "applivery-sdk-android"
@@ -60,6 +62,7 @@ class LoginActivity : ComponentActivity() {
                 }
             )
         }
+        CookieManager.getInstance().removeAllCookie()
 
         lifecycleScope.launch {
             val uri = presenter.getAuthenticationUri().getOrNull()?.uri ?: return@launch
