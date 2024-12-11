@@ -30,7 +30,25 @@
 
     <application android:supportsRtl="true">
 
-        <activity android:name=".ui.views.login.LoginActivity" />
+        <activity
+            android:name=".ui.views.login.LoginActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboard|keyboardHidden"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.Translucent.NoTitleBar" />
+
+        <activity
+            android:name=".ui.views.login.RedirectUriReceiverActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="${appliveryAuthRedirectScheme}" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name=".tools.androidimplementations.AppliveryFileProviderLeg"

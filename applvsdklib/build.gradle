@@ -77,7 +77,9 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     implementation "com.karumi:dexter:${dexterVersion}"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleScopeVersion}"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-common-java8:${lifecycleVersion}"
+    implementation "androidx.browser:browser:${browserVersion}"
 
     // Test dependencies
     testImplementation "junit:junit:${junitVersion}"
