@@ -113,9 +113,41 @@ class AppliveryApplication : Application() {
  ```
 
 This method is intended to initialize the Applivery SDK. The only thing you have to take care about is that this call **MUST** be performed in App's `onCreate()` Method.
- 
-**IMPORTANT: Don't init Applivery on `release` builds** 
- 
+
+**IMPORTANT: Don't init Applivery on `release` builds**
+
+#### Auth configuration
+
+In order to configure SDK authentication flow, you have to define a URL redirect schema unique to your application so we can callback the app when authentication flow completes.
+
+First, init the SDK using the init method that accepts a `redirectScheme` parameter:
+
+ ```kotlin
+class AppliveryApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        if (BuildConfig.BUILD_TYPE != "release") {
+            Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN, "tenant" /*optional*/, "redirectScheme")
+        }
+    }
+}
+ ```
+
+Next, define a new Manifest placeholder inside you app's build gradle file with the same scheme used in the init method:
+
+```groovy
+manifestPlaceholders = [appliveryAuthRedirectScheme: "${customScheme}"]
+```
+Scheme must be a custom scheme in order to ensure ir remains unique (typically your applicationId).
+
+If you are not using Applivery authentication just leave the field empty and use a constructor that does not accept this parameter.
+
+```groovy
+manifestPlaceholders = [appliveryAuthRedirectScheme: ""]
+```
+
 ### Step 2
 Once initialized the SDK and **once your App is stable in the Home Screen** you have to call proactivelly the following method in order to check for new updates:
 ```kotlin

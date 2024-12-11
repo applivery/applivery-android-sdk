@@ -20,7 +20,7 @@ buildscript {
         versions = [
                 minSdk    : 16,
                 targetSdk : 29,
-                compileSdk: 31,
+                compileSdk: 33,
         ]
     }
     repositories {
@@ -57,5 +57,5 @@ apply from: "${rootDir}/scripts/publish-root.gradle"
 
 ext {
     PUBLISH_GROUP_ID = 'com.applivery'
-    PUBLISH_VERSION = '3.7.0'
+    PUBLISH_VERSION = '3.8.0'
 }

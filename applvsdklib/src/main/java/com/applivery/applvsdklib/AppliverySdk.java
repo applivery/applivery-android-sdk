@@ -19,8 +19,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -74,14 +76,14 @@ public class AppliverySdk {
     private static Boolean checkForUpdatesBackground = BuildConfig.CHECK_FOR_UPDATES_BACKGROUND;
     private static Boolean isUpdating = false;
 
-    public static synchronized void sdkInitialize(Application app, String appToken, String tenant) {
-        init(app, appToken, tenant);
+    public static synchronized void sdkInitialize(Application app, String appToken, String tenant, String redirectScheme) {
+        init(app, appToken, tenant, redirectScheme);
     }
 
-    private static void init(Application app, String appToken, String tenant) {
+    private static void init(Application app, String appToken, String tenant, String redirectScheme) {
         if (!sdkInitialized) {
             sdkInitialized = true;
-            initializeAppliveryConstants(app, appToken, tenant);
+            initializeAppliveryConstants(app, appToken, tenant, redirectScheme);
             app.registerActivityLifecycleCallbacks(new AppliveryLifecycleCallbacks());
             registerActivityLifecyleCallbacks(app);
             obtainAppConfig(false);
@@ -108,7 +110,7 @@ public class AppliverySdk {
         return isUpdating;
     }
 
-    private static void initializeAppliveryConstants(Application app, String appToken, String tenant) {
+    private static void initializeAppliveryConstants(Application app, String appToken, String tenant, String redirectScheme) {
 
         //region validate some requirements
         Context applicationContext = Validate.notNull(app, "Application").getApplicationContext();
@@ -118,6 +120,15 @@ public class AppliverySdk {
 
         AppliveryDataManager.INSTANCE.setAppToken(appToken);
         AppliveryDataManager.INSTANCE.setTenant(tenant);
+        AppliveryDataManager.INSTANCE.setRedirectScheme(redirectScheme);
+
+        if (redirectScheme != null && !isRedirectSchemeRegistered(applicationContext, redirectScheme)) {
+            throw new RuntimeException(
+                    "redirectScheme is not handled by any activity in this app! "
+                            + "Ensure that appliveryAuthRedirectScheme in your build.gradle file "
+                            + "is correctly configured, or that an appropriate intent filter "
+                            + "exists in your app manifest.");
+        }
 
         AppliverySdk.applicationContext = applicationContext;
 
@@ -334,6 +345,19 @@ public class AppliverySdk {
                     }
                 }
         );
+    }
+
+
+    private static boolean isRedirectSchemeRegistered(Context context, String scheme) {
+        // ensure that the redirect URI declared in the configuration is handled by some activity
+        // in the app, by querying the package manager speculatively
+        Intent redirectIntent = new Intent();
+        redirectIntent.setPackage(context.getPackageName());
+        redirectIntent.setAction(Intent.ACTION_VIEW);
+        redirectIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+        redirectIntent.setData(new Uri.Builder().scheme(scheme).build());
+
+        return !context.getPackageManager().queryIntentActivities(redirectIntent, 0).isEmpty();
     }
 
 
