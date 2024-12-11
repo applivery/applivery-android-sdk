@@ -15,10 +15,12 @@
  */
 package com.applivery.applvsdklib.ui.views.login
 
+import android.net.Uri
+import androidx.core.net.toUri
 import com.applivery.applvsdklib.features.auth.GetAuthenticationUriUseCase
+import com.applivery.base.AppliveryDataManager
 import com.applivery.base.domain.PreferencesManager
 import com.applivery.base.domain.SessionManager
-import com.applivery.base.domain.model.AuthenticationUri
 
 class LoginPresenter(
     private val getAuthenticationUri: GetAuthenticationUriUseCase,
@@ -26,8 +28,13 @@ class LoginPresenter(
     private val preferencesManager: PreferencesManager
 ) {
 
-    suspend fun getAuthenticationUri(): Result<AuthenticationUri> {
-        return getAuthenticationUri.invoke()
+    suspend fun getAuthenticationUri(): Result<Uri> {
+        return getAuthenticationUri.invoke().map {
+            it.uri.toUri()
+                .buildUpon()
+                .appendQueryParameter("scheme", AppliveryDataManager.redirectScheme)
+                .build()
+        }
     }
 
     fun onAuthenticated(bearer: String) {
