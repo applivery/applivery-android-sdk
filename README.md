@@ -145,7 +145,7 @@ Scheme must be a custom scheme in order to ensure ir remains unique (typically y
 If you are not using Applivery authentication just leave the field empty and use a constructor that does not accept this parameter.
 
 ```groovy
-manifestPlaceholders = [appliveryAuthRedirectScheme: "${customScheme}"]
+manifestPlaceholders = [appliveryAuthRedirectScheme: ""]
 ```
 
 ### Step 2
