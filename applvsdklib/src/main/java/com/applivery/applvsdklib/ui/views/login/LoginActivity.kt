@@ -89,11 +89,12 @@ class LoginActivity : ComponentActivity() {
 
         fun getIntent(context: Context): Intent {
             return Intent(context, LoginActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
         fun createResponseHandlingIntent(context: Context, responseUri: Uri?): Intent {
-            return getIntent(context).setData(responseUri)
+            return getIntent(context)
+                .setData(responseUri)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
     }
 }
