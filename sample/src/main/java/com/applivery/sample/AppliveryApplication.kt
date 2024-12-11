@@ -25,7 +25,7 @@ class AppliveryApplication : Application() {
         appPreferences = AppPreferences(applicationContext)
 
         if (BuildConfig.BUILD_TYPE != "release") {
-            Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN, /*tenant*/null, packageName)
+            Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN, /*tenant*/null, BuildConfig.CustomRedirectScheme)
             Applivery.setCheckForUpdatesBackground(appPreferences.checkForUpdatesBackground)
         }
     }

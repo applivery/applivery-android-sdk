@@ -36,6 +36,8 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        buildConfigField STRING, "CustomRedirectScheme", "\"$applicationId\""
+
         manifestPlaceholders = [appliveryAuthRedirectScheme: "$applicationId"]
     }
 
