@@ -21,5 +21,5 @@ object AppliveryDataManager {
     var appData: AppData? = null
     var appToken: String? = null
     var tenant: String? = null
-    var redirectScheme: String? = null
+    var callingPackage: String? = null
 }
