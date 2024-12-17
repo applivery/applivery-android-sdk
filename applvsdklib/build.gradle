@@ -26,8 +26,6 @@ ext {
 
 apply from: "${rootDir}/scripts/publish-module.gradle"
 
-def BOOLEAN = "Boolean"
-
 android {
     namespace 'com.applivery.applvsdklib'
 
@@ -37,7 +35,11 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
 
-        buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
+        buildConfigField "Boolean", "CHECK_FOR_UPDATES_BACKGROUND", 'false'
+
+        var authSchemeSuffix = "applivery.auth"
+        buildConfigField "String", "AuthSchemeSuffix", "\"$authSchemeSuffix\""
+        manifestPlaceholders = [authSchemeSuffix: "$authSchemeSuffix"]
     }
 
     buildTypes {

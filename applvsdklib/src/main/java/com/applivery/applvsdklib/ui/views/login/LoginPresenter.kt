@@ -17,6 +17,7 @@ package com.applivery.applvsdklib.ui.views.login
 
 import android.net.Uri
 import androidx.core.net.toUri
+import com.applivery.applvsdklib.BuildConfig
 import com.applivery.applvsdklib.features.auth.GetAuthenticationUriUseCase
 import com.applivery.base.AppliveryDataManager
 import com.applivery.base.domain.PreferencesManager
@@ -29,10 +30,12 @@ class LoginPresenter(
 ) {
 
     suspend fun getAuthenticationUri(): Result<Uri> {
+        val applicationId = AppliveryDataManager.callingPackage
+        val redirectScheme = "${applicationId}.${BuildConfig.AuthSchemeSuffix}"
         return getAuthenticationUri.invoke().map {
             it.uri.toUri()
                 .buildUpon()
-                .appendQueryParameter("scheme", AppliveryDataManager.redirectScheme)
+                .appendQueryParameter("scheme", redirectScheme)
                 .build()
         }
     }
