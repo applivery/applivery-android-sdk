@@ -34,6 +34,7 @@ android {
     defaultConfig {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
+        consumerProguardFiles 'consumer-rules.pro'
 
         buildConfigField "Boolean", "CHECK_FOR_UPDATES_BACKGROUND", 'false'
 
