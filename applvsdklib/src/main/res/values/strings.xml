@@ -69,7 +69,7 @@
 
     <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
 
-    <string name="appliveryUpdateMsg">There is a new version available for downloadInfo. Do you want to update to the latest version?</string>
+    <string name="appliveryUpdateMsg">There is a new version available for download. Do you want to update to the latest version?</string>
     <string name="applivery_error_subscription">SDK usage is not allowed under your current subscription plan. Please upgrade or contact us at support@applivery.com</string>
 
     <string name="appliveryMustUpdateAppLocked">Sorry this App is outdated. Please, update the App to continue using it</string>

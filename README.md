@@ -214,7 +214,7 @@ In order to customize the appearance of the UI, you can make a new resource file
   <color name="applivery_drawing_color">#ffbb33</color>
 
   <string name="appliveryUpdate">Update!</string>
-  <string name="appliveryUpdateMsg">There is a new version available for downloadInfo! Do you want to update to the latest version?</string>
+  <string name="appliveryUpdateMsg">There is a new version available for download! Do you want to update to the latest version?</string>
   <string name="appliveryMustUpdateAppLocked">You must update.</string>
   
   <string name="appliveryLoginFailDielogTitle">Invalid credentials</string>

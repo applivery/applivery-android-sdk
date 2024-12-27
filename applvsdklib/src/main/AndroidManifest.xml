@@ -34,8 +34,7 @@
             android:name=".ui.views.login.LoginActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboard|keyboardHidden"
             android:exported="false"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.AppCompat.Translucent.NoTitleBar" />
+            android:launchMode="singleTask"/>
 
         <activity
             android:name=".ui.views.login.RedirectUriReceiverActivity"
