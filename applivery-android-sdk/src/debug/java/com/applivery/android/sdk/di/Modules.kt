@@ -24,6 +24,7 @@ import com.applivery.android.sdk.domain.InstallationIdProvider
 import com.applivery.android.sdk.domain.InstallationIdProviderImpl
 import com.applivery.android.sdk.domain.Logger
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
+import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
 import com.applivery.android.sdk.domain.usecases.GetAppConfig
 import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
@@ -124,6 +125,7 @@ internal val domainModules = module {
     factoryOf(::AndroidHostAppPackageInfoProvider).bind<HostAppPackageInfoProvider>()
     factoryOf(::AndroidSharedPreferencesProvider).bind<SharedPreferencesProvider>()
     factoryOf(::InstallationIdProviderImpl).bind<InstallationIdProvider>()
+    factoryOf(::UnifiedErrorHandler)
 }
 
 internal val appModules = module {
