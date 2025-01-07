@@ -5,11 +5,24 @@ import android.app.Application
 import android.os.Bundle
 import java.lang.ref.WeakReference
 
-class CurrentActivityProvider : Application.ActivityLifecycleCallbacks {
+internal interface CurrentActivityProvider {
+
+    val activity: Activity?
+
+    fun start()
+}
+
+internal class CurrentActivityProviderImpl(
+    private val application: Application
+) : CurrentActivityProvider, Application.ActivityLifecycleCallbacks {
 
     private var activityRef = WeakReference<Activity>(null)
 
-    val activity: Activity? get() = activityRef.get()
+    override val activity: Activity? get() = activityRef.get()
+
+    override fun start() {
+        application.registerActivityLifecycleCallbacks(this)
+    }
 
     override fun onActivityPaused(activity: Activity) = Unit
 

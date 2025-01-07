@@ -1,148 +1,123 @@
 package com.applivery.android.sdk.data.service
 
 import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
-import com.applivery.android.sdk.data.base.JsonMapper
 import com.applivery.android.sdk.data.models.ApiError
-import com.applivery.android.sdk.data.models.ApiErrorSchema
-import okhttp3.Request
-import okio.Timeout
-import retrofit2.Call
-import retrofit2.CallAdapter
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import retrofit2.Call
+import retrofit2.CallAdapter
+import retrofit2.Retrofit
 
 /**
- * [CallAdapter.Factory] that returns [EitherCallAdapter] or [EitherCallSuspendAdapter]
- * for calls typed with [Either]
+ * A [CallAdapter.Factory] which supports suspend + [Either] as the return type
+ *
+ * Adding this to [Retrofit] will enable you to return [Either] from your service methods.
+ *
+ * ```kotlin
+ * import arrow.core.Either
+ * import arrow.retrofit.adapter.either.ResponseE
+ * import retrofit2.http.GET
+ *
+ * data class User(val name: String)
+ * data class ErrorBody(val msg: String)
+ *
+ * interface MyService {
+ *
+ *   @GET("/user/me")
+ *   suspend fun getUser(): Either<ErrorBody, User>
+ *
+ * }
+ * ```
+ * <!--- KNIT example-arrow-retrofit-01.kt -->
+ *
+ * Using [Either] as the return type means that 200 status code and HTTP errors
+ * return a value, other exceptions will throw.
+ *
+ * If you want an adapter that never throws but instead wraps all errors (including no network,
+ * timeout, malformed JSON) in a dedicated type then define [CallError] as your error type
+ * argument:
+ *
+ * ```kotlin
+ * import arrow.core.Either
+ * import arrow.retrofit.adapter.either.networkhandling.CallError
+ * import retrofit2.http.Body
+ * import retrofit2.http.GET
+ * import retrofit2.http.POST
+ *
+ * data class User(val name: String)
+ *
+ * interface MyService {
+ *
+ *   @GET("/user/me")
+ *   suspend fun getUser(): Either<CallError, User>
+ *
+ *   // Set the expected response type as Unit if you expect a null response body
+ *   // (e.g. for 204 No Content response)
+ *   @POST("/")
+ *   suspend fun postSomething(@Body something: String): Either<CallError, Unit>
+ * }
+ * ```
+ * <!--- KNIT example-arrow-retrofit-02.kt -->
  */
-class EitherCallAdapterFactory(private val jsonMapper: JsonMapper) : CallAdapter.Factory() {
+class EitherCallAdapterFactory : CallAdapter.Factory() {
+    companion object {
+        fun create(): EitherCallAdapterFactory = EitherCallAdapterFactory()
+    }
 
     override fun get(
         returnType: Type,
         annotations: Array<Annotation>,
         retrofit: Retrofit
     ): CallAdapter<*, *>? {
+        val rawType = getRawType(returnType)
 
-        /*Fail fast if the type is not a ParameterizedType*/
-        if (returnType !is ParameterizedType) return null
-
-        /*Check what is our container type. If its of type Call and parameterized with Either, it
-         means it comes from a suspend fun, so the adapter needs to handle it*/
-        if (getRawType(returnType) == Call::class.java) {
-            val enclosingType = getParameterUpperBound(0, returnType)
-            if (getRawType(enclosingType) == Either::class.java) {
-                val responseType = getParameterUpperBound(1, enclosingType as ParameterizedType)
-                return EitherCallSuspendAdapter<Any>(responseType, jsonMapper)
-            }
+        if (returnType !is ParameterizedType) {
+            val name = parseTypeName(returnType)
+            throw IllegalArgumentException(
+                "Return type must be parameterized as $name<Foo> or $name<out Foo>"
+            )
         }
 
-        /*The return type is directly Either, so handle it normally*/
-        if (getRawType(returnType) == Either::class.java) {
-            val responseType = getParameterUpperBound(1, returnType)
-            return EitherCallAdapter<Any>(responseType, jsonMapper)
-        }
-
-        return null
-    }
-}
-
-/**
- * [CallAdapter] that wraps call responses into [Either].
- */
-class EitherCallAdapter<T : Any>(
-    private val returnType: Type,
-    private val jsonMapper: JsonMapper
-) : CallAdapter<T, Either<ApiError, T>> {
-
-    override fun adapt(call: Call<T>): Either<ApiError, T> {
-        return runCatching { EitherCallMapper(call, jsonMapper).execute() }.fold(
-            onSuccess = { it.body() ?: ApiError.Internal().left() },
-            onFailure = { ApiError.IO().left() }
-        )
-    }
-
-    override fun responseType(): Type = returnType
-}
-
-/**
- * [CallAdapter] that wraps suspend call responses into [Either].
- */
-class EitherCallSuspendAdapter<T : Any>(
-    private val returnType: Type,
-    private val jsonMapper: JsonMapper
-) : CallAdapter<T, Call<Either<ApiError, T>>> {
-
-    override fun adapt(call: Call<T>): Call<Either<ApiError, T>> {
-        return EitherCallMapper(call, jsonMapper)
-    }
-
-    override fun responseType(): Type = returnType
-}
-
-/**
- * Simple [Call] that allows mapping from source.
- */
-abstract class CallMapper<I, O>(protected val source: Call<I>) : Call<O> {
-
-    final override fun cancel() = source.cancel()
-    final override fun request(): Request = source.request()
-    final override fun isExecuted() = source.isExecuted
-    final override fun isCanceled() = source.isCanceled
-}
-
-/**
- * [CallMapper] implementation that transforms source response to [Either].
- * This mapper *NEVER* returns a unsuccessful call nor invokes [Callback.onFailure] as
- * all errors are driven through [arrow.core.Either.Left] instances.
- */
-class EitherCallMapper<T : Any>(
-    source: Call<T>,
-    private val jsonMapper: JsonMapper
-) : CallMapper<T, Either<ApiError, T>>(source) {
-
-    private fun <T : Any> Response<T>.handle(): Either<ApiError, T> {
-        return if (isSuccessful) {
-            body()?.right() ?: ApiError.Internal().left()
-        } else {
-            val errorSchema = jsonMapper.run { errorBody()?.string()?.fromJson<ApiErrorSchema>() }
-            errorSchema?.toApiError()?.left() ?: ApiError.Internal().left()
+        return when (rawType) {
+            Call::class.java -> eitherAdapter(returnType, retrofit)
+            else -> null
         }
     }
 
-    override fun execute(): Response<Either<ApiError, T>> {
-        return runCatching { source.execute() }.fold(
-            onSuccess = { Response.success(it.handle()) },
-            onFailure = { Response.success(ApiError.IO().left()) }
-        )
-    }
-
-    override fun enqueue(callback: Callback<Either<ApiError, T>>) {
-
-        source.enqueue(object : Callback<T> {
-
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                callback.onResponse(
-                    this@EitherCallMapper,
-                    Response.success(response.handle())
-                )
+    private fun eitherAdapter(
+        returnType: ParameterizedType,
+        retrofit: Retrofit
+    ): CallAdapter<Type, out Call<out Any>>? {
+        val wrapperType = getParameterUpperBound(0, returnType)
+        return when (getRawType(wrapperType)) {
+            Either::class.java -> {
+                val (errorType, bodyType) = extractErrorAndReturnType(wrapperType, returnType)
+                if (errorType == ApiError::class.java) {
+                    NetworkEitherCallAdapter(bodyType)
+                } else {
+                    ArrowEitherCallAdapter<Any, Type>(retrofit, errorType, bodyType)
+                }
             }
 
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                callback.onResponse(
-                    this@EitherCallMapper,
-                    Response.success(ApiError.IO().left())
-                )
-            }
-        })
+            else -> null
+        }
     }
 
-    override fun clone(): EitherCallMapper<T> = EitherCallMapper(source.clone(), jsonMapper)
-
-    override fun timeout(): Timeout = source.timeout()
+    private fun extractErrorAndReturnType(
+        wrapperType: Type,
+        returnType: ParameterizedType
+    ): Pair<Type, Type> {
+        if (wrapperType !is ParameterizedType) {
+            val name = parseTypeName(returnType)
+            throw IllegalArgumentException(
+                "Return type must be parameterized as " +
+                    "$name<ErrorBody, ResponseBody> or $name<out ErrorBody, out ResponseBody>"
+            )
+        }
+        val errorType = getParameterUpperBound(0, wrapperType)
+        val bodyType = getParameterUpperBound(1, wrapperType)
+        return Pair(errorType, bodyType)
+    }
 }
 
+private fun parseTypeName(type: Type): String = type.toString().split(".").last()

@@ -1,71 +1,45 @@
 package com.applivery.android.sdk
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.applivery.android.sdk.di.AppliveryDiContext
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.di.Properties
-import com.applivery.android.sdk.di.domainModules
-import com.applivery.android.sdk.di.networkModules
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.updates.IsUpToDateCallback
-import com.applivery.android.sdk.updates.UpdatesLifecycleObserver
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.get
 
 internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
-    private val currentActivityProvider: CurrentActivityProvider = CurrentActivityProvider()
-    private val processLifecycle get() = ProcessLifecycleOwner.get().lifecycle
-    private val updatesLifecycleObserver = UpdatesLifecycleObserver()
+    private val mainScope = MainScope()
 
-    override fun init(context: Context, appToken: String) {
-        require(context.applicationContext is Application) { "Application context expected" }
-        require(appToken.isNotBlank()) { "Empty appToken received" }
-
-        val app = context.applicationContext as Application
-        AppliveryDiContext.koinApp.apply {
-            androidContext(app)
-            // TODO: modules
-            modules(
-                networkModules,
-                domainModules
-            )
-            // TODO: map properties from build config correctly
-            properties(
-                mapOf(
-                    Properties.AppToken to appToken,
-                    Properties.ApiUrl to "https://sdk-api.applivery.io"
-                )
-            )
-        }
-
-        app.registerActivityLifecycleCallbacks(currentActivityProvider)
+    override fun init(appToken: String) {
+        initialize(appToken, tenant = null)
     }
 
-    override fun checkForUpdatesInBackground(check: Boolean) {
-        processLifecycle.removeObserver(updatesLifecycleObserver)
-        if (check) {
-            processLifecycle.addObserver(updatesLifecycleObserver)
-        }
-    }
-
-    override fun checkForUpdates() {
-        TODO("Not yet implemented")
+    override fun init(appToken: String, tenant: String) {
+        require(tenant.isNotBlank()) { "Empty tenant received" }
+        initialize(appToken, tenant)
     }
 
     override fun isUpToDate(callback: IsUpToDateCallback) {
-        // TODO: create a scope and offer another way to work with coroutines
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                val result = get<IsUpToDateUseCase>()()
-                callback.onResponse(result.getOrNull() ?: false)
-            }
+        mainScope.launch { callback.onResponse(isUpToDate()) }
+    }
+
+    override suspend fun isUpToDate(): Boolean {
+        return get<IsUpToDateUseCase>().invoke().getOrNull() == true
+    }
+
+    private fun initialize(appToken: String, tenant: String?) {
+        require(appToken.isNotBlank()) { "Empty appToken received" }
+
+        AppliveryDiContext.koinApp.apply {
+            properties(
+                mapOf(
+                    Properties.AppToken to appToken,
+                    Properties.AppTenant to tenant.orEmpty()
+                )
+            )
         }
     }
 }

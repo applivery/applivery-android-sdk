@@ -1,17 +1,16 @@
 package com.applivery.android.sdk
 
-import android.content.Context
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 
 interface Applivery {
 
-    fun init(context: Context, appToken: String)
+    fun init(appToken: String)
 
-    fun checkForUpdatesInBackground(check: Boolean)
-
-    fun checkForUpdates()
+    fun init(appToken: String, tenant: String)
 
     fun isUpToDate(callback: IsUpToDateCallback)
+
+    suspend fun isUpToDate(): Boolean
 
     companion object {
         private var sInstance: Applivery? = null
@@ -20,8 +19,12 @@ interface Applivery {
             return requireNotNull(sInstance) { "Applivery SDK not initialized. Did you forget to call Applivery.init?" }
         }
 
-        fun init(context: Context, appToken: String) {
-            sInstance = AppliverySdk().apply { init(context, appToken) }
+        fun init(appToken: String) {
+            sInstance = AppliverySdk().apply { init(appToken) }
+        }
+
+        fun init(appToken: String, tenant: String) {
+            sInstance = AppliverySdk().apply { init(appToken, tenant) }
         }
     }
 }

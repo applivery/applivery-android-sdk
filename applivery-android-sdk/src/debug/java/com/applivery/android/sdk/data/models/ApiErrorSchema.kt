@@ -7,7 +7,7 @@ sealed class ApiError(message: String?) : Throwable(message){
     class Unauthorized(message: String?) : ApiError(message)
     class Subscription(message: String?) : ApiError(message)
     class Internal(message: String? = null) : ApiError(message)
-    class IO : ApiError(null)
+    class IO(message: String? = null) : ApiError(message)
 }
 
 // TODO: test with real call if this is the expected schema
@@ -29,4 +29,6 @@ data class ApiErrorSchema(
 private const val LIMIT_EXCEEDED_ERROR = 5003
 private const val UNAUTHORIZED_ERROR = 4004
 private const val SUBSCRIPTION_ERROR = 5004
+
+fun ApiError?.orDefault() : ApiError = this ?: ApiError.Internal()
 
