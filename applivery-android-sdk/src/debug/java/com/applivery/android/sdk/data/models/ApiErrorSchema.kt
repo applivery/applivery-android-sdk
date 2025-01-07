@@ -2,7 +2,7 @@ package com.applivery.android.sdk.data.models
 
 import com.google.gson.annotations.SerializedName
 
-sealed class ApiError(message: String?) : Throwable(message){
+sealed class ApiError(val message: String?) {
     class LimitExceeded(message: String?) : ApiError(message)
     class Unauthorized(message: String?) : ApiError(message)
     class Subscription(message: String?) : ApiError(message)
@@ -10,7 +10,10 @@ sealed class ApiError(message: String?) : Throwable(message){
     class IO(message: String? = null) : ApiError(message)
 }
 
-// TODO: test with real call if this is the expected schema
+class ApiErrorContainerSchema(
+    @SerializedName("error") val data: ApiErrorSchema?
+)
+
 data class ApiErrorSchema(
     @SerializedName("code") val code: Int,
     @SerializedName("message") val message: String,
@@ -30,5 +33,5 @@ private const val LIMIT_EXCEEDED_ERROR = 5003
 private const val UNAUTHORIZED_ERROR = 4004
 private const val SUBSCRIPTION_ERROR = 5004
 
-fun ApiError?.orDefault() : ApiError = this ?: ApiError.Internal()
+fun ApiError?.orDefault(): ApiError = this ?: ApiError.Internal()
 

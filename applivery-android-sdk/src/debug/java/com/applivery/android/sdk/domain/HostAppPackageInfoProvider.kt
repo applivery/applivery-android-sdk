@@ -5,12 +5,12 @@ import android.os.Build
 import com.applivery.android.sdk.domain.model.PackageInfo
 import android.content.pm.PackageInfo as AndroidPackageInfo
 
-interface HostAppPackageInfoProvider {
+internal interface HostAppPackageInfoProvider {
 
     val packageInfo: PackageInfo
 }
 
-class AndroidHostAppPackageInfoProvider(
+internal class AndroidHostAppPackageInfoProvider(
     private val context: Context
 ) : HostAppPackageInfoProvider {
 

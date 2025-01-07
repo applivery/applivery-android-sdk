@@ -3,12 +3,12 @@ package com.applivery.android.sdk.domain
 import androidx.core.content.edit
 import java.util.UUID
 
-interface InstallationIdProvider {
+internal interface InstallationIdProvider {
 
     val installationId: String
 }
 
-class InstallationIdProviderImpl(
+internal class InstallationIdProviderImpl(
     private val sharedPreferencesProvider: SharedPreferencesProvider
 ) : InstallationIdProvider {
 

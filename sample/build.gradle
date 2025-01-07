@@ -39,7 +39,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
+            buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"yK6HLUIwVhlnrWohfXfMkt8y\""
             enableUnitTestCoverage true
             enableAndroidTestCoverage true
         }
@@ -66,6 +66,16 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17
     }
 }
 

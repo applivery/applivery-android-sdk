@@ -1,11 +1,11 @@
-package com.applivery.android.sdk.data.service
+package com.applivery.android.sdk.data.api.service
 
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.applivery.android.sdk.data.base.JsonMapper
 import com.applivery.android.sdk.data.models.ApiError
-import com.applivery.android.sdk.data.models.ApiErrorSchema
+import com.applivery.android.sdk.data.models.ApiErrorContainerSchema
 import com.applivery.android.sdk.data.models.orDefault
 import com.google.gson.GsonBuilder
 import okhttp3.Request
@@ -46,8 +46,8 @@ private class EitherCall<R>(
                     // Http error response (4xx - 5xx)
                     if (!isSuccessful) {
                         val errorBody = errorBody()?.string().orEmpty()
-                        val error = jsonMapper.run { errorBody.fromJson<ApiErrorSchema>() }
-                        return error?.toApiError().orDefault().left()
+                        val error = jsonMapper.run { errorBody.fromJson<ApiErrorContainerSchema>() }
+                        return error?.data?.toApiError().orDefault().left()
                     }
 
                     // Http success response with body

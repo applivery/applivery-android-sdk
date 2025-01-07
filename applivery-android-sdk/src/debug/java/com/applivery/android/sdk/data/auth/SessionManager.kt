@@ -5,7 +5,7 @@ import androidx.core.content.edit
 import arrow.core.Option
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
 
-interface SessionManager {
+internal interface SessionManager {
 
     val isLoggedIn: Boolean
 
@@ -16,13 +16,13 @@ interface SessionManager {
     fun logOut()
 }
 
-class SessionManagerImpl(
+internal class SessionManagerImpl(
     private val preferencesProvider: SharedPreferencesProvider
 ) : SessionManager {
 
     private val preferences: SharedPreferences get() = preferencesProvider.sharedPreferences
 
-    override val isLoggedIn: Boolean = getToken().isSome()
+    override val isLoggedIn: Boolean get() = getToken().isSome()
 
     override fun saveToken(token: String) {
         preferences.edit { putString(KeyToken, token) }

@@ -1,0 +1,70 @@
+<resources>
+    <string name="applivery_sdk_string_name">Applivery Sdk</string>
+    <string name="applivery_name">Applivery</string>
+    <string name="appliveryUpdate">Update</string>
+    <string name="appliveryLater">Later</string>
+    <string name="applivery_download_message">Current downloadInfo progress…</string>
+    <string name="applivery_download_title">Downloading</string>
+
+    <string name="applivery_continueRequestPermissionAllowedFeedback">All permissions have been allowed</string>
+    <string name="applivery_continueRequestPermissionSettingsDeniedFeedback">SETTINGS</string>
+    <string name="applivery_continueRequestPermissionDeniedFeedback">Write permission denied, this permission is compulsory for downloadInfo and store the new app version.</string>
+    <string name="applivery_continueRequestPermissionRationaleMessage">Permissions denied are necessary for doing some tasks, allow it!</string>
+    <string name="applivery_continueRequestPermissionRationaleTitle">Permission Request</string>
+
+    <string name="applivery_writeOnExternalPermissionAllowedFeedback">Write on external Storage has been allowed</string>
+    <string name="applivery_writeOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
+    <string name="applivery_writeOnExternalPermissionDeniedFeedback">Write on external Storage Permission is necessary for downloading new app</string>
+    <string name="applivery_writeOnExternalPermissionRationaleMessage">Write on external Storage Permission is necessary for downloading new app version, allow it!</string>
+    <string name="applivery_writeOnExternalPermissionRationaleTitle">Permission Request</string>
+
+    <string name="applivery_readOnExternalPermissionAllowedFeedback">Read from external Storage has been allowed</string>
+    <string name="applivery_readOnExternalPermissionSettingsDeniedFeedback">SETTINGS</string>
+    <string name="applivery_readOnExternalPermissionDeniedFeedback">Read from external Storage Permission is necessary for installing downloaded app</string>
+    <string name="applivery_readOnExternalPermissionRationaleMessage">Read from external Storage Permission is necessary for installing downloaded app, allow it!</string>
+    <string name="applivery_readOnExternalPermissionRationaleTitle">Permission Request</string>
+
+    <string name="applivery_readOnScreenshotFolderPermissionAllowedFeedback">Read from external Storage has been allowed</string>
+    <string name="applivery_readOnScreenshotFolderPermissionSettingsDeniedFeedback">SETTINGS</string>
+    <string name="applivery_readOnScreenshotFolderPermissionDeniedFeedback">Read from external Storage Permission is necessary for detecting screenshots</string>
+    <string name="applivery_readOnScreenshotFolderPermissionRationalMessage">Read from external Storage Permission is necessary for detecting screenshots, allow it!</string>
+    <string name="applivery_readOnScreenshotFolderPermissionRationaleTitle">Permission Request</string>
+
+    <string name="applivery_accessNetworkStatePermissionAllowedFeedback">Access network state has been allowed</string>
+    <string name="applivery_accessNetworkStatePermissionSettingsDeniedFeedback">SETTINGS</string>
+    <string name="applivery_accessNetworkStatePermissionDeniedFeedback">Access network state Permission is necessary for sending feedback</string>
+    <string name="applivery_accessNetworkStatePermissionRationalMessage">Access network state Permission is necessary for sending feedback, allow it!</string>
+    <string name="applivery_accessNetworkStatePermissionRationaleTitle">Permission Request</string>
+
+    <string name="appliveryError">Applivery error</string>
+    <string name="appliveryAcceptButton">Accept</string>
+
+    <string name="appliveryBugSelectorText">Bug</string>
+    <string name="appliveryFeedbackSelectorText">Feedback</string>
+    <string name="appliveryFeedbackEmailLabel">Email</string>
+    <string name="appliveryFeedbackEmailHint">Optional email</string>
+    <string name="appliveryFeedbackEmailError">Wrong format</string>
+
+    <string name="appliveryLogoImageDesc">Applivery Logo</string>
+    <string name="appliveryCancelFeedbackButtonDesc">Cancel feedback button</string>
+    <string name="appliverynextFeedbackButtonDesc">Continue with feedback button</string>
+    <string name="appliverySendFeedbackButtonDesc">Send feedback button</string>
+    <string name="appliveryScreenshotImageDesc">Screenshot feedback Image</string>
+
+    <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
+
+    <string name="appliveryUpdateMsg">There is a new version available for download. Do you want to update to the latest version?</string>
+    <string name="applivery_error_subscription">SDK usage is not allowed under your current subscription plan. Please upgrade or contact us at support@applivery.com</string>
+
+    <string name="appliveryMustUpdateAppLocked">Sorry this App is outdated. Please, update the App to continue using it</string>
+    <string name="appliveryMustUpdateAppLockedDefault">Your app is locked, please update…</string>
+    <string name="appliveryUsername">Email</string>
+    <string name="appliveryPassword">Password</string>
+    <string name="appliveryLogin">Login</string>
+    <string name="appliveryCancel">Cancel</string>
+
+    <string name="appliveryLoginFailDielogTitle">Invalid credentials</string>
+    <string name="appliveryLoginFailDielogText">The email or password you entered is not valid</string>
+    <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
+
+</resources>

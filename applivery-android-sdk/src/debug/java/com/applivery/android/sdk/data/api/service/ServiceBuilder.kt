@@ -1,4 +1,4 @@
-package com.applivery.android.sdk.data.service
+package com.applivery.android.sdk.data.api.service
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

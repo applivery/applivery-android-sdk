@@ -5,12 +5,12 @@ import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
 
-interface IsUpToDateUseCase {
+internal interface IsUpToDateUseCase {
 
     suspend operator fun invoke(): Either<DomainError, Boolean>
 }
 
-class IsUpToDate(
+internal class IsUpToDate(
     private val repository: AppliveryRepository,
     private val hostAppPackageInfoProvider: HostAppPackageInfoProvider
 ) : IsUpToDateUseCase {

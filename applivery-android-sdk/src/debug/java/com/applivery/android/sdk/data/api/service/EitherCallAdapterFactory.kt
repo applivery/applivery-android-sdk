@@ -1,4 +1,4 @@
-package com.applivery.android.sdk.data.service
+package com.applivery.android.sdk.data.api.service
 
 import arrow.core.Either
 import com.applivery.android.sdk.data.models.ApiError

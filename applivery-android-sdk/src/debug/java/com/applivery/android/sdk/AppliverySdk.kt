@@ -3,6 +3,7 @@ package com.applivery.android.sdk
 import com.applivery.android.sdk.di.AppliveryDiContext
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.di.Properties
+import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import kotlinx.coroutines.MainScope
@@ -41,5 +42,8 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
                 )
             )
         }
+
+        /*Lets fetch the config to check if configuration is correct*/
+        mainScope.launch { get<GetAppConfigUseCase>().invoke() }
     }
 }

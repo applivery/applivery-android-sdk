@@ -1,4 +1,4 @@
-package com.applivery.android.sdk.data.service
+package com.applivery.android.sdk.data.api.service
 
 import android.os.Build
 import com.applivery.android.sdk.BuildConfig
@@ -8,7 +8,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.util.Locale
 
-class HeadersInterceptor(
+internal class HeadersInterceptor(
     private val packageInfoProvider: HostAppPackageInfoProvider
 ) : Interceptor {
 
