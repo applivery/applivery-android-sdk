@@ -14,36 +14,53 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.applivery.applvsdklib">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <uses-feature
-      android:name="android.hardware.sensor.accelerometer"
-      android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
 
-  <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
-  <!--Using Android M request permissions System-->
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <!--Using Android M request permissions System-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-  <application
-      android:supportsRtl="true">
+    <application android:supportsRtl="true">
 
-    <provider
-        android:name=".tools.androidimplementations.AppliveryFileProviderLeg"
-        android:authorities="${applicationId}.provider"
-        android:exported="false"
-        android:grantUriPermissions="true">
+        <activity
+            android:name=".ui.views.login.LoginActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboard|keyboardHidden"
+            android:exported="false"
+            android:launchMode="singleTask"/>
 
-      <meta-data
-          android:name="android.support.FILE_PROVIDER_PATHS"
-          android:resource="@xml/applivery_provider_paths_leg"/>
+        <activity
+            android:name=".ui.views.login.RedirectUriReceiverActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-    </provider>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-  </application>
+                <data android:scheme="${applicationId}.${authSchemeSuffix}" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name=".tools.androidimplementations.AppliveryFileProviderLeg"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/applivery_provider_paths_leg" />
+
+        </provider>
+
+    </application>
 
 </manifest>

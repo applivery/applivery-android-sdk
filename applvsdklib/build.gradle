@@ -25,25 +25,33 @@ ext {
 
 apply from: "${rootDir}/scripts/publish-module.gradle"
 
-def BOOLEAN = "Boolean"
-
 android {
-    compileSdkVersion versions.compileSdk
+    namespace 'com.applivery.applvsdklib'
+
+    compileSdkVersion androidCompileSdk
 
     defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+        consumerProguardFiles 'consumer-rules.pro'
 
-        buildConfigField BOOLEAN, "CHECK_FOR_UPDATES_BACKGROUND", 'false'
+        buildConfigField "Boolean", "CHECK_FOR_UPDATES_BACKGROUND", 'false'
+
+        var authSchemeSuffix = "applivery.auth"
+        buildConfigField "String", "AuthSchemeSuffix", "\"$authSchemeSuffix\""
+        manifestPlaceholders = [authSchemeSuffix: "$authSchemeSuffix"]
     }
 
     buildTypes {
+
         debug {
-            testCoverageEnabled true
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
         }
 
         prerelease {
-            testCoverageEnabled true
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
         }
 
         release {
@@ -51,8 +59,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    lintOptions {
+    lint {
         abortOnError false
     }
 }
@@ -72,6 +79,9 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     implementation "com.karumi:dexter:${dexterVersion}"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-common-java8:${lifecycleVersion}"
+    implementation "androidx.browser:browser:${browserVersion}"
 
     // Test dependencies
     testImplementation "junit:junit:${junitVersion}"

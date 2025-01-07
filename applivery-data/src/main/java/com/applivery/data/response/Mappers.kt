@@ -1,5 +1,6 @@
 package com.applivery.data.response
 
+import com.applivery.base.domain.model.AuthenticationUri
 import com.applivery.base.domain.model.UserProfile
 import com.applivery.base.domain.model.UserType
 import java.text.SimpleDateFormat
@@ -25,4 +26,8 @@ fun UserEntity.toDomain(): UserProfile = UserProfile(
 fun ApiUserType.toDomain(): UserType = when (this) {
     ApiUserType.User -> UserType.User
     ApiUserType.Employee -> UserType.Employee
+}
+
+fun AuthenticationUriApi.toDomain(): AuthenticationUri? {
+    return AuthenticationUri(uri ?: return null)
 }

@@ -20,6 +20,7 @@ apply from: '../dependencies.gradle'
 apply from: rootProject.file('gradle/checkstyle.gradle')
 
 def STRING = "String"
+def tenantPlaceholder = "{tenant}"
 
 ext {
     PUBLISH_ARTIFACT_ID = 'applivery-data'
@@ -27,34 +28,37 @@ ext {
 apply from: "${rootDir}/scripts/publish-module.gradle"
 
 android {
-    compileSdkVersion versions.compileSdk
+    namespace 'com.applivery.data'
+
+    compileSdkVersion androidCompileSdk
 
     defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
 
         buildConfigField STRING, "LibraryVersion", "\"$PUBLISH_VERSION\""
-        buildConfigField STRING, "MinSdk", "\"$versions.minSdk\""
-        buildConfigField STRING, "TargetSdk", "\"$versions.targetSdk\""
+        buildConfigField STRING, "MinSdk", "\"$androidMinSdk\""
+        buildConfigField STRING, "TargetSdk", "\"$androidTargetSdk\""
+        buildConfigField STRING, "TenantPlaceholder", "\"$tenantPlaceholder\""
     }
 
     buildTypes {
         debug {
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://sdk-api.applivery.io"'
+            buildConfigField STRING, "API_URL", "\"https://sdk-api.${tenantPlaceholder}applivery.io/\""
+            buildConfigField STRING, "DOWNLOAD_API_URL", "\"https://download-api.${tenantPlaceholder}applivery.io/\""
         }
 
         prerelease {
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
+            buildConfigField STRING, "API_URL", "\"https://sdk-api.${tenantPlaceholder}applivery.io/\""
+            buildConfigField STRING, "DOWNLOAD_API_URL", "\"https://download-api.${tenantPlaceholder}applivery.io/\""
         }
 
         release {
-            buildConfigField STRING, "API_URL", '"https://sdk-api.applivery.io"'
-            buildConfigField STRING, "DOWNLOAD_API_URL", '"https://download-api.applivery.io/"'
+            buildConfigField STRING, "API_URL", "\"https://sdk-api.${tenantPlaceholder}applivery.io/\""
+            buildConfigField STRING, "DOWNLOAD_API_URL", "\"https://download-api.${tenantPlaceholder}applivery.io/\""
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

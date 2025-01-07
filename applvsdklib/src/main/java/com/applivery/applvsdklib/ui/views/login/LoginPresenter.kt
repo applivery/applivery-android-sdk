@@ -15,20 +15,33 @@
  */
 package com.applivery.applvsdklib.ui.views.login
 
-import com.applivery.applvsdklib.domain.login.LoginInteractor
-import com.applivery.applvsdklib.domain.model.UserData
+import android.net.Uri
+import androidx.core.net.toUri
+import com.applivery.applvsdklib.BuildConfig
+import com.applivery.applvsdklib.features.auth.GetAuthenticationUriUseCase
+import com.applivery.base.AppliveryDataManager
+import com.applivery.base.domain.PreferencesManager
+import com.applivery.base.domain.SessionManager
 
-class LoginPresenter(private val loginInteractor: LoginInteractor) {
+class LoginPresenter(
+    private val getAuthenticationUri: GetAuthenticationUriUseCase,
+    private val sessionManager: SessionManager,
+    private val preferencesManager: PreferencesManager
+) {
 
-  var view: LoginView? = null
+    suspend fun getAuthenticationUri(): Result<Uri> {
+        val applicationId = AppliveryDataManager.callingPackage
+        val redirectScheme = "${applicationId}.${BuildConfig.AuthSchemeSuffix}"
+        return getAuthenticationUri.invoke().map {
+            it.uri.toUri()
+                .buildUpon()
+                .appendQueryParameter("scheme", redirectScheme)
+                .build()
+        }
+    }
 
-  fun makeLogin(userData: UserData) {
-    loginInteractor.makeLogin(userData,
-        onSuccess = { view?.showLoginSuccess() },
-        onError = { view?.showLoginError() })
-  }
-
-  fun requestLogin() {
-    view?.showLoginDialog()
-  }
+    fun onAuthenticated(bearer: String) {
+        sessionManager.saveSession(bearer)
+        preferencesManager.anonymousEmail = null
+    }
 }

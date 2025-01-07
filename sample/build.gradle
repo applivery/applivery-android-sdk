@@ -21,12 +21,14 @@ apply from: '../dependencies.gradle'
 def STRING = "String"
 
 android {
-    compileSdkVersion = versions.compileSdk
+    namespace 'com.applivery.sample'
+
+    compileSdkVersion = androidCompileSdk
 
     defaultConfig {
         applicationId "com.applivery.sample"
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
 
         versionCode 1
         versionName "1.0"
@@ -37,16 +39,18 @@ android {
     buildTypes {
         debug {
             buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
-            testCoverageEnabled true
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
         }
 
         prerelease {
             signingConfig signingConfigs.debug
             debuggable true
             minifyEnabled true
-            testCoverageEnabled true
 
             buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
         }
 
         release {
@@ -55,8 +59,7 @@ android {
             buildConfigField STRING, "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\""
         }
     }
-
-    lintOptions {
+    lint {
         abortOnError false
     }
 
@@ -76,9 +79,4 @@ dependencies {
 
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-}
-
-repositories {
-    mavenCentral()
-    maven { url "https://dl.bintray.com/applivery/applivery-android-snapshots" }
 }

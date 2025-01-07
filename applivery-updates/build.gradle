@@ -26,11 +26,13 @@ ext {
 apply from: "${rootDir}/scripts/publish-module.gradle"
 
 android {
-    compileSdkVersion versions.compileSdk
+    namespace 'com.applivery.updates'
+
+    compileSdkVersion androidCompileSdk
 
     defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

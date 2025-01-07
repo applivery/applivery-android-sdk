@@ -15,13 +15,15 @@
  */
 package com.applivery.data
 
+import com.applivery.base.AppliveryDataManager
+import com.applivery.data.ApiUriBuilder.buildUponTenant
 import com.applivery.data.di.InjectorUtils
 import com.applivery.data.request.BindUserRequest
 import com.applivery.data.request.FeedbackRequest
-import com.applivery.data.request.LoginRequest
 import com.applivery.data.response.ApiAppConfig
 import com.applivery.data.response.ApiBuildToken
 import com.applivery.data.response.ApiFeedback
+import com.applivery.data.response.AuthenticationUriApi
 import com.applivery.data.response.ServerResponse
 import com.applivery.data.response.UserDataResponse
 import com.applivery.data.response.UserEntity
@@ -30,6 +32,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -43,9 +46,6 @@ interface AppliveryApiService {
     @POST("$API_VERSION/feedback")
     suspend fun sendFeedback(@Body feedback: FeedbackRequest): ServerResponse<ApiFeedback>
 
-    @POST("$API_VERSION//auth/login")
-    fun makeLogin(@Body loginEntity: LoginRequest): Call<ServerResponse<UserDataResponse>>
-
     @POST("$API_VERSION/auth/customLogin")
     fun bindUser(@Body bindUserRequest: BindUserRequest): Call<ServerResponse<UserDataResponse>>
 
@@ -54,6 +54,9 @@ interface AppliveryApiService {
 
     @GET("$API_VERSION/auth/profile")
     fun getUser(): Call<ServerResponse<UserEntity>>
+
+    @GET("$API_VERSION/auth/redirect")
+    suspend fun getAuthenticationUri(): ServerResponse<AuthenticationUriApi>
 
     companion object {
         @Volatile
@@ -67,7 +70,8 @@ interface AppliveryApiService {
             }
 
         private fun provideAppliveryApiService(): AppliveryApiService {
-            return Retrofit.Builder().baseUrl(BuildConfig.API_URL)
+            val url = BuildConfig.API_URL.buildUponTenant(AppliveryDataManager.tenant)
+            return Retrofit.Builder().baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(InjectorUtils.provideOkHttpClient())
                 .build()
