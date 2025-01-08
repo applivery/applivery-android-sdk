@@ -5,6 +5,7 @@ import android.os.Build
 import com.applivery.android.sdk.domain.model.PackageInfo
 import android.content.pm.PackageInfo as AndroidPackageInfo
 
+
 internal interface HostAppPackageInfoProvider {
 
     val packageInfo: PackageInfo
@@ -19,6 +20,7 @@ internal class AndroidHostAppPackageInfoProvider(
             val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
             val appInfo = context.packageManager.getApplicationInfo(context.packageName, 0)
             return PackageInfo(
+                appName = context.applicationName(),
                 packageName = pInfo.packageName,
                 versionCode = pInfo.versionCodeCompat,
                 versionName = pInfo.versionName,
@@ -35,4 +37,13 @@ internal class AndroidHostAppPackageInfoProvider(
                 versionCode.toLong()
             }
         }
+
+    private fun Context.applicationName(): String {
+        val stringId = applicationInfo.labelRes
+        return if (stringId == 0) {
+            applicationInfo.nonLocalizedLabel.toString()
+        } else {
+            context.getString(stringId)
+        }
+    }
 }

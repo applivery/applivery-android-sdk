@@ -4,15 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.lifecycle.lifecycleScope
-import com.applivery.android.sdk.di.AppliveryKoinComponent
+import com.applivery.android.sdk.BaseActivity
 import com.applivery.android.sdk.login.customtabs.CustomTabsManager
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LoginActivity : ComponentActivity(), AppliveryKoinComponent {
+internal class LoginActivity : BaseActivity() {
 
     private val viewModel: LoginViewModel by viewModel()
     private var authorizationStarted = false

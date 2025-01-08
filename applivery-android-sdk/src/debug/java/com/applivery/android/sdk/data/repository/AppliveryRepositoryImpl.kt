@@ -15,9 +15,9 @@ internal class AppliveryRepositoryImpl(
     private val cache: MemoryDataSource,
 ) : AppliveryRepository {
 
-    override suspend fun getConfig(): Either<DomainError, AppConfig> = either {
+    override suspend fun getConfig(forceUpdate: Boolean): Either<DomainError, AppConfig> = either {
         recover(
-            block = { cache.getAppConfig().bind() },
+            block = { if (forceUpdate) raise(ForceUpdate) else cache.getAppConfig().bind() },
             recover = { api.getAppConfig().onRight(cache::setAppConfig).bind() }
         )
     }
@@ -26,3 +26,5 @@ internal class AppliveryRepositoryImpl(
         return api.getAuthenticationUri()
     }
 }
+
+private object ForceUpdate : DomainError()

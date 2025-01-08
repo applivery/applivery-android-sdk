@@ -67,4 +67,12 @@
     <string name="appliveryLoginFailDielogText">The email or password you entered is not valid</string>
     <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
 
+    <string name="applivery_updates_app_name">Applivery</string>
+
+    <string name="applivery_updates_channel_name">Applivery-updates</string>
+    <string name="applivery_updates_channel_description">Applivery-updates</string>
+
+    <string name="applivery_updates_notification_text">Downloading %1$s</string>
+    <string name="applivery_updates_notification_progress">Downloaded (%1$d/%2$d) MB</string>
+
 </resources>

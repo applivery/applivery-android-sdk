@@ -3,6 +3,7 @@ package com.applivery.android.sdk
 import com.applivery.android.sdk.di.AppliveryDiContext
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.di.Properties
+import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
 import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.updates.IsUpToDateCallback
@@ -29,6 +30,10 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
     override suspend fun isUpToDate(): Boolean {
         return get<IsUpToDateUseCase>().invoke().getOrNull() == true
+    }
+
+    override fun checkForUpdates() {
+        mainScope.launch { get<CheckUpdatesUseCase>().invoke() }
     }
 
     private fun initialize(appToken: String, tenant: String?) {

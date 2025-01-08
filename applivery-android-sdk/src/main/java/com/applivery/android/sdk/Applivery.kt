@@ -12,6 +12,8 @@ interface Applivery {
 
     suspend fun isUpToDate(): Boolean
 
+    fun checkForUpdates()
+
     companion object {
         private var sInstance: Applivery? = null
 

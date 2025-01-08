@@ -16,6 +16,7 @@ import com.applivery.android.sdk.data.auth.SessionManagerImpl
 import com.applivery.android.sdk.data.base.JsonMapper
 import com.applivery.android.sdk.data.memory.MemoryDataSource
 import com.applivery.android.sdk.data.repository.AppliveryRepositoryImpl
+import com.applivery.android.sdk.data.repository.DownloadsRepositoryImpl
 import com.applivery.android.sdk.domain.AndroidHostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.AndroidLogger
 import com.applivery.android.sdk.domain.AndroidSharedPreferencesProvider
@@ -26,6 +27,11 @@ import com.applivery.android.sdk.domain.Logger
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
+import com.applivery.android.sdk.domain.repository.DownloadsRepository
+import com.applivery.android.sdk.domain.usecases.CheckUpdates
+import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
+import com.applivery.android.sdk.domain.usecases.DownloadLastBuild
+import com.applivery.android.sdk.domain.usecases.DownloadLastBuildUseCase
 import com.applivery.android.sdk.domain.usecases.GetAppConfig
 import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
 import com.applivery.android.sdk.domain.usecases.GetAuthenticationUri
@@ -34,6 +40,8 @@ import com.applivery.android.sdk.domain.usecases.IsUpToDate
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.login.LoginHandler
 import com.applivery.android.sdk.login.LoginViewModel
+import com.applivery.android.sdk.updates.BuildInstaller
+import com.applivery.android.sdk.updates.IntentBuildInstaller
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -104,10 +112,13 @@ private val useCasesModule = module {
     factoryOf(::IsUpToDate).bind<IsUpToDateUseCase>()
     factoryOf(::GetAuthenticationUri).bind<GetAuthenticationUriUseCase>()
     factoryOf(::GetAppConfig).bind<GetAppConfigUseCase>()
+    factoryOf(::CheckUpdates).bind<CheckUpdatesUseCase>()
+    factoryOf(::DownloadLastBuild).bind<DownloadLastBuildUseCase>()
 }
 
 private val repositoriesModule = module {
     factoryOf(::AppliveryRepositoryImpl).bind<AppliveryRepository>()
+    factoryOf(::DownloadsRepositoryImpl).bind<DownloadsRepository>()
 }
 
 private val viewModelsModule = module {
@@ -134,4 +145,5 @@ internal val appModules = module {
     singleOf(::CurrentActivityProviderImpl).bind<CurrentActivityProvider>()
     factoryOf(::AndroidLogger).bind<Logger>()
     singleOf(::LoginHandler)
+    factoryOf(::IntentBuildInstaller).bind<BuildInstaller>()
 }
