@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
 import com.applivery.android.sdk.BaseActivity
 import com.applivery.android.sdk.R
@@ -17,7 +16,6 @@ internal class SuggestedUpdateActivity : BaseActivity(), DialogInterface.OnDismi
     private val hostAppPackageInfoProvider: HostAppPackageInfoProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         AlertDialog.Builder(this)
             .setTitle(hostAppPackageInfoProvider.packageInfo.appName)

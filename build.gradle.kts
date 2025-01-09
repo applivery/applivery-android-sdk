@@ -3,8 +3,9 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
-    id("io.gitlab.arturbosch.detekt") version "1.19.0-RC2"
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.gradle.nexus.publish)
 }
 
 allprojects {

@@ -41,7 +41,10 @@ import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.login.LoginHandler
 import com.applivery.android.sdk.login.LoginViewModel
 import com.applivery.android.sdk.updates.BuildInstaller
-import com.applivery.android.sdk.updates.IntentBuildInstaller
+import com.applivery.android.sdk.updates.AndroidBuildInstaller
+import com.applivery.android.sdk.updates.UpdateInstallProgressObserver
+import com.applivery.android.sdk.updates.UpdateInstallProgressSender
+import com.applivery.android.sdk.updates.UpdateInstallProgressSenderImpl
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -50,6 +53,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
+import org.koin.dsl.binds
 import org.koin.dsl.module
 import retrofit2.create
 
@@ -145,5 +149,11 @@ internal val appModules = module {
     singleOf(::CurrentActivityProviderImpl).bind<CurrentActivityProvider>()
     factoryOf(::AndroidLogger).bind<Logger>()
     singleOf(::LoginHandler)
-    factoryOf(::IntentBuildInstaller).bind<BuildInstaller>()
+    factoryOf(::AndroidBuildInstaller).bind<BuildInstaller>()
+    singleOf(::UpdateInstallProgressSenderImpl).binds(
+        arrayOf(
+            UpdateInstallProgressSender::class,
+            UpdateInstallProgressObserver::class
+        )
+    )
 }

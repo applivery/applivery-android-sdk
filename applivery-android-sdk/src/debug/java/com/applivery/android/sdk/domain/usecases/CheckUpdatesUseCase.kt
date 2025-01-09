@@ -5,6 +5,7 @@ import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.model.AppConfig
 import com.applivery.android.sdk.domain.model.UpdateType
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
+import com.applivery.android.sdk.updates.ForceUpdateActivity
 import com.applivery.android.sdk.updates.SuggestedUpdateActivity
 
 internal interface CheckUpdatesUseCase {
@@ -25,7 +26,9 @@ internal class CheckUpdates(
         when (config.toUpdateType()) {
             UpdateType.ForceUpdate -> {
                 val activity = currentActivityProvider.activity ?: return
+                activity.startActivity(ForceUpdateActivity.getIntent(activity))
             }
+
             UpdateType.SuggestedUpdate -> {
                 val activity = currentActivityProvider.activity ?: return
                 activity.startActivity(SuggestedUpdateActivity.getIntent(activity))

@@ -13,9 +13,12 @@ import arrow.core.raise.either
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
+import com.applivery.android.sdk.domain.Logger
+import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.usecases.DownloadLastBuildUseCase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -26,6 +29,10 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
     private val downloadLastBuild: DownloadLastBuildUseCase by inject()
 
     private val buildInstaller: BuildInstaller by inject()
+
+    private val logger: Logger by inject()
+
+    private val progressSender: UpdateInstallProgressSender by inject()
 
     private val coroutineScope = MainScope()
 
@@ -48,9 +55,17 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
         startForeground(NOTIFICATION_ID, notification)
 
         coroutineScope.launch {
+            progressSender.step.update { UpdateInstallStep.Idle }
             either {
-                buildInstaller.install(downloadLastBuild().bind())
+                progressSender.step.update { UpdateInstallStep.Downloading }
+                val lastBuildFile = downloadLastBuild().bind()
+                progressSender.step.update { UpdateInstallStep.Installing }
+                buildInstaller.install(lastBuildFile).onLeft(::onInstallFailed)
+                lastBuildFile.delete()
+                progressSender.step.update { UpdateInstallStep.Done }
             }
+            progressSender.step.update { UpdateInstallStep.Idle }
+            stopSelf()
         }
     }
 
@@ -71,6 +86,10 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
     override fun onDestroy() {
         super.onDestroy()
         coroutineScope.cancel()
+    }
+
+    private fun onInstallFailed(error: DomainError) {
+        logger.log("Error installing build: ${error.message}")
     }
 
     companion object {
