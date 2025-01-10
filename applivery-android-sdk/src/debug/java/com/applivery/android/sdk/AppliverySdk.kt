@@ -7,6 +7,7 @@ import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
 import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.updates.IsUpToDateCallback
+import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.get
@@ -36,6 +37,10 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
         mainScope.launch { get<CheckUpdatesUseCase>().invoke() }
     }
 
+    override fun setCheckForUpdatesBackground(enable: Boolean) {
+        get<UpdatesBackgroundChecker>().enableCheckForUpdatesBackground(enable)
+    }
+
     private fun initialize(appToken: String, tenant: String?) {
         require(appToken.isNotBlank()) { "Empty appToken received" }
 
@@ -50,5 +55,8 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
         /*Lets fetch the config to check if configuration is correct*/
         mainScope.launch { get<GetAppConfigUseCase>().invoke() }
+
+        /*Initialize SDK dependent components*/
+        get<UpdatesBackgroundChecker>().start()
     }
 }

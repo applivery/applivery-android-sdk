@@ -40,11 +40,13 @@ import com.applivery.android.sdk.domain.usecases.IsUpToDate
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.login.LoginHandler
 import com.applivery.android.sdk.login.LoginViewModel
-import com.applivery.android.sdk.updates.BuildInstaller
 import com.applivery.android.sdk.updates.AndroidBuildInstaller
+import com.applivery.android.sdk.updates.BuildInstaller
 import com.applivery.android.sdk.updates.UpdateInstallProgressObserver
 import com.applivery.android.sdk.updates.UpdateInstallProgressSender
 import com.applivery.android.sdk.updates.UpdateInstallProgressSenderImpl
+import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
+import com.applivery.android.sdk.updates.UpdatesBackgroundCheckerImpl
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -147,6 +149,7 @@ internal val appModules = module {
     includes(viewModelsModule)
     factory<Application> { get<Context>() as Application }
     singleOf(::CurrentActivityProviderImpl).bind<CurrentActivityProvider>()
+    singleOf(::UpdatesBackgroundCheckerImpl).bind<UpdatesBackgroundChecker>()
     factoryOf(::AndroidLogger).bind<Logger>()
     singleOf(::LoginHandler)
     factoryOf(::AndroidBuildInstaller).bind<BuildInstaller>()

@@ -14,6 +14,8 @@ interface Applivery {
 
     fun checkForUpdates()
 
+    fun setCheckForUpdatesBackground(enable: Boolean)
+
     companion object {
         private var sInstance: Applivery? = null
 

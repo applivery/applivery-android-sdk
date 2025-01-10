@@ -35,7 +35,7 @@ internal class AppliveryDiInitializer : Initializer<Unit> {
     }
 }
 
-internal class CurrentActivityProviderInitializer : Initializer<Unit>, AppliveryKoinComponent {
+internal class AppliveryInitializer : Initializer<Unit>, AppliveryKoinComponent {
 
     override fun create(context: Context) {
         get<CurrentActivityProvider>().start()
@@ -43,17 +43,5 @@ internal class CurrentActivityProviderInitializer : Initializer<Unit>, Applivery
 
     override fun dependencies(): List<Class<out Initializer<*>>> {
         return listOf(AppliveryDiInitializer::class.java)
-    }
-}
-
-/**
- * Utility class just to declare dependency initializers.
- */
-internal class AppliveryInitializer : Initializer<Unit> {
-
-    override fun create(context: Context) = Unit
-
-    override fun dependencies(): List<Class<out Initializer<*>>> {
-        return listOf(CurrentActivityProviderInitializer::class.java)
     }
 }
