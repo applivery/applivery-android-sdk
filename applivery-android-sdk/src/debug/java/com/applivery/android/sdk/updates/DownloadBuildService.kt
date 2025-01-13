@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import arrow.core.raise.either
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.di.AppliveryKoinComponent
@@ -96,8 +97,11 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
         private const val NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_87234"
         private const val NOTIFICATION_ID = 0x21
 
-        fun getIntent(context: Context): Intent {
-            return Intent(context, DownloadBuildService::class.java)
+        fun start(context: Context) {
+            ContextCompat.startForegroundService(
+                context,
+                Intent(context, DownloadBuildService::class.java)
+            )
         }
     }
 }

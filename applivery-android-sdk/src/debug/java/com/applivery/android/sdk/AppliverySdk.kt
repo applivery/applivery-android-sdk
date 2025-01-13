@@ -6,6 +6,7 @@ import com.applivery.android.sdk.di.Properties
 import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
 import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
+import com.applivery.android.sdk.updates.DownloadBuildService
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
 import kotlinx.coroutines.MainScope
@@ -39,6 +40,10 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
     override fun setCheckForUpdatesBackground(enable: Boolean) {
         get<UpdatesBackgroundChecker>().enableCheckForUpdatesBackground(enable)
+    }
+
+    override fun update() {
+        DownloadBuildService.start(context = get())
     }
 
     private fun initialize(appToken: String, tenant: String?) {

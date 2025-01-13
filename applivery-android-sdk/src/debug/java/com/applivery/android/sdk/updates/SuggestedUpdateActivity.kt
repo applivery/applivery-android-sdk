@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import com.applivery.android.sdk.BaseActivity
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
@@ -29,12 +28,7 @@ internal class SuggestedUpdateActivity : BaseActivity(), DialogInterface.OnDismi
     }
 
     private fun onPositiveButtonClick(): DialogInterface.OnClickListener {
-        return DialogInterface.OnClickListener { _, _ ->
-            ContextCompat.startForegroundService(
-                this,
-                DownloadBuildService.getIntent(this)
-            )
-        }
+        return DialogInterface.OnClickListener { _, _ -> DownloadBuildService.start(this) }
     }
 
     private fun onNegativeButtonClick(): DialogInterface.OnClickListener {

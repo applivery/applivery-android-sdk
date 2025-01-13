@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.applivery.android.sdk.BaseActivity
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
@@ -54,12 +53,7 @@ internal class ForceUpdateActivity : BaseActivity() {
         }
     }
 
-    private fun startDownloadService() {
-        ContextCompat.startForegroundService(
-            this,
-            DownloadBuildService.getIntent(this)
-        )
-    }
+    private fun startDownloadService() = DownloadBuildService.start(this)
 
     @Suppress("OVERRIDE_DEPRECATION")
     @SuppressLint("MissingSuperCall")
