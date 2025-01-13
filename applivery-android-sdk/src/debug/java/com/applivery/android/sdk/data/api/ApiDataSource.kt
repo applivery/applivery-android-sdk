@@ -5,16 +5,23 @@ import arrow.core.Either
 import arrow.core.raise.catch
 import arrow.core.raise.either
 import arrow.core.raise.ensureNotNull
+import arrow.core.right
 import com.applivery.android.sdk.data.api.service.AppliveryApiService
 import com.applivery.android.sdk.data.api.service.AppliveryDownloadService
+import com.applivery.android.sdk.data.auth.SessionManager
 import com.applivery.android.sdk.data.models.AppConfigApi
 import com.applivery.android.sdk.data.models.AuthenticationUriApi
+import com.applivery.android.sdk.data.models.UserApi
+import com.applivery.android.sdk.data.models.toApi
 import com.applivery.android.sdk.data.models.toDomain
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.model.AppConfig
 import com.applivery.android.sdk.domain.model.AuthenticationUri
+import com.applivery.android.sdk.domain.model.BindUser
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.model.InternalError
+import com.applivery.android.sdk.domain.model.User
+import com.applivery.android.sdk.domain.model.ignore
 import com.applivery.android.sdk.domain.model.mapNotNull
 import com.applivery.android.sdk.updates.createContentFile
 import com.applivery.android.sdk.updates.write
@@ -24,7 +31,8 @@ internal class ApiDataSource(
     private val context: Context,
     private val apiService: AppliveryApiService,
     private val downloadService: AppliveryDownloadService,
-    private val unifiedErrorHandler: UnifiedErrorHandler
+    private val unifiedErrorHandler: UnifiedErrorHandler,
+    private val sessionManager: SessionManager
 ) {
 
     suspend fun getAppConfig(): Either<DomainError, AppConfig> {
@@ -55,5 +63,30 @@ internal class ApiDataSource(
             val file = ensureNotNull(context.createContentFile(buildId)) { InternalError() }
             file.write(body.byteStream()).bind()
         }
+    }
+
+    suspend fun bindUser(bindUser: BindUser): Either<DomainError, Unit> {
+        return apiService.bindUser(bindUser.toApi())
+            .toDomain()
+            .mapNotNull { it.bearer }
+            .onRight(::onSaveToken)
+            .ignore()
+    }
+
+    fun unbindUser(): Either<DomainError, Unit> {
+        sessionManager.logOut()
+        // TODO:
+        //preferencesManager.anonymousEmail = null
+        return Unit.right()
+    }
+
+    suspend fun getUser(): Either<DomainError, User> {
+        return apiService.getUser().toDomain().map(UserApi::toDomain)
+    }
+
+    private fun onSaveToken(token: String) {
+        sessionManager.saveToken(token)
+        // TODO:
+        //preferencesManager.anonymousEmail = null
     }
 }

@@ -1,10 +1,10 @@
 package com.applivery.android.sdk.domain.model
 
-abstract class DomainError(val message: String? = null)
+internal abstract class DomainError(val message: String? = null)
 
-abstract class DeveloperError : DomainError()
+internal abstract class DeveloperError : DomainError()
 
-class UnauthorizedError : DomainError()
-class LimitExceededError : DeveloperError()
-class SubscriptionError : DeveloperError()
-class InternalError(message: String? = null) : DomainError(message)
+internal class UnauthorizedError : DomainError()
+internal class LimitExceededError : DeveloperError()
+internal class SubscriptionError : DeveloperError()
+internal class InternalError(message: String? = null) : DomainError(message)

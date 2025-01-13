@@ -7,7 +7,9 @@ import com.applivery.android.sdk.data.api.ApiDataSource
 import com.applivery.android.sdk.data.memory.MemoryDataSource
 import com.applivery.android.sdk.domain.model.AppConfig
 import com.applivery.android.sdk.domain.model.AuthenticationUri
+import com.applivery.android.sdk.domain.model.BindUser
 import com.applivery.android.sdk.domain.model.DomainError
+import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
 
 internal class AppliveryRepositoryImpl(
@@ -24,6 +26,18 @@ internal class AppliveryRepositoryImpl(
 
     override suspend fun getAuthenticationUri(): Either<DomainError, AuthenticationUri> {
         return api.getAuthenticationUri()
+    }
+
+    override suspend fun bindUser(bindUser: BindUser): Either<DomainError, Unit> {
+        return api.bindUser(bindUser)
+    }
+
+    override suspend fun unbindUser(): Either<DomainError, Unit> {
+        return api.unbindUser()
+    }
+
+    override suspend fun getUser(): Either<DomainError, User> {
+        return api.getUser()
     }
 }
 

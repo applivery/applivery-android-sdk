@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
  * Class that contains helper methods to deal with memory based cache.
  * [Key] type MUST implement [equals] and [hashCode] in order for cache to work properly
  */
-class MemoryCache<Key, Value : Any>(private val expiration: Expiration? = null) : Cache {
+internal class MemoryCache<Key, Value : Any>(private val expiration: Expiration? = null) : Cache {
 
     private val cache: MutableMap<Key, Value> = mutableMapOf()
     private val cachedAt: MutableMap<Key, Long> = mutableMapOf()
@@ -54,34 +54,34 @@ class MemoryCache<Key, Value : Any>(private val expiration: Expiration? = null) 
     private fun now() = System.currentTimeMillis()
 }
 
-object CacheNotFoundError : DomainError()
-object CacheExpiredError : DomainError()
-object EmptyCacheError : DomainError()
+internal object CacheNotFoundError : DomainError()
+internal object CacheExpiredError : DomainError()
+internal object EmptyCacheError : DomainError()
 
-interface Expiration {
+internal interface Expiration {
     val time: Long
     val timeUnit: TimeUnit
 }
 
-class ExpirationTime(
+internal class ExpirationTime(
     override val time: Long,
     override val timeUnit: TimeUnit
 ) : Expiration
 
-object Hour : Expiration {
+internal object Hour : Expiration {
     override val time: Long get() = 1
     override val timeUnit: TimeUnit = TimeUnit.HOURS
 }
 
-class Hours(override val time: Long) : Expiration {
+internal class Hours(override val time: Long) : Expiration {
     override val timeUnit: TimeUnit = TimeUnit.HOURS
 }
 
-object Day : Expiration {
+internal object Day : Expiration {
     override val time: Long get() = 1
     override val timeUnit: TimeUnit = TimeUnit.DAYS
 }
 
-class Days(override val time: Long) : Expiration {
+internal class Days(override val time: Long) : Expiration {
     override val timeUnit: TimeUnit = TimeUnit.DAYS
 }

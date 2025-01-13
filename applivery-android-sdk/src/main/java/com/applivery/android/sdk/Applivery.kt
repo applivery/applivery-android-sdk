@@ -1,6 +1,9 @@
 package com.applivery.android.sdk
 
+import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.updates.IsUpToDateCallback
+import com.applivery.android.sdk.user.BindUserCallback
+import com.applivery.android.sdk.user.GetUserCallback
 
 interface Applivery {
 
@@ -17,6 +20,27 @@ interface Applivery {
     fun setCheckForUpdatesBackground(enable: Boolean)
 
     fun update()
+
+    fun bindUser(
+        email: String,
+        firstName: String? = null,
+        lastName: String? = null,
+        tags: List<String> = emptyList(),
+        callback: BindUserCallback
+    )
+
+    suspend fun bindUser(
+        email: String,
+        firstName: String? = null,
+        lastName: String? = null,
+        tags: List<String> = emptyList()
+    ): Result<Unit>
+
+    fun unbindUser()
+
+    fun getUser(callback: GetUserCallback)
+
+    suspend fun getUser(): Result<User>
 
     companion object {
         private var sInstance: Applivery? = null

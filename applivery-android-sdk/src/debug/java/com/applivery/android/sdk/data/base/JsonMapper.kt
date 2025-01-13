@@ -3,7 +3,7 @@ package com.applivery.android.sdk.data.base
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class JsonMapper(val gson: Gson) {
+internal class JsonMapper(val gson: Gson) {
 
     inline fun <reified T : Any> T.toJson(): String = gson.toJson(this)
 

@@ -48,4 +48,4 @@ internal class LoginHandler(
     }
 }
 
-class LoginCanceled : DomainError()
+internal class LoginCanceled : DomainError()

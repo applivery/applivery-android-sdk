@@ -59,7 +59,7 @@ import retrofit2.Retrofit
  * ```
  * <!--- KNIT example-arrow-retrofit-02.kt -->
  */
-class EitherCallAdapterFactory : CallAdapter.Factory() {
+internal class EitherCallAdapterFactory : CallAdapter.Factory() {
     companion object {
         fun create(): EitherCallAdapterFactory = EitherCallAdapterFactory()
     }

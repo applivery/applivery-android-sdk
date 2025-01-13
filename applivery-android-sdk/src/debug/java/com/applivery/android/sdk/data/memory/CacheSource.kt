@@ -1,11 +1,11 @@
 package com.applivery.android.sdk.data.memory
 
-interface Cache {
+internal interface Cache {
 
     fun clear()
 }
 
-abstract class CacheSource : Cache {
+internal abstract class CacheSource : Cache {
 
     private val caches: MutableList<Cache> = mutableListOf()
 

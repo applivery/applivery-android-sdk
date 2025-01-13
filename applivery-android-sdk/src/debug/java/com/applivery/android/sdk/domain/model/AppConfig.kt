@@ -1,6 +1,6 @@
 package com.applivery.android.sdk.domain.model
 
-data class AppConfig(
+internal data class AppConfig(
     val forceAuth: Boolean,
     val forceUpdate: Boolean,
     val lastBuildId: String,

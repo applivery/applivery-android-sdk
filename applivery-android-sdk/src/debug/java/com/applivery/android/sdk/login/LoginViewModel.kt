@@ -29,6 +29,7 @@ internal class LoginViewModel(
 
     fun onAuthenticated(bearer: String) {
         sessionManager.saveToken(bearer)
+        // TODO:
         /*preferencesManager.anonymousEmail = null*/
     }
 }

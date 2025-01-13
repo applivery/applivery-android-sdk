@@ -2,4 +2,4 @@ package com.applivery.android.sdk.data.models
 
 import com.google.gson.annotations.SerializedName
 
-class ApiResponseSchema<T>(@SerializedName("data") val data: T?)
+internal class ApiResponseSchema<T>(@SerializedName("data") val data: T?)
