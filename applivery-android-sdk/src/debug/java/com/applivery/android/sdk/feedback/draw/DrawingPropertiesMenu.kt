@@ -9,13 +9,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +24,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,7 +38,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -44,10 +47,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.applivery.android.sdk.R
 import kotlin.math.roundToInt
 
@@ -58,8 +58,9 @@ internal fun DrawingPropertiesMenu(
     drawMode: DrawMode,
     onUndo: () -> Unit,
     onRedo: () -> Unit,
-    onPathPropertiesChange: (PathProperties) -> Unit,
-    onDrawModeChanged: (DrawMode) -> Unit
+    onApply: () -> Unit,
+    onDrawModeChanged: (DrawMode) -> Unit,
+    onPropertiesChanged: (PathProperties) -> Unit,
 ) {
 
     val properties by rememberUpdatedState(newValue = pathProperties)
@@ -68,202 +69,206 @@ internal fun DrawingPropertiesMenu(
     var showPropertiesDialog by remember { mutableStateOf(false) }
     var currentDrawMode = drawMode
 
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        IconButton(
-            onClick = {
-                currentDrawMode = if (currentDrawMode == DrawMode.Touch) {
-                    DrawMode.Draw
-                } else {
-                    DrawMode.Touch
-                }
-                onDrawModeChanged(currentDrawMode)
-            }
+    ElevatedCard(modifier = modifier) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_touch),
-                contentDescription = null,
-                tint = if (currentDrawMode == DrawMode.Touch) Color.Black else Color.LightGray
-            )
-        }
-        IconButton(
-            onClick = {
-                currentDrawMode = if (currentDrawMode == DrawMode.Erase) {
-                    DrawMode.Draw
-                } else {
-                    DrawMode.Erase
+            IconButton(
+                onClick = {
+                    currentDrawMode = if (currentDrawMode == DrawMode.Touch) {
+                        DrawMode.Draw
+                    } else {
+                        DrawMode.Touch
+                    }
+                    onDrawModeChanged(currentDrawMode)
                 }
-                onDrawModeChanged(currentDrawMode)
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .alpha(if (currentDrawMode == DrawMode.Touch) 1f else 0.3f),
+                    painter = painterResource(id = R.drawable.ic_touch),
+                    contentDescription = null,
+                )
             }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_eraser),
-                contentDescription = null,
-                tint = if (currentDrawMode == DrawMode.Erase) Color.Black else Color.LightGray
-            )
-        }
+            IconButton(
+                onClick = {
+                    currentDrawMode = if (currentDrawMode == DrawMode.Erase) {
+                        DrawMode.Draw
+                    } else {
+                        DrawMode.Erase
+                    }
+                    onDrawModeChanged(currentDrawMode)
+                }
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .alpha(if (currentDrawMode == DrawMode.Erase) 1f else 0.3f),
+                    painter = painterResource(id = R.drawable.ic_eraser),
+                    contentDescription = null
+                )
+            }
 
 
-        IconButton(onClick = { showColorDialog = !showColorDialog }) {
-            ColorWheel(modifier = Modifier.size(24.dp))
-        }
+            IconButton(onClick = { showColorDialog = !showColorDialog }) {
+                ColorWheel(modifier = Modifier.size(24.dp))
+            }
 
-        IconButton(onClick = { showPropertiesDialog = !showPropertiesDialog }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_brush),
-                contentDescription = null,
-                tint = Color.LightGray
-            )
-        }
+            IconButton(onClick = { showPropertiesDialog = !showPropertiesDialog }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_brush),
+                    contentDescription = null
+                )
+            }
 
-        IconButton(onClick = {
-            onUndo()
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_undo),
-                contentDescription = null,
-                tint = Color.LightGray
-            )
-        }
+            IconButton(onClick = onUndo) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_undo),
+                    contentDescription = null
+                )
+            }
 
-        IconButton(onClick = {
-            onRedo()
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_redo),
-                contentDescription = null,
-                tint = Color.LightGray
-            )
+            IconButton(onClick = onRedo) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_redo),
+                    contentDescription = null
+                )
+            }
+
+            IconButton(onClick = onApply) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_check),
+                    contentDescription = null
+                )
+            }
         }
     }
 
     if (showColorDialog) {
         ColorSelectionDialog(
-            properties.color,
+            initialColor = properties.color,
             onDismiss = { showColorDialog = !showColorDialog },
             onNegativeClick = { showColorDialog = !showColorDialog },
             onPositiveClick = { color: Color ->
                 showColorDialog = !showColorDialog
-                properties.color = color
+                onPropertiesChanged(properties.copy(color = color))
             }
         )
     }
 
     if (showPropertiesDialog) {
-        PropertiesMenuDialog(properties) {
-            showPropertiesDialog = !showPropertiesDialog
-        }
+        PropertiesMenuDialog(
+            properties = properties,
+            onPropertiesChanged = onPropertiesChanged,
+            onDismiss = { showPropertiesDialog = !showPropertiesDialog }
+        )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PropertiesMenuDialog(pathOption: PathProperties, onDismiss: () -> Unit) {
+internal fun PropertiesMenuDialog(
+    properties: PathProperties,
+    onPropertiesChanged: (PathProperties) -> Unit,
+    onDismiss: () -> Unit
+) {
 
-    var strokeWidth by remember { mutableFloatStateOf(pathOption.strokeWidth) }
-    var strokeCap by remember { mutableStateOf(pathOption.strokeCap) }
-    var strokeJoin by remember { mutableStateOf(pathOption.strokeJoin) }
+    var strokeWidth by remember { mutableFloatStateOf(properties.strokeWidth) }
+    var strokeCap by remember { mutableStateOf(properties.strokeCap) }
+    var strokeJoin by remember { mutableStateOf(properties.strokeJoin) }
 
-    Dialog(onDismissRequest = onDismiss) {
+    BasicAlertDialog(onDismissRequest = onDismiss) {
 
-        ElevatedCard(
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.padding(vertical = 8.dp)
+        Column(
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.background)
+                .padding(all = 8.dp)
         ) {
-            Column(modifier = Modifier.padding(8.dp)) {
 
-                Text(
-                    text = "Properties",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 12.dp, top = 12.dp)
-                )
+            Text(
+                modifier = Modifier.padding(start = 12.dp, top = 12.dp),
+                text = "Properties",
+                style = MaterialTheme.typography.titleLarge
+            )
 
-                Canvas(
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp, vertical = 20.dp)
-                        .height(40.dp)
-                        .fillMaxWidth()
-                ) {
-                    val path = Path()
-                    path.moveTo(0f, size.height / 2)
-                    path.lineTo(size.width, size.height / 2)
+            Canvas(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp, vertical = 20.dp)
+                    .height(40.dp)
+                    .fillMaxWidth()
+            ) {
+                val path = Path()
+                path.moveTo(0f, size.height / 2)
+                path.lineTo(size.width, size.height / 2)
 
-                    drawPath(
-                        color = pathOption.color,
-                        path = path,
-                        style = Stroke(
-                            width = strokeWidth,
-                            cap = strokeCap,
-                            join = strokeJoin
-                        )
+                drawPath(
+                    color = properties.color,
+                    path = path,
+                    style = Stroke(
+                        width = strokeWidth,
+                        cap = strokeCap,
+                        join = strokeJoin
                     )
-                }
-
-                Text(
-                    text = "Stroke Width ${strokeWidth.toInt()}",
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(horizontal = 12.dp)
-                )
-
-                Slider(
-                    value = strokeWidth,
-                    onValueChange = {
-                        strokeWidth = it
-                        pathOption.strokeWidth = strokeWidth
-                    },
-                    valueRange = 1f..100f,
-                    onValueChangeFinished = {}
-                )
-
-
-                ExposedSelectionMenu(title = "Stroke Cap",
-                    index = when (strokeCap) {
-                        StrokeCap.Butt -> 0
-                        StrokeCap.Round -> 1
-                        else -> 2
-                    },
-                    options = listOf("Butt", "Round", "Square"),
-                    onSelected = {
-                        println("STOKE CAP $it")
-                        strokeCap = when (it) {
-                            0 -> StrokeCap.Butt
-                            1 -> StrokeCap.Round
-                            else -> StrokeCap.Square
-                        }
-
-                        pathOption.strokeCap = strokeCap
-
-                    }
-                )
-
-                ExposedSelectionMenu(title = "Stroke Join",
-                    index = when (strokeJoin) {
-                        StrokeJoin.Miter -> 0
-                        StrokeJoin.Round -> 1
-                        else -> 2
-                    },
-                    options = listOf("Miter", "Round", "Bevel"),
-                    onSelected = {
-                        println("STOKE JOIN $it")
-
-                        strokeJoin = when (it) {
-                            0 -> StrokeJoin.Miter
-                            1 -> StrokeJoin.Round
-                            else -> StrokeJoin.Bevel
-                        }
-
-                        pathOption.strokeJoin = strokeJoin
-                    }
                 )
             }
+
+            Text(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                text = "Stroke Width ${strokeWidth.toInt()}",
+            )
+
+            Slider(
+                value = strokeWidth,
+                onValueChange = {
+                    strokeWidth = it
+                    onPropertiesChanged(properties.copy(strokeWidth = strokeWidth))
+                },
+                valueRange = 1f..100f,
+                onValueChangeFinished = {}
+            )
+
+
+            ExposedSelectionMenu(title = "Stroke Cap",
+                index = when (strokeCap) {
+                    StrokeCap.Butt -> 0
+                    StrokeCap.Round -> 1
+                    else -> 2
+                },
+                options = listOf("Butt", "Round", "Square"),
+                onSelected = {
+                    strokeCap = when (it) {
+                        0 -> StrokeCap.Butt
+                        1 -> StrokeCap.Round
+                        else -> StrokeCap.Square
+                    }
+                    onPropertiesChanged(properties.copy(strokeCap = strokeCap))
+                }
+            )
+
+            ExposedSelectionMenu(title = "Stroke Join",
+                index = when (strokeJoin) {
+                    StrokeJoin.Miter -> 0
+                    StrokeJoin.Round -> 1
+                    else -> 2
+                },
+                options = listOf("Miter", "Round", "Bevel"),
+                onSelected = {
+                    strokeJoin = when (it) {
+                        0 -> StrokeJoin.Miter
+                        1 -> StrokeJoin.Round
+                        else -> StrokeJoin.Bevel
+                    }
+                    onPropertiesChanged(properties.copy(strokeJoin = strokeJoin))
+                }
+            )
         }
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ColorSelectionDialog(
     initialColor: Color,
@@ -283,24 +288,22 @@ internal fun ColorSelectionDialog(
         alpha = alpha.roundToInt()
     )
 
-    Dialog(onDismissRequest = onDismiss) {
+    BasicAlertDialog(onDismissRequest = onDismiss) {
 
         BoxWithConstraints(
-            Modifier
-                .shadow(1.dp, RoundedCornerShape(8.dp))
-                .background(Color.White)
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.background)
+                .padding(all = 8.dp)
         ) {
 
             val widthInDp = LocalDensity.current.run { maxWidth }
-
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column {
 
                 Text(
+                    modifier = Modifier.padding(start = 12.dp, top = 12.dp),
                     text = "Color",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 12.dp)
+                    style = MaterialTheme.typography.titleLarge
                 )
 
                 // Initial and Current Colors
@@ -315,7 +318,7 @@ internal fun ColorSelectionDialog(
                             .weight(1f)
                             .height(40.dp)
                             .background(
-                                initialColor,
+                                color = initialColor,
                                 shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
                             )
                     )
@@ -332,6 +335,7 @@ internal fun ColorSelectionDialog(
 
                 ColorWheel(
                     modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
                         .width(widthInDp * .8f)
                         .aspectRatio(1f)
                 )
@@ -346,9 +350,7 @@ internal fun ColorSelectionDialog(
                     title = "Red",
                     titleColor = Color.Red,
                     rgb = red,
-                    onColorChanged = {
-                        red = it
-                    }
+                    onColorChanged = { red = it }
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 ColorSlider(
@@ -358,9 +360,7 @@ internal fun ColorSelectionDialog(
                     title = "Green",
                     titleColor = Color.Green,
                     rgb = green,
-                    onColorChanged = {
-                        green = it
-                    }
+                    onColorChanged = { green = it }
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -371,9 +371,7 @@ internal fun ColorSelectionDialog(
                     title = "Blue",
                     titleColor = Color.Blue,
                     rgb = blue,
-                    onColorChanged = {
-                        blue = it
-                    }
+                    onColorChanged = { blue = it }
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -391,34 +389,23 @@ internal fun ColorSelectionDialog(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Buttons
-
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .background(Color(0xffF3E5F5)),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
 
                 ) {
 
                     TextButton(
+                        modifier = Modifier.weight(1f),
                         onClick = onNegativeClick,
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
                     ) {
-                        Text(text = "CANCEL")
+                        Text(text = "Cancel")
                     }
                     TextButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                        onClick = {
-                            onPositiveClick(color)
-                        },
+                        modifier = Modifier.weight(1f),
+                        onClick = { onPositiveClick(color) },
                     ) {
-                        Text(text = "OK")
+                        Text(text = "Apply")
                     }
                 }
             }
@@ -445,19 +432,16 @@ internal fun ExposedSelectionMenu(
 
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(options[index]) }
-    var selectedIndex = remember { index }
 
     ExposedDropdownMenuBox(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
         expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
+        onExpandedChange = { expanded = it }
     ) {
         TextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.menuAnchor(),
             readOnly = true,
             value = selectedOptionText,
             onValueChange = { },
@@ -473,22 +457,17 @@ internal fun ExposedSelectionMenu(
                 disabledIndicatorColor = Color.Transparent,
             )
         )
-        ExposedDropdownMenu(
-            modifier = Modifier.fillMaxWidth(),
+        DropdownMenu(
+            modifier = Modifier.exposedDropdownSize(),
             expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-
-            }
+            onDismissRequest = { expanded = false }
         ) {
             options.forEachIndexed { index: Int, selectionOption: String ->
                 DropdownMenuItem(
-                    modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         selectedOptionText = selectionOption
                         expanded = false
-                        selectedIndex = index
-                        onSelected(selectedIndex)
+                        onSelected(index)
                     },
                     text = { Text(text = selectionOption) }
                 )

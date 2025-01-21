@@ -56,6 +56,8 @@ import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.DialogProperties
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.feedback.draw.DrawingCanvas
+import com.applivery.android.sdk.feedback.draw.DrawingPropertiesMenu
+import com.applivery.android.sdk.feedback.draw.rememberDrawingCanvasState
 import com.applivery.android.sdk.presentation.ViewModelIntentSender
 import com.applivery.android.sdk.presentation.viewModelIntentSender
 import com.applivery.android.sdk.ui.theme.AppliveryTheme
@@ -227,14 +229,20 @@ internal fun FeedbackScreen(
         )
 
         if (showDrawingScreenshot) {
-            ScreenshotDrawCanvasDialog(requireNotNull(state.screenshot))
+            ScreenshotDrawCanvasDialog(
+                screenshot = requireNotNull(state.screenshot),
+                onDismiss = { showDrawingScreenshot = false }
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenshotDrawCanvasDialog(screenshot: Bitmap) {
+fun ScreenshotDrawCanvasDialog(
+    screenshot: Bitmap,
+    onDismiss: () -> Unit = {}
+) {
     BasicAlertDialog(
         modifier = Modifier
             .fillMaxSize()
@@ -244,9 +252,10 @@ fun ScreenshotDrawCanvasDialog(screenshot: Bitmap) {
             dismissOnClickOutside = false,
             usePlatformDefaultWidth = false
         ),
-        onDismissRequest = {}
+        onDismissRequest = onDismiss
     ) {
-        Column {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            val canvasState = rememberDrawingCanvasState()
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -262,8 +271,23 @@ fun ScreenshotDrawCanvasDialog(screenshot: Bitmap) {
                     bitmap = screenshot.asImageBitmap(),
                     contentDescription = null
                 )
-                DrawingCanvas(modifier = Modifier.size(imageSize))
+                DrawingCanvas(
+                    modifier = Modifier.size(imageSize),
+                    state = canvasState
+                )
             }
+            DrawingPropertiesMenu(
+                modifier = Modifier
+                    .padding(all = 8.dp)
+                    .fillMaxWidth(),
+                pathProperties = canvasState.pathProperties.value,
+                drawMode = canvasState.drawMode.value,
+                onUndo = canvasState::undo,
+                onRedo = canvasState::redo,
+                onDrawModeChanged = canvasState::setDrawMode,
+                onPropertiesChanged = canvasState::setDrawProperties,
+                onApply = {/*TODO*/}
+            )
         }
     }
 }

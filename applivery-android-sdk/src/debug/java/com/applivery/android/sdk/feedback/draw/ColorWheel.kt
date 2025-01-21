@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 private val gradientColors = listOf(
     Color.Red,
@@ -48,9 +47,7 @@ internal fun ColorWheel(modifier: Modifier = Modifier) {
             brush = Brush.sweepGradient(colors = gradientColors, center = center),
             radius = radius,
             center = center,
-            style = Stroke(
-                width = strokeWidth
-            )
+            style = Stroke(width = strokeWidth)
         )
     }
 }
@@ -82,8 +79,6 @@ internal fun ColorSlider(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = rgb.toInt().toString(),
-            color = Color.LightGray,
-            fontSize = 12.sp,
             modifier = Modifier.width(30.dp)
         )
     }
