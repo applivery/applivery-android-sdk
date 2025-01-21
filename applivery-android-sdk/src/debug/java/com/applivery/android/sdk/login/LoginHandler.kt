@@ -27,7 +27,7 @@ internal class LoginHandler(
         if (currentDialog?.isShowing == true) return LoginCanceled().left()
         return withContext(Dispatchers.Main.immediate) {
             suspendCancellableCoroutine { cont ->
-                currentDialog = AlertDialog.Builder(activity)
+                currentDialog = AlertDialog.Builder(activity, R.style.Theme_Applivery_Dialog)
                     .setTitle(hostAppPackageInfoProvider.packageInfo.appName)
                     .setMessage(R.string.appliveryLoginRequiredText)
                     .setCancelable(false)

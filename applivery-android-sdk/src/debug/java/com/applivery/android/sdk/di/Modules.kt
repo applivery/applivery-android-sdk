@@ -20,6 +20,7 @@ import com.applivery.android.sdk.data.repository.DownloadsRepositoryImpl
 import com.applivery.android.sdk.domain.AndroidHostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.AndroidLogger
 import com.applivery.android.sdk.domain.AndroidSharedPreferencesProvider
+import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.InstallationIdProvider
 import com.applivery.android.sdk.domain.InstallationIdProviderImpl
@@ -44,6 +45,15 @@ import com.applivery.android.sdk.domain.usecases.IsUpToDate
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUser
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
+import com.applivery.android.sdk.feedback.AndroidShakeDetector
+import com.applivery.android.sdk.feedback.ContentUriImageDecoder
+import com.applivery.android.sdk.feedback.ContentUriImageDecoderImpl
+import com.applivery.android.sdk.feedback.FeedbackViewModel
+import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
+import com.applivery.android.sdk.feedback.ScreenshotFeedbackCheckerImpl
+import com.applivery.android.sdk.feedback.ShakeDetector
+import com.applivery.android.sdk.feedback.ShakeFeedbackChecker
+import com.applivery.android.sdk.feedback.ShakeFeedbackCheckerImpl
 import com.applivery.android.sdk.login.LoginHandler
 import com.applivery.android.sdk.login.LoginViewModel
 import com.applivery.android.sdk.updates.AndroidBuildInstaller
@@ -138,6 +148,7 @@ private val repositoriesModule = module {
 
 private val viewModelsModule = module {
     viewModelOf(::LoginViewModel)
+    viewModelOf(::FeedbackViewModel)
 }
 
 internal val dataModules = module {
@@ -160,6 +171,7 @@ internal val appModules = module {
     singleOf(::CurrentActivityProviderImpl).bind<CurrentActivityProvider>()
     singleOf(::UpdatesBackgroundCheckerImpl).bind<UpdatesBackgroundChecker>()
     factoryOf(::AndroidLogger).bind<Logger>()
+    factoryOf(::DomainLogger)
     singleOf(::LoginHandler)
     factoryOf(::AndroidBuildInstaller).bind<BuildInstaller>()
     singleOf(::UpdateInstallProgressSenderImpl).binds(
@@ -168,4 +180,9 @@ internal val appModules = module {
             UpdateInstallProgressObserver::class
         )
     )
+    factoryOf(::AndroidShakeDetector).bind<ShakeDetector>()
+    singleOf(::ShakeFeedbackCheckerImpl).bind<ShakeFeedbackChecker>()
+    singleOf(::ScreenshotFeedbackCheckerImpl).bind<ScreenshotFeedbackChecker>()
+    factoryOf(::ContentUriImageDecoderImpl).bind<ContentUriImageDecoder>()
+
 }

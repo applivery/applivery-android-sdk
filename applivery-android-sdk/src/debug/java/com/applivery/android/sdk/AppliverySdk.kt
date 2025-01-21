@@ -12,6 +12,8 @@ import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
+import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
+import com.applivery.android.sdk.feedback.ShakeFeedbackChecker
 import com.applivery.android.sdk.updates.DownloadBuildService
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
@@ -96,6 +98,22 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
         return get<GetUserUseCase>().invoke().asResult()
     }
 
+    override fun enableShakeFeedback() {
+        get<ShakeFeedbackChecker>().enable(true)
+    }
+
+    override fun disableShakeFeedback() {
+        get<ShakeFeedbackChecker>().enable(false)
+    }
+
+    override fun enableScreenshotFeedback() {
+        get<ScreenshotFeedbackChecker>().enable(true)
+    }
+
+    override fun disableScreenshotFeedback() {
+        get<ScreenshotFeedbackChecker>().enable(false)
+    }
+
     private fun initialize(appToken: String, tenant: String?) {
         require(appToken.isNotBlank()) { "Empty appToken received" }
 
@@ -113,5 +131,7 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
         /*Initialize SDK dependent components*/
         get<UpdatesBackgroundChecker>().start()
+        get<ShakeFeedbackChecker>().start()
+        get<ScreenshotFeedbackChecker>().start()
     }
 }

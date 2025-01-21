@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission
         android:name="android.permission.VIBRATE"
         tools:node="remove" />
     <uses-permission
@@ -14,6 +19,10 @@
     <uses-permission
         android:name="android.permission.ENFORCE_UPDATE_OWNERSHIP"
         tools:node="remove" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
 
     <application>
 
@@ -32,6 +41,12 @@
 
         <activity
             android:name=".updates.ForceUpdateActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Applivery.NoActionBar" />
+
+        <activity
+            android:name=".feedback.FeedbackActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Applivery.NoActionBar" />

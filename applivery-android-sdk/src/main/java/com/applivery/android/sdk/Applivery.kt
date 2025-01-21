@@ -42,6 +42,14 @@ interface Applivery {
 
     suspend fun getUser(): Result<User>
 
+    fun enableShakeFeedback()
+
+    fun disableShakeFeedback()
+
+    fun enableScreenshotFeedback()
+
+    fun disableScreenshotFeedback()
+
     companion object {
         private var sInstance: Applivery? = null
 

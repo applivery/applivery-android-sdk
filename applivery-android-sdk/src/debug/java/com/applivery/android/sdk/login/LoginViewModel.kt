@@ -10,6 +10,7 @@ import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.usecases.GetAuthenticationUriUseCase
 
+// TODO: migrate to BaseViewModel
 internal class LoginViewModel(
     private val getAuthenticationUri: GetAuthenticationUriUseCase,
     private val packageInfoProvider: HostAppPackageInfoProvider,
