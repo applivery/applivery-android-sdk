@@ -27,7 +27,6 @@ internal sealed interface FeedbackIntent : ViewIntent {
     class FeedbackTypeChanged(val type: FeedbackType) : FeedbackIntent
     class FeedbackChanged(val feedback: String) : FeedbackIntent
     class EmailChanged(val email: String) : FeedbackIntent
-    data object ClickScreenshot : FeedbackIntent
     class AttachScreenshot(val attach: Boolean) : FeedbackIntent
     data object SendFeedback : FeedbackIntent
     data object CancelFeedback : FeedbackIntent
@@ -68,7 +67,6 @@ internal class FeedbackViewModel(
             is FeedbackIntent.FeedbackChanged -> onFeedbackChanged(intent.feedback)
             is FeedbackIntent.FeedbackTypeChanged -> onFeedbackTypeChanged(intent.type)
             is FeedbackIntent.EmailChanged -> onEmailChanged(intent.email)
-            is FeedbackIntent.ClickScreenshot -> onClickScreenshot()
             is FeedbackIntent.AttachScreenshot -> onAttachScreenshot(intent.attach)
             is FeedbackIntent.SendFeedback -> onSendFeedback()
             is FeedbackIntent.CancelFeedback -> onCancelFeedback()
