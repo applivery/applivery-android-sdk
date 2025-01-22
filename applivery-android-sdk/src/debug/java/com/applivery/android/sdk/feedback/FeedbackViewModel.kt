@@ -12,7 +12,6 @@ import com.applivery.android.sdk.presentation.BaseViewModel
 import com.applivery.android.sdk.presentation.ViewAction
 import com.applivery.android.sdk.presentation.ViewIntent
 import com.applivery.android.sdk.presentation.ViewState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -30,6 +29,7 @@ internal sealed interface FeedbackIntent : ViewIntent {
     class AttachScreenshot(val attach: Boolean) : FeedbackIntent
     data object SendFeedback : FeedbackIntent
     data object CancelFeedback : FeedbackIntent
+    class ScreenshotModified(val newScreenshot: Bitmap) : FeedbackIntent
 }
 
 internal data class FeedbackState(
@@ -70,6 +70,7 @@ internal class FeedbackViewModel(
             is FeedbackIntent.AttachScreenshot -> onAttachScreenshot(intent.attach)
             is FeedbackIntent.SendFeedback -> onSendFeedback()
             is FeedbackIntent.CancelFeedback -> onCancelFeedback()
+            is FeedbackIntent.ScreenshotModified -> onScreenshotModified(intent.newScreenshot)
         }
     }
 
@@ -103,5 +104,9 @@ internal class FeedbackViewModel(
 
     private fun onCancelFeedback() {
         dispatchAction(FeedbackAction.Exit)
+    }
+
+    private fun onScreenshotModified(newScreenshot: Bitmap) {
+        setState { copy(screenshot = newScreenshot) }
     }
 }

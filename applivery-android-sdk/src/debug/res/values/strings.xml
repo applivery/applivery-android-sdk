@@ -44,6 +44,23 @@
     <string name="appliveryFeedbackEmailLabel">Email</string>
     <string name="appliveryFeedbackEmailHint">Optional email</string>
     <string name="appliveryFeedbackEmailError">Wrong format</string>
+    <string name="appliveryFeedbackImageEditorProperties">Properties</string>
+    <string name="appliveryFeedbackImageEditorStrokeWidth">Stroke Width %d</string>
+    <string name="appliveryFeedbackImageEditorStrokeCap">Stroke Cap</string>
+    <string name="appliveryFeedbackImageEditorStrokeCapButt">Butt</string>
+    <string name="appliveryFeedbackImageEditorStrokeCapRound">Round</string>
+    <string name="appliveryFeedbackImageEditorStrokeCapSquare">Square</string>
+    <string name="appliveryFeedbackImageEditorStrokeJoin">Stroke Join</string>
+    <string name="appliveryFeedbackImageEditorStrokeJoinMiter">Miter</string>
+    <string name="appliveryFeedbackImageEditorStrokeJoinRound">Round</string>
+    <string name="appliveryFeedbackImageEditorStrokeJoinBevel">Bevel</string>
+    <string name="appliveryFeedbackImageEditorColor">Color</string>
+    <string name="appliveryFeedbackImageEditorColorRed">Red</string>
+    <string name="appliveryFeedbackImageEditorColorGreen">Green</string>
+    <string name="appliveryFeedbackImageEditorColorBlue">Blue</string>
+    <string name="appliveryFeedbackImageEditorColorAlpha">Alpha</string>
+    <string name="appliveryFeedbackImageEditorCancel">Cancel</string>
+    <string name="appliveryFeedbackImageEditorApply">Apply</string>
 
     <string name="appliveryLogoImageDesc">Applivery Logo</string>
     <string name="appliveryCancelFeedbackButtonDesc">Cancel feedback button</string>

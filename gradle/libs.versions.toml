@@ -24,6 +24,7 @@ composeBom = "2024.06.00"
 detekt = "1.19.0-RC2"
 nexusPublish = "1.1.0"
 ackpine = "0.9.4"
+capturable = "2.1.0"
 
 [libraries]
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidCore" }
@@ -58,6 +59,7 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 ackpine-ktx = { module = "ru.solrudev.ackpine:ackpine-ktx", version.ref = "ackpine" }
+capturable = { module = "dev.shreyaspatil:capturable", version.ref = "capturable" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

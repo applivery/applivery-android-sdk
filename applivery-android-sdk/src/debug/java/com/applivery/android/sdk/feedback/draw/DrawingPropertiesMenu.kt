@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.applivery.android.sdk.R
 import kotlin.math.roundToInt
@@ -189,7 +190,7 @@ internal fun PropertiesMenuDialog(
 
             Text(
                 modifier = Modifier.padding(start = 12.dp, top = 12.dp),
-                text = "Properties",
+                text = stringResource(id = R.string.appliveryFeedbackImageEditorProperties),
                 style = MaterialTheme.typography.titleLarge
             )
 
@@ -216,7 +217,10 @@ internal fun PropertiesMenuDialog(
 
             Text(
                 modifier = Modifier.padding(horizontal = 12.dp),
-                text = "Stroke Width ${strokeWidth.toInt()}",
+                text = stringResource(
+                    id = R.string.appliveryFeedbackImageEditorStrokeWidth,
+                    strokeWidth.toInt()
+                ),
             )
 
             Slider(
@@ -230,13 +234,17 @@ internal fun PropertiesMenuDialog(
             )
 
 
-            ExposedSelectionMenu(title = "Stroke Cap",
+            ExposedSelectionMenu(title = stringResource(R.string.appliveryFeedbackImageEditorStrokeCap),
                 index = when (strokeCap) {
                     StrokeCap.Butt -> 0
                     StrokeCap.Round -> 1
                     else -> 2
                 },
-                options = listOf("Butt", "Round", "Square"),
+                options = listOf(
+                    stringResource(R.string.appliveryFeedbackImageEditorStrokeCapButt),
+                    stringResource(R.string.appliveryFeedbackImageEditorStrokeCapRound),
+                    stringResource(R.string.appliveryFeedbackImageEditorStrokeCapSquare)
+                ),
                 onSelected = {
                     strokeCap = when (it) {
                         0 -> StrokeCap.Butt
@@ -247,13 +255,17 @@ internal fun PropertiesMenuDialog(
                 }
             )
 
-            ExposedSelectionMenu(title = "Stroke Join",
+            ExposedSelectionMenu(title = stringResource(R.string.appliveryFeedbackImageEditorStrokeJoin),
                 index = when (strokeJoin) {
                     StrokeJoin.Miter -> 0
                     StrokeJoin.Round -> 1
                     else -> 2
                 },
-                options = listOf("Miter", "Round", "Bevel"),
+                options = listOf(
+                    stringResource(R.string.appliveryFeedbackImageEditorStrokeJoinMiter),
+                    stringResource(R.string.appliveryFeedbackImageEditorStrokeJoinRound),
+                    stringResource(R.string.appliveryFeedbackImageEditorStrokeJoinBevel)
+                ),
                 onSelected = {
                     strokeJoin = when (it) {
                         0 -> StrokeJoin.Miter
@@ -302,7 +314,7 @@ internal fun ColorSelectionDialog(
 
                 Text(
                     modifier = Modifier.padding(start = 12.dp, top = 12.dp),
-                    text = "Color",
+                    text = stringResource(R.string.appliveryFeedbackImageEditorColor),
                     style = MaterialTheme.typography.titleLarge
                 )
 
@@ -347,7 +359,7 @@ internal fun ColorSelectionDialog(
                     modifier = Modifier
                         .padding(start = 12.dp, end = 12.dp)
                         .fillMaxWidth(),
-                    title = "Red",
+                    title = stringResource(R.string.appliveryFeedbackImageEditorColorRed),
                     titleColor = Color.Red,
                     rgb = red,
                     onColorChanged = { red = it }
@@ -357,7 +369,7 @@ internal fun ColorSelectionDialog(
                     modifier = Modifier
                         .padding(start = 12.dp, end = 12.dp)
                         .fillMaxWidth(),
-                    title = "Green",
+                    title = stringResource(R.string.appliveryFeedbackImageEditorColorGreen),
                     titleColor = Color.Green,
                     rgb = green,
                     onColorChanged = { green = it }
@@ -368,7 +380,7 @@ internal fun ColorSelectionDialog(
                     modifier = Modifier
                         .padding(start = 12.dp, end = 12.dp)
                         .fillMaxWidth(),
-                    title = "Blue",
+                    title = stringResource(R.string.appliveryFeedbackImageEditorColorBlue),
                     titleColor = Color.Blue,
                     rgb = blue,
                     onColorChanged = { blue = it }
@@ -380,7 +392,7 @@ internal fun ColorSelectionDialog(
                     modifier = Modifier
                         .padding(start = 12.dp, end = 12.dp)
                         .fillMaxWidth(),
-                    title = "Alpha",
+                    title = stringResource(R.string.appliveryFeedbackImageEditorColorAlpha),
                     titleColor = Color.Black,
                     rgb = alpha,
                     onColorChanged = {
@@ -399,13 +411,13 @@ internal fun ColorSelectionDialog(
                         modifier = Modifier.weight(1f),
                         onClick = onNegativeClick,
                     ) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(R.string.appliveryFeedbackImageEditorCancel))
                     }
                     TextButton(
                         modifier = Modifier.weight(1f),
                         onClick = { onPositiveClick(color) },
                     ) {
-                        Text(text = "Apply")
+                        Text(text = stringResource(R.string.appliveryFeedbackImageEditorApply))
                     }
                 }
             }

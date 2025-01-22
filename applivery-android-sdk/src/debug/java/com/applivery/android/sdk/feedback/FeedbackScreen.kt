@@ -34,13 +34,17 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -61,6 +65,9 @@ import com.applivery.android.sdk.feedback.draw.rememberDrawingCanvasState
 import com.applivery.android.sdk.presentation.ViewModelIntentSender
 import com.applivery.android.sdk.presentation.viewModelIntentSender
 import com.applivery.android.sdk.ui.theme.AppliveryTheme
+import dev.shreyaspatil.capturable.capturable
+import dev.shreyaspatil.capturable.controller.rememberCaptureController
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -231,22 +238,31 @@ internal fun FeedbackScreen(
         if (showDrawingScreenshot) {
             ScreenshotDrawCanvasDialog(
                 screenshot = requireNotNull(state.screenshot),
-                onDismiss = { showDrawingScreenshot = false }
+                onDismiss = {
+                    showDrawingScreenshot = false
+                },
+                onApply = { bitmap ->
+                    showDrawingScreenshot = false
+                    bitmap?.let { intentSender.sendIntent(FeedbackIntent.ScreenshotModified(it)) }
+                }
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class,
+    ExperimentalComposeApi::class
+)
 @Composable
 fun ScreenshotDrawCanvasDialog(
     screenshot: Bitmap,
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    onApply: (Bitmap?) -> Unit
 ) {
     BasicAlertDialog(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize(),
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = false,
@@ -255,15 +271,18 @@ fun ScreenshotDrawCanvasDialog(
         onDismissRequest = onDismiss
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            val density = LocalDensity.current
             val canvasState = rememberDrawingCanvasState()
+            var imageSize by remember { mutableStateOf(DpSize.Zero) }
+            val coroutineScope = rememberCoroutineScope()
+            val captureController = rememberCaptureController()
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.background)
+                    .capturable(captureController)
             ) {
-                val density = LocalDensity.current
-                var imageSize by remember { mutableStateOf(DpSize.Zero) }
                 Image(
                     modifier = Modifier.onSizeChanged {
                         imageSize = with(density) { it.toSize().toDpSize() }
@@ -286,7 +305,16 @@ fun ScreenshotDrawCanvasDialog(
                 onRedo = canvasState::redo,
                 onDrawModeChanged = canvasState::setDrawMode,
                 onPropertiesChanged = canvasState::setDrawProperties,
-                onApply = {/*TODO*/}
+                onApply = {
+                    coroutineScope.launch {
+                        val bitmapAsync = captureController.captureAsync()
+                        try {
+                            onApply(bitmapAsync.await().asAndroidBitmap())
+                        } catch (error: Throwable) {
+                            onApply(null)
+                        }
+                    }
+                }
             )
         }
     }
