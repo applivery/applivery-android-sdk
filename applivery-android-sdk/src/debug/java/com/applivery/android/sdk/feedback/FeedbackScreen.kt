@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -90,7 +91,10 @@ internal fun FeedbackScreen(
                         navigationIconContentColor = contentColorFor(containerColor)
                     ),
                     actions = {
-                        IconButton(onClick = { intentSender.sendIntent(FeedbackIntent.SendFeedback) }) {
+                        IconButton(
+                            onClick = { intentSender.sendIntent(FeedbackIntent.SendFeedback) },
+                            enabled = state.isSendEnabled
+                        ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_send),
                                 contentDescription = stringResource(id = R.string.appliverySendFeedbackButtonDesc)
@@ -230,9 +234,11 @@ internal fun FeedbackScreen(
                             }
                         }
                     }
+                    if (state.isLoading) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
                 }
             }
-
         )
 
         if (showDrawingScreenshot) {

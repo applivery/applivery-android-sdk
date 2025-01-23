@@ -3,20 +3,30 @@ package com.applivery.android.sdk.feedback
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcelable
+import android.util.Base64
 import androidx.lifecycle.viewModelScope
 import arrow.core.flatMap
 import arrow.core.raise.either
+import com.applivery.android.sdk.domain.AppPreferences
+import com.applivery.android.sdk.domain.DeviceInfoProvider
+import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.ensureNotNull
+import com.applivery.android.sdk.domain.model.Feedback
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
+import com.applivery.android.sdk.domain.usecases.SendFeedbackUseCase
 import com.applivery.android.sdk.presentation.BaseViewModel
 import com.applivery.android.sdk.presentation.ViewAction
 import com.applivery.android.sdk.presentation.ViewIntent
 import com.applivery.android.sdk.presentation.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.io.ByteArrayOutputStream
+
+private val EmailRegex =
+    """[a-zA-Z0-9+._%\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+""".toRegex()
 
 @Parcelize
-class FeedbackArguments(val screenshotUri: Uri? = null) : Parcelable
+internal class FeedbackArguments(val screenshotUri: Uri? = null) : Parcelable
 
 internal sealed interface FeedbackAction : ViewAction {
     data object Exit : FeedbackAction
@@ -37,14 +47,20 @@ internal data class FeedbackState(
     val feedbackType: FeedbackType = FeedbackType.Feedback,
     val feedback: String? = null,
     val email: String? = null,
+    val isEmailInvalid: Boolean = false,
     val isEmailReadOnly: Boolean = false,
-    val screenshot: Bitmap? = null
+    val screenshot: Bitmap? = null,
+    val isSendEnabled: Boolean = false,
 ) : ViewState
 
 internal class FeedbackViewModel(
     private val arguments: FeedbackArguments,
     private val imageDecoder: ContentUriImageDecoder,
-    private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase,
+    private val appPreferences: AppPreferences,
+    private val sendFeedback: SendFeedbackUseCase,
+    private val deviceInfoProvider: DeviceInfoProvider,
+    private val packageInfoProvider: HostAppPackageInfoProvider,
 ) : BaseViewModel<FeedbackState, FeedbackIntent, FeedbackAction>() {
 
     override val initialViewState: FeedbackState = FeedbackState()
@@ -53,7 +69,9 @@ internal class FeedbackViewModel(
         viewModelScope.launch {
             getUserUseCase()
                 .flatMap { either { ensureNotNull(it.email.takeUnless { it.isNullOrBlank() }) } }
-                .onRight { setState { copy(isEmailReadOnly = true, email = it) } }
+                .onRight { setState { copy(isEmailReadOnly = true) } }
+                .onRight { onEmailChanged(it) }
+                .onLeft { onEmailChanged(appPreferences.anonymousEmail.orEmpty()) }
         }
 
         viewModelScope.launch {
@@ -76,6 +94,7 @@ internal class FeedbackViewModel(
 
     private fun onFeedbackChanged(feedback: String) {
         setState { copy(feedback = feedback) }
+        checkInputs()
     }
 
     private fun onFeedbackTypeChanged(type: FeedbackType) {
@@ -84,10 +103,7 @@ internal class FeedbackViewModel(
 
     private fun onEmailChanged(email: String) {
         setState { copy(email = email) }
-    }
-
-    private fun onClickScreenshot() {
-        // TODO:  
+        checkInputs()
     }
 
     private fun onAttachScreenshot(attach: Boolean) {
@@ -98,8 +114,34 @@ internal class FeedbackViewModel(
         }
     }
 
+    private fun checkInputs() {
+        val feedback = getState().feedback.orEmpty()
+        val email = getState().email.orEmpty()
+        val isEmailValid = email.isValidEmail() || email.isBlank()
+        val isSendEnabled = feedback.isNotBlank() && isEmailValid
+        setState { copy(isEmailInvalid = !isEmailValid, isSendEnabled = isSendEnabled) }
+    }
+
     private fun onSendFeedback() {
-        // TODO:
+
+        val state = getState()
+        val email = state.email.orEmpty()
+        if (email.isNotBlank() && !state.isEmailReadOnly) {
+            appPreferences.anonymousEmail = email
+        }
+        setState { copy(isLoading = true, isSendEnabled = false) }
+        val feedback = Feedback(
+            deviceInfo = deviceInfoProvider.deviceInfo,
+            packageInfo = packageInfoProvider.packageInfo,
+            message = getState().feedback.orEmpty(),
+            type = getState().feedbackType,
+            email = getState().email,
+            screenshotBase64 = getState().screenshot?.asB64()
+        )
+        viewModelScope.launch {
+            sendFeedback(feedback)
+            dispatchAction(FeedbackAction.Exit)
+        }
     }
 
     private fun onCancelFeedback() {
@@ -108,5 +150,16 @@ internal class FeedbackViewModel(
 
     private fun onScreenshotModified(newScreenshot: Bitmap) {
         setState { copy(screenshot = newScreenshot) }
+    }
+
+    private fun Bitmap.asB64(): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP)
+    }
+
+    private fun String.isValidEmail(): Boolean {
+        return EmailRegex.matches(this)
     }
 }

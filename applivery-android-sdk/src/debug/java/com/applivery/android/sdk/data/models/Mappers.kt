@@ -7,13 +7,19 @@ import arrow.core.right
 import com.applivery.android.sdk.domain.model.AppConfig
 import com.applivery.android.sdk.domain.model.AuthenticationUri
 import com.applivery.android.sdk.domain.model.BindUser
+import com.applivery.android.sdk.domain.model.Device
+import com.applivery.android.sdk.domain.model.DeviceInfo
 import com.applivery.android.sdk.domain.model.DomainError
+import com.applivery.android.sdk.domain.model.Feedback
 import com.applivery.android.sdk.domain.model.InternalError
 import com.applivery.android.sdk.domain.model.LimitExceededError
+import com.applivery.android.sdk.domain.model.Os
+import com.applivery.android.sdk.domain.model.PackageInfo
 import com.applivery.android.sdk.domain.model.SubscriptionError
 import com.applivery.android.sdk.domain.model.UnauthorizedError
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.model.UserType
+import com.applivery.android.sdk.feedback.FeedbackType
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -76,4 +82,60 @@ internal fun UserTypeApi.toDomain(): UserType {
         UserTypeApi.User -> UserType.User
         UserTypeApi.Employee -> UserType.Employee
     }
+}
+
+internal fun PackageInfo.toApi(): PackageInfoApi {
+    return PackageInfoApi(
+        name = appName,
+        version = versionCode.toString(),
+        versionName = versionName
+    )
+}
+
+internal fun Os.toApi(): OsApi {
+    return OsApi(
+        name = name,
+        version = version
+    )
+}
+
+internal fun Device.toApi(): DeviceApi {
+    return DeviceApi(
+        battery = batteryStatus.percentage.toString(),
+        batteryStatus = batteryStatus.isCharging,
+        diskFree = availableDiskPercentage.toString(),
+        model = model,
+        network = networkType,
+        orientation = orientation,
+        ramTotal = ramStatus.total.toString(),
+        ramUsed = ramStatus.used.toString(),
+        resolution = "${screenResolution.width}x${screenResolution.height}",
+        type = deviceType,
+        vendor = vendor
+    )
+}
+
+internal fun DeviceInfo.toApi(): DeviceInfoApi {
+    return DeviceInfoApi(
+        device = device.toApi(),
+        os = os.toApi()
+    )
+}
+
+internal fun FeedbackType.toApi(): String {
+    return when (this) {
+        FeedbackType.Feedback -> "feedback"
+        FeedbackType.Bug -> "bug"
+    }
+}
+
+internal fun Feedback.toApi(): FeedbackApi {
+    return FeedbackApi(
+        deviceInfo = deviceInfo.toApi(),
+        message = message,
+        packageInfo = packageInfo.toApi(),
+        screenshot = screenshotBase64?.let { "data:image/png;base64,$it" },
+        type = type.toApi(),
+        email = email
+    )
 }

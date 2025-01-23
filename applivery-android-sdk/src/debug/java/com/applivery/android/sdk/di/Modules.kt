@@ -20,10 +20,12 @@ import com.applivery.android.sdk.data.repository.DownloadsRepositoryImpl
 import com.applivery.android.sdk.domain.AndroidHostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.AndroidLogger
 import com.applivery.android.sdk.domain.AndroidSharedPreferencesProvider
+import com.applivery.android.sdk.domain.AppPreferences
+import com.applivery.android.sdk.domain.AppPreferencesImpl
+import com.applivery.android.sdk.domain.DeviceInfoProvider
+import com.applivery.android.sdk.domain.DeviceInfoProviderImpl
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
-import com.applivery.android.sdk.domain.InstallationIdProvider
-import com.applivery.android.sdk.domain.InstallationIdProviderImpl
 import com.applivery.android.sdk.domain.Logger
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
@@ -43,6 +45,8 @@ import com.applivery.android.sdk.domain.usecases.GetUser
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDate
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
+import com.applivery.android.sdk.domain.usecases.SendFeedback
+import com.applivery.android.sdk.domain.usecases.SendFeedbackUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUser
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
 import com.applivery.android.sdk.feedback.AndroidShakeDetector
@@ -87,7 +91,7 @@ private val networkModule = module {
             addInterceptor(
                 SessionInterceptor(
                     sessionManager = get(),
-                    idProvider = get(),
+                    appPreferences = get(),
                     appToken = getProperty(Properties.AppToken),
                     loginHandler = get()
                 )
@@ -139,6 +143,7 @@ private val useCasesModule = module {
     factoryOf(::BindUser).bind<BindUserUseCase>()
     factoryOf(::UnbindUser).bind<UnbindUserUseCase>()
     factoryOf(::GetUser).bind<GetUserUseCase>()
+    factoryOf(::SendFeedback).bind<SendFeedbackUseCase>()
 }
 
 private val repositoriesModule = module {
@@ -161,8 +166,9 @@ internal val domainModules = module {
     includes(repositoriesModule)
     factoryOf(::AndroidHostAppPackageInfoProvider).bind<HostAppPackageInfoProvider>()
     factoryOf(::AndroidSharedPreferencesProvider).bind<SharedPreferencesProvider>()
-    factoryOf(::InstallationIdProviderImpl).bind<InstallationIdProvider>()
+    factoryOf(::AppPreferencesImpl).bind<AppPreferences>()
     factoryOf(::UnifiedErrorHandler)
+    factoryOf(::DeviceInfoProviderImpl).bind<DeviceInfoProvider>()
 }
 
 internal val appModules = module {

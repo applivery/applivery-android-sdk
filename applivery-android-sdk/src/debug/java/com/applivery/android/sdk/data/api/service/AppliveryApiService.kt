@@ -8,6 +8,7 @@ import com.applivery.android.sdk.data.models.AuthenticationUriApi
 import com.applivery.android.sdk.data.models.BindUserApi
 import com.applivery.android.sdk.data.models.BindUserResponseApi
 import com.applivery.android.sdk.data.models.BuildTokenApi
+import com.applivery.android.sdk.data.models.FeedbackApi
 import com.applivery.android.sdk.data.models.UserApi
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -30,4 +31,7 @@ internal interface AppliveryApiService {
 
     @GET("v1/auth/profile")
     suspend fun getUser(): Either<ApiError, ApiResponseSchema<UserApi>>
+
+    @POST("v1/feedback")
+    suspend fun sendFeedback(@Body body: FeedbackApi): Either<ApiError, ApiResponseSchema<Unit>>
 }

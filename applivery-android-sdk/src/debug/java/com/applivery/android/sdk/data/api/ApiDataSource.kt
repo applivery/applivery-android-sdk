@@ -14,11 +14,13 @@ import com.applivery.android.sdk.data.models.AuthenticationUriApi
 import com.applivery.android.sdk.data.models.UserApi
 import com.applivery.android.sdk.data.models.toApi
 import com.applivery.android.sdk.data.models.toDomain
+import com.applivery.android.sdk.domain.AppPreferences
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.model.AppConfig
 import com.applivery.android.sdk.domain.model.AuthenticationUri
 import com.applivery.android.sdk.domain.model.BindUser
 import com.applivery.android.sdk.domain.model.DomainError
+import com.applivery.android.sdk.domain.model.Feedback
 import com.applivery.android.sdk.domain.model.InternalError
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.model.ignore
@@ -32,7 +34,8 @@ internal class ApiDataSource(
     private val apiService: AppliveryApiService,
     private val downloadService: AppliveryDownloadService,
     private val unifiedErrorHandler: UnifiedErrorHandler,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val appPreferences: AppPreferences
 ) {
 
     suspend fun getAppConfig(): Either<DomainError, AppConfig> {
@@ -75,8 +78,7 @@ internal class ApiDataSource(
 
     fun unbindUser(): Either<DomainError, Unit> {
         sessionManager.logOut()
-        // TODO:
-        //preferencesManager.anonymousEmail = null
+        appPreferences.anonymousEmail = null
         return Unit.right()
     }
 
@@ -84,9 +86,12 @@ internal class ApiDataSource(
         return apiService.getUser().toDomain().map(UserApi::toDomain)
     }
 
+    suspend fun sendFeedback(feedback: Feedback): Either<DomainError, Unit> {
+        return apiService.sendFeedback(feedback.toApi()).toDomain()
+    }
+
     private fun onSaveToken(token: String) {
         sessionManager.saveToken(token)
-        // TODO:
-        //preferencesManager.anonymousEmail = null
+        appPreferences.anonymousEmail = null
     }
 }

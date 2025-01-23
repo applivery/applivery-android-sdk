@@ -9,6 +9,7 @@ import com.applivery.android.sdk.domain.model.AppConfig
 import com.applivery.android.sdk.domain.model.AuthenticationUri
 import com.applivery.android.sdk.domain.model.BindUser
 import com.applivery.android.sdk.domain.model.DomainError
+import com.applivery.android.sdk.domain.model.Feedback
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
 
@@ -38,6 +39,10 @@ internal class AppliveryRepositoryImpl(
 
     override suspend fun getUser(): Either<DomainError, User> {
         return api.getUser()
+    }
+
+    override suspend fun sendFeedback(feedback: Feedback): Either<DomainError, Unit> {
+        return api.sendFeedback(feedback)
     }
 }
 

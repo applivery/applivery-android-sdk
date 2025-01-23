@@ -2,7 +2,7 @@ package com.applivery.android.sdk.feedback
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
+import com.applivery.android.sdk.ui.check
 
 internal enum class MediaPermissionGrantStatus {
     Granted,
@@ -22,9 +22,5 @@ internal object MediaPermissionGrantStatusChecker {
         } else {
             MediaPermissionGrantStatus.Denied
         }
-    }
-
-    private fun Context.check(permission: String): Boolean {
-        return checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
     }
 }

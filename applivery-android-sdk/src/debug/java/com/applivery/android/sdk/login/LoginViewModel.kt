@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import com.applivery.android.sdk.BuildConfig
 import com.applivery.android.sdk.data.auth.SessionManager
+import com.applivery.android.sdk.domain.AppPreferences
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.usecases.GetAuthenticationUriUseCase
@@ -14,7 +15,8 @@ import com.applivery.android.sdk.domain.usecases.GetAuthenticationUriUseCase
 internal class LoginViewModel(
     private val getAuthenticationUri: GetAuthenticationUriUseCase,
     private val packageInfoProvider: HostAppPackageInfoProvider,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val appPreferences: AppPreferences
 ) : ViewModel() {
 
     suspend fun getAuthenticationUri(): Either<DomainError, Uri> {
@@ -30,7 +32,6 @@ internal class LoginViewModel(
 
     fun onAuthenticated(bearer: String) {
         sessionManager.saveToken(bearer)
-        // TODO:
-        /*preferencesManager.anonymousEmail = null*/
+        appPreferences.anonymousEmail = null
     }
 }
