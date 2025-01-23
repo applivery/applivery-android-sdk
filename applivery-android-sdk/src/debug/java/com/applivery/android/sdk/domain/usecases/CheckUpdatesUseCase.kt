@@ -1,6 +1,6 @@
 package com.applivery.android.sdk.domain.usecases
 
-import com.applivery.android.sdk.CurrentActivityProvider
+import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.model.AppConfig
 import com.applivery.android.sdk.domain.model.UpdateType
@@ -15,7 +15,7 @@ internal interface CheckUpdatesUseCase {
 
 internal class CheckUpdates(
     private val repository: AppliveryRepository,
-    private val currentActivityProvider: CurrentActivityProvider,
+    private val hostActivityProvider: HostActivityProvider,
     hostAppPackageInfoProvider: HostAppPackageInfoProvider
 ) : CheckUpdatesUseCase {
 
@@ -25,12 +25,12 @@ internal class CheckUpdates(
         val config = repository.getConfig().getOrNull() ?: return
         when (config.toUpdateType()) {
             UpdateType.ForceUpdate -> {
-                val activity = currentActivityProvider.activity ?: return
+                val activity = hostActivityProvider.activity ?: return
                 activity.startActivity(ForceUpdateActivity.getIntent(activity))
             }
 
             UpdateType.SuggestedUpdate -> {
-                val activity = currentActivityProvider.activity ?: return
+                val activity = hostActivityProvider.activity ?: return
                 activity.startActivity(SuggestedUpdateActivity.getIntent(activity))
             }
 

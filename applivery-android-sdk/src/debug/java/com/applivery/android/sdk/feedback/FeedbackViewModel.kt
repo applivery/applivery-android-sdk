@@ -61,6 +61,7 @@ internal class FeedbackViewModel(
     private val sendFeedback: SendFeedbackUseCase,
     private val deviceInfoProvider: DeviceInfoProvider,
     private val packageInfoProvider: HostAppPackageInfoProvider,
+    private val hostAppScreenshotProvider: HostAppScreenshotProvider
 ) : BaseViewModel<FeedbackState, FeedbackIntent, FeedbackAction>() {
 
     override val initialViewState: FeedbackState = FeedbackState()
@@ -108,7 +109,11 @@ internal class FeedbackViewModel(
 
     private fun onAttachScreenshot(attach: Boolean) {
         if (attach) {
-
+            viewModelScope.launch {
+                setState { copy(isLoading = false) }
+                val screenshot = hostAppScreenshotProvider.get().getOrNull()
+                setState { copy(screenshot = screenshot, isLoading = false) }
+            }
         } else {
             setState { copy(screenshot = null) }
         }

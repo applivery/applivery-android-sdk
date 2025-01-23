@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.applivery.android.sdk.CurrentActivityProvider
+import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.DomainLogger
 
 internal interface ScreenshotFeedbackChecker {
@@ -18,7 +18,7 @@ internal interface ScreenshotFeedbackChecker {
 internal class ScreenshotFeedbackCheckerImpl(
     private val context: Context,
     private val logger: DomainLogger,
-    private val currentActivityProvider: CurrentActivityProvider
+    private val hostActivityProvider: HostActivityProvider
 ) : ScreenshotFeedbackChecker, DefaultLifecycleObserver {
 
     private var isEnabled: Boolean = false
@@ -49,7 +49,7 @@ internal class ScreenshotFeedbackCheckerImpl(
     }
 
     private fun onScreenshotDetected(uri: Uri) {
-        val activity = currentActivityProvider.activity
+        val activity = hostActivityProvider.activity
         if (activity == null) {
             logger.noActivityFoundForFeedbackView()
             return

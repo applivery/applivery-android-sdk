@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import com.applivery.android.sdk.BaseActivity
+import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import org.koin.core.component.inject
 
-internal class SuggestedUpdateActivity : BaseActivity(), DialogInterface.OnDismissListener {
+internal class SuggestedUpdateActivity : SdkBaseActivity(), DialogInterface.OnDismissListener {
 
     private val hostAppPackageInfoProvider: HostAppPackageInfoProvider by inject()
 

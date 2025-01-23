@@ -2,8 +2,8 @@ package com.applivery.android.sdk.di
 
 import android.app.Application
 import android.content.Context
-import com.applivery.android.sdk.CurrentActivityProvider
-import com.applivery.android.sdk.CurrentActivityProviderImpl
+import com.applivery.android.sdk.HostActivityProvider
+import com.applivery.android.sdk.HostHostActivityProvider
 import com.applivery.android.sdk.data.api.ApiDataSource
 import com.applivery.android.sdk.data.api.service.AppliveryApiService
 import com.applivery.android.sdk.data.api.service.AppliveryDownloadService
@@ -53,6 +53,8 @@ import com.applivery.android.sdk.feedback.AndroidShakeDetector
 import com.applivery.android.sdk.feedback.ContentUriImageDecoder
 import com.applivery.android.sdk.feedback.ContentUriImageDecoderImpl
 import com.applivery.android.sdk.feedback.FeedbackViewModel
+import com.applivery.android.sdk.feedback.HostAppScreenshotProvider
+import com.applivery.android.sdk.feedback.HostAppScreenshotProviderImpl
 import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
 import com.applivery.android.sdk.feedback.ScreenshotFeedbackCheckerImpl
 import com.applivery.android.sdk.feedback.ShakeDetector
@@ -174,7 +176,7 @@ internal val domainModules = module {
 internal val appModules = module {
     includes(viewModelsModule)
     factory<Application> { get<Context>() as Application }
-    singleOf(::CurrentActivityProviderImpl).bind<CurrentActivityProvider>()
+    singleOf(::HostHostActivityProvider).bind<HostActivityProvider>()
     singleOf(::UpdatesBackgroundCheckerImpl).bind<UpdatesBackgroundChecker>()
     factoryOf(::AndroidLogger).bind<Logger>()
     factoryOf(::DomainLogger)
@@ -190,5 +192,5 @@ internal val appModules = module {
     singleOf(::ShakeFeedbackCheckerImpl).bind<ShakeFeedbackChecker>()
     singleOf(::ScreenshotFeedbackCheckerImpl).bind<ScreenshotFeedbackChecker>()
     factoryOf(::ContentUriImageDecoderImpl).bind<ContentUriImageDecoder>()
-
+    singleOf(::HostAppScreenshotProviderImpl).bind<HostAppScreenshotProvider>()
 }

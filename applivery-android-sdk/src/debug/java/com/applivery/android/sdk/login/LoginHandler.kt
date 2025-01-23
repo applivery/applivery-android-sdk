@@ -4,7 +4,7 @@ import androidx.appcompat.app.AlertDialog
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.applivery.android.sdk.CurrentActivityProvider
+import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.model.DomainError
@@ -16,7 +16,7 @@ import kotlin.coroutines.resume
 
 
 internal class LoginHandler(
-    private val activityProvider: CurrentActivityProvider,
+    private val activityProvider: HostActivityProvider,
     private val hostAppPackageInfoProvider: HostAppPackageInfoProvider
 ) {
 

@@ -38,7 +38,7 @@ internal class AppliveryDiInitializer : Initializer<Unit> {
 internal class AppliveryInitializer : Initializer<Unit>, AppliveryKoinComponent {
 
     override fun create(context: Context) {
-        get<CurrentActivityProvider>().start()
+        get<HostActivityProvider>().start()
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {

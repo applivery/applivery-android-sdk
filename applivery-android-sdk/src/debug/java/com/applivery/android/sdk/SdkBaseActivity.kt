@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 
-internal abstract class BaseActivity : ComponentActivity(), AppliveryKoinComponent {
+internal abstract class SdkBaseActivity : ComponentActivity(), AppliveryKoinComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()

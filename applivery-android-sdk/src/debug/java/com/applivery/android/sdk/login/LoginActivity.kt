@@ -6,12 +6,12 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.lifecycle.lifecycleScope
-import com.applivery.android.sdk.BaseActivity
+import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.login.customtabs.CustomTabsManager
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-internal class LoginActivity : BaseActivity() {
+internal class LoginActivity : SdkBaseActivity() {
 
     private val viewModel: LoginViewModel by viewModel()
     private var authorizationStarted = false

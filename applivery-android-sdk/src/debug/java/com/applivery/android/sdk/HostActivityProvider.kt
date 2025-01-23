@@ -5,16 +5,16 @@ import android.app.Application
 import android.os.Bundle
 import java.lang.ref.WeakReference
 
-internal interface CurrentActivityProvider {
+internal interface HostActivityProvider {
 
     val activity: Activity?
 
     fun start()
 }
 
-internal class CurrentActivityProviderImpl(
+internal class HostHostActivityProvider(
     private val application: Application
-) : CurrentActivityProvider, Application.ActivityLifecycleCallbacks {
+) : HostActivityProvider, Application.ActivityLifecycleCallbacks {
 
     private var activityRef = WeakReference<Activity>(null)
 
@@ -35,10 +35,16 @@ internal class CurrentActivityProviderImpl(
     override fun onActivityStopped(activity: Activity) = Unit
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        activityRef = WeakReference(activity)
+        activity.track()
     }
 
     override fun onActivityResumed(activity: Activity) {
-        activityRef = WeakReference(activity)
+        activity.track()
+    }
+
+    private fun Activity.track() {
+        if (this !is SdkBaseActivity) {
+            activityRef = WeakReference(this)
+        }
     }
 }
