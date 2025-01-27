@@ -7,7 +7,7 @@ plugins {
 
 /*
 ext {
-    PUBLISH_ARTIFACT_ID = 'applivery-base'
+    PUBLISH_ARTIFACT_ID = 'applivery-sdk'
 }
 apply from: "${rootDir}/scripts/publish-module.gradle"
 */
