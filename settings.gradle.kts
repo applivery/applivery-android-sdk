@@ -20,9 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "applivery-android-sdk"
-include(":applvsdklib")
 include(":sample")
-include(":applivery-updates")
-include(":applivery-base")
-include(":applivery-data")
 include(":applivery-android-sdk")

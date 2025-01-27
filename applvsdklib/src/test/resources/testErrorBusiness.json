@@ -1,7 +1,0 @@
-{
-  "status": "false",
-  "error": {
-    "code": 200,
-    "msg": "No app registered on applivery"
-  }
-}

@@ -5,10 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.applivery.applvsdklib.Applivery
-import com.applivery.applvsdklib.BindUserCallback
-import com.applivery.applvsdklib.GetUserCallback
-import com.applivery.base.domain.model.UserProfile
+import com.applivery.android.sdk.Applivery
+import com.applivery.android.sdk.domain.model.User
+import com.applivery.android.sdk.user.BindUserCallback
+import com.applivery.android.sdk.user.GetUserCallback
 import com.applivery.sample.databinding.ActivityUserBinding
 
 class UserActivity : AppCompatActivity() {
@@ -31,7 +31,7 @@ class UserActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         binding.bindUserButton.setOnClickListener { bindUser() }
-        binding.unBindUserButton.setOnClickListener { Applivery.unbindUser() }
+        binding.unBindUserButton.setOnClickListener { Applivery.getInstance().unbindUser() }
     }
 
     private fun bindUser() {
@@ -60,7 +60,7 @@ class UserActivity : AppCompatActivity() {
             null
         }
 
-        Applivery.bindUser(email, firstName, lastName, tags, object : BindUserCallback {
+        Applivery.getInstance().bindUser(email, firstName, lastName, tags.orEmpty(), object : BindUserCallback {
             override fun onSuccess() {
                 Toast.makeText(this@UserActivity, "Success", Toast.LENGTH_SHORT).show()
             }
@@ -73,12 +73,12 @@ class UserActivity : AppCompatActivity() {
 
     private fun getUser() {
 
-        Applivery.getUser(object : GetUserCallback {
+        Applivery.getInstance().getUser(object : GetUserCallback {
 
-            override fun onSuccess(userProfile: UserProfile) {
-                binding.emailEditText.setText(userProfile.email)
-                binding.firstNameEditText.setText(userProfile.firstName)
-                binding.lastNameEditText.setText(userProfile.lastName)
+            override fun onSuccess(user: User) {
+                binding.emailEditText.setText(user.email)
+                binding.firstNameEditText.setText(user.firstName)
+                binding.lastNameEditText.setText(user.lastName)
             }
 
             override fun onError(message: String) = Unit

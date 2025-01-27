@@ -16,27 +16,14 @@
 package com.applivery.sample
 
 import android.app.Application
-import android.util.Log
-import com.applivery.android.sdk.updates.IsUpToDateCallback
-import com.applivery.applvsdklib.Applivery
+import com.applivery.android.sdk.Applivery
 
 class AppliveryApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
         appPreferences = AppPreferences(applicationContext)
-
-        if (BuildConfig.BUILD_TYPE != "release") {
-            Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN)
-            Applivery.setCheckForUpdatesBackground(appPreferences.checkForUpdatesBackground)
-        }
-
-        com.applivery.android.sdk.Applivery.init(this, BuildConfig.APPLIVERY_APP_TOKEN)
-        com.applivery.android.sdk.Applivery.getInstance().isUpToDate(object : IsUpToDateCallback{
-            override fun onResponse(isUpToDate: Boolean) {
-
-            }
-        })
+        Applivery.init(BuildConfig.APPLIVERY_APP_TOKEN)
     }
 
     companion object {

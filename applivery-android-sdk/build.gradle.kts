@@ -5,9 +5,18 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+/*
+ext {
+    PUBLISH_ARTIFACT_ID = 'applivery-base'
+}
+apply from: "${rootDir}/scripts/publish-module.gradle"
+*/
+
+
 android {
     val androidCompileSdk: Int by rootProject.extra
     val androidMinSdk: Int by rootProject.extra
+
     val PUBLISH_VERSION: String by rootProject.extra
     val tenantPlaceholder = "{tenant}"
     val authSchemeSuffix = "applivery.auth"

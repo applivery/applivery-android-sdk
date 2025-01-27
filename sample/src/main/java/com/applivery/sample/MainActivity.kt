@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.applivery.applvsdklib.Applivery
+import com.applivery.android.sdk.Applivery
 import com.applivery.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -24,46 +24,46 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         setSupportActionBar(binding.toolbar)
         binding.chronometer.start()
-        binding.checkForUpdatesBackgroundSwitch.isChecked = Applivery.getCheckForUpdatesBackground()
+        binding.checkForUpdatesBackgroundSwitch.isChecked =
+            Applivery.getInstance().getCheckForUpdatesBackground()
         binding.checkForUpdatesBackgroundSwitch.setOnCheckedChangeListener { _, isChecked ->
             appPreferences.checkForUpdatesBackground = isChecked
-            Applivery.setCheckForUpdatesBackground(isChecked)
+            Applivery.getInstance().setCheckForUpdatesBackground(isChecked)
         }
 
-        Applivery.disableShakeFeedback()
-        Applivery.disableScreenshotFeedback()
+        Applivery.getInstance().disableShakeFeedback()
 
         binding.feedbackSwitch.isChecked = false
         binding.feedbackSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                Applivery.enableShakeFeedback()
+                Applivery.getInstance().enableShakeFeedback()
             } else {
-                Applivery.disableShakeFeedback()
-                Applivery.disableScreenshotFeedback()
+                Applivery.getInstance().disableShakeFeedback()
+                Applivery.getInstance().disableScreenshotFeedback()
             }
         }
 
         binding.screenshotSwitch.isChecked = false
         binding.screenshotSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                Applivery.enableScreenshotFeedback()
+                Applivery.getInstance().enableScreenshotFeedback()
             } else {
-                Applivery.disableScreenshotFeedback()
+                Applivery.getInstance().disableScreenshotFeedback()
             }
         }
 
         binding.checkForUpdatesButton.setOnClickListener {
-            Applivery.checkForUpdates()
+            Applivery.getInstance().checkForUpdates()
         }
 
         binding.downloadLastBuildButton.setOnClickListener {
-            Applivery.update()
+            Applivery.getInstance().update()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        Applivery.isUpToDate { isUpToDate ->
+        Applivery.getInstance().isUpToDate { isUpToDate ->
             if (isUpToDate) {
                 binding.isUpToDateTextView.text = getString(R.string.is_up_to_date_text_updated)
             } else {
@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 UserActivity.open(this)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
