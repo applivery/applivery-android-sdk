@@ -169,7 +169,8 @@ internal fun FeedbackScreen(
                                 keyboardType = KeyboardType.Email,
                                 imeAction = ImeAction.Done
                             ),
-                            keyboardActions = KeyboardActions { focusManager.clearFocus() }
+                            keyboardActions = KeyboardActions { focusManager.clearFocus() },
+                            isError = state.isEmailInvalid
                         )
 
                         Box(

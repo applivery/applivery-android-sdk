@@ -52,6 +52,10 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
         get<UpdatesBackgroundChecker>().enableCheckForUpdatesBackground(enable)
     }
 
+    override fun getCheckForUpdatesBackground(): Boolean {
+        return get<UpdatesBackgroundChecker>().isEnabled
+    }
+
     override fun update() {
         DownloadBuildService.start(context = get())
     }

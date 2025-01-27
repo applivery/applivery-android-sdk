@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 
 internal interface UpdatesBackgroundChecker {
 
+    val isEnabled: Boolean
+
     fun start()
 
     fun enableCheckForUpdatesBackground(enable: Boolean)
@@ -20,18 +22,18 @@ internal class UpdatesBackgroundCheckerImpl(
 
     private val coroutineScope = MainScope()
 
-    private var checkForUpdatesBackgroundEnabled: Boolean = false
+    override var isEnabled: Boolean = false
 
     override fun start() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     }
 
     override fun enableCheckForUpdatesBackground(enable: Boolean) {
-        checkForUpdatesBackgroundEnabled = enable
+        isEnabled = enable
     }
 
     override fun onResume(owner: LifecycleOwner) {
-        if (checkForUpdatesBackgroundEnabled) {
+        if (isEnabled) {
             coroutineScope.launch { checkUpdatesUseCase() }
         }
     }

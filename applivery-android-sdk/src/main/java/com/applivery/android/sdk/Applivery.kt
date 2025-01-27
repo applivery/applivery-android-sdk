@@ -19,6 +19,8 @@ interface Applivery {
 
     fun setCheckForUpdatesBackground(enable: Boolean)
 
+    fun getCheckForUpdatesBackground(): Boolean
+
     fun update()
 
     fun bindUser(

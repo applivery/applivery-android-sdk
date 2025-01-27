@@ -1,5 +1,5 @@
 package com.applivery.android.sdk.updates
 
-interface IsUpToDateCallback {
+fun interface IsUpToDateCallback {
     fun onResponse(isUpToDate: Boolean)
 }
