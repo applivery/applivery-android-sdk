@@ -5,10 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.addCallback
-import androidx.lifecycle.lifecycleScope
 import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.login.customtabs.CustomTabsManager
-import kotlinx.coroutines.launch
+import com.applivery.android.sdk.presentation.launchAndCollectIn
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 internal class LoginActivity : SdkBaseActivity() {
@@ -24,6 +23,17 @@ internal class LoginActivity : SdkBaseActivity() {
         lifecycle.addObserver(customTabsManager)
 
         onBackPressedDispatcher.addCallback { LoginCallbacks.onCanceled() }
+
+        viewModel.viewActions.launchAndCollectIn(this) { action ->
+            when (action) {
+                is LoginAction.OpenAuthorizationUri -> {
+                    customTabsManager.launch(action.uri)
+                    authorizationStarted = true
+                }
+
+                is LoginAction.Finish -> finish()
+            }
+        }
     }
 
     override fun onResume() {
@@ -35,11 +45,7 @@ internal class LoginActivity : SdkBaseActivity() {
          * stack underneath the authorization activity.
          */
         if (!authorizationStarted) {
-            lifecycleScope.launch {
-                val uri = viewModel.getAuthenticationUri().getOrNull() ?: return@launch
-                customTabsManager.launch(uri)
-                authorizationStarted = true
-            }
+            viewModel.sendIntent(LoginIntent.AuthorizationStarted)
             return
         }
 
@@ -53,13 +59,7 @@ internal class LoginActivity : SdkBaseActivity() {
          * the back button, or closes the browser tab.
          */
         val bearer = intent.data?.getQueryParameter(ReplyQueryBearerKey)
-        if (bearer != null) {
-            viewModel.onAuthenticated(bearer)
-            LoginCallbacks.onLogin()
-        } else {
-            LoginCallbacks.onCanceled()
-        }
-        finish()
+        viewModel.sendIntent(LoginIntent.AuthenticationFinished(bearer))
     }
 
     override fun onNewIntent(intent: Intent) {
