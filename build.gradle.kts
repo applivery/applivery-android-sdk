@@ -5,19 +5,16 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.detekt)
-    alias(libs.plugins.gradle.nexus.publish)
 }
 
 allprojects {
     apply(from = "$rootDir/detekt.gradle")
 }
 
-apply(from = "${rootDir}/scripts/publish-root.gradle")
-
 val androidCompileSdk by extra { 34 }
 val androidMinSdk by extra { 24 }
 val androidTargetSdk by extra { 34 }
 
-val PUBLISH_GROUP_ID by extra { "com.applivery" }
-val PUBLISH_VERSION by extra { "3.8.5" }
+val libraryGroup by extra { "com.applivery" }
+val libraryVersion by extra { "4.0.0-SNAPSHOT" }
 

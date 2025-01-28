@@ -37,18 +37,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        missingDimensionStrategy("default", "sandbox") //TODO remove and build flavors here
+        buildConfigField("String", "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\"")
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String", "APPLIVERY_APP_TOKEN", "\"yK6HLUIwVhlnrWohfXfMkt8y\"")
-        }
-
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            buildConfigField("String", "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\"")
         }
     }
     lint {

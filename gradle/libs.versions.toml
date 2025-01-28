@@ -15,9 +15,8 @@ arrow = "1.2.0"
 junitExt = "1.2.1"
 startUp = "1.2.0"
 activity = "1.9.3"
-composeBom = "2025.01.00"
+composeBom = "2024.06.00"
 detekt = "1.23.6"
-nexusPublish = "1.1.0"
 ackpine = "0.9.4"
 capturable = "2.1.0"
 appcompat = "1.7.0"
@@ -59,4 +58,3 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-gradle-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexusPublish" }
