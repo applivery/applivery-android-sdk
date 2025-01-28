@@ -85,6 +85,8 @@ implementation 'com.applivery:applivery-sdk:${latestVersion}'
 At your application startup, in a class extending from `Application`, you must call the `Applivery.init()` method:
 
  ```kotlin
+import com.applivery.applvsdklib.Applivery
+
 class AppliveryApplication : Application() {
 
     override fun onCreate() {
@@ -100,6 +102,8 @@ class AppliveryApplication : Application() {
 For private Applivery instances, tenants can be configured passing it as parameter in the `Applivery.init()` method:
 
  ```kotlin
+import com.applivery.applvsdklib.Applivery
+
 class AppliveryApplication : Application() {
 
     override fun onCreate() {
