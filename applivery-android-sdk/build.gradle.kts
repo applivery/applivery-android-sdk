@@ -109,6 +109,8 @@ dependencies {
     debugImplementation(libs.androidx.compose.material3)
     debugImplementation(libs.ackpine.ktx)
     debugImplementation(libs.capturable)
+    releaseCompileOnly(platform(libs.androidx.compose.bom))
+    releaseCompileOnly(libs.androidx.compose.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
