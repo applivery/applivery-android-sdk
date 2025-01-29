@@ -14,7 +14,7 @@ import androidx.browser.customtabs.CustomTabsSession
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
-class CustomTabsManager(private val context: Context) : DefaultLifecycleObserver {
+internal class CustomTabsManager(private val context: Context) : DefaultLifecycleObserver {
 
     private val packageNameToUse: String? by lazy { getPackageNameToUse(context) }
 

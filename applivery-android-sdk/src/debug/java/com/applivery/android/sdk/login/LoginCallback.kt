@@ -1,6 +1,6 @@
 package com.applivery.android.sdk.login
 
-interface LoginCallback {
+internal interface LoginCallback {
 
     fun onLogin()
 
@@ -16,7 +16,7 @@ interface LoginCallback {
     }
 }
 
-object LoginCallbacks : LoginCallback {
+internal object LoginCallbacks : LoginCallback {
 
     private val callbacks = mutableListOf<LoginCallback>()
 

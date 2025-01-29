@@ -263,7 +263,7 @@ internal fun FeedbackScreen(
     ExperimentalComposeApi::class
 )
 @Composable
-fun ScreenshotDrawCanvasDialog(
+private fun ScreenshotDrawCanvasDialog(
     screenshot: Bitmap,
     onDismiss: () -> Unit = {},
     onApply: (Bitmap?) -> Unit

@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 
-interface CustomTabIntentResolver {
+internal interface CustomTabIntentResolver {
 
     fun launch(uri: Uri): Boolean
 
@@ -21,7 +21,9 @@ interface CustomTabIntentResolver {
     }
 }
 
-class CustomTabIntentResolverDefault(private val context: Context) : CustomTabIntentResolver {
+internal class CustomTabIntentResolverDefault(
+    private val context: Context
+) : CustomTabIntentResolver {
 
     override fun launch(uri: Uri): Boolean {
         val pm = context.packageManager

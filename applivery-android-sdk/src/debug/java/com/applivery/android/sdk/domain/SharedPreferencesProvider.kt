@@ -8,7 +8,7 @@ interface SharedPreferencesProvider {
     val sharedPreferences: SharedPreferences
 }
 
-class AndroidSharedPreferencesProvider(private val context: Context) : SharedPreferencesProvider {
+internal class AndroidSharedPreferencesProvider(private val context: Context) : SharedPreferencesProvider {
 
     override val sharedPreferences: SharedPreferences
         get() = context.getSharedPreferences(PreferencesName, Context.MODE_PRIVATE)
