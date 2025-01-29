@@ -33,8 +33,8 @@ android {
         minSdk = androidMinSdk
         targetSdk = androidTargetSdk
 
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "3.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\"")
@@ -66,7 +66,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":applivery-android-sdk"))
+    debugImplementation("com.applivery:applivery-sdk:4.0.0-SNAPSHOT")
+    releaseImplementation("com.applivery:applivery-sdk-no-op:4.0.0-SNAPSHOT")
 
     implementation(libs.androidx.appcompat)
     implementation(libs.android.material)
