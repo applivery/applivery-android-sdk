@@ -120,8 +120,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
-val secrets = Properties().apply {
-    load(File("$rootDir/local.properties").inputStream())
+val secretsFile = rootProject.file("local.properties")
+val secrets = Properties()
+
+if (secretsFile.exists()) {
+    secrets.load(secretsFile.inputStream())
 }
 
 publishing {
