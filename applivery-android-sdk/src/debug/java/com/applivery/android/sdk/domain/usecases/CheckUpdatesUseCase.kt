@@ -1,6 +1,7 @@
 package com.applivery.android.sdk.domain.usecases
 
 import com.applivery.android.sdk.HostActivityProvider
+import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.model.AppConfig
 import com.applivery.android.sdk.domain.model.UpdateType
@@ -16,6 +17,7 @@ internal interface CheckUpdatesUseCase {
 internal class CheckUpdates(
     private val repository: AppliveryRepository,
     private val hostActivityProvider: HostActivityProvider,
+    private val logger: DomainLogger,
     hostAppPackageInfoProvider: HostAppPackageInfoProvider
 ) : CheckUpdatesUseCase {
 
@@ -23,7 +25,7 @@ internal class CheckUpdates(
 
     override suspend fun invoke() {
         val config = repository.getConfig().getOrNull() ?: return
-        when (config.toUpdateType()) {
+        when (config.toUpdateType().also(logger::updateType)) {
             UpdateType.ForceUpdate -> {
                 val activity = hostActivityProvider.activity ?: return
                 activity.startActivity(ForceUpdateActivity.getIntent(activity))

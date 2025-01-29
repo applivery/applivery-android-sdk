@@ -3,6 +3,7 @@ package com.applivery.android.sdk
 import com.applivery.android.sdk.di.AppliveryDiContext
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.di.Properties
+import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.asResult
 import com.applivery.android.sdk.domain.model.BindUser
 import com.applivery.android.sdk.domain.model.User
@@ -120,6 +121,8 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
     private fun initialize(appToken: String, tenant: String?) {
         require(appToken.isNotBlank()) { "Empty appToken received" }
+
+        get<DomainLogger>().startingSdk(appToken, tenant)
 
         AppliveryDiContext.koinApp.apply {
             properties(

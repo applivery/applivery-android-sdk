@@ -13,12 +13,14 @@ import androidx.core.content.ContextCompat
 import arrow.core.raise.either
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.di.AppliveryKoinComponent
+import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
-import com.applivery.android.sdk.domain.Logger
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.usecases.DownloadLastBuildUseCase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -31,7 +33,7 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
 
     private val buildInstaller: BuildInstaller by inject()
 
-    private val logger: Logger by inject()
+    private val logger: DomainLogger by inject()
 
     private val progressSender: UpdateInstallProgressSender by inject()
 
@@ -68,6 +70,10 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
             progressSender.step.update { UpdateInstallStep.Idle }
             stopSelf()
         }
+
+        progressSender.step
+            .onEach { logger.installBuildProgress(it) }
+            .launchIn(coroutineScope)
     }
 
     private fun createNotificationChannel() {
@@ -90,7 +96,7 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
     }
 
     private fun onInstallFailed(error: DomainError) {
-        logger.log("Error installing build: ${error.message}")
+        logger.errorInstallingBuild(error.message)
     }
 
     companion object {

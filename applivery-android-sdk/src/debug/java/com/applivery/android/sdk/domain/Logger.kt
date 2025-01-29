@@ -1,7 +1,9 @@
 package com.applivery.android.sdk.domain
 
 import android.util.Log
+import com.applivery.android.sdk.domain.model.UpdateType
 import com.applivery.android.sdk.feedback.MediaPermissionGrantStatus
+import com.applivery.android.sdk.updates.UpdateInstallStep
 
 internal interface Logger {
 
@@ -22,6 +24,10 @@ internal class AndroidLogger : Logger {
 internal class DomainLogger(
     private val logger: Logger
 ) {
+
+    fun startingSdk(appToken: String, tenant: String?) {
+        logger.log("Starting Applivery SDK with appToken: $appToken and tenant: $tenant")
+    }
 
     fun logMediaPermissionGrantStatus(status: MediaPermissionGrantStatus) {
         when (status) {
@@ -45,4 +51,29 @@ internal class DomainLogger(
         logger.log("Image decoding failed with the following error:")
         error.printStackTrace()
     }
+
+    fun accelerometerNotAvailable() {
+        logger.log("Accelerometer not found. Shake feedback won't work for this device")
+    }
+
+    fun updateType(updateType: UpdateType) {
+        when (updateType) {
+            UpdateType.ForceUpdate -> logger.log("Force update available")
+            UpdateType.SuggestedUpdate -> logger.log("Suggested update available")
+            UpdateType.None -> logger.log("No update available")
+        }
+    }
+
+    fun errorCapturingScreenFromHostApp(errorMessage: String?) {
+        logger.log("Error capturing screen from host app: $errorMessage")
+    }
+
+    fun installBuildProgress(step: UpdateInstallStep) {
+        logger.log("Installing build in progress: $step")
+    }
+
+    fun errorInstallingBuild(errorMessage: String?) {
+        logger.log("Error installing build: $errorMessage")
+    }
+
 }

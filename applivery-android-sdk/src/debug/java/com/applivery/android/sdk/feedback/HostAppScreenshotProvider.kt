@@ -6,6 +6,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.applivery.android.sdk.HostActivityProvider
+import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.model.InternalError
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,8 @@ internal interface HostAppScreenshotProvider {
 
 @Suppress("DEPRECATION")
 internal class HostAppScreenshotProviderImpl(
-    private val hostActivityProvider: HostActivityProvider
+    private val hostActivityProvider: HostActivityProvider,
+    private val logger: DomainLogger
 ) : HostAppScreenshotProvider {
 
     override suspend fun get(): Either<DomainError, Bitmap> {
@@ -38,11 +40,9 @@ internal class HostAppScreenshotProviderImpl(
                     BitmapFactory.decodeStream(ByteArrayInputStream(it.toByteArray()))
                 }.right()
             } catch (e: Throwable) {
-                // TODO: log error
-                e.printStackTrace()
-                InternalError().left()
+                InternalError(e.message).left()
             }
-        }
+        }.onLeft { logger.errorCapturingScreenFromHostApp(it.message) }
     }
 
     companion object {

@@ -98,9 +98,7 @@ private val networkModule = module {
                     loginHandler = get()
                 )
             )
-            addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-            )
+            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
         }.build()
     }
     factory(ApiServiceUrl) {

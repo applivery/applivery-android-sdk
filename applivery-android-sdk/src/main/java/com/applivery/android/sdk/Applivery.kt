@@ -56,7 +56,7 @@ interface Applivery {
         private var sInstance: Applivery? = null
 
         fun getInstance(): Applivery {
-            return requireNotNull(sInstance) { "Applivery SDK not initialized. Did you forget to call Applivery.init?" }
+            return requireNotNull(sInstance) { "Applivery SDK not initialized. Did you forget to call Applivery.init() ?" }
         }
 
         fun init(appToken: String) {

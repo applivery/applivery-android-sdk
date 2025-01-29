@@ -6,7 +6,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.core.content.getSystemService
-import com.applivery.android.sdk.domain.Logger
+import com.applivery.android.sdk.domain.DomainLogger
 import kotlin.math.sqrt
 
 internal interface ShakeDetector {
@@ -22,7 +22,7 @@ internal interface ShakeDetector {
 
 internal class AndroidShakeDetector(
     context: Context,
-    private val logger: Logger
+    private val logger: DomainLogger
 ) : ShakeDetector, SensorEventListener {
 
     private val sensorManager by lazy { context.getSystemService<SensorManager>() }
@@ -35,7 +35,7 @@ internal class AndroidShakeDetector(
     override fun start(listener: ShakeDetector.Listener) {
         val accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         if (accelerometer == null) {
-            logger.log("Accelerometer not found. Shake feedback won't work for this device")
+            logger.accelerometerNotAvailable()
             return
         }
         sensorManager?.registerListener(
