@@ -3,8 +3,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-parcelize")
     alias(libs.plugins.compose.compiler)
+    id("kotlin-parcelize")
     id("maven-publish")
     id("signing")
 }
@@ -111,6 +111,7 @@ dependencies {
     debugImplementation(libs.capturable)
     releaseCompileOnly(platform(libs.androidx.compose.bom))
     releaseCompileOnly(libs.androidx.compose.ui)
+    testReleaseCompileOnly(platform(libs.androidx.compose.bom))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
