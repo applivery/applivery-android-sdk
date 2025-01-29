@@ -112,6 +112,7 @@ dependencies {
     releaseCompileOnly(platform(libs.androidx.compose.bom))
     releaseCompileOnly(libs.androidx.compose.ui)
     testReleaseCompileOnly(platform(libs.androidx.compose.bom))
+    testReleaseCompileOnly(libs.androidx.compose.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
