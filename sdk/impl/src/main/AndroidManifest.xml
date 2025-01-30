@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.VIBRATE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.ENFORCE_UPDATE_OWNERSHIP"
+        tools:node="remove" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
+
+    <application>
+
+        <activity
+            android:name=".login.LoginActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboard|keyboardHidden"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Applivery.NoActionBar" />
+
+        <activity
+            android:name=".updates.SuggestedUpdateActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Applivery.NoActionBar.Translucent" />
+
+        <activity
+            android:name=".updates.ForceUpdateActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Applivery.NoActionBar" />
+
+        <activity
+            android:name=".feedback.FeedbackActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Applivery.NoActionBar" />
+
+        <activity
+            android:name=".login.RedirectUriReceiverActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Applivery.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="${applicationId}.${authSchemeSuffix}" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".updates.DownloadBuildService"
+            android:foregroundServiceType="shortService"
+            android:stopWithTask="true" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="com.applivery.android.sdk.AppliveryInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="ru.solrudev.ackpine.AckpineInitializer"
+                tools:node="remove" />
+        </provider>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.applivery.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

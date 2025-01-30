@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -16,10 +17,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
         maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     }
 }
 
 rootProject.name = "applivery-android-sdk"
 include(":sample")
-include(":applivery-android-sdk")
+//include(":applivery-android-sdk")
+include(":sdk:public")
+include(":sdk:impl")
+include(":sdk:no-op")

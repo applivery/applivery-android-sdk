@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.detekt)
 }
@@ -16,5 +17,5 @@ val androidMinSdk by extra { 24 }
 val androidTargetSdk by extra { 34 }
 
 val libraryGroup by extra { "com.applivery" }
-val libraryVersion by extra { "4.0.0-alpha1" }
+val libraryVersion by extra { "4.0.0-alpha2" }
 

@@ -52,9 +52,15 @@ capturable = { module = "dev.shreyaspatil:capturable", version.ref = "capturable
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 android-material = { module = "com.google.android.material:material", version.ref = "material" }
 
+#Libs for convention plugin
+android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+android-tools-common = { module = "com.android.tools:common", version = "31.8.0" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
