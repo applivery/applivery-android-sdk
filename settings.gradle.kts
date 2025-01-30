@@ -24,7 +24,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "applivery-android-sdk"
 include(":sample")
-//include(":applivery-android-sdk")
 include(":sdk:public")
 include(":sdk:impl")
 include(":sdk:no-op")

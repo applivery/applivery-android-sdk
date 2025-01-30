@@ -28,11 +28,11 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
     private val mainScope = MainScope()
 
-    override fun init(appToken: String) {
+    fun init(appToken: String) {
         initialize(appToken, tenant = null)
     }
 
-    override fun init(appToken: String, tenant: String) {
+    fun init(appToken: String, tenant: String) {
         require(tenant.isNotBlank()) { "Empty tenant received" }
         initialize(appToken, tenant)
     }

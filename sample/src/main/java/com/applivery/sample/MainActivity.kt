@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.applivery.android.sdk.Applivery
+import com.applivery.android.sdk.getInstance
 import com.applivery.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

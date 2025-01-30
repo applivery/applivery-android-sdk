@@ -7,10 +7,6 @@ import com.applivery.android.sdk.user.GetUserCallback
 
 interface Applivery {
 
-    fun init(appToken: String)
-
-    fun init(appToken: String, tenant: String)
-
     fun isUpToDate(callback: IsUpToDateCallback)
 
     suspend fun isUpToDate(): Boolean

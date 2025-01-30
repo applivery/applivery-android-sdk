@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.applivery.android.sdk.Applivery
 import com.applivery.android.sdk.domain.model.User
+import com.applivery.android.sdk.getInstance
 import com.applivery.android.sdk.user.BindUserCallback
 import com.applivery.android.sdk.user.GetUserCallback
 import com.applivery.sample.databinding.ActivityUserBinding

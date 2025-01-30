@@ -2,6 +2,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
@@ -13,22 +14,24 @@ import org.gradle.kotlin.dsl.register
 import org.gradle.plugins.signing.SigningExtension
 import java.util.Properties
 
-private val artifactIdMissingError = """
-    No artifactId was provided for SdkPublishExtension. Provide one using sdkPublish DSL
-""".trimIndent()
-
-private val artifactConfiguration: Project.(Secrets) -> ArtifactConfiguration = { secrets ->
-    val options = extensions.getByType<SdkPublishExtension>()
-    val libraryGroup: String by rootProject.extra
-    val libraryVersion: String by rootProject.extra
-    val pomConfiguration = pomConfiguration(secrets)
-    ArtifactConfiguration(
-        artifactId = options.artifactId ?: error(artifactIdMissingError),
-        groupId = libraryGroup,
-        version = libraryVersion,
-        pom = pomConfiguration
-    )
+private val extensionPropertyMissingError: (String) -> String = {
+    " No $it was provided for SdkPublishExtension. Provide one using sdkPublish DSL"
 }
+private val artifactIdMissingError = extensionPropertyMissingError("artifactId")
+private val publicModuleNameMissingError = extensionPropertyMissingError("publicModuleName")
+
+private val artifactConfiguration: Project.(Secrets, String) -> ArtifactConfiguration =
+    { secrets, artifactId ->
+        val libraryGroup: String by rootProject.extra
+        val libraryVersion: String by rootProject.extra
+        val pomConfiguration = pomConfiguration(secrets)
+        ArtifactConfiguration(
+            artifactId = artifactId,
+            groupId = libraryGroup,
+            version = libraryVersion,
+            pom = pomConfiguration
+        )
+    }
 
 private val pomConfiguration: Project.(Secrets) -> PomConfiguration = {
     PomConfiguration(
@@ -69,6 +72,7 @@ private val repositoryConfiguration: Project.(Secrets) -> RepositoryConfiguratio
 
 interface SdkPublishExtension {
     var artifactId: String?
+    var publicModuleName: String?
 }
 
 class PublishConventionPlugin : Plugin<Project> {
@@ -78,12 +82,14 @@ class PublishConventionPlugin : Plugin<Project> {
                 apply("maven-publish")
                 apply("signing")
             }
-            extensions.create("sdkPublish", SdkPublishExtension::class)
+            val options = extensions.create("sdkPublish", SdkPublishExtension::class)
             val secrets = Secrets.fromPropertiesFile("local.properties")
             afterEvaluate {
+                val artifactId = options.artifactId ?: error(artifactIdMissingError)
+                val publicModule = options.publicModuleName ?: error(publicModuleNameMissingError)
                 extensions.configure<PublishingExtension> {
                     configureWith(
-                        artifact = artifactConfiguration(secrets),
+                        artifact = artifactConfiguration(secrets, artifactId),
                         repository = repositoryConfiguration(secrets),
                     )
                 }
@@ -96,6 +102,17 @@ class PublishConventionPlugin : Plugin<Project> {
                         secrets.signingPassword
                     )
                     sign(publishing.publications)
+                }
+
+                tasks.register<Copy>("copyJars") {
+                    val publicModuleDir = publicModule.replace(":", "/")
+                    dependsOn("$publicModule:createJar")
+                    from("${rootProject.rootDir}$publicModuleDir/build/libs/${project(publicModule).name}.jar")
+                    into("libs")
+                }
+
+                tasks.named("preBuild").configure {
+                    dependsOn("copyJars")
                 }
             }
         }

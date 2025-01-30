@@ -64,3 +64,5 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+applivery-publish = { id = "com.applivery.android.sdk.publish", version = "unspecified" }
+applivery-jvm-jar = { id = "com.applivery.android.sdk.jvm.jar", version = "unspecified" }

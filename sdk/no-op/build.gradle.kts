@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.applivery.android.sdk.publish")
+    alias(libs.plugins.applivery.publish)
 }
 
 sdkPublish {
     artifactId = "applivery-sdk-no-op"
+    publicModuleName = ":sdk:public"
 }
 
 android {
@@ -47,15 +48,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
-}
-
-tasks.register<Copy>("copyJars") {
-    dependsOn(":sdk:public:createJar") // Ensure JARs are built first
-    println("Trying to get the JAR from ${"../sdk/public/build/libs/${project(":sdk:public").name}.jar"}")
-    from("${rootProject.rootDir}/sdk/public/build/libs/${project(":sdk:public").name}.jar")
-    into("libs")
-}
-
-tasks.named("preBuild").configure {
-    dependsOn("copyJars")
 }

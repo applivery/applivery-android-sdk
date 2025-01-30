@@ -7,10 +7,6 @@ import com.applivery.android.sdk.user.GetUserCallback
 
 internal class AppliverySdk : Applivery {
 
-    override fun init(appToken: String) = Unit
-
-    override fun init(appToken: String, tenant: String) = Unit
-
     override fun isUpToDate(callback: IsUpToDateCallback) {
         callback.onResponse(isUpToDate = true)
     }
@@ -63,18 +59,12 @@ class AppliveryNoOpError : Throwable() {
     override val message: String = "This is a no op instance of the Applivery SDK"
 }
 
-private var sInstance: Applivery? = null
+private var sInstance: Applivery = AppliverySdk()
 
-fun Applivery.Companion.getInstance(): Applivery {
-    return requireNotNull(sInstance) {
-        "Applivery SDK not initialized. Did you forget to call Applivery.init() ?"
-    }
-}
+fun Applivery.Companion.getInstance(): Applivery = sInstance
 
-fun Applivery.Companion.init(appToken: String) {
-    sInstance = AppliverySdk().apply { init(appToken) }
-}
+@Suppress("UNUSED_PARAMETER")
+fun Applivery.Companion.init(appToken: String) = Unit
 
-fun Applivery.Companion.init(appToken: String, tenant: String) {
-    sInstance = AppliverySdk().apply { init(appToken, tenant) }
-}
+@Suppress("UNUSED_PARAMETER")
+fun Applivery.Companion.init(appToken: String, tenant: String) = Unit
