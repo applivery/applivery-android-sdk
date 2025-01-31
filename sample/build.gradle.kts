@@ -66,8 +66,8 @@ android {
 }
 
 dependencies {
-    releaseImplementation("com.applivery:applivery-sdk-no-op:4.0.0-alpha2")
-    debugImplementation("com.applivery:applivery-sdk:4.0.0-alpha2")
+    releaseImplementation("com.applivery:applivery-sdk-no-op:4.0.0-alpha3")
+    debugImplementation("com.applivery:applivery-sdk:4.0.0-alpha3")
 
     implementation(libs.androidx.appcompat)
     implementation(libs.android.material)

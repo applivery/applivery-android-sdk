@@ -21,10 +21,6 @@ gradlePlugin {
             id = libs.plugins.applivery.publish.get().pluginId
             implementationClass = "PublishConventionPlugin"
         }
-        register("JvmJarConventionPlugin") {
-            id = libs.plugins.applivery.jvm.jar.get().pluginId
-            implementationClass = "JvmJarConventionPlugin"
-        }
     }
 }
 

@@ -2,7 +2,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
@@ -15,10 +14,9 @@ import org.gradle.plugins.signing.SigningExtension
 import java.util.Properties
 
 private val extensionPropertyMissingError: (String) -> String = {
-    " No $it was provided for SdkPublishExtension. Provide one using sdkPublish DSL"
+    "No $it was provided for SdkPublishExtension. Provide one using sdkPublish DSL"
 }
 private val artifactIdMissingError = extensionPropertyMissingError("artifactId")
-private val publicModuleNameMissingError = extensionPropertyMissingError("publicModuleName")
 
 private val artifactConfiguration: Project.(Secrets, String) -> ArtifactConfiguration =
     { secrets, artifactId ->
@@ -72,7 +70,6 @@ private val repositoryConfiguration: Project.(Secrets) -> RepositoryConfiguratio
 
 interface SdkPublishExtension {
     var artifactId: String?
-    var publicModuleName: String?
 }
 
 class PublishConventionPlugin : Plugin<Project> {
@@ -86,7 +83,6 @@ class PublishConventionPlugin : Plugin<Project> {
             val secrets = Secrets.fromPropertiesFile("local.properties")
             afterEvaluate {
                 val artifactId = options.artifactId ?: error(artifactIdMissingError)
-                val publicModule = options.publicModuleName ?: error(publicModuleNameMissingError)
                 extensions.configure<PublishingExtension> {
                     configureWith(
                         artifact = artifactConfiguration(secrets, artifactId),
@@ -102,17 +98,6 @@ class PublishConventionPlugin : Plugin<Project> {
                         secrets.signingPassword
                     )
                     sign(publishing.publications)
-                }
-
-                tasks.register<Copy>("copyJars") {
-                    val publicModuleDir = publicModule.replace(":", "/")
-                    dependsOn("$publicModule:createJar")
-                    from("${rootProject.rootDir}$publicModuleDir/build/libs/${project(publicModule).name}.jar")
-                    into("libs")
-                }
-
-                tasks.named("preBuild").configure {
-                    dependsOn("copyJars")
                 }
             }
         }
@@ -151,7 +136,12 @@ class PublishConventionPlugin : Plugin<Project> {
                         url = artifact.pom.scm.url
                     }
                 }
-                from(components["release"])
+                if (plugins.hasPlugin("java")) {
+                    from(components["java"])
+                }
+                if (plugins.hasPlugin("android-library")) {
+                    from(components["release"])
+                }
             }
         }
         repositories {

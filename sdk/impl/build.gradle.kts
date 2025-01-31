@@ -8,7 +8,6 @@ plugins {
 
 sdkPublish {
     artifactId = "applivery-sdk"
-    publicModuleName = ":sdk:public"
 }
 
 android {
@@ -75,7 +74,7 @@ android {
 
 dependencies {
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    api(project(":sdk:public"))
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.startup)
