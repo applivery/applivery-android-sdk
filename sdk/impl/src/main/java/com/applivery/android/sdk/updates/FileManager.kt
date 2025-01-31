@@ -6,6 +6,7 @@ import androidx.core.content.FileProvider
 import arrow.core.Either
 import arrow.core.raise.catch
 import arrow.core.raise.either
+import com.applivery.android.sdk.AppliveryFileProvider
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.model.InternalError
 import kotlinx.coroutines.Dispatchers.IO
@@ -30,7 +31,7 @@ internal fun Context.getContentUriForFile(file: File): Uri? {
     return runCatching {
         FileProvider.getUriForFile(
             this,
-            "$packageName.applivery.fileprovider",
+            AppliveryFileProvider.authority,
             file
         )
     }.getOrNull()
