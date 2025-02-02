@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -49,6 +48,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.applivery.android.sdk.R
 import kotlin.math.roundToInt
 
@@ -167,7 +167,6 @@ internal fun DrawingPropertiesMenu(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PropertiesMenuDialog(
     properties: PathProperties,
@@ -179,7 +178,7 @@ internal fun PropertiesMenuDialog(
     var strokeCap by remember { mutableStateOf(properties.strokeCap) }
     var strokeJoin by remember { mutableStateOf(properties.strokeJoin) }
 
-    BasicAlertDialog(onDismissRequest = onDismiss) {
+    Dialog(onDismissRequest = onDismiss) {
 
         Column(
             modifier = Modifier
@@ -280,7 +279,6 @@ internal fun PropertiesMenuDialog(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ColorSelectionDialog(
     initialColor: Color,
@@ -300,7 +298,7 @@ internal fun ColorSelectionDialog(
         alpha = alpha.roundToInt()
     )
 
-    BasicAlertDialog(onDismissRequest = onDismiss) {
+    Dialog(onDismissRequest = onDismiss) {
 
         BoxWithConstraints(
             modifier = Modifier

@@ -36,7 +36,14 @@ internal fun AppliveryTheme(content: @Composable () -> Unit) {
             onErrorContainer = colorOnErrorContainer,
             outline = colorOutline,
             outlineVariant = colorOutlineVariant,
-            scrim = colorScrim
+            scrim = colorScrim,
+            surfaceContainer = colorSurface,
+            surfaceContainerHigh = colorSurface,
+            surfaceContainerLow = colorSurface,
+            surfaceContainerHighest = colorSurface,
+            surfaceContainerLowest = colorSurface,
+            surfaceDim = colorSurface,
+            surfaceBright = colorSurface
         ),
         content = content
     )

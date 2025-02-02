@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.R
+import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import org.koin.core.component.inject
 
@@ -41,7 +41,7 @@ internal class SuggestedUpdateActivity : SdkBaseActivity(), DialogInterface.OnDi
 
         fun getIntent(context: Context): Intent {
             return Intent(context, SuggestedUpdateActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
     }
 }

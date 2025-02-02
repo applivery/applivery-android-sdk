@@ -2,6 +2,7 @@ package com.applivery.android.sdk.data.api
 
 import android.content.Context
 import arrow.core.Either
+import arrow.core.left
 import arrow.core.raise.catch
 import arrow.core.raise.either
 import arrow.core.raise.ensureNotNull
@@ -22,6 +23,7 @@ import com.applivery.android.sdk.domain.model.BindUser
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.model.Feedback
 import com.applivery.android.sdk.domain.model.InternalError
+import com.applivery.android.sdk.domain.model.UnauthorizedError
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.model.ignore
 import com.applivery.android.sdk.domain.model.mapNotNull
@@ -83,6 +85,7 @@ internal class ApiDataSource(
     }
 
     suspend fun getUser(): Either<DomainError, User> {
+        if (!sessionManager.isLoggedIn) return UnauthorizedError().left()
         return apiService.getUser().toDomain().map(UserApi::toDomain)
     }
 

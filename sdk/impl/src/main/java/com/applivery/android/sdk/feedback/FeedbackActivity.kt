@@ -44,7 +44,7 @@ internal class FeedbackActivity : SdkBaseActivity() {
         fun getIntent(context: Context, arguments: FeedbackArguments): Intent {
             return Intent(context, FeedbackActivity::class.java)
                 .putExtra(ExtraArguments, arguments)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
     }
 }

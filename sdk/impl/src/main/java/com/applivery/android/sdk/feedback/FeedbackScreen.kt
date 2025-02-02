@@ -1,23 +1,27 @@
 package com.applivery.android.sdk.feedback
 
 import android.graphics.Bitmap
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +52,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -58,6 +63,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.feedback.draw.DrawingCanvas
@@ -243,7 +249,10 @@ internal fun FeedbackScreen(
         )
 
         if (showDrawingScreenshot) {
+            /*Its important to call it here so it calculate available height based on the current
+            * insets, because in the Dialog context there are no insets to consume*/
             ScreenshotDrawCanvasDialog(
+                modifier = Modifier.availableHeight(),
                 screenshot = requireNotNull(state.screenshot),
                 onDismiss = {
                     showDrawingScreenshot = false
@@ -258,18 +267,17 @@ internal fun FeedbackScreen(
 }
 
 @OptIn(
-    ExperimentalMaterial3Api::class,
     ExperimentalComposeUiApi::class,
     ExperimentalComposeApi::class
 )
 @Composable
 private fun ScreenshotDrawCanvasDialog(
+    modifier: Modifier = Modifier,
     screenshot: Bitmap,
     onDismiss: () -> Unit = {},
     onApply: (Bitmap?) -> Unit
 ) {
-    BasicAlertDialog(
-        modifier = Modifier.fillMaxSize(),
+    Dialog(
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = false,
@@ -277,7 +285,10 @@ private fun ScreenshotDrawCanvasDialog(
         ),
         onDismissRequest = onDismiss
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             val density = LocalDensity.current
             val canvasState = rememberDrawingCanvasState()
             var imageSize by remember { mutableStateOf(DpSize.Zero) }
@@ -326,6 +337,24 @@ private fun ScreenshotDrawCanvasDialog(
         }
     }
 }
+
+/**
+ * Temporary workaround to fix WindowInsets bug on Dialogs on Android 15
+ * (https://issuetracker.google.com/issues/391393405)
+ * We use a @Composable instead a composed Modifier because we want the value at the call place
+ */
+@Composable
+fun Modifier.availableHeight() =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        val insets = WindowInsets.systemBars.asPaddingValues()
+        val screenHeight = LocalConfiguration.current.screenHeightDp
+        val availableHeight =
+            screenHeight.dp - insets.calculateTopPadding() - insets.calculateBottomPadding()
+
+        heightIn(max = availableHeight)
+    } else {
+        this
+    }
 
 @Preview
 @Composable

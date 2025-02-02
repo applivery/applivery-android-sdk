@@ -23,7 +23,7 @@ internal class AndroidHostAppPackageInfoProvider(
                 appName = context.applicationName(),
                 packageName = pInfo.packageName,
                 versionCode = pInfo.versionCodeCompat,
-                versionName = pInfo.versionName,
+                versionName = pInfo.versionName.orEmpty(),
                 minSdkVersion = appInfo.minSdkVersion,
                 targetSdkVersion = appInfo.targetSdkVersion
             )
