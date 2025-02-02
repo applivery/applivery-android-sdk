@@ -1,92 +1,231 @@
 package com.applivery.sample
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.applivery.android.sdk.Applivery
 import com.applivery.android.sdk.getInstance
-import com.applivery.sample.databinding.ActivityMainBinding
+import com.applivery.sample.theme.AppliveryTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     private lateinit var appPreferences: AppPreferences
-    private lateinit var binding: ActivityMainBinding
+
+    private val isUpToDate = MutableStateFlow(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
         appPreferences = AppliveryApplication.appPreferences
-        initViews()
-    }
+        setContent {
+            val isUpToDate by isUpToDate.collectAsState()
+            var isShakeFeedbackEnabled by remember { mutableStateOf(false) }
+            var isScreenshotFeedbackEnabled by remember { mutableStateOf(false) }
+            var isCheckForUpdatesBackgroundEnabled by remember { mutableStateOf(appPreferences.checkForUpdatesBackground) }
+            MainScreen(
+                isUpToDate = isUpToDate,
+                isShakeFeedbackEnabled = isShakeFeedbackEnabled,
+                isScreenshotFeedbackEnabled = isScreenshotFeedbackEnabled,
+                isCheckForUpdatesBackgroundEnabled = isCheckForUpdatesBackgroundEnabled,
+                onEnableShakeFeedback = {
+                    if (it) {
+                        Applivery.getInstance().enableShakeFeedback()
+                    } else {
+                        Applivery.getInstance().disableShakeFeedback()
+                    }
+                    isShakeFeedbackEnabled = it
 
-    private fun initViews() {
-        setSupportActionBar(binding.toolbar)
-        binding.chronometer.start()
-        binding.checkForUpdatesBackgroundSwitch.isChecked =
-            Applivery.getInstance().getCheckForUpdatesBackground()
-        binding.checkForUpdatesBackgroundSwitch.setOnCheckedChangeListener { _, isChecked ->
-            appPreferences.checkForUpdatesBackground = isChecked
-            Applivery.getInstance().setCheckForUpdatesBackground(isChecked)
-        }
-
-        Applivery.getInstance().disableShakeFeedback()
-
-        binding.feedbackSwitch.isChecked = false
-        binding.feedbackSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                Applivery.getInstance().enableShakeFeedback()
-            } else {
-                Applivery.getInstance().disableShakeFeedback()
-                Applivery.getInstance().disableScreenshotFeedback()
-            }
-        }
-
-        binding.screenshotSwitch.isChecked = false
-        binding.screenshotSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                Applivery.getInstance().enableScreenshotFeedback()
-            } else {
-                Applivery.getInstance().disableScreenshotFeedback()
-            }
-        }
-
-        binding.checkForUpdatesButton.setOnClickListener {
-            Applivery.getInstance().checkForUpdates()
-        }
-
-        binding.downloadLastBuildButton.setOnClickListener {
-            Applivery.getInstance().update()
+                },
+                onEnableScreenshotFeedback = {
+                    if (it) {
+                        Applivery.getInstance().enableScreenshotFeedback()
+                    } else {
+                        Applivery.getInstance().disableScreenshotFeedback()
+                    }
+                    isScreenshotFeedbackEnabled = it
+                },
+                onEnableCheckForUpdatesBackground = {
+                    appPreferences.checkForUpdatesBackground = it
+                    isCheckForUpdatesBackgroundEnabled = it
+                },
+                onCheckForUpdates = {
+                    Applivery.getInstance().checkForUpdates()
+                },
+                onDownloadLastBuild = {
+                    Applivery.getInstance().update()
+                },
+                onUserClick = {
+                    UserActivity.open(this)
+                }
+            )
         }
     }
 
     override fun onResume() {
         super.onResume()
-        Applivery.getInstance().isUpToDate { isUpToDate ->
-            if (isUpToDate) {
-                binding.isUpToDateTextView.text = getString(R.string.is_up_to_date_text_updated)
-            } else {
-                binding.isUpToDateTextView.text = getString(R.string.is_up_to_date_text_no_updated)
-            }
+        Applivery.getInstance().isUpToDate { upToDate ->
+            isUpToDate.update { upToDate }
         }
     }
+}
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.user_menu, menu)
-        return true
-    }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainScreen(
+    isUpToDate: Boolean,
+    isShakeFeedbackEnabled: Boolean,
+    isScreenshotFeedbackEnabled: Boolean,
+    isCheckForUpdatesBackgroundEnabled: Boolean,
+    onEnableShakeFeedback: (Boolean) -> Unit,
+    onEnableScreenshotFeedback: (Boolean) -> Unit,
+    onEnableCheckForUpdatesBackground: (Boolean) -> Unit,
+    onCheckForUpdates: () -> Unit,
+    onDownloadLastBuild: () -> Unit,
+    onUserClick: () -> Unit
+) {
+    AppliveryTheme {
+        Scaffold(
+            topBar = {
+                val containerColor = MaterialTheme.colorScheme.primaryContainer
+                val contentColor = contentColorFor(containerColor)
+                TopAppBar(
+                    title = { Text(text = stringResource(id = R.string.app_name)) },
+                    actions = {
+                        IconButton(onClick = onUserClick) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_user),
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = containerColor,
+                        titleContentColor = contentColor,
+                        actionIconContentColor = contentColor,
+                        navigationIconContentColor = contentColor
+                    )
+                )
+            },
+            content = { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(horizontal = 24.dp)
+                ) {
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.show_user -> {
-                UserActivity.open(this)
-                true
+                    val text = if (isUpToDate) {
+                        stringResource(id = R.string.is_up_to_date_text_updated)
+                    } else {
+                        stringResource(id = R.string.is_up_to_date_text_no_updated)
+                    }
+                    Text(
+                        modifier = Modifier.padding(top = 24.dp),
+                        text = text
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(id = R.string.enable_shake_feedback)
+                        )
+                        Switch(
+                            checked = isShakeFeedbackEnabled,
+                            onCheckedChange = onEnableShakeFeedback
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(id = R.string.enable_screenshot_feedback)
+                        )
+                        Switch(
+                            checked = isScreenshotFeedbackEnabled,
+                            onCheckedChange = onEnableScreenshotFeedback
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(id = R.string.check_for_updates_background)
+                        )
+                        Switch(
+                            checked = isCheckForUpdatesBackgroundEnabled,
+                            onCheckedChange = onEnableCheckForUpdatesBackground
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        onClick = onCheckForUpdates
+                    ) {
+                        Text(text = stringResource(id = R.string.main_view_check_for_updates))
+                    }
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        onClick = onDownloadLastBuild
+                    ) {
+                        Text(text = stringResource(id = R.string.main_view_download_last_build))
+                    }
+                }
             }
-
-            else -> super.onOptionsItemSelected(item)
-        }
+        )
     }
+}
+
+@Preview
+@Composable
+private fun MainScreenPreview() {
+    MainScreen(
+        isUpToDate = false,
+        isShakeFeedbackEnabled = false,
+        isScreenshotFeedbackEnabled = false,
+        isCheckForUpdatesBackgroundEnabled = false,
+        onEnableShakeFeedback = {},
+        onEnableScreenshotFeedback = {},
+        onEnableCheckForUpdatesBackground = {},
+        onCheckForUpdates = {},
+        onDownloadLastBuild = {},
+        onUserClick = {}
+    )
 }
