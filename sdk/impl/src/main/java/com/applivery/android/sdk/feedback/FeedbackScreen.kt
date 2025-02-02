@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -53,6 +54,7 @@ import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -272,8 +274,8 @@ internal fun FeedbackScreen(
 )
 @Composable
 private fun ScreenshotDrawCanvasDialog(
-    modifier: Modifier = Modifier,
     screenshot: Bitmap,
+    modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
     onApply: (Bitmap?) -> Unit
 ) {
@@ -344,17 +346,28 @@ private fun ScreenshotDrawCanvasDialog(
  * We use a @Composable instead a composed Modifier because we want the value at the call place
  */
 @Composable
-fun Modifier.availableHeight() =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+fun Modifier.availableHeight(): Modifier {
+    return if (targetSdkVersion() < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        this.fillMaxHeight()
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
         val insets = WindowInsets.systemBars.asPaddingValues()
         val screenHeight = LocalConfiguration.current.screenHeightDp
         val availableHeight =
             screenHeight.dp - insets.calculateTopPadding() - insets.calculateBottomPadding()
 
-        heightIn(max = availableHeight)
+        this.then(heightIn(max = availableHeight))
     } else {
-        this
+        this.fillMaxHeight()
     }
+}
+
+@Composable
+fun targetSdkVersion(): Int {
+    val context = LocalContext.current
+    return remember {
+        context.packageManager.getApplicationInfo(context.packageName, 0).targetSdkVersion
+    }
+}
 
 @Preview
 @Composable
