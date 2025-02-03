@@ -30,7 +30,7 @@ class ErrorManager {
         if (currentDialog?.isShowing == true) return
 
         currentDialog = AlertDialog.Builder(activity)
-            .setTitle(R.string.appliveryError)
+            .setTitle(R.string.appliveryLoginRequiredTitle)
             .setCancelable(false)
             .setMessage(R.string.appliveryLoginRequiredText)
             .setPositiveButton(R.string.appliveryLogin) { _, _ ->
