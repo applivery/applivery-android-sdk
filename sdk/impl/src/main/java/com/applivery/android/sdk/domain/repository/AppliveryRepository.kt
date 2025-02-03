@@ -10,7 +10,7 @@ import com.applivery.android.sdk.domain.model.User
 
 internal interface AppliveryRepository {
 
-    suspend fun getConfig(forceUpdate: Boolean = false): Either<DomainError, AppConfig>
+    suspend fun getConfig(): Either<DomainError, AppConfig>
 
     suspend fun getAuthenticationUri(): Either<DomainError, AuthenticationUri>
 
