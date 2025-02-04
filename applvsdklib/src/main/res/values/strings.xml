@@ -81,6 +81,7 @@
 
     <string name="appliveryLoginFailDielogTitle">Invalid credentials</string>
     <string name="appliveryLoginFailDielogText">The email or password you entered is not valid</string>
+    <string name="appliveryLoginRequiredTitle">Login required</string>
     <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
 
 </resources>

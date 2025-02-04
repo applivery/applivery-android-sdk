@@ -67,7 +67,7 @@ class ShowErrorAlert {
     private fun showLoginDialog(message: String) {
         AppliveryLifecycleCallbacks.activity?.let {
             val builder = AlertDialog.Builder(it)
-            builder.setTitle(R.string.appliveryError)
+            builder.setTitle(R.string.appliveryLoginRequiredTitle)
                 .setCancelable(false)
                 .setMessage(message)
                 .setPositiveButton(R.string.appliveryLogin) { dialog, _ ->
