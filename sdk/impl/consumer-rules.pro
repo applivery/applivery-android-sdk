@@ -1,2 +1,3 @@
 -keep class com.applivery.data.response.** { *; }
 -keep class com.applivery.data.request.** { *; }
+-keep class arrow.** { *; }
