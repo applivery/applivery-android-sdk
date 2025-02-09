@@ -17,5 +17,5 @@ val androidMinSdk by extra { 24 }
 val androidTargetSdk by extra { 35 }
 
 val libraryGroup by extra { "com.applivery" }
-val libraryVersion by extra { "4.0.0-alpha4" }
+val libraryVersion by extra { "4.0.0-alpha5" }
 
