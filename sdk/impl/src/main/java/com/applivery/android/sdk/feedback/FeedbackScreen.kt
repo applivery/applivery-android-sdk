@@ -166,9 +166,6 @@ internal fun FeedbackScreen(
                             onValueChange = {
                                 intentSender.sendIntent(FeedbackIntent.EmailChanged(it))
                             },
-                            placeholder = {
-                                Text(text = stringResource(id = R.string.appliveryFeedbackEmailHint))
-                            },
                             label = {
                                 Text(text = stringResource(id = R.string.appliveryFeedbackEmailLabel))
                             },

@@ -210,27 +210,28 @@ Applivery.getInstance().getUser(getUserCallback)
 ### Styling the UI
 
 In order to customize the appearance of the UI, you can make a new resource file called
-`applivery.xml` under your `res/values` folder overwriting the Applivery default attributes.
+`applivery.xml` under your `res/values` folder overwriting default values for colors and strings.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="applivery_primary_color">#ffbb33</color>
-    <color name="applivery_secondary_color">#ffffff</color>
-    <color name="applivery_primary_font_color">#ffffff</color>
-    <color name="applivery_secondary_font_color">#444444</color>
+  <!--Main colors-->
+  <color name="applivery_primary_color">#FF0241E3</color>
+  <color name="applivery_accent_color">#FF0241E3</color>
+  <color name="applivery_foreground_color">#FF010258</color>
 
-    <color name="applivery_drawing_color">#ffbb33</color>
+  <!--Update texts-->
+  <string name="appliveryUpdateMsg">There is a new version available for download. Do you want to
+    update to the latest version?
+  </string>
+  <string name="appliveryMustUpdateAppLocked">Sorry this App is outdated. Please, update the App
+    to continue using it
+  </string>
 
-    <string name="appliveryUpdate">Update!</string>
-    <string name="appliveryUpdateMsg">There is a new version available for download! Do you want to
-        update to the latest version?
-    </string>
-    <string name="appliveryMustUpdateAppLocked">You must update.</string>
+  <!--Login prompt texts-->
+  <string name="appliveryLogin">Login</string>
+  <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
 
-    <string name="appliveryLoginFailDielogTitle">Invalid credentials</string>
-    <string name="appliveryLoginFailDielogText">The email or password you entered is not valid
-    </string>
 </resources>
 ```
 
@@ -240,19 +241,3 @@ In order to customize the appearance of the UI, you can make a new resource file
 
 As a sample integration you can take a look
 at [our sample app](https://github.com/applivery/applivery-android-sdk/tree/master/sample)
-
-# License
-
-Copyright (C) Applivery
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.

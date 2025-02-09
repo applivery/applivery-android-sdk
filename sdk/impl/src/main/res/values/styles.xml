@@ -2,9 +2,9 @@
 <resources>
 
     <style name="Theme.Applivery.NoActionBar" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:colorPrimary">#FF0241E3</item>
-        <item name="android:colorAccent">#FF0241E3</item>
-        <item name="android:colorForeground">#FF010258</item>
+        <item name="android:colorPrimary">@color/applivery_primary_color</item>
+        <item name="android:colorAccent">@color/applivery_accent_color</item>
+        <item name="android:colorForeground">@color/applivery_foreground_color</item>
     </style>
 
     <style name="Theme.Applivery.NoActionBar.Translucent">
@@ -18,8 +18,8 @@
     </style>
 
     <style name="Theme.Applivery.Dialog" parent="android:ThemeOverlay.Material.Dialog.Alert">
-        <item name="android:colorPrimary">#FF0241E3</item>
-        <item name="android:colorAccent">#FF0241E3</item>
-        <item name="android:colorForeground">#FF010258</item>
+        <item name="android:colorPrimary">@color/applivery_primary_color</item>
+        <item name="android:colorAccent">@color/applivery_accent_color</item>
+        <item name="android:colorForeground">@color/applivery_foreground_color</item>
     </style>
 </resources>

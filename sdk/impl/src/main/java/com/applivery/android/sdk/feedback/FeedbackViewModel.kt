@@ -122,7 +122,7 @@ internal class FeedbackViewModel(
     private fun checkInputs() {
         val feedback = getState().feedback.orEmpty()
         val email = getState().email.orEmpty()
-        val isEmailValid = email.isValidEmail() || email.isBlank()
+        val isEmailValid = email.isValidEmail()
         val isSendEnabled = feedback.isNotBlank() && isEmailValid
         setState { copy(isEmailInvalid = !isEmailValid, isSendEnabled = isSendEnabled) }
     }

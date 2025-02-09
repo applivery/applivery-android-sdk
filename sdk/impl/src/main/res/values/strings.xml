@@ -6,7 +6,6 @@
     <string name="appliveryBugSelectorText">Bug</string>
     <string name="appliveryFeedbackSelectorText">Feedback</string>
     <string name="appliveryFeedbackEmailLabel">Email</string>
-    <string name="appliveryFeedbackEmailHint">Optional email</string>
     <string name="appliveryFeedbackImageEditorProperties">Properties</string>
     <string name="appliveryFeedbackImageEditorStrokeWidth">Stroke Width %d</string>
     <string name="appliveryFeedbackImageEditorStrokeCap">Stroke Cap</string>
