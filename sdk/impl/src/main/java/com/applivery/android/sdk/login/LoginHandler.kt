@@ -1,6 +1,6 @@
 package com.applivery.android.sdk.login
 
-import androidx.appcompat.app.AlertDialog
+import android.app.AlertDialog
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
