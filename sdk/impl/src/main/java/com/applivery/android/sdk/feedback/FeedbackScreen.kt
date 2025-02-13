@@ -345,16 +345,16 @@ private fun ScreenshotDrawCanvasDialog(
 @Composable
 fun Modifier.availableHeight(): Modifier {
     return if (targetSdkVersion() < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-        this.fillMaxHeight()
+        fillMaxHeight()
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
         val insets = WindowInsets.systemBars.asPaddingValues()
         val screenHeight = LocalConfiguration.current.screenHeightDp
         val availableHeight =
             screenHeight.dp - insets.calculateTopPadding() - insets.calculateBottomPadding()
 
-        this.then(heightIn(max = availableHeight))
+        heightIn(max = availableHeight)
     } else {
-        this.fillMaxHeight()
+        fillMaxHeight()
     }
 }
 

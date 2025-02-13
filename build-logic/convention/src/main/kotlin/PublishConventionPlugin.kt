@@ -174,11 +174,11 @@ private data class Secrets(
                 secrets.load(secretsFile.inputStream())
             }
             return Secrets(
-                mavenCentralUsername = secrets.getProperty("mavenCentralUsername"),
-                mavenCentralPassword = secrets.getProperty("mavenCentralPassword"),
-                signingKeyId = secrets.getProperty("signing.keyId"),
-                signingKey = secrets.getProperty("signing.key"),
-                signingPassword = secrets.getProperty("signing.password")
+                mavenCentralUsername = secrets.getProperty("mavenCentralUsername").orEmpty(),
+                mavenCentralPassword = secrets.getProperty("mavenCentralPassword").orEmpty(),
+                signingKeyId = secrets.getProperty("signing.keyId").orEmpty(),
+                signingKey = secrets.getProperty("signing.key").orEmpty(),
+                signingPassword = secrets.getProperty("signing.password").orEmpty()
             )
         }
     }
