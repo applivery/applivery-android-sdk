@@ -19,6 +19,7 @@ composeBom = "2025.01.01"
 detekt = "1.23.6"
 ackpine = "0.10.1"
 capturable = "2.1.0"
+hbRecorder = "3.0.9"
 
 [libraries]
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidCore" }
@@ -47,6 +48,7 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 ackpine-ktx = { module = "ru.solrudev.ackpine:ackpine-ktx", version.ref = "ackpine" }
 capturable = { module = "dev.shreyaspatil:capturable", version.ref = "capturable" }
+hbrecorder = { module = "com.github.HBiSoft:HBRecorder", version.ref = "hbRecorder" }
 
 #Libs for convention plugin
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }

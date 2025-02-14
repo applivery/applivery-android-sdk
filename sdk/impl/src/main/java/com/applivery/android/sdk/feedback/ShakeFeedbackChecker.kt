@@ -1,11 +1,13 @@
 package com.applivery.android.sdk.feedback
 
-import android.content.Context
+import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.applivery.android.sdk.HostActivityProvider
-import com.applivery.android.sdk.domain.DomainLogger
+import com.applivery.android.sdk.feedback.video.ScreenRecorder
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 internal interface ShakeFeedbackChecker {
 
@@ -15,13 +17,14 @@ internal interface ShakeFeedbackChecker {
 }
 
 internal class ShakeFeedbackCheckerImpl(
-    private val context: Context,
-    private val logger: DomainLogger,
     private val shakeDetector: ShakeDetector,
-    private val hostActivityProvider: HostActivityProvider
+    private val screenRecorder: ScreenRecorder
 ) : ShakeFeedbackChecker, ShakeDetector.Listener, DefaultLifecycleObserver {
 
     private var isEnabled: Boolean = false
+
+    private val coroutineScope = MainScope()
+    private var recordingJob: Job? = null
 
     override fun start() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -47,11 +50,20 @@ internal class ShakeFeedbackCheckerImpl(
     }
 
     override fun onShake(count: Int) {
-        val activity = hostActivityProvider.activity
-        if (activity == null) {
-            logger.noActivityFoundForFeedbackView()
+        if (recordingJob?.isActive == true) {
+            Log.d("ShakeFeedbackChecker", "onShake: already recording")
             return
         }
-        activity.startActivity(FeedbackActivity.getIntent(context, FeedbackArguments()))
+
+        recordingJob = coroutineScope.launch {
+            screenRecorder.start().fold(
+                ifLeft = {
+                    Log.d("ShakeFeedbackChecker", "onShake: failed to start recording")
+                },
+                ifRight = {
+                    Log.d("ShakeFeedbackChecker", "file recorded $it")
+                }
+            )
+        }
     }
 }
