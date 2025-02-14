@@ -1,8 +1,32 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <SmellBaseline>
-  <ManuallySuppressedIssues/>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
-    <ID>WildcardImport:MainActivity.kt$import kotlinx.android.synthetic.main.activity_main.*</ID>
-    <ID>WildcardImport:UserActivity.kt$import kotlinx.android.synthetic.main.activity_user.*</ID>
+    <ID>LongParameterList:MainActivity.kt$( isUpToDate: Boolean, isShakeFeedbackEnabled: Boolean, isScreenshotFeedbackEnabled: Boolean, isCheckForUpdatesBackgroundEnabled: Boolean, onEnableShakeFeedback: (Boolean) -&gt; Unit, onEnableScreenshotFeedback: (Boolean) -&gt; Unit, onEnableCheckForUpdatesBackground: (Boolean) -&gt; Unit, onCheckForUpdates: () -&gt; Unit, onDownloadLastBuild: () -&gt; Unit, onUserClick: () -&gt; Unit )</ID>
+    <ID>LongParameterList:UserActivity.kt$( user: User?, tags: String, onChangeFirstName: (String) -&gt; Unit, onChangeLastName: (String) -&gt; Unit, onChangeEmail: (String) -&gt; Unit, onChangeTags: (String) -&gt; Unit, onBind: () -&gt; Unit, onUnbind: () -&gt; Unit, onBack: () -&gt; Unit )</ID>
+    <ID>MagicNumber:Color.kt$0xFF010258</ID>
+    <ID>MagicNumber:Color.kt$0xFF0241E3</ID>
+    <ID>MagicNumber:Color.kt$0xFF03FDEA</ID>
+    <ID>MagicNumber:Color.kt$0xFF2E2F73</ID>
+    <ID>MagicNumber:Color.kt$0xFF3567E9</ID>
+    <ID>MagicNumber:Color.kt$0xFF5B5B8F</ID>
+    <ID>MagicNumber:Color.kt$0xFF678DEE</ID>
+    <ID>MagicNumber:Color.kt$0xFF999ABC</ID>
+    <ID>MagicNumber:Color.kt$0xFF9AB3F4</ID>
+    <ID>MagicNumber:Color.kt$0xFFCCCCDE</ID>
+    <ID>MagicNumber:Color.kt$0xFFCCD9F9</ID>
+    <ID>MagicNumber:Color.kt$0xFFDFE8FF</ID>
+    <ID>MagicNumber:Color.kt$0xFFE6E6EE</ID>
+    <ID>MagicNumber:Color.kt$0xFFE6ECFC</ID>
+    <ID>MagicNumber:Color.kt$0xFFECEFF1</ID>
+    <ID>MagicNumber:Color.kt$0xFFEF4444</ID>
+    <ID>MagicNumber:Color.kt$0xFFFFB81C</ID>
+    <ID>MagicNumber:Color.kt$0xFFFFF1D2</ID>
+    <ID>MaxLineLength:MainActivity.kt$MainActivity$var isCheckForUpdatesBackgroundEnabled by remember { mutableStateOf(appPreferences.checkForUpdatesBackground) }</ID>
+    <ID>NewLineAtEndOfFile:Color.kt$com.applivery.sample.theme.Color.kt</ID>
+    <ID>NewLineAtEndOfFile:MainActivity.kt$com.applivery.sample.MainActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:UserActivity.kt$com.applivery.sample.UserActivity.kt</ID>
+    <ID>UnusedPrivateMember:MainActivity.kt$@Preview @Composable private fun MainScreenPreview()</ID>
+    <ID>UnusedPrivateMember:UserActivity.kt$@Preview @Composable private fun UserScreenPreview()</ID>
   </CurrentIssues>
 </SmellBaseline>
