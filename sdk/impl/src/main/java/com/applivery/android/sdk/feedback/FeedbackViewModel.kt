@@ -25,8 +25,16 @@ import java.io.ByteArrayOutputStream
 private val EmailRegex =
     """[a-zA-Z0-9+._%\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+""".toRegex()
 
-@Parcelize
-internal class FeedbackArguments(val screenshotUri: Uri? = null) : Parcelable
+internal sealed interface FeedbackArguments : Parcelable {
+
+    val uri: Uri
+
+    @Parcelize
+    class Screenshot(override val uri: Uri) : FeedbackArguments
+
+    @Parcelize
+    class Video(override val uri: Uri) : FeedbackArguments
+}
 
 internal sealed interface FeedbackAction : ViewAction {
     data object Exit : FeedbackAction
@@ -49,7 +57,7 @@ internal data class FeedbackState(
     val email: String? = null,
     val isEmailInvalid: Boolean = false,
     val isEmailReadOnly: Boolean = false,
-    val screenshot: Bitmap? = null,
+    val attachment: FeedbackAttachment? = null,
     val isSendEnabled: Boolean = false,
 ) : ViewState
 
@@ -76,8 +84,13 @@ internal class FeedbackViewModel(
         }
 
         viewModelScope.launch {
-            val uri = arguments.screenshotUri ?: return@launch
-            imageDecoder.of(uri)?.let { setState { copy(screenshot = it) } }
+            val attachment = when (arguments) {
+                is FeedbackArguments.Screenshot -> imageDecoder.of(arguments.uri)
+                    ?.let(FeedbackAttachment::Screenshot)
+
+                is FeedbackArguments.Video -> FeedbackAttachment.Video(arguments.uri)
+            }
+            setState { copy(attachment = attachment) }
         }
     }
 
@@ -112,10 +125,11 @@ internal class FeedbackViewModel(
             viewModelScope.launch {
                 setState { copy(isLoading = false) }
                 val screenshot = hostAppScreenshotProvider.get().getOrNull()
-                setState { copy(screenshot = screenshot, isLoading = false) }
+                val attachment = screenshot?.let(FeedbackAttachment::Screenshot)
+                setState { copy(attachment = attachment, isLoading = false) }
             }
         } else {
-            setState { copy(screenshot = null) }
+            setState { copy(attachment = null) }
         }
     }
 
@@ -135,13 +149,15 @@ internal class FeedbackViewModel(
             appPreferences.anonymousEmail = email
         }
         setState { copy(isLoading = true, isSendEnabled = false) }
+
+        // TODO:
         val feedback = Feedback(
             deviceInfo = deviceInfoProvider.deviceInfo,
             packageInfo = packageInfoProvider.packageInfo,
             message = getState().feedback.orEmpty(),
             type = getState().feedbackType,
             email = getState().email,
-            screenshotBase64 = getState().screenshot?.asB64()
+            screenshotBase64 = /*getState().screenshot?.asB64()*/ null
         )
         viewModelScope.launch {
             sendFeedback(feedback)
@@ -154,9 +170,10 @@ internal class FeedbackViewModel(
     }
 
     private fun onScreenshotModified(newScreenshot: Bitmap) {
-        setState { copy(screenshot = newScreenshot) }
+        setState { copy(attachment = FeedbackAttachment.Screenshot(newScreenshot)) }
     }
 
+    @Suppress("UnusedPrivateMember")
     private fun Bitmap.asB64(): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)

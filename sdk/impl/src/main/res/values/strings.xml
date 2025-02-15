@@ -23,6 +23,8 @@
     <string name="appliveryFeedbackImageEditorColorAlpha">Alpha</string>
     <string name="appliveryFeedbackImageEditorCancel">Cancel</string>
     <string name="appliveryFeedbackImageEditorApply">Apply</string>
+    <string name="appliveryFeedbackVideoName">Video clip</string>
+    <string name="appliveryFeedbackVideoWatchPreview">Watch preview</string>
 
     <string name="appliveryCancelFeedbackButtonDesc">Cancel feedback button</string>
     <string name="appliverySendFeedbackButtonDesc">Send feedback button</string>

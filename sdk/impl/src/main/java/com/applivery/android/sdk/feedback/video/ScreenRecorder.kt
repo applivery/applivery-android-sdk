@@ -55,8 +55,7 @@ internal class HBScreenRecorder(
         recorder.stopScreenRecording()
     }
 
-    override fun HBRecorderOnStart() {
-    }
+    override fun HBRecorderOnStart() = Unit
 
     override fun HBRecorderOnComplete() {
         val continuation = currentRecordingCont ?: return

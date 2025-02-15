@@ -97,6 +97,11 @@ dependencies {
     implementation(libs.ackpine.ktx)
     implementation(libs.capturable)
     implementation(libs.hbrecorder)
+    implementation(libs.compose.video)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.media3.ui)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

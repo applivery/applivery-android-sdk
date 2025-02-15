@@ -16,7 +16,7 @@ internal interface ScreenshotFeedbackChecker {
 }
 
 internal class ScreenshotFeedbackCheckerImpl(
-    private val context: Context,
+    context: Context,
     private val logger: DomainLogger,
     private val hostActivityProvider: HostActivityProvider
 ) : ScreenshotFeedbackChecker, DefaultLifecycleObserver {
@@ -54,7 +54,7 @@ internal class ScreenshotFeedbackCheckerImpl(
             logger.noActivityFoundForFeedbackView()
             return
         }
-        val arguments = FeedbackArguments(screenshotUri = uri)
-        activity.startActivity(FeedbackActivity.getIntent(context, arguments))
+        val arguments = FeedbackArguments.Screenshot(uri = uri)
+        activity.startActivity(FeedbackActivity.getIntent(activity, arguments))
     }
 }
