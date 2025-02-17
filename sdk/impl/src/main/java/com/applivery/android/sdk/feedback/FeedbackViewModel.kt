@@ -3,7 +3,6 @@ package com.applivery.android.sdk.feedback
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcelable
-import android.util.Base64
 import androidx.lifecycle.viewModelScope
 import arrow.core.flatMap
 import arrow.core.raise.either
@@ -20,7 +19,6 @@ import com.applivery.android.sdk.presentation.ViewIntent
 import com.applivery.android.sdk.presentation.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.io.ByteArrayOutputStream
 
 private val EmailRegex =
     """[a-zA-Z0-9+._%\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+""".toRegex()
@@ -150,16 +148,20 @@ internal class FeedbackViewModel(
         }
         setState { copy(isLoading = true, isSendEnabled = false) }
 
-        // TODO:
-        val feedback = Feedback(
-            deviceInfo = deviceInfoProvider.deviceInfo,
-            packageInfo = packageInfoProvider.packageInfo,
-            message = getState().feedback.orEmpty(),
-            type = getState().feedbackType,
-            email = getState().email,
-            screenshotBase64 = /*getState().screenshot?.asB64()*/ null
-        )
         viewModelScope.launch {
+            val baseFeedback = Feedback.Simple(
+                deviceInfo = deviceInfoProvider.deviceInfo,
+                packageInfo = packageInfoProvider.packageInfo,
+                message = getState().feedback,
+                type = getState().feedbackType,
+                email = getState().email
+            )
+            val feedback = when (val attachment = getState().attachment) {
+                is FeedbackAttachment.Video -> baseFeedback.withVideo(attachment.uri)
+                is FeedbackAttachment.Screenshot -> baseFeedback.withScreenshot(attachment.screenshot)
+                null -> baseFeedback
+            }
+            // TODO: show toast
             sendFeedback(feedback)
             dispatchAction(FeedbackAction.Exit)
         }
@@ -171,14 +173,6 @@ internal class FeedbackViewModel(
 
     private fun onScreenshotModified(newScreenshot: Bitmap) {
         setState { copy(attachment = FeedbackAttachment.Screenshot(newScreenshot)) }
-    }
-
-    @Suppress("UnusedPrivateMember")
-    private fun Bitmap.asB64(): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.NO_WRAP)
     }
 
     private fun String.isValidEmail(): Boolean {

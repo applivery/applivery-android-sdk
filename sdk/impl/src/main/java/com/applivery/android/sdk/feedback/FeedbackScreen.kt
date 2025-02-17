@@ -91,8 +91,7 @@ internal fun FeedbackScreen(
     state: FeedbackState,
     intentSender: ViewModelIntentSender<FeedbackIntent>
 ) {
-    var showDrawingScreenshot by remember { mutableStateOf(false) }
-    var showVideoPreview by remember { mutableStateOf(false) }
+    var showAttachmentDetail by remember { mutableStateOf(false) }
     AppliveryTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -212,7 +211,7 @@ internal fun FeedbackScreen(
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .fillMaxWidth(),
-                            onPreviewVideo = { showVideoPreview = true }
+                            onPreviewVideo = { showAttachmentDetail = true }
                         )
 
                         is FeedbackAttachment.Screenshot,
@@ -224,7 +223,7 @@ internal fun FeedbackScreen(
                             onAttachChanged = {
                                 intentSender.sendIntent(FeedbackIntent.AttachScreenshot(it))
                             },
-                            onEditScreenShot = { showDrawingScreenshot = true }
+                            onEditScreenShot = { showAttachmentDetail = true }
                         )
                     }
 
@@ -235,29 +234,31 @@ internal fun FeedbackScreen(
             }
         )
 
-        if (showDrawingScreenshot) {
-            /*Its important to call it here so it calculate available height based on the current
-            * insets, because in the Dialog context there are no insets to consume*/
-            ScreenshotDrawCanvasDialog(
-                modifier = Modifier.availableHeight(),
-                screenshot = requireNotNull(state.attachment as FeedbackAttachment.Screenshot).screenshot,
-                onDismiss = {
-                    showDrawingScreenshot = false
-                },
-                onApply = { bitmap ->
-                    showDrawingScreenshot = false
-                    bitmap?.let { intentSender.sendIntent(FeedbackIntent.ScreenshotModified(it)) }
-                }
-            )
-        }
-        if (showVideoPreview) {
-            VideoPreviewDialog(
-                modifier = Modifier
-                    .availableHeight()
-                    .fillMaxWidth(),
-                videoUri = requireNotNull(state.attachment as FeedbackAttachment.Video).uri,
-                onDismiss = { showVideoPreview = false }
-            )
+        if (showAttachmentDetail) {
+            /*Its important to build the Modifier it here so it calculates available height based
+            * on the current insets, because in the Dialog context there are no insets to consume*/
+            val modifier = Modifier.availableHeight()
+            when (val attachment = state.attachment) {
+                is FeedbackAttachment.Screenshot -> ScreenshotDrawCanvasDialog(
+                    modifier = modifier,
+                    screenshot = attachment.screenshot,
+                    onDismiss = {
+                        showAttachmentDetail = false
+                    },
+                    onApply = { bitmap ->
+                        showAttachmentDetail = false
+                        bitmap?.let { intentSender.sendIntent(FeedbackIntent.ScreenshotModified(it)) }
+                    }
+                )
+
+                is FeedbackAttachment.Video -> VideoPreviewDialog(
+                    modifier = modifier.fillMaxWidth(),
+                    videoUri = attachment.uri,
+                    onDismiss = { showAttachmentDetail = false }
+                )
+
+                null -> Unit
+            }
         }
     }
 }

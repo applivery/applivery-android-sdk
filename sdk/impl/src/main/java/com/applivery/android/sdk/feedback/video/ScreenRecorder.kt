@@ -89,6 +89,6 @@ internal class HBScreenRecorder(
     }
 
     companion object {
-        private const val MaxVideoDurationInSecods = 60
+        private const val MaxVideoDurationInSecods = 30
     }
 }
