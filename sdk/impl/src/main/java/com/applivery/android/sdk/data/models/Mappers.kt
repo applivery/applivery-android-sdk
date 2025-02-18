@@ -150,6 +150,7 @@ internal fun Feedback.toApi(): FeedbackApi {
     )
 }
 
+@Suppress("MagicNumber")
 private fun Bitmap.asB64(): String {
     val byteArrayOutputStream = ByteArrayOutputStream()
     compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)

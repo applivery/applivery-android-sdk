@@ -28,6 +28,10 @@
 
     <string name="appliveryCancelFeedbackButtonDesc">Cancel feedback button</string>
     <string name="appliverySendFeedbackButtonDesc">Send feedback button</string>
+    <string name="appliveryFeedbackSentSuccess">Feedback sent successfully</string>
+    <string name="appliveryFeedbackSentError">There was an error sending feedback</string>
+    <string name="appliveryFeedbackTitleFeedback">Send feedback</string>
+    <string name="appliveryFeedbackTitleBug">Send a bug report</string>
 
     <string name="appliveryAttachScreenshotSwithText">Attach screenshot</string>
 

@@ -36,6 +36,7 @@ internal sealed interface FeedbackArguments : Parcelable {
 
 internal sealed interface FeedbackAction : ViewAction {
     data object Exit : FeedbackAction
+    class ShowFeedbackSent(val success: Boolean) : FeedbackAction
 }
 
 internal sealed interface FeedbackIntent : ViewIntent {
@@ -161,8 +162,8 @@ internal class FeedbackViewModel(
                 is FeedbackAttachment.Screenshot -> baseFeedback.withScreenshot(attachment.screenshot)
                 null -> baseFeedback
             }
-            // TODO: show toast
-            sendFeedback(feedback)
+            val result = sendFeedback(feedback)
+            dispatchAction(FeedbackAction.ShowFeedbackSent(result.isRight()))
             dispatchAction(FeedbackAction.Exit)
         }
     }

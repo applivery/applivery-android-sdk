@@ -2,7 +2,7 @@ package com.applivery.android.sdk.data.models
 
 import com.google.gson.annotations.SerializedName
 
-internal class FeedbackApi(
+internal data class FeedbackApi(
     @SerializedName("deviceInfo") val deviceInfo: DeviceInfoApi?,
     @SerializedName("message") val message: String?,
     @SerializedName("packageInfo") val packageInfo: PackageInfoApi?,

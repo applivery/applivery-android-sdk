@@ -98,7 +98,13 @@ internal fun FeedbackScreen(
             topBar = {
                 val containerColor = MaterialTheme.colorScheme.primary
                 TopAppBar(
-                    title = { Text(text = stringResource(id = R.string.applivery_name)) },
+                    title = {
+                        val titleResId = when (state.feedbackType) {
+                            FeedbackType.Feedback -> R.string.appliveryFeedbackTitleFeedback
+                            FeedbackType.Bug -> R.string.appliveryFeedbackTitleBug
+                        }
+                        Text(text = stringResource(id = titleResId))
+                    },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = containerColor,
                         titleContentColor = contentColorFor(containerColor),
