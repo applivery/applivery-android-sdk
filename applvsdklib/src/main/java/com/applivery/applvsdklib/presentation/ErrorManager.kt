@@ -31,11 +31,13 @@ class ErrorManager {
 
         currentDialog = AlertDialog.Builder(activity)
             .setTitle(R.string.appliveryLoginRequiredTitle)
-            .setCancelable(false)
             .setMessage(R.string.appliveryLoginRequiredText)
             .setPositiveButton(R.string.appliveryLogin) { _, _ ->
                 currentDialog?.dismiss()
                 showLoginView(activity)
+            }
+            .setNegativeButton(R.string.appliveryCancel) { _, _ ->
+                currentDialog?.dismiss()
             }
             .show()
     }
