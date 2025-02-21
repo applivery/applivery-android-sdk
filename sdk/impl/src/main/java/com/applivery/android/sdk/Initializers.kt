@@ -8,6 +8,7 @@ import com.applivery.android.sdk.di.Properties
 import com.applivery.android.sdk.di.appModules
 import com.applivery.android.sdk.di.dataModules
 import com.applivery.android.sdk.di.domainModules
+import com.applivery.android.sdk.feedback.video.ScreenRecorderBubble
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.get
 
@@ -39,6 +40,7 @@ internal class AppliveryInitializer : Initializer<Unit>, AppliveryKoinComponent 
 
     override fun create(context: Context) {
         get<HostActivityProvider>().start()
+        get<ScreenRecorderBubble>().start()
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {

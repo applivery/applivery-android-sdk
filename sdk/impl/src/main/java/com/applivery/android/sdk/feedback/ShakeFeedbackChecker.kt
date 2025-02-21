@@ -60,6 +60,7 @@ internal class ShakeFeedbackCheckerImpl(
             return
         }
 
+        // TODO: if we are in FeedbackActivity do not start recording
         recordingJob = coroutineScope.launch {
             screenRecorder.start().fold(
                 ifLeft = {

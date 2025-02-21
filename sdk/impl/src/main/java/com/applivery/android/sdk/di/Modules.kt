@@ -62,6 +62,8 @@ import com.applivery.android.sdk.feedback.ShakeFeedbackChecker
 import com.applivery.android.sdk.feedback.ShakeFeedbackCheckerImpl
 import com.applivery.android.sdk.feedback.video.HBScreenRecorder
 import com.applivery.android.sdk.feedback.video.ScreenRecorder
+import com.applivery.android.sdk.feedback.video.ScreenRecorderBubble
+import com.applivery.android.sdk.feedback.video.ScreenRecorderBubbleOverlay
 import com.applivery.android.sdk.login.LoginHandler
 import com.applivery.android.sdk.login.LoginViewModel
 import com.applivery.android.sdk.updates.AndroidBuildInstaller
@@ -194,4 +196,5 @@ internal val appModules = module {
     factoryOf(::ContentUriImageDecoderImpl).bind<ContentUriImageDecoder>()
     singleOf(::HostAppScreenshotProviderImpl).bind<HostAppScreenshotProvider>()
     singleOf(::HBScreenRecorder).bind<ScreenRecorder>()
+    singleOf(::ScreenRecorderBubbleOverlay).bind<ScreenRecorderBubble>()
 }
