@@ -19,7 +19,6 @@ composeBom = "2025.01.01"
 detekt = "1.23.6"
 ackpine = "0.10.1"
 capturable = "2.1.0"
-hbRecorder = "3.0.9"
 composeVideo = "1.2.0"
 media3 = "1.5.1"
 
@@ -53,7 +52,6 @@ androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", versi
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 ackpine-ktx = { module = "ru.solrudev.ackpine:ackpine-ktx", version.ref = "ackpine" }
 capturable = { module = "dev.shreyaspatil:capturable", version.ref = "capturable" }
-hbrecorder = { module = "com.github.HBiSoft:HBRecorder", version.ref = "hbRecorder" }
 compose-video = { module = "io.sanghun:compose-video", version.ref = "composeVideo" }
 
 #Libs for convention plugin

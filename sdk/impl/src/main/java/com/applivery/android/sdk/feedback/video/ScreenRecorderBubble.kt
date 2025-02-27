@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.ui.theme.AppliveryTheme
 import com.applivery.android.sdk.ui.theme.colorError
+import java.lang.ref.WeakReference
 
 internal interface ScreenRecorderBubble {
 
@@ -44,24 +45,31 @@ internal class ScreenRecorderBubbleOverlay(
     private val application: Application
 ) : ScreenRecorderBubble, Application.ActivityLifecycleCallbacks {
 
+    private var activityRef = WeakReference<Activity>(null)
+
     override fun start() {
         application.registerActivityLifecycleCallbacks(this)
     }
 
     override fun show() {
+        val activity = activityRef.get() ?: return
     }
 
     override fun hide() {
+        val activity = activityRef.get() ?: return
     }
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-    }
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
 
     override fun onActivityStarted(activity: Activity) = Unit
 
-    override fun onActivityResumed(activity: Activity) = Unit
+    override fun onActivityResumed(activity: Activity) {
+        activityRef = WeakReference(activity)
+    }
 
-    override fun onActivityPaused(activity: Activity) = Unit
+    override fun onActivityPaused(activity: Activity) {
+        activityRef = WeakReference(null)
+    }
 
     override fun onActivityStopped(activity: Activity) = Unit
 
@@ -78,7 +86,10 @@ internal class ScreenRecorderBubbleView(
 
     @Composable
     override fun Content() {
-        ScreenRecorderBubble(onFinished = configuration.onFinished)
+        ScreenRecorderBubble(
+            countDowTimeInSeconds = configuration.countDownTimeInSeconds,
+            onFinished = configuration.onFinished
+        )
     }
 
     data class Configuration(

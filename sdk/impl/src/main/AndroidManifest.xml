@@ -103,6 +103,15 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <service
+            android:name=".feedback.video.recorder.ScreenRecorderService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <receiver
+            android:name=".feedback.video.recorder.StopScreenRecordingNotificationReceiver"
+            android:exported="false" />
+
     </application>
 
 </manifest>

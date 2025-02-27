@@ -45,9 +45,15 @@
 
     <string name="applivery_updates_app_name">Applivery</string>
 
-    <string name="applivery_updates_channel_name">Applivery-updates</string>
-    <string name="applivery_updates_channel_description">Applivery-updates</string>
+    <string name="applivery_updates_channel_name">Downloads</string>
+    <string name="applivery_updates_channel_description">Build downloads progress will be sent to this channel</string>
 
     <string name="applivery_updates_notification_text">Downloading %1$s</string>
+
+    <string name="appliveryScreenRecordingNotificationChannelTitle">Screen recording</string>
+    <string name="appliveryScreenRecordingNotificationChannelDescription">Screen recording live service will post notifications here</string>
+    <string name="appliveryScreenRecordingNotificationTitle">Applivery is recording you screen</string>
+    <string name="appliveryScreenRecordingNotificationDescription">You can stop recording by pressing the stop button</string>
+    <string name="appliveryScreenRecordingNotificationStopAction">Stop recording</string>
 
 </resources>
