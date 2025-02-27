@@ -1,8 +1,6 @@
 package com.applivery.android.sdk.feedback.video.recorder
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,13 +8,7 @@ import android.os.Parcelable
 import android.os.ResultReceiver
 import android.util.Log
 import androidx.activity.result.ActivityResult
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ERROR_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ERROR_REASON_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.GENERAL_ERROR
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_COMPLETE_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_PAUSE_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_RESUME_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_START_KEY
+import com.applivery.android.sdk.ui.parcelable
 import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.sql.Date
@@ -74,13 +66,17 @@ internal class ScreenRecorder(
     private var isRecordingPaused: Boolean = false
     private var countDown: Countdown? = null
 
+    override fun onFileReady() {
+        fileObserver.stopWatching()
+        listener.onRecordingCompleted(config.outputFile)
+    }
+
     fun startScreenRecording(activityResult: ActivityResult) {
         startService(activityResult)
     }
 
     fun stopScreenRecording() {
-        val service = Intent(context, ScreenRecorderService::class.java)
-        context.stopService(service)
+        context.stopService(ScreenRecorderService.getIntent(context))
     }
 
     fun pauseScreenRecording() {
@@ -104,47 +100,15 @@ internal class ScreenRecorder(
             fileObserver.startWatching()
             val listener = object : ResultReceiver(Handler(Looper.getMainLooper())) {
                 override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
-                    super.onReceiveResult(resultCode, resultData)
-                    if (resultCode == Activity.RESULT_OK) {
-                        val errorListener = resultData.getString(ERROR_REASON_KEY)
-                        val onComplete = resultData.getString(ON_COMPLETE_KEY)
-                        val onStartCode = resultData.getInt(ON_START_KEY)
-                        val errorCode = resultData.getInt(ERROR_KEY)
-                        if (errorListener != null) {
-                            stopCountDown()
-                            fileObserver.stopWatching()
-                            wasOnErrorCalled = true
-                            if (errorCode > 0) {
-                                listener.onRecordingError(errorCode, errorListener)
-                            } else {
-                                listener.onRecordingError(GENERAL_ERROR, errorListener)
-                            }
-                            try {
-                                val service = Intent(
-                                    context,
-                                    ScreenRecorderService::class.java
-                                )
-                                context.stopService(service)
-                            } catch (e: Exception) {
-                                // Can be ignored
-                            }
-                        } else if (onComplete != null) {
-                            //Stop countdown if it was set
-                            stopCountDown()
-                            wasOnErrorCalled = false
-                        } else if (onStartCode != 0) {
-                            listener.onRecordingStarted()
-                            startCountdown()
-                        }
-                        // OnPause/onResume was called
-                        val onPause = resultData.getString(ON_PAUSE_KEY)
-                        val onResume = resultData.getString(ON_RESUME_KEY)
-                        if (onPause != null) {
-                            listener.onRecordingPaused()
-                        }
-                        if (onResume != null) {
-                            listener.onRecordingResumed()
-                        }
+                    val eventKey = ScreenRecorderService.EventKey
+                    val event = resultData.parcelable<ScreenRecorderService.Event>(eventKey)
+                    when (event) {
+                        is ScreenRecorderService.Event.OnStart -> onStart()
+                        is ScreenRecorderService.Event.OnResume -> onResume()
+                        is ScreenRecorderService.Event.OnPause -> onPause()
+                        is ScreenRecorderService.Event.OnComplete -> onComplete()
+                        is ScreenRecorderService.Event.OnError -> onError(event.code, event.reason)
+                        null -> Unit
                     }
                 }
             }
@@ -187,8 +151,29 @@ internal class ScreenRecorder(
         countDown?.stop()
     }
 
-    override fun onFileReady() {
+    private fun onStart() {
+        listener.onRecordingStarted()
+        startCountdown()
+    }
+
+    private fun onResume() {
+        listener.onRecordingResumed()
+    }
+
+    private fun onPause() {
+        listener.onRecordingPaused()
+    }
+
+    private fun onComplete() {
+        stopCountDown()
+        wasOnErrorCalled = false
+    }
+
+    private fun onError(code: Int, reason: String?) {
+        stopCountDown()
         fileObserver.stopWatching()
-        listener.onRecordingCompleted(config.outputFile)
+        wasOnErrorCalled = true
+        listener.onRecordingError(code, reason)
+        runCatching { context.stopService(ScreenRecorderService.getIntent(context)) }
     }
 }

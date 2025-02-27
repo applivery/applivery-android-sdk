@@ -24,20 +24,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import com.applivery.android.sdk.R
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ERROR_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ERROR_REASON_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.MAX_FILE_SIZE_REACHED_ERROR
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_COMPLETE
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_COMPLETE_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_PAUSE
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_PAUSE_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_RESUME
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_RESUME_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_START
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.ON_START_KEY
-import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.SETTINGS_ERROR
+import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderErrorCodes.MAX_FILE_SIZE_REACHED_ERROR
+import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderErrorCodes.SETTINGS_ERROR
 import com.applivery.android.sdk.notifications.NotificationChannels
 import com.applivery.android.sdk.notifications.createNotificationChannel
+import com.applivery.android.sdk.ui.parcelable
+import kotlinx.parcelize.Parcelize
 import java.util.Locale
 
 internal class ScreenRecorderService : Service() {
@@ -51,6 +43,8 @@ internal class ScreenRecorderService : Service() {
     private var mediaProjection: MediaProjection? = null
     private var mediaRecorder: MediaRecorder? = null
     private var virtualDisplay: VirtualDisplay? = null
+
+    override fun onBind(intent: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) {
@@ -102,23 +96,19 @@ internal class ScreenRecorderService : Service() {
         try {
             initRecorder()
         } catch (e: Exception) {
-            val bundle = bundleOf(ERROR_REASON_KEY to Log.getStackTraceString(e))
-            listener.send(Activity.RESULT_OK, bundle)
+            listener.sendEvent(Event.OnError(reason = Log.getStackTraceString(e)))
         }
 
         try {
             initMediaProjection(activityResult)
         } catch (e: Exception) {
-            val bundle = bundleOf(ERROR_REASON_KEY to Log.getStackTraceString(e))
-            listener.send(Activity.RESULT_OK, bundle)
+            listener.sendEvent(Event.OnError(reason = Log.getStackTraceString(e)))
         }
 
-        //Init VirtualDisplay
         try {
             initVirtualDisplay()
         } catch (e: Exception) {
-            val bundle = bundleOf(ERROR_REASON_KEY to Log.getStackTraceString(e))
-            listener.send(Activity.RESULT_OK, bundle)
+            listener.sendEvent(Event.OnError(reason = Log.getStackTraceString(e)))
         }
 
         mediaRecorder?.setOnErrorListener { _: MediaRecorder?, what: Int, _: Int ->
@@ -126,11 +116,7 @@ internal class ScreenRecorderService : Service() {
                 // Benign error b/c recording is too short and has no frames. See SO: https://stackoverflow.com/questions/40616466/mediarecorder-stop-failed-1007
                 return@setOnErrorListener
             }
-            val bundle = bundleOf(
-                ERROR_REASON_KEY to what.toString(),
-                ERROR_KEY to SETTINGS_ERROR
-            )
-            listener.send(Activity.RESULT_OK, bundle)
+            listener.sendEvent(Event.OnError(code = SETTINGS_ERROR, reason = what.toString()))
         }
 
         mediaRecorder?.setOnInfoListener { _: MediaRecorder?, what: Int, extra: Int ->
@@ -145,42 +131,29 @@ internal class ScreenRecorderService : Service() {
                         extra
                     )
                 )
-                val bundle = bundleOf(
-                    ERROR_REASON_KEY to "Max file size reached",
-                    ERROR_KEY to MAX_FILE_SIZE_REACHED_ERROR
-                )
-                listener.send(Activity.RESULT_OK, bundle)
+                listener.sendEvent(Event.OnError(code = MAX_FILE_SIZE_REACHED_ERROR))
             }
         }
 
-        //Start Recording
         try {
             mediaRecorder?.start()
-            val bundle = bundleOf(ON_START_KEY to ON_START)
-            listener.send(Activity.RESULT_OK, bundle)
+            listener.sendEvent(Event.OnStart)
         } catch (e: Exception) {
-            val bundle = bundleOf(
-                ERROR_REASON_KEY to Log.getStackTraceString(e),
-                ERROR_KEY to SETTINGS_ERROR
-            )
-            listener.send(Activity.RESULT_OK, bundle)
+            val event = Event.OnError(code = SETTINGS_ERROR, reason = Log.getStackTraceString(e))
+            listener.sendEvent(event)
         }
 
         return START_STICKY
     }
 
-    //Pause Recording
     private fun pauseRecording() {
         mediaRecorder?.pause()
-        val bundle = bundleOf(ON_PAUSE_KEY to ON_PAUSE)
-        listener.send(Activity.RESULT_OK, bundle)
+        listener.sendEvent(Event.OnPause)
     }
 
-    //Resume Recording
     private fun resumeRecording() {
         mediaRecorder?.resume()
-        val bundle = bundleOf(ON_RESUME_KEY to ON_RESUME)
-        listener.send(Activity.RESULT_OK, bundle)
+        listener.sendEvent(Event.OnResume)
     }
 
     private fun initMediaProjection(activityResult: ActivityResult) {
@@ -258,12 +231,7 @@ internal class ScreenRecorderService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         resetAll()
-        callOnComplete()
-    }
-
-    private fun callOnComplete() {
-        val bundle = bundleOf(ON_COMPLETE_KEY to ON_COMPLETE)
-        listener.send(Activity.RESULT_OK, bundle)
+        listener.sendEvent(Event.OnComplete)
     }
 
     private fun resetAll() {
@@ -275,7 +243,9 @@ internal class ScreenRecorderService : Service() {
         mediaProjection?.stop()
     }
 
-    override fun onBind(intent: Intent): IBinder? = null
+    private fun ResultReceiver.sendEvent(event: Event) {
+        send(Activity.RESULT_OK, bundleOf(EventKey to event))
+    }
 
     companion object {
         private const val TAG = "ScreenRecorderService"
@@ -283,6 +253,8 @@ internal class ScreenRecorderService : Service() {
         private const val ExtraConfig = "extra:config"
         private const val ExtraActivityResult = "extra:activityResult"
         private const val ExtraListener = "extra:listener"
+
+        const val EventKey = "ScreenRecorderService:event"
 
         fun getIntent(context: Context): Intent {
             return Intent(context, ScreenRecorderService::class.java)
@@ -301,6 +273,26 @@ internal class ScreenRecorderService : Service() {
             }
         }
     }
+
+    sealed interface Event : Parcelable {
+        @Parcelize
+        data object OnStart : Event
+
+        @Parcelize
+        data object OnPause : Event
+
+        @Parcelize
+        data object OnResume : Event
+
+        @Parcelize
+        data object OnComplete : Event
+
+        @Parcelize
+        data class OnError(
+            val code: Int = ScreenRecorderErrorCodes.GENERAL_ERROR,
+            val reason: String? = null
+        ) : Event
+    }
 }
 
 private fun mediaProjectionCallback(onStop: () -> Unit = {}): MediaProjection.Callback {
@@ -309,11 +301,3 @@ private fun mediaProjectionCallback(onStop: () -> Unit = {}): MediaProjection.Ca
     }
 }
 
-internal inline fun <reified T : Parcelable> Intent.parcelable(name: String): T? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getParcelableExtra(name, T::class.java)
-    } else {
-        @Suppress("DEPRECATION")
-        getParcelableExtra(name)
-    }
-}

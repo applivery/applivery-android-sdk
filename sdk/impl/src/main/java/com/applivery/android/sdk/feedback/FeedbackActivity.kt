@@ -10,12 +10,13 @@ import androidx.compose.runtime.getValue
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.presentation.launchAndCollectIn
+import com.applivery.android.sdk.ui.parcelable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 internal class FeedbackActivity : SdkBaseActivity() {
 
-    private val arguments get() = intent.getParcelableExtra<FeedbackArguments>(ExtraArguments)
+    private val arguments get() = intent.parcelable<FeedbackArguments>(ExtraArguments)
     private val viewModel: FeedbackViewModel by viewModel { parametersOf(arguments) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
