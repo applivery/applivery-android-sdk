@@ -96,7 +96,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.ackpine.ktx)
     implementation(libs.capturable)
-    implementation(libs.hbrecorder)
     implementation(libs.compose.video)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)

@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.DomainLogger
-import com.applivery.android.sdk.feedback.video.ScreenRecorder
+import com.applivery.android.sdk.feedback.video.VideoReporter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ internal class ShakeFeedbackCheckerImpl(
     private val shakeDetector: ShakeDetector,
     private val logger: DomainLogger,
     private val hostActivityProvider: HostActivityProvider,
-    private val screenRecorder: ScreenRecorder,
+    private val videoReporter: VideoReporter,
 ) : ShakeFeedbackChecker, ShakeDetector.Listener, DefaultLifecycleObserver {
 
     private var isEnabled: Boolean = false
@@ -62,7 +62,7 @@ internal class ShakeFeedbackCheckerImpl(
 
         // TODO: if we are in FeedbackActivity do not start recording
         recordingJob = coroutineScope.launch {
-            screenRecorder.start().fold(
+            videoReporter.start().fold(
                 ifLeft = {
                     // TODO: handle error
                     Log.d("ShakeFeedbackChecker", "onShake: failed to start recording")

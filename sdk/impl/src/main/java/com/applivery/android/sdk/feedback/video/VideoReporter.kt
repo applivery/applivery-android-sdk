@@ -8,14 +8,15 @@ import arrow.core.right
 import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.model.InternalError
-import com.hbisoft.hbrecorder.HBRecorder
-import com.hbisoft.hbrecorder.HBRecorderListener
+import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorder
+import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConfig
+import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderListener
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import kotlin.coroutines.resume
 
-internal interface ScreenRecorder {
+internal interface VideoReporter {
 
     suspend fun start(): Either<DomainError, File>
 
@@ -23,18 +24,20 @@ internal interface ScreenRecorder {
 
 }
 
-internal class HBScreenRecorder(
+internal class VideoReporterImpl(
     private val context: Context,
-    private val hostActivityProvider: HostActivityProvider
-) : ScreenRecorder, HBRecorderListener {
+    private val hostActivityProvider: HostActivityProvider,
+    private val screenRecorderBubble: ScreenRecorderBubble,
+) : VideoReporter, ScreenRecorderListener {
 
-    private val recorder = HBRecorder(context, this).apply {
-        isAudioEnabled(false)
-        setOutputPath(outputDirectory?.path)
-        setMaxDuration(MaxVideoDurationInSecods)
-    }
+    private val outputDirectory get() = context.externalCacheDir ?: context.cacheDir
 
-    private val outputDirectory get() = context.externalCacheDir
+    private val recorderConfig = ScreenRecorderConfig.builder()
+        .outputLocation(outputDirectory)
+        .maxDuration(MaxVideoDurationInSecods)
+        .build()
+
+    private val recorder = ScreenRecorder(context, recorderConfig, this)
 
     private var currentRecordingCont: CancellableContinuation<Either<DomainError, File>>? = null
 
@@ -44,10 +47,7 @@ internal class HBScreenRecorder(
         if (mediaPermissionResult.resultCode != Activity.RESULT_OK) return InternalError().left()
         return suspendCancellableCoroutine { cont ->
             currentRecordingCont = cont
-            recorder.startScreenRecording(
-                mediaPermissionResult.data,
-                mediaPermissionResult.resultCode
-            )
+            recorder.startScreenRecording(mediaPermissionResult)
         }
     }
 
@@ -55,24 +55,24 @@ internal class HBScreenRecorder(
         recorder.stopScreenRecording()
     }
 
-    override fun HBRecorderOnStart() = Unit
+    override fun onRecordingStarted() {
+        screenRecorderBubble.show()
+    }
 
-    override fun HBRecorderOnComplete() {
+    override fun onRecordingCompleted(file: File) {
+        screenRecorderBubble.hide()
+
         val continuation = currentRecordingCont ?: return
         if (!continuation.isActive) return
-        val recordingFile = recorder.getRecordingFile().getOrNull()
-        if (recordingFile == null) {
+        if (!file.exists() || !file.isFile) {
             continuation.resume(InternalError().left())
             return
         }
-        if (!recordingFile.exists() || !recordingFile.isFile) {
-            continuation.resume(InternalError().left())
-        }
-        continuation.resume(recordingFile.right())
+        continuation.resume(file.right())
         currentRecordingCont = null
     }
 
-    override fun HBRecorderOnError(errorCode: Int, reason: String?) {
+    override fun onRecordingError(errorCode: Int, reason: String?) {
         // TODO: handle errors
         val continuation = currentRecordingCont ?: return
         if (!continuation.isActive) return
@@ -80,12 +80,12 @@ internal class HBScreenRecorder(
         currentRecordingCont = null
     }
 
-    override fun HBRecorderOnPause() = Unit
+    override fun onRecordingPaused() {
+        screenRecorderBubble.hide()
+    }
 
-    override fun HBRecorderOnResume() = Unit
-
-    private fun HBRecorder.getRecordingFile(): Result<File> {
-        return runCatching { File(recorder.filePath) }
+    override fun onRecordingResumed() {
+        screenRecorderBubble.show()
     }
 
     companion object {
