@@ -82,7 +82,7 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
     }
 
     private fun onInstallFailed(error: DomainError) {
-        logger.errorInstallingBuild(error.message)
+        logger.errorInstallingBuild(error)
     }
 
     companion object {

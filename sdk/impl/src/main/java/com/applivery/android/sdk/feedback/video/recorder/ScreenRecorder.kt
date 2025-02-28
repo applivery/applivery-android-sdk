@@ -6,8 +6,12 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
 import android.os.ResultReceiver
+import android.provider.Settings
 import android.util.Log
 import androidx.activity.result.ActivityResult
+import com.applivery.android.sdk.domain.DomainLogger
+import com.applivery.android.sdk.feedback.video.bubble.VideoReporterBubble
+import com.applivery.android.sdk.feedback.video.bubble.VideoReporterFloatingViewManager
 import com.applivery.android.sdk.ui.parcelable
 import kotlinx.parcelize.Parcelize
 import java.io.File
@@ -56,7 +60,8 @@ internal class ScreenRecorderConfig private constructor(
 internal class ScreenRecorder(
     private val context: Context,
     private val config: ScreenRecorderConfig,
-    private val listener: ScreenRecorderListener
+    private val domainLogger: DomainLogger,
+    private val listener: ScreenRecorderListener,
 ) : FileObserver.OnReadyListener {
     private val fileObserver: FileObserver = FileObserver(
         path = config.outputFile.parent ?: error("Output path has no parent"),
@@ -65,6 +70,8 @@ internal class ScreenRecorder(
     private var wasOnErrorCalled: Boolean = false
     private var isRecordingPaused: Boolean = false
     private var countDown: Countdown? = null
+
+    private val floatingViewManager = VideoReporterFloatingViewManager(context)
 
     override fun onFileReady() {
         fileObserver.stopWatching()
@@ -120,8 +127,38 @@ internal class ScreenRecorder(
             )
             context.startService(serviceIntent)
         } catch (e: Exception) {
+            fileObserver.stopWatching()
             listener.onRecordingError(0, Log.getStackTraceString(e))
         }
+    }
+
+    private fun onStart() {
+        listener.onRecordingStarted()
+        startCountdown()
+        showOverlay()
+    }
+
+    private fun onResume() {
+        listener.onRecordingResumed()
+    }
+
+    private fun onPause() {
+        listener.onRecordingPaused()
+    }
+
+    private fun onComplete() {
+        stopCountDown()
+        wasOnErrorCalled = false
+        hideOverlay()
+    }
+
+    private fun onError(code: Int, reason: String?) {
+        stopCountDown()
+        fileObserver.stopWatching()
+        wasOnErrorCalled = true
+        listener.onRecordingError(code, reason)
+        stopScreenRecording()
+        hideOverlay()
     }
 
     private fun startCountdown() {
@@ -151,29 +188,24 @@ internal class ScreenRecorder(
         countDown?.stop()
     }
 
-    private fun onStart() {
-        listener.onRecordingStarted()
-        startCountdown()
+    private fun showOverlay() {
+        if (!Settings.canDrawOverlays(context)) {
+            domainLogger.noOverlayPermission()
+            return
+        }
+        floatingViewManager.show {
+            VideoReporterBubble(
+                countDowTimeInSeconds = config.maxDuration,
+                onFinished = ::stopScreenRecording,
+            )
+        }
     }
 
-    private fun onResume() {
-        listener.onRecordingResumed()
-    }
-
-    private fun onPause() {
-        listener.onRecordingPaused()
-    }
-
-    private fun onComplete() {
-        stopCountDown()
-        wasOnErrorCalled = false
-    }
-
-    private fun onError(code: Int, reason: String?) {
-        stopCountDown()
-        fileObserver.stopWatching()
-        wasOnErrorCalled = true
-        listener.onRecordingError(code, reason)
-        runCatching { context.stopService(ScreenRecorderService.getIntent(context)) }
+    private fun hideOverlay() {
+        if (!Settings.canDrawOverlays(context)) {
+            domainLogger.noOverlayPermission()
+            return
+        }
+        floatingViewManager.hide()
     }
 }

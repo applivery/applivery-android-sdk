@@ -1,14 +1,10 @@
-package com.applivery.android.sdk.feedback.video
+package com.applivery.android.sdk.feedback.video.bubble
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Application
-import android.content.Context
-import android.os.Bundle
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.runtime.Composable
@@ -23,85 +19,17 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.ui.theme.AppliveryTheme
 import com.applivery.android.sdk.ui.theme.colorError
-import java.lang.ref.WeakReference
-
-internal interface ScreenRecorderBubble {
-
-    fun start()
-
-    fun show()
-
-    fun hide()
-}
-
-internal class ScreenRecorderBubbleOverlay(
-    private val application: Application
-) : ScreenRecorderBubble, Application.ActivityLifecycleCallbacks {
-
-    private var activityRef = WeakReference<Activity>(null)
-
-    override fun start() {
-        application.registerActivityLifecycleCallbacks(this)
-    }
-
-    override fun show() {
-        val activity = activityRef.get() ?: return
-    }
-
-    override fun hide() {
-        val activity = activityRef.get() ?: return
-    }
-
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
-
-    override fun onActivityStarted(activity: Activity) = Unit
-
-    override fun onActivityResumed(activity: Activity) {
-        activityRef = WeakReference(activity)
-    }
-
-    override fun onActivityPaused(activity: Activity) {
-        activityRef = WeakReference(null)
-    }
-
-    override fun onActivityStopped(activity: Activity) = Unit
-
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
-
-    override fun onActivityDestroyed(activity: Activity) = Unit
-}
-
-@SuppressLint("ViewConstructor")
-internal class ScreenRecorderBubbleView(
-    context: Context,
-    private val configuration: Configuration
-) : AbstractComposeView(context) {
-
-    @Composable
-    override fun Content() {
-        ScreenRecorderBubble(
-            countDowTimeInSeconds = configuration.countDownTimeInSeconds,
-            onFinished = configuration.onFinished
-        )
-    }
-
-    data class Configuration(
-        var countDownTimeInSeconds: Int,
-        var onFinished: () -> Unit
-    )
-}
 
 private val ProgressWidth = 3.dp
 
 @Composable
-private fun ScreenRecorderBubble(
+fun VideoReporterBubble(
     countDowTimeInSeconds: Int = 10,
     modifier: Modifier = Modifier,
     onFinished: () -> Unit
@@ -137,6 +65,7 @@ private fun ScreenRecorderBubble(
             shape = CircleShape,
             contentColor = colorError,
             containerColor = Color.LightGray,
+            elevation = FloatingActionButtonDefaults.elevation(0.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_stop),
@@ -149,5 +78,5 @@ private fun ScreenRecorderBubble(
 @Preview
 @Composable
 private fun ScreenRecorderBubblePreview() {
-    ScreenRecorderBubble { }
+    VideoReporterBubble { }
 }

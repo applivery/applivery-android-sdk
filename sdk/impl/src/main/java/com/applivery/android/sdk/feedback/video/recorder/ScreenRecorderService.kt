@@ -65,7 +65,6 @@ internal class ScreenRecorderService : Service() {
         activityResult = intent.parcelable(ExtraActivityResult) ?: error("ActivityResult is null")
         listener = intent.parcelable(ExtraListener) ?: error("Listener is null")
 
-        //Notification
         val notificationChannel = NotificationChannels.ScreenRecording
         createNotificationChannel(notificationChannel)
 

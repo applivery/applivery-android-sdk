@@ -42,7 +42,7 @@ internal class HostAppScreenshotProviderImpl(
             } catch (e: Throwable) {
                 InternalError(e.message).left()
             }
-        }.onLeft { logger.errorCapturingScreenFromHostApp(it.message) }
+        }.onLeft { logger.errorCapturingScreenFromHostApp(it) }
     }
 
     companion object {

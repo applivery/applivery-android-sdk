@@ -6,6 +6,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.applivery.android.sdk.HostActivityProvider
+import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.model.InternalError
 import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorder
@@ -21,13 +22,12 @@ internal interface VideoReporter {
     suspend fun start(): Either<DomainError, File>
 
     suspend fun stop()
-
 }
 
 internal class VideoReporterImpl(
     private val context: Context,
     private val hostActivityProvider: HostActivityProvider,
-    private val screenRecorderBubble: ScreenRecorderBubble,
+    domainLogger: DomainLogger
 ) : VideoReporter, ScreenRecorderListener {
 
     private val outputDirectory get() = context.externalCacheDir ?: context.cacheDir
@@ -37,7 +37,7 @@ internal class VideoReporterImpl(
         .maxDuration(MaxVideoDurationInSecods)
         .build()
 
-    private val recorder = ScreenRecorder(context, recorderConfig, this)
+    private val recorder = ScreenRecorder(context, recorderConfig, domainLogger, this)
 
     private var currentRecordingCont: CancellableContinuation<Either<DomainError, File>>? = null
 
@@ -55,13 +55,9 @@ internal class VideoReporterImpl(
         recorder.stopScreenRecording()
     }
 
-    override fun onRecordingStarted() {
-        screenRecorderBubble.show()
-    }
+    override fun onRecordingStarted() = Unit
 
     override fun onRecordingCompleted(file: File) {
-        screenRecorderBubble.hide()
-
         val continuation = currentRecordingCont ?: return
         if (!continuation.isActive) return
         if (!file.exists() || !file.isFile) {
@@ -73,22 +69,19 @@ internal class VideoReporterImpl(
     }
 
     override fun onRecordingError(errorCode: Int, reason: String?) {
-        // TODO: handle errors
         val continuation = currentRecordingCont ?: return
         if (!continuation.isActive) return
-        continuation.resume(InternalError().left())
+        continuation.resume(RecordingError(reason).left())
         currentRecordingCont = null
     }
 
-    override fun onRecordingPaused() {
-        screenRecorderBubble.hide()
-    }
+    override fun onRecordingPaused() = Unit
 
-    override fun onRecordingResumed() {
-        screenRecorderBubble.show()
-    }
+    override fun onRecordingResumed() = Unit
 
     companion object {
         private const val MaxVideoDurationInSecods = 30
     }
 }
+
+internal class RecordingError(message: String?) : DomainError(message)

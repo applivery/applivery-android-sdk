@@ -1,7 +1,6 @@
 package com.applivery.android.sdk.feedback
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -11,6 +10,7 @@ import com.applivery.android.sdk.feedback.video.VideoReporter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.io.File
 
 internal interface ShakeFeedbackChecker {
 
@@ -56,28 +56,26 @@ internal class ShakeFeedbackCheckerImpl(
 
     override fun onShake(count: Int) {
         if (recordingJob?.isActive == true) {
-            Log.d("ShakeFeedbackChecker", "onShake: already recording")
+            logger.onShakeDetectedAlreadyRecording()
             return
         }
 
         // TODO: if we are in FeedbackActivity do not start recording
         recordingJob = coroutineScope.launch {
             videoReporter.start().fold(
-                ifLeft = {
-                    // TODO: handle error
-                    Log.d("ShakeFeedbackChecker", "onShake: failed to start recording")
-                },
-                ifRight = {
-                    Log.d("ShakeFeedbackChecker", "file recorded $it")
-                    val activity = hostActivityProvider.activity
-                    if (activity == null) {
-                        logger.noActivityFoundForFeedbackView()
-                        return@launch
-                    }
-                    val arguments = FeedbackArguments.Video(uri = Uri.fromFile(it))
-                    activity.startActivity(FeedbackActivity.getIntent(activity, arguments))
-                }
+                ifLeft = logger::videoReportingError,
+                ifRight = ::onScreenRecordingReady
             )
         }
+    }
+
+    private fun onScreenRecordingReady(file: File) {
+        val activity = hostActivityProvider.activity
+        if (activity == null) {
+            logger.noActivityFoundForFeedbackView()
+            return
+        }
+        val arguments = FeedbackArguments.Video(uri = Uri.fromFile(file))
+        activity.startActivity(FeedbackActivity.getIntent(activity, arguments))
     }
 }

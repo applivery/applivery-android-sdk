@@ -3,7 +3,9 @@ package com.applivery.android.sdk.feedback.video
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.media.projection.MediaProjectionConfig
 import android.media.projection.MediaProjectionManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,7 +25,7 @@ internal class MediaProjectionActivity : SdkBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val intent = mediaProjectionManager?.createScreenCaptureIntent() ?: return
+        val intent = mediaProjectionManager?.createScreenCaptureIntentCompat() ?: return
         mediaProjectionLauncher.launch(intent)
     }
 
@@ -40,5 +42,13 @@ internal suspend fun Activity.requestMediaPermission(): ActivityResult {
     return suspendCancellableCoroutine { cont ->
         MediaProjectionCallbacks.add { cont.resume(it) }
         startActivity(MediaProjectionActivity.getIntent(this))
+    }
+}
+
+private fun MediaProjectionManager.createScreenCaptureIntentCompat(): Intent {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        createScreenCaptureIntent(MediaProjectionConfig.createConfigForDefaultDisplay())
+    } else {
+        createScreenCaptureIntent()
     }
 }
