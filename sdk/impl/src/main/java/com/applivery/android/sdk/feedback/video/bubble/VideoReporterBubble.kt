@@ -1,7 +1,7 @@
 package com.applivery.android.sdk.feedback.video.bubble
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -9,11 +9,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -25,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.ui.theme.AppliveryTheme
 import com.applivery.android.sdk.ui.theme.colorError
+import kotlinx.coroutines.withContext
 
 private val ProgressWidth = 3.dp
 
@@ -35,15 +34,18 @@ fun VideoReporterBubble(
     onFinished: () -> Unit
 ) {
     AppliveryTheme {
-        var progress by remember { mutableFloatStateOf(0f) }
-        val progressAnimation by animateFloatAsState(
-            progress,
-            animationSpec = tween(
-                durationMillis = countDowTimeInSeconds * 1000,
-                easing = LinearEasing
-            )
-        )
-        LaunchedEffect(countDowTimeInSeconds) { progress = 360f }
+        val progress = remember { Animatable(0f) }
+        LaunchedEffect(countDowTimeInSeconds) {
+            withContext(FixedMotionDurationScale) {
+                progress.animateTo(
+                    targetValue = 360f,
+                    animationSpec = tween(
+                        durationMillis = countDowTimeInSeconds * 1000,
+                        easing = LinearEasing
+                    )
+                )
+            }
+        }
         LargeFloatingActionButton(
             modifier = modifier.drawWithContent {
                 drawContent()
@@ -57,7 +59,7 @@ fun VideoReporterBubble(
                         size.height - offset.y - ProgressWidth.toPx() / 2f
                     ),
                     startAngle = 270f,
-                    sweepAngle = progressAnimation,
+                    sweepAngle = progress.value,
                     useCenter = false
                 )
             },
@@ -74,6 +76,11 @@ fun VideoReporterBubble(
         }
     }
 }
+
+private object FixedMotionDurationScale : MotionDurationScale {
+    override val scaleFactor: Float get() = 1f
+}
+
 
 @Preview
 @Composable

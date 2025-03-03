@@ -3,7 +3,6 @@ package com.applivery.android.sdk.feedback.video.bubble
 import android.content.Context
 import android.graphics.PixelFormat
 import android.os.Build
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -15,10 +14,10 @@ import androidx.core.content.getSystemService
 import arrow.atomic.AtomicBoolean
 
 internal class VideoReporterFloatingViewManager(context: Context) {
-    private val composeOwner = FloatingWindowLifecycleOwner()
+    private val lifecycleOwner = OverlayViewLifecycleOwner()
     private val factory = FloatingViewFactory(
         context = context,
-        composeOwner = composeOwner
+        lifecycleOwner = lifecycleOwner
     )
 
     fun show(content: @Composable () -> Unit) {
@@ -32,7 +31,7 @@ internal class VideoReporterFloatingViewManager(context: Context) {
 
 internal class FloatingViewFactory(
     private val context: Context,
-    private val composeOwner: FloatingWindowLifecycleOwner
+    private val lifecycleOwner: OverlayViewLifecycleOwner
 ) {
     private val windowManager = requireNotNull(context.getSystemService<WindowManager>())
     private var floatingView: ComposeView? = null
@@ -90,12 +89,11 @@ internal class FloatingViewFactory(
     }
 
     private fun addToComposeLifecycle(composable: ComposeView) {
-        composeOwner.attachToDecorView(composable)
+        lifecycleOwner.attachToDecorView(composable)
         if (!isComposeOwnerInit.getAndSet(true)) {
-            composeOwner.onCreate()
+            lifecycleOwner.onCreate()
         }
-        composeOwner.onStart()
-        composeOwner.onResume()
+        lifecycleOwner.onResume()
     }
 
     private fun baseLayoutParams(): WindowManager.LayoutParams {
