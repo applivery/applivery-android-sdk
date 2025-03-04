@@ -1,0 +1,140 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:DrawingCanvas.kt$@Composable internal fun DrawingCanvas( modifier: Modifier = Modifier, state: DrawingCanvasState = rememberDrawingCanvasState(), )</ID>
+    <ID>EmptyDefaultConstructor:BaseViewModel.kt$BaseViewModel$( )</ID>
+    <ID>FunctionNaming:AppliveryTheme.kt$@Composable internal fun AppliveryTheme(content: @Composable () -&gt; Unit)</ID>
+    <ID>FunctionNaming:ColorWheel.kt$@Composable internal fun ColorSlider( modifier: Modifier, title: String, titleColor: Color, valueRange: ClosedFloatingPointRange&lt;Float&gt; = 0f..255f, rgb: Float, onColorChanged: (Float) -&gt; Unit )</ID>
+    <ID>FunctionNaming:ColorWheel.kt$@Composable internal fun ColorWheel(modifier: Modifier = Modifier)</ID>
+    <ID>FunctionNaming:DrawingCanvas.kt$@Composable internal fun DrawingCanvas( modifier: Modifier = Modifier, state: DrawingCanvasState = rememberDrawingCanvasState(), )</ID>
+    <ID>FunctionNaming:DrawingPropertiesMenu.kt$@Composable internal fun DrawingPropertiesMenu( modifier: Modifier = Modifier, pathProperties: PathProperties, drawMode: DrawMode, onUndo: () -&gt; Unit, onRedo: () -&gt; Unit, onApply: () -&gt; Unit, onDrawModeChanged: (DrawMode) -&gt; Unit, onPropertiesChanged: (PathProperties) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:DrawingPropertiesMenu.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable internal fun ColorSelectionDialog( initialColor: Color, onDismiss: () -&gt; Unit, onNegativeClick: () -&gt; Unit, onPositiveClick: (Color) -&gt; Unit )</ID>
+    <ID>FunctionNaming:DrawingPropertiesMenu.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable internal fun ExposedSelectionMenu( title: String, index: Int, options: List&lt;String&gt;, onSelected: (Int) -&gt; Unit )</ID>
+    <ID>FunctionNaming:DrawingPropertiesMenu.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable internal fun PropertiesMenuDialog( properties: PathProperties, onPropertiesChanged: (PathProperties) -&gt; Unit, onDismiss: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:FeedbackScreen.kt$@OptIn( ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class, ExperimentalComposeApi::class ) @Composable private fun ScreenshotDrawCanvasDialog( screenshot: Bitmap, onDismiss: () -&gt; Unit = {}, onApply: (Bitmap?) -&gt; Unit )</ID>
+    <ID>FunctionNaming:FeedbackScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable internal fun FeedbackScreen( state: FeedbackState, intentSender: ViewModelIntentSender&lt;FeedbackIntent&gt; )</ID>
+    <ID>FunctionNaming:FeedbackScreen.kt$@Preview @Composable private fun FeedbackScreenPreview()</ID>
+    <ID>FunctionNaming:ForceUpdateActivity.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ForceUpdateScreen( hostAppName: String, installStep: UpdateInstallStep, onUpdateClick: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:ForceUpdateActivity.kt$@Preview @Composable private fun ForceUpdateScreenPreview()</ID>
+    <ID>LongMethod:DrawingCanvas.kt$@Composable internal fun DrawingCanvas( modifier: Modifier = Modifier, state: DrawingCanvasState = rememberDrawingCanvasState(), )</ID>
+    <ID>LongMethod:DrawingPropertiesMenu.kt$@Composable internal fun DrawingPropertiesMenu( modifier: Modifier = Modifier, pathProperties: PathProperties, drawMode: DrawMode, onUndo: () -&gt; Unit, onRedo: () -&gt; Unit, onApply: () -&gt; Unit, onDrawModeChanged: (DrawMode) -&gt; Unit, onPropertiesChanged: (PathProperties) -&gt; Unit, )</ID>
+    <ID>LongMethod:DrawingPropertiesMenu.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable internal fun ColorSelectionDialog( initialColor: Color, onDismiss: () -&gt; Unit, onNegativeClick: () -&gt; Unit, onPositiveClick: (Color) -&gt; Unit )</ID>
+    <ID>LongMethod:DrawingPropertiesMenu.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable internal fun PropertiesMenuDialog( properties: PathProperties, onPropertiesChanged: (PathProperties) -&gt; Unit, onDismiss: () -&gt; Unit )</ID>
+    <ID>LongMethod:FeedbackScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable internal fun FeedbackScreen( state: FeedbackState, intentSender: ViewModelIntentSender&lt;FeedbackIntent&gt; )</ID>
+    <ID>LongParameterList:ColorWheel.kt$( modifier: Modifier, title: String, titleColor: Color, valueRange: ClosedFloatingPointRange&lt;Float&gt; = 0f..255f, rgb: Float, onColorChanged: (Float) -&gt; Unit )</ID>
+    <ID>LongParameterList:DrawingPropertiesMenu.kt$( modifier: Modifier = Modifier, pathProperties: PathProperties, drawMode: DrawMode, onUndo: () -&gt; Unit, onRedo: () -&gt; Unit, onApply: () -&gt; Unit, onDrawModeChanged: (DrawMode) -&gt; Unit, onPropertiesChanged: (PathProperties) -&gt; Unit, )</ID>
+    <ID>LongParameterList:FeedbackViewModel.kt$FeedbackViewModel$( private val arguments: FeedbackArguments, private val imageDecoder: ContentUriImageDecoder, private val getUserUseCase: GetUserUseCase, private val appPreferences: AppPreferences, private val sendFeedback: SendFeedbackUseCase, private val deviceInfoProvider: DeviceInfoProvider, private val packageInfoProvider: HostAppPackageInfoProvider, private val hostAppScreenshotProvider: HostAppScreenshotProvider )</ID>
+    <ID>LongParameterList:onResponseFn.kt$( callback: Callback&lt;T&gt;, call: Call&lt;T&gt;, errorConverter: Converter&lt;ResponseBody, E&gt;, bodyType: Type, response: Response&lt;R&gt;, newResponseFn: (R, Response&lt;R&gt;) -&gt; Response&lt;T&gt;, errorResponseFn: (E, Response&lt;R&gt;) -&gt; Response&lt;T&gt; )</ID>
+    <ID>LoopWithTooManyJumpStatements:CustomTabsManager.kt$CustomTabsManager.Companion$for</ID>
+    <ID>MagicNumber:Color.kt$0xFF010258</ID>
+    <ID>MagicNumber:Color.kt$0xFF0241E3</ID>
+    <ID>MagicNumber:Color.kt$0xFF03FDEA</ID>
+    <ID>MagicNumber:Color.kt$0xFF2E2F73</ID>
+    <ID>MagicNumber:Color.kt$0xFF3567E9</ID>
+    <ID>MagicNumber:Color.kt$0xFF5B5B8F</ID>
+    <ID>MagicNumber:Color.kt$0xFF678DEE</ID>
+    <ID>MagicNumber:Color.kt$0xFF999ABC</ID>
+    <ID>MagicNumber:Color.kt$0xFF9AB3F4</ID>
+    <ID>MagicNumber:Color.kt$0xFFCCCCDE</ID>
+    <ID>MagicNumber:Color.kt$0xFFCCD9F9</ID>
+    <ID>MagicNumber:Color.kt$0xFFDFE8FF</ID>
+    <ID>MagicNumber:Color.kt$0xFFE6E6EE</ID>
+    <ID>MagicNumber:Color.kt$0xFFE6ECFC</ID>
+    <ID>MagicNumber:Color.kt$0xFFECEFF1</ID>
+    <ID>MagicNumber:Color.kt$0xFFEF4444</ID>
+    <ID>MagicNumber:Color.kt$0xFFFFB81C</ID>
+    <ID>MagicNumber:Color.kt$0xFFFFF1D2</ID>
+    <ID>MagicNumber:ColorWheel.kt$.3f</ID>
+    <ID>MagicNumber:ColorWheel.kt$255f</ID>
+    <ID>MagicNumber:DeviceInfoProviderImpl.kt$DeviceInfoProviderImpl$100</ID>
+    <ID>MagicNumber:DeviceInfoProviderImpl.kt$DeviceInfoProviderImpl$1024</ID>
+    <ID>MagicNumber:DrawingPropertiesMenu.kt$.8f</ID>
+    <ID>MagicNumber:DrawingPropertiesMenu.kt$0.3f</ID>
+    <ID>MagicNumber:DrawingPropertiesMenu.kt$255</ID>
+    <ID>MagicNumber:FeedbackScreen.kt$1080</ID>
+    <ID>MagicNumber:FeedbackScreen.kt$1920</ID>
+    <ID>MagicNumber:FeedbackViewModel.kt$FeedbackViewModel$100</ID>
+    <ID>MatchingDeclarationName:BindUserRequest.kt$BindUserApi</ID>
+    <ID>MatchingDeclarationName:DrawingCanvas.kt$DrawingCanvasState</ID>
+    <ID>MaxLineLength:NetworkEitherCallAdapter.kt$EitherCall.&lt;no name provided&gt;$"If you expect response body to be null then define your API method as returning Unit:\n"</ID>
+    <ID>NestedBlockDepth:onResponseFn.kt$internal inline fun &lt;E, R, T&gt; onResponseFn( callback: Callback&lt;T&gt;, call: Call&lt;T&gt;, errorConverter: Converter&lt;ResponseBody, E&gt;, bodyType: Type, response: Response&lt;R&gt;, newResponseFn: (R, Response&lt;R&gt;) -&gt; Response&lt;T&gt;, errorResponseFn: (E, Response&lt;R&gt;) -&gt; Response&lt;T&gt; )</ID>
+    <ID>NewLineAtEndOfFile:ApiDataSource.kt$com.applivery.android.sdk.data.api.ApiDataSource.kt</ID>
+    <ID>NewLineAtEndOfFile:ApiResponseSchema.kt$com.applivery.android.sdk.data.models.ApiResponseSchema.kt</ID>
+    <ID>NewLineAtEndOfFile:AppPreferences.kt$com.applivery.android.sdk.domain.AppPreferences.kt</ID>
+    <ID>NewLineAtEndOfFile:AppliveryDiContext.kt$com.applivery.android.sdk.di.AppliveryDiContext.kt</ID>
+    <ID>NewLineAtEndOfFile:AppliveryRepository.kt$com.applivery.android.sdk.domain.repository.AppliveryRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:AppliveryRepositoryImpl.kt$com.applivery.android.sdk.data.repository.AppliveryRepositoryImpl.kt</ID>
+    <ID>NewLineAtEndOfFile:AppliverySdk.kt$com.applivery.android.sdk.AppliverySdk.kt</ID>
+    <ID>NewLineAtEndOfFile:BindUser.kt$com.applivery.android.sdk.domain.model.BindUser.kt</ID>
+    <ID>NewLineAtEndOfFile:BindUserRequest.kt$com.applivery.android.sdk.data.models.BindUserRequest.kt</ID>
+    <ID>NewLineAtEndOfFile:BindUserUseCase.kt$com.applivery.android.sdk.domain.usecases.BindUserUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:BuildInstaller.kt$com.applivery.android.sdk.updates.BuildInstaller.kt</ID>
+    <ID>NewLineAtEndOfFile:CheckUpdatesUseCase.kt$com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:Color.kt$com.applivery.android.sdk.ui.theme.Color.kt</ID>
+    <ID>NewLineAtEndOfFile:ColorWheel.kt$com.applivery.android.sdk.feedback.draw.ColorWheel.kt</ID>
+    <ID>NewLineAtEndOfFile:ContentUriImageDecoder.kt$com.applivery.android.sdk.feedback.ContentUriImageDecoder.kt</ID>
+    <ID>NewLineAtEndOfFile:DownloadBuildService.kt$com.applivery.android.sdk.updates.DownloadBuildService.kt</ID>
+    <ID>NewLineAtEndOfFile:DownloadsRepository.kt$com.applivery.android.sdk.domain.repository.DownloadsRepository.kt</ID>
+    <ID>NewLineAtEndOfFile:DownloadsRepositoryImpl.kt$com.applivery.android.sdk.data.repository.DownloadsRepositoryImpl.kt</ID>
+    <ID>NewLineAtEndOfFile:DragMotionEvent.kt$com.applivery.android.sdk.feedback.draw.DragMotionEvent.kt</ID>
+    <ID>NewLineAtEndOfFile:DrawMode.kt$com.applivery.android.sdk.feedback.draw.DrawMode.kt</ID>
+    <ID>NewLineAtEndOfFile:DrawingPropertiesMenu.kt$com.applivery.android.sdk.feedback.draw.DrawingPropertiesMenu.kt</ID>
+    <ID>NewLineAtEndOfFile:EitherExtensions.kt$com.applivery.android.sdk.domain.model.EitherExtensions.kt</ID>
+    <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$com.applivery.android.sdk.impl.ExampleUnitTest.kt</ID>
+    <ID>NewLineAtEndOfFile:Feedback.kt$com.applivery.android.sdk.domain.model.Feedback.kt</ID>
+    <ID>NewLineAtEndOfFile:FeedbackScreen.kt$com.applivery.android.sdk.feedback.FeedbackScreen.kt</ID>
+    <ID>NewLineAtEndOfFile:FeedbackType.kt$com.applivery.android.sdk.feedback.FeedbackType.kt</ID>
+    <ID>NewLineAtEndOfFile:FeedbackViewModel.kt$com.applivery.android.sdk.feedback.FeedbackViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:FileManager.kt$com.applivery.android.sdk.updates.FileManager.kt</ID>
+    <ID>NewLineAtEndOfFile:ForceUpdateActivity.kt$com.applivery.android.sdk.updates.ForceUpdateActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:GetAppConfigUseCase.kt$com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetAuthenticationUriUseCase.kt$com.applivery.android.sdk.domain.usecases.GetAuthenticationUriUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:GetUserUseCase.kt$com.applivery.android.sdk.domain.usecases.GetUserUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:HostActivityProvider.kt$com.applivery.android.sdk.HostActivityProvider.kt</ID>
+    <ID>NewLineAtEndOfFile:HostAppPackageInfoProvider.kt$com.applivery.android.sdk.domain.HostAppPackageInfoProvider.kt</ID>
+    <ID>NewLineAtEndOfFile:HostAppScreenshotProvider.kt$com.applivery.android.sdk.feedback.HostAppScreenshotProvider.kt</ID>
+    <ID>NewLineAtEndOfFile:IsUpToDateUseCase.kt$com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:LoginHandler.kt$com.applivery.android.sdk.login.LoginHandler.kt</ID>
+    <ID>NewLineAtEndOfFile:LoginViewModel.kt$com.applivery.android.sdk.login.LoginViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:Mappers.kt$com.applivery.android.sdk.data.models.Mappers.kt</ID>
+    <ID>NewLineAtEndOfFile:MediaPermissionGrantStatus.kt$com.applivery.android.sdk.feedback.MediaPermissionGrantStatus.kt</ID>
+    <ID>NewLineAtEndOfFile:MotionEvent.kt$com.applivery.android.sdk.feedback.draw.MotionEvent.kt</ID>
+    <ID>NewLineAtEndOfFile:PackageInfo.kt$com.applivery.android.sdk.domain.model.PackageInfo.kt</ID>
+    <ID>NewLineAtEndOfFile:PathProperties.kt$com.applivery.android.sdk.feedback.draw.PathProperties.kt</ID>
+    <ID>NewLineAtEndOfFile:Permissions.kt$com.applivery.android.sdk.ui.Permissions.kt</ID>
+    <ID>NewLineAtEndOfFile:Properties.kt$com.applivery.android.sdk.di.Properties.kt</ID>
+    <ID>NewLineAtEndOfFile:ScreenshotFeedbackChecker.kt$com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker.kt</ID>
+    <ID>NewLineAtEndOfFile:ScreenshotObserver.kt$com.applivery.android.sdk.feedback.ScreenshotObserver.kt</ID>
+    <ID>NewLineAtEndOfFile:SdkBaseActivity.kt$com.applivery.android.sdk.SdkBaseActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:SendFeedbackUseCase.kt$com.applivery.android.sdk.domain.usecases.SendFeedbackUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:ServiceBuilder.kt$com.applivery.android.sdk.data.api.service.ServiceBuilder.kt</ID>
+    <ID>NewLineAtEndOfFile:SessionManager.kt$com.applivery.android.sdk.data.auth.SessionManager.kt</ID>
+    <ID>NewLineAtEndOfFile:ShakeFeedbackChecker.kt$com.applivery.android.sdk.feedback.ShakeFeedbackChecker.kt</ID>
+    <ID>NewLineAtEndOfFile:SharedPreferencesProvider.kt$com.applivery.android.sdk.domain.SharedPreferencesProvider.kt</ID>
+    <ID>NewLineAtEndOfFile:SuggestedUpdateActivity.kt$com.applivery.android.sdk.updates.SuggestedUpdateActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:UnbindUserUseCase.kt$com.applivery.android.sdk.domain.usecases.UnbindUserUseCase.kt</ID>
+    <ID>NewLineAtEndOfFile:UnifiedErrorHandler.kt$com.applivery.android.sdk.domain.UnifiedErrorHandler.kt</ID>
+    <ID>NewLineAtEndOfFile:UpdateInstall.kt$com.applivery.android.sdk.updates.UpdateInstall.kt</ID>
+    <ID>NewLineAtEndOfFile:UpdatesBackgroundChecker.kt$com.applivery.android.sdk.updates.UpdatesBackgroundChecker.kt</ID>
+    <ID>ReturnCount:CheckUpdatesUseCase.kt$CheckUpdates$override suspend fun invoke()</ID>
+    <ID>ReturnCount:CustomTabsManager.kt$CustomTabsManager.Companion$private fun hasSpecializedHandlerIntents(context: Context, intent: Intent): Boolean</ID>
+    <ID>ReturnCount:DeviceInfoProviderImpl.kt$DeviceInfoProviderImpl$@SuppressLint("MissingPermission") private fun NetworkCapabilities.getNetworkType(): String</ID>
+    <ID>ReturnCount:DeviceInfoProviderImpl.kt$DeviceInfoProviderImpl$private fun getRamStatus(): RamStatus</ID>
+    <ID>ReturnCount:LoginHandler.kt$LoginHandler$suspend operator fun invoke(): Either&lt;DomainError, Unit&gt;</ID>
+    <ID>ReturnCount:NetworkEitherCallAdapter.kt$EitherCall.&lt;no name provided&gt;$private fun Response&lt;R&gt;.toEither(): Either&lt;ApiError, R&gt;</ID>
+    <ID>ReturnCount:ScreenshotObserver.kt$ScreenshotObserver$override fun onChange(selfChange: Boolean, uri: Uri?)</ID>
+    <ID>SwallowedException:CustomTabsManager.kt$CustomTabsManager.Companion$e: RuntimeException</ID>
+    <ID>SwallowedException:FeedbackScreen.kt$error: Throwable</ID>
+    <ID>SwallowedException:JsonMapper.kt$JsonMapper$e: Throwable</ID>
+    <ID>TooGenericExceptionCaught:CustomTabsManager.kt$CustomTabsManager.Companion$e: RuntimeException</ID>
+    <ID>TooGenericExceptionCaught:FeedbackScreen.kt$error: Throwable</ID>
+    <ID>TooGenericExceptionCaught:HostAppScreenshotProvider.kt$HostAppScreenshotProviderImpl$e: Throwable</ID>
+    <ID>TooGenericExceptionCaught:JsonMapper.kt$JsonMapper$e: Throwable</ID>
+    <ID>TooGenericExceptionCaught:onResponseFn.kt$e: Exception</ID>
+    <ID>TopLevelPropertyNaming:Mappers.kt$private const val ApiDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"</ID>
+    <ID>UnusedPrivateMember:FeedbackScreen.kt$@Preview @Composable private fun FeedbackScreenPreview()</ID>
+    <ID>UnusedPrivateMember:ForceUpdateActivity.kt$@Preview @Composable private fun ForceUpdateScreenPreview()</ID>
+    <ID>WildcardImport:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
+  </CurrentIssues>
+</SmellBaseline>

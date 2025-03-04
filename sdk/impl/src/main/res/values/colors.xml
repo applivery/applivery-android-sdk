@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="applivery_primary_color">#FF0241E3</color>
+    <color name="applivery_accent_color">#FF0241E3</color>
+    <color name="applivery_foreground_color">#FF010258</color>
+</resources>
