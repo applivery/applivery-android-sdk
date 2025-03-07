@@ -25,10 +25,10 @@ private val EmailRegex =
 
 internal sealed interface FeedbackArguments : Parcelable {
 
-    val uri: Uri
+    val uri: Uri?
 
     @Parcelize
-    class Screenshot(override val uri: Uri) : FeedbackArguments
+    class Screenshot(override val uri: Uri? = null) : FeedbackArguments
 
     @Parcelize
     class Video(override val uri: Uri) : FeedbackArguments
@@ -84,7 +84,8 @@ internal class FeedbackViewModel(
 
         viewModelScope.launch {
             val attachment = when (arguments) {
-                is FeedbackArguments.Screenshot -> imageDecoder.of(arguments.uri)
+                is FeedbackArguments.Screenshot -> arguments.uri
+                    ?.let { imageDecoder.of(it) }
                     ?.let(FeedbackAttachment::Screenshot)
 
                 is FeedbackArguments.Video -> FeedbackAttachment.Video(arguments.uri)

@@ -6,6 +6,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.DomainLogger
+import com.applivery.android.sdk.domain.FeedbackProgressProvider
+import com.applivery.android.sdk.domain.model.ShakeFeedbackBehavior
 import com.applivery.android.sdk.feedback.video.VideoReporter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -16,7 +18,9 @@ internal interface ShakeFeedbackChecker {
 
     fun start()
 
-    fun enable(enable: Boolean)
+    fun enable(behavior: ShakeFeedbackBehavior)
+
+    fun disable()
 }
 
 internal class ShakeFeedbackCheckerImpl(
@@ -24,9 +28,11 @@ internal class ShakeFeedbackCheckerImpl(
     private val logger: DomainLogger,
     private val hostActivityProvider: HostActivityProvider,
     private val videoReporter: VideoReporter,
+    private val feedbackProgressProvider: FeedbackProgressProvider
 ) : ShakeFeedbackChecker, ShakeDetector.Listener, DefaultLifecycleObserver {
 
     private var isEnabled: Boolean = false
+    private var currentBehavior: ShakeFeedbackBehavior = ShakeFeedbackBehavior.Normal
 
     private val coroutineScope = MainScope()
     private var recordingJob: Job? = null
@@ -35,13 +41,15 @@ internal class ShakeFeedbackCheckerImpl(
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     }
 
-    override fun enable(enable: Boolean) {
-        isEnabled = enable
-        if (isEnabled) {
-            shakeDetector.start(this)
-        } else {
-            shakeDetector.stop()
-        }
+    override fun enable(behavior: ShakeFeedbackBehavior) {
+        isEnabled = true
+        currentBehavior = behavior
+        shakeDetector.start(this)
+    }
+
+    override fun disable() {
+        isEnabled = false
+        shakeDetector.stop()
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -55,12 +63,30 @@ internal class ShakeFeedbackCheckerImpl(
     }
 
     override fun onShake(count: Int) {
+        if (feedbackProgressProvider.isFeedbackInProgress) return
+
+        when (currentBehavior) {
+            ShakeFeedbackBehavior.Normal -> onShakeForNormalBehavior()
+            ShakeFeedbackBehavior.Video -> onShakeForVideoBehavior()
+        }
+    }
+
+    private fun onShakeForNormalBehavior() {
+        val activity = hostActivityProvider.activity
+        if (activity == null) {
+            logger.noActivityFoundForFeedbackView()
+            return
+        }
+        val arguments = FeedbackArguments.Screenshot()
+        activity.startActivity(FeedbackActivity.getIntent(activity, arguments))
+    }
+
+    private fun onShakeForVideoBehavior() {
         if (recordingJob?.isActive == true) {
             logger.onShakeDetectedAlreadyRecording()
             return
         }
 
-        // TODO: if we are in FeedbackActivity do not start recording
         recordingJob = coroutineScope.launch {
             videoReporter.start().fold(
                 ifLeft = logger::videoReportingError,

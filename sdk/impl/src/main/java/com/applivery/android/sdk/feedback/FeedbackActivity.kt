@@ -9,15 +9,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.SdkBaseActivity
+import com.applivery.android.sdk.domain.FeedbackProgressUpdater
 import com.applivery.android.sdk.presentation.launchAndCollectIn
 import com.applivery.android.sdk.ui.parcelable
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 internal class FeedbackActivity : SdkBaseActivity() {
 
     private val arguments get() = intent.parcelable<FeedbackArguments>(ExtraArguments)
     private val viewModel: FeedbackViewModel by viewModel { parametersOf(arguments) }
+
+    private val feedbackProgressUpdater by inject<FeedbackProgressUpdater>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +43,16 @@ internal class FeedbackActivity : SdkBaseActivity() {
         if (savedInstanceState == null) {
             viewModel.load()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        feedbackProgressUpdater.isFeedbackInProgress = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        feedbackProgressUpdater.isFeedbackInProgress = false
     }
 
     private fun showFeedbackSentToast(success: Boolean) {

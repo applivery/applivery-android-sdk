@@ -1,5 +1,6 @@
 package com.applivery.android.sdk
 
+import com.applivery.android.sdk.domain.model.ShakeFeedbackBehavior
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.user.BindUserCallback
@@ -46,7 +47,7 @@ internal class AppliverySdk : Applivery {
 
     override suspend fun getUser(): Result<User> = Result.failure(AppliveryNoOpError())
 
-    override fun enableShakeFeedback() = Unit
+    override fun enableShakeFeedback(behavior: ShakeFeedbackBehavior) = Unit
 
     override fun disableShakeFeedback() = Unit
 

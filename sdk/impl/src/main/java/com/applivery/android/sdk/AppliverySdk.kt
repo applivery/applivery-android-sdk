@@ -6,6 +6,7 @@ import com.applivery.android.sdk.di.Properties
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.asResult
 import com.applivery.android.sdk.domain.model.BindUser
+import com.applivery.android.sdk.domain.model.ShakeFeedbackBehavior
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.usecases.BindUserUseCase
 import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
@@ -103,12 +104,12 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
         return get<GetUserUseCase>().invoke().asResult()
     }
 
-    override fun enableShakeFeedback() {
-        get<ShakeFeedbackChecker>().enable(true)
+    override fun enableShakeFeedback(behavior: ShakeFeedbackBehavior) {
+        get<ShakeFeedbackChecker>().enable(behavior)
     }
 
     override fun disableShakeFeedback() {
-        get<ShakeFeedbackChecker>().enable(false)
+        get<ShakeFeedbackChecker>().disable()
     }
 
     override fun enableScreenshotFeedback() {
