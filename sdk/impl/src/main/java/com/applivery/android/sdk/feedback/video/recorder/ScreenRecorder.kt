@@ -9,6 +9,9 @@ import android.os.ResultReceiver
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.result.ActivityResult
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.feedback.video.bubble.VideoReporterBubble
 import com.applivery.android.sdk.feedback.video.bubble.VideoReporterFloatingViewManager
@@ -195,6 +198,7 @@ internal class ScreenRecorder(
         }
         floatingViewManager.show {
             VideoReporterBubble(
+                modifier = Modifier.padding(16.dp),
                 countDowTimeInSeconds = config.maxDuration,
                 onFinished = ::stopScreenRecording,
             )

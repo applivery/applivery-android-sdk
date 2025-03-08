@@ -3,10 +3,10 @@ package com.applivery.android.sdk.feedback.video.bubble
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -26,6 +26,7 @@ import com.applivery.android.sdk.ui.theme.colorError
 import kotlinx.coroutines.withContext
 
 private val ProgressWidth = 3.dp
+private val FloatingActionButtonSize = 76.dp
 
 @Composable
 fun VideoReporterBubble(
@@ -46,28 +47,29 @@ fun VideoReporterBubble(
                 )
             }
         }
-        LargeFloatingActionButton(
-            modifier = modifier.drawWithContent {
-                drawContent()
-                val offset = Offset(ProgressWidth.toPx() / 2f, ProgressWidth.toPx() / 2f)
-                drawArc(
-                    color = Color.DarkGray,
-                    style = Stroke(width = ProgressWidth.toPx()),
-                    topLeft = offset,
-                    size = Size(
-                        size.width - offset.x - ProgressWidth.toPx() / 2f,
-                        size.height - offset.y - ProgressWidth.toPx() / 2f
-                    ),
-                    startAngle = 270f,
-                    sweepAngle = progress.value,
-                    useCenter = false
-                )
-            },
+        FloatingActionButton(
+            modifier = modifier
+                .size(FloatingActionButtonSize)
+                .drawWithContent {
+                    drawContent()
+                    val offset = Offset(ProgressWidth.toPx() / 2f, ProgressWidth.toPx() / 2f)
+                    drawArc(
+                        color = Color.DarkGray,
+                        style = Stroke(width = ProgressWidth.toPx()),
+                        topLeft = offset,
+                        size = Size(
+                            size.width - offset.x - ProgressWidth.toPx() / 2f,
+                            size.height - offset.y - ProgressWidth.toPx() / 2f
+                        ),
+                        startAngle = 270f,
+                        sweepAngle = progress.value,
+                        useCenter = false
+                    )
+                },
             onClick = onFinished,
             shape = CircleShape,
             contentColor = colorError,
-            containerColor = Color.LightGray,
-            elevation = FloatingActionButtonDefaults.elevation(0.dp)
+            containerColor = Color.LightGray
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_stop),
