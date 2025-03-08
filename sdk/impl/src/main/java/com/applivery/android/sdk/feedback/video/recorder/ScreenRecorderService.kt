@@ -46,6 +46,7 @@ internal class ScreenRecorderService : Service() {
 
     override fun onBind(intent: Intent): IBinder? = null
 
+    @Suppress("CyclomaticComplexMethod")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) {
             stopSelf(startId)
@@ -111,7 +112,7 @@ internal class ScreenRecorderService : Service() {
         }
 
         mediaRecorder?.setOnErrorListener { _: MediaRecorder?, what: Int, _: Int ->
-            if (what == 268435556 && hasMaxFileBeenReached) {
+            if (what == BenignMediaError && hasMaxFileBeenReached) {
                 // Benign error b/c recording is too short and has no frames. See SO: https://stackoverflow.com/questions/40616466/mediarecorder-stop-failed-1007
                 return@setOnErrorListener
             }
@@ -182,18 +183,11 @@ internal class ScreenRecorderService : Service() {
         mediaRecorder?.setOutputFile(config.outputFile.path)
         mediaRecorder?.setVideoSize(screenSpecs.width, screenSpecs.height)
 
-        // TODO: use some kind of metric to record on SD on low end devices
-        val isHdVideo = true
-        if (!isHdVideo) {
-            mediaRecorder?.setVideoEncodingBitRate(12000000)
-            mediaRecorder?.setVideoFrameRate(30)
-        } else {
-            mediaRecorder?.setVideoEncodingBitRate(5 * screenSpecs.width * screenSpecs.height)
-            mediaRecorder?.setVideoFrameRate(60)
-        }
+        mediaRecorder?.setVideoEncodingBitRate(VideoBitRateFactor * screenSpecs.width * screenSpecs.height)
+        mediaRecorder?.setVideoFrameRate(VideoFrameRate)
 
         // Catch approaching file limit
-        if (config.maxFileSize > ScreenRecorderDefaults.NoLimitMaxFileSize) {
+        if (config.maxFileSize > ScreenRecorderConstants.NoLimitMaxFileSize) {
             mediaRecorder?.setMaxFileSize(config.maxFileSize) // in bytes
         }
 
@@ -252,6 +246,9 @@ internal class ScreenRecorderService : Service() {
         private const val ExtraConfig = "extra:config"
         private const val ExtraActivityResult = "extra:activityResult"
         private const val ExtraListener = "extra:listener"
+        private const val VideoFrameRate = 60
+        private const val VideoBitRateFactor = 5
+        private const val BenignMediaError = 268435556
 
         const val EventKey = "ScreenRecorderService:event"
 

@@ -5,6 +5,8 @@ import android.content.res.Configuration
 import android.media.CamcorderProfile
 import android.util.DisplayMetrics
 import android.view.WindowManager
+import com.applivery.android.sdk.feedback.video.recorder.ScreenRecorderConstants.VideoDimensionNotSpecified
+import kotlin.math.roundToInt
 
 internal class ScreenSpecsCalculator(
     private val context: Context
@@ -20,30 +22,30 @@ internal class ScreenSpecsCalculator(
             val configuration = context.resources.configuration
             val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
             val camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH)
-            val cameraWidth = camcorderProfile?.videoFrameWidth ?: -1
-            val cameraHeight = camcorderProfile?.videoFrameHeight ?: -1
-            val cameraFrameRate = camcorderProfile?.videoFrameRate ?: 30
+            val cameraWidth = camcorderProfile?.videoFrameWidth ?: VideoDimensionNotSpecified
+            val cameraHeight = camcorderProfile?.videoFrameHeight ?: VideoDimensionNotSpecified
 
             return calculateRecordingInfo(
-                displayWidth,
-                displayHeight,
-                displayDensity,
-                isLandscape,
-                cameraWidth,
-                cameraHeight,
-                cameraFrameRate,
-                100
+                displayWidth = displayWidth,
+                displayHeight = displayHeight,
+                displayDensity = displayDensity,
+                isLandscapeDevice = isLandscape,
+                cameraWidth = cameraWidth,
+                cameraHeight = cameraHeight,
             )
         }
 
     data class ScreenSpecs(
         val width: Int,
         val height: Int,
-        val frameRate: Int,
         val density: Int
     )
 
     companion object {
+
+        private const val DefaultSizeFactor = 1f
+
+        @Suppress("LongParameterList")
         fun calculateRecordingInfo(
             displayWidth: Int,
             displayHeight: Int,
@@ -51,25 +53,32 @@ internal class ScreenSpecsCalculator(
             isLandscapeDevice: Boolean,
             cameraWidth: Int,
             cameraHeight: Int,
-            cameraFrameRate: Int,
-            sizePercentage: Int
+            sizeFactor: Float = DefaultSizeFactor
         ): ScreenSpecs {
             // Scale the display size before any maximum size calculations.
             var realDisplayWidth = displayWidth
             var realDisplayHeight = displayHeight
-            realDisplayWidth = realDisplayWidth * sizePercentage / 100
-            realDisplayHeight = realDisplayHeight * sizePercentage / 100
+            realDisplayWidth *= sizeFactor.roundToInt()
+            realDisplayHeight *= sizeFactor.roundToInt()
 
-            if (cameraWidth == -1 && cameraHeight == -1) {
+            if (cameraWidth == VideoDimensionNotSpecified && cameraHeight == VideoDimensionNotSpecified) {
                 // No cameras. Fall back to the display size.
-                return ScreenSpecs(realDisplayWidth, realDisplayHeight, cameraFrameRate, displayDensity)
+                return ScreenSpecs(
+                    realDisplayWidth,
+                    realDisplayHeight,
+                    displayDensity
+                )
             }
 
             var frameWidth = if (isLandscapeDevice) cameraWidth else cameraHeight
             var frameHeight = if (isLandscapeDevice) cameraHeight else cameraWidth
             if (frameWidth >= realDisplayWidth && frameHeight >= realDisplayHeight) {
                 // Frame can hold the entire display. Use exact values.
-                return ScreenSpecs(realDisplayWidth, realDisplayHeight, cameraFrameRate, displayDensity)
+                return ScreenSpecs(
+                    realDisplayWidth,
+                    realDisplayHeight,
+                    displayDensity
+                )
             }
 
             // Calculate new width or height to preserve aspect ratio.
@@ -78,7 +87,7 @@ internal class ScreenSpecsCalculator(
             } else {
                 frameHeight = realDisplayHeight * frameWidth / realDisplayWidth
             }
-            return ScreenSpecs(frameWidth, frameHeight, cameraFrameRate, displayDensity)
+            return ScreenSpecs(frameWidth, frameHeight, displayDensity)
         }
     }
 }

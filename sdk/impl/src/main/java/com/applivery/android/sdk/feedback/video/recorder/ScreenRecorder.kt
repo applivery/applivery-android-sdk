@@ -28,13 +28,10 @@ internal class ScreenRecorderConfig private constructor(
     val maxFileSize: Long,
     val maxDuration: Int
 ) : Parcelable {
-    companion object {
-        fun builder(): Builder = Builder()
-    }
 
     class Builder {
         private var outputFile: File? = null
-        private var maxFileSize: Long = ScreenRecorderDefaults.NoLimitMaxFileSize
+        private var maxFileSize: Long = ScreenRecorderConstants.NoLimitMaxFileSize
         private var maxDuration: Int = 0
 
         fun outputLocation(outputFile: File) = apply { this.outputFile = outputFile }
@@ -57,6 +54,10 @@ internal class ScreenRecorderConfig private constructor(
             val filePath = "${outputFile.path}/$curTime.mp4"
             return File(filePath)
         }
+    }
+
+    companion object {
+        fun builder(): Builder = Builder()
     }
 }
 
@@ -165,7 +166,7 @@ internal class ScreenRecorder(
     }
 
     private fun startCountdown() {
-        countDown = object : Countdown(config.maxDuration.toLong() * 1000, 1000, 0) {
+        countDown = object : Countdown(config.maxDuration * Second, Second, 0) {
 
             override fun onTick(timeLeft: Long) = Unit
 
@@ -211,5 +212,9 @@ internal class ScreenRecorder(
             return
         }
         floatingViewManager.hide()
+    }
+
+    companion object {
+        private const val Second = 1000L
     }
 }

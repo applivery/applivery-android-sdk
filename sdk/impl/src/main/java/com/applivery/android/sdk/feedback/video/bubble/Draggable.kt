@@ -64,6 +64,8 @@ internal enum class InterruptMovState {
     DRAGGING,
 }
 
+private const val DraggableZIndex = 10f
+
 @Composable
 internal fun Draggable(
     modifier: Modifier = Modifier,
@@ -104,7 +106,7 @@ internal fun Draggable(
 
     Box(
         modifier = modifier
-            .zIndex(10f)
+            .zIndex(DraggableZIndex)
             .layout { measurable, constraints ->
                 val newConstraints = constraints.copy(
                     maxWidth = Int.MAX_VALUE,
