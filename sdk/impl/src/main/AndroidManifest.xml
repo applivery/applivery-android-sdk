@@ -12,6 +12,11 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--Screen recording permissions-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <uses-permission
         android:name="android.permission.VIBRATE"
         tools:node="remove" />
@@ -67,6 +72,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".feedback.video.MediaProjectionActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Applivery.NoActionBar.Translucent" />
+
         <service
             android:name=".updates.DownloadBuildService"
             android:foregroundServiceType="shortService"
@@ -91,6 +102,15 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <service
+            android:name=".feedback.video.recorder.ScreenRecorderService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <receiver
+            android:name=".feedback.video.recorder.StopScreenRecordingNotificationReceiver"
+            android:exported="false" />
 
     </application>
 

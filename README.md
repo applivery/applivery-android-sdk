@@ -2,8 +2,6 @@
 
 ![Android CI](https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/)
-[![](https://jitpack.io/v/Applivery/applivery-android-sdk.svg)](https://jitpack.io/#Applivery/applivery-android-sdk)
-[![Twitter](https://img.shields.io/badge/twitter-@Applivery-blue.svg?style=flat)](https://twitter.com/Applivery)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android
 Apps.
@@ -13,9 +11,6 @@ Apps.
 * [Overview](#overview)
 * [Getting Started](#getting-started)
 * [SDK Installation](#sdk-installation)
-    * [Gradle with jCenter dependency](#gradle-with-jcenter-dependency)
-    * [Gradle with JitPack Maven dependency](#gradle-with-jitpack-maven-dependency)
-    * [Gradle with Nexus/MavenCentral dependency](#gradle-with-nexusmavencentral-dependency)
 * [SDK Setup](#sdk-setup)
     * [Step 1](#step-1)
     * [Step 2](#step-2)
@@ -54,36 +49,34 @@ You can get your APP TOKEN in your App -> Settings -> Integrations section.
 
 ## SDK Installation
 
-Applivery SDK is meant to be used in your non production builds, either debug only builds on any
-other build type you use to build your testing builds.
+Applivery SDK is designed for non-production builds (debug builds or other testing build variants).
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/)
 
-add the following dependency to your app gradle:
+Add the following dependency to your app's `build.gradle` file:
 
  ```kotlin
 // debugImplementation because Applivery SDK should only run in debug builds.
 debugImplementation("com.applivery:applivery-sdk:${latestVersion}")
  ```
 
-### No op artifact
+### No-op artifact
 
-Applivery SDK release builds exclusion may require complex source set configuration. To ease this
+Applivery SDK exclusion in release builds may require complex source set configuration. To ease this
 scenario we also publish a no-op artifact with the same public API as the SDK so you do not have
 to make any changes in your code rather than including it as dependency in the compile
-configurations
-you do not want Applivery SDK to run.
+configurations you do not want Applivery SDK to run.
 
 ```kotlin
 releaseImplementation("com.applivery:applivery-sdk-no-op:${latestVersion}")
  ```
 
-This way you can call Applivery SDK methods in your main source set having a no-op version in the
-build types you need.
+This approach lets you call Applivery SDK methods throughout your codebase without affecting release
+builds.
 
 ## SDK Setup
 
-### Step 1
+### Step 1: Initialize the SDK
 
 Call `Applivery.init()` method whenever you want to start Applivery SDK, typically in your
 `Application.onCreate()` method:
@@ -91,6 +84,7 @@ Call `Applivery.init()` method whenever you want to start Applivery SDK, typical
  ```kotlin
 import com.applivery.android.sdk.Applivery
 import com.applivery.android.sdk.init
+
 ...
 Applivery.init(APPLIVERY_TOKEN)
  ```
@@ -99,78 +93,67 @@ For private Applivery instances, tenants can be configured passing it as paramet
 `Applivery.init()` method:
 
  ```kotlin
+import com.applivery.android.sdk.Applivery
+import com.applivery.android.sdk.init
+
+...
 Applivery.init(APPLIVERY_TOKEN, TENANT)
  ```
 
-#### Java users
+#### Java Integration
 
-Starting from version 4.0.0, everything is written in Kotlin, so Java users now have a `AppliveryInterop`
-class to use the SDK.
+For Java users (version 4.0.0+), use the `AppliveryInterop` class to access the SDK functionality.
 
-### Step 2
+### Step 2: Check for Updates
 
-Once initialized the SDK you have to call proactivelly the following method in order to check for
-new updates:
+After initializing the SDK, check for available updates by calling:
 
 ```kotlin
 import com.applivery.android.sdk.Applivery
 import com.applivery.android.sdk.getInstance
+
 ...
 Applivery.getInstance().checkForUpdates()
 ```
 
-### Permissions
+This will verify if there are newer versions of your app available on Applivery and prompt users to
+update if needed.
 
-Applivery SDK uses some permissions in order for some features to work. As the SDK can not
-disturb your users showing permissions prompts without any previous context, you are in charge of
-requesting the permissions to your users.
+### Required Permissions
 
-- POST_NOTIFICATIONS: Used to show an ongoing notification when downloading updates
-- READ_MEDIA_IMAGES: Used to observe for screenshots. Note that starting on Android 14
-  there is a new READ_MEDIA_VISUAL_USER_SELECTED permission for users to grant partial access to
-  some folders or files. Applivery SDK needs to have access to all files in order to observe for
-  screenshots properly. You can follow the instructions on
-  the [official documentation](https://developer.android.com/about/versions/14/changes/partial-photo-video-access)
-  on how to request this kind of permissions properly
+Applivery SDK requires certain permissions to function properly. You need to request these
+permissions in your app:
+
+- POST_NOTIFICATIONS: Used to display ongoing notifications during update downloads
+- READ_MEDIA_IMAGES: Required to detect screenshots for the feedback feature.
+
+Note: On Android 14+, users can grant partial access to media files. For screenshot detection to
+work properly, Applivery needs full access. Follow
+the [official documentation](https://developer.android.com/about/versions/14/changes/partial-photo-video-access)
+for properly requesting these permissions.
 
 ## Advanced concepts
 
-### Updates
+### Update Management
 
-You will find that the following public methods are available:
+The SDK provides several methods to control the update experience:
 
 Manually check for updates:
 
 ```kotlin
+// Manually check for available updates
 Applivery.getInstance().checkForUpdates()
-```
 
-Check for updates when coming from background
-
-```kotlin
+// Enable automatic update checks when app returns from background
 Applivery.getInstance().setCheckForUpdatesBackground(true)
-```
 
-Start the download of the last app version:
-
-```kotlin
+// Trigger immediate download of the latest version
 Applivery.getInstance().update()
 ```
 
-### Notice for versions prior 3.5.2
-
-Versions up to 3.5.1 contains a FileProvider needed to support in-app updates.
-This FileProvider builds its authorities by using the host app package name plus ".fileprovider"
-literal, giving us something like "com.foo.bar.fileprovider".
-If you are using another FileProvider in your app, check that its authorities are not conflicting
-with the SDK's ones, if so please change it to avoid issues.
-
-Versions 3.5.2 and above do not have this limitation.
-
 ### Feedback Reporting
 
-You can either take a screenshot or shake your phone if you want to send activate the Feedback
-Reporting feature
+Applivery offers two ways for users to submit feedback:
 
 You can enable or disable the screenshot feedback by using the following methods:
 
@@ -179,64 +162,57 @@ Applivery.getInstance().enableScreenshotFeedback()
 Applivery.getInstance().disableScreenshotFeedback()
 ```
 
-... and the shake event by using:
+and the shake event by using:
 
 ```kotlin
-Applivery.getInstance().enableShakeFeedback()
+Applivery.getInstance().enableShakeFeedback(behavior)
 Applivery.getInstance().disableShakeFeedback()
 ```
 
-### Bind user
+where behavior is one of the following:
 
-Programatically login a user in Applivery, for example if the app has a custom login and don't
-want to use Applivery's authentication to track the user in the platform
+- `ShakeFeedbackBehavior.Normal`: Opens feedback form without attachment
+- `ShakeFeedbackBehavior.Video`: Opens feedback form with screen recording attachment
+  attachment
+
+### User Management
+
+Track users in the Applivery platform:
 
 ```kotlin
+// Associate a user with the current app session
 Applivery.getInstance().bindUser(email, firstName, lastName, tags)
-```
 
-### Unbind user
-
-Logout a previously binded user
-
-```kotlin
+// Remove user association
 Applivery.getInstance().unbindUser()
-```
 
-### Get user
-
-This public method returns the user profile from Applivery API.
-It will be required that the user has previously logged in or has been bound to the platform through
-the `bindUser() method. In case it does not exist it will return an unauthorized error.
-
-```kotlin
+// Retrieve the current user profile
 Applivery.getInstance().getUser(getUserCallback)
 ```
 
 ### Styling the UI
 
-In order to customize the appearance of the UI, you can make a new resource file called
-`applivery.xml` under your `res/values` folder overwriting default values for colors and strings.
+Create a custom `applivery.xml` file in your `res/values folder to override default colors and strings:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!--Main colors-->
-  <color name="applivery_primary_color">#FF0241E3</color>
-  <color name="applivery_accent_color">#FF0241E3</color>
-  <color name="applivery_foreground_color">#FF010258</color>
+    <!--Main colors-->
+    <color name="applivery_primary_color">#FF0241E3</color>
+    <color name="applivery_accent_color">#FF0241E3</color>
+    <color name="applivery_foreground_color">#FF010258</color>
 
-  <!--Update texts-->
-  <string name="appliveryUpdateMsg">There is a new version available for download. Do you want to
-    update to the latest version?
-  </string>
-  <string name="appliveryMustUpdateAppLocked">Sorry this App is outdated. Please, update the App
-    to continue using it
-  </string>
+    <!--Update texts-->
+    <string name="appliveryUpdateMsg">There is a new version available for download. Do you want to
+        update to the latest version?
+    </string>
+    <string name="appliveryMustUpdateAppLocked">Sorry this App is outdated. Please, update the App
+        to continue using it
+    </string>
 
-  <!--Login prompt texts-->
-  <string name="appliveryLogin">Login</string>
-  <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
+    <!--Login prompt texts-->
+    <string name="appliveryLogin">Login</string>
+    <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
 
 </resources>
 ```
@@ -245,5 +221,18 @@ In order to customize the appearance of the UI, you can make a new resource file
 
 ### Sample App
 
-As a sample integration you can take a look
-at [our sample app](https://github.com/applivery/applivery-android-sdk/tree/master/sample)
+For a complete implementation example, check [our sample app](https://github.com/applivery/applivery-android-sdk/tree/master/sample).
+
+### Troubleshooting
+
+If you encounter issues implementing the SDK:
+- Verify you're using the latest SDK version
+- Ensure your APP TOKEN is correct
+- Check that permissions are properly requested in your app
+- Review Android logcat for Applivery-related logs
+
+### Support
+For additional assistance:
+- Visit Applivery Documentation
+- Open an issue on GitHub
+- Contact Applivery Support support@applivery.com

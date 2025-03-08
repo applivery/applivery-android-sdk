@@ -3,7 +3,6 @@ package com.applivery.android.sdk.feedback
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcelable
-import android.util.Base64
 import androidx.lifecycle.viewModelScope
 import arrow.core.flatMap
 import arrow.core.raise.either
@@ -20,16 +19,24 @@ import com.applivery.android.sdk.presentation.ViewIntent
 import com.applivery.android.sdk.presentation.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.io.ByteArrayOutputStream
 
 private val EmailRegex =
     """[a-zA-Z0-9+._%\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+""".toRegex()
 
-@Parcelize
-internal class FeedbackArguments(val screenshotUri: Uri? = null) : Parcelable
+internal sealed interface FeedbackArguments : Parcelable {
+
+    val uri: Uri?
+
+    @Parcelize
+    class Screenshot(override val uri: Uri? = null) : FeedbackArguments
+
+    @Parcelize
+    class Video(override val uri: Uri) : FeedbackArguments
+}
 
 internal sealed interface FeedbackAction : ViewAction {
     data object Exit : FeedbackAction
+    class ShowFeedbackSent(val success: Boolean) : FeedbackAction
 }
 
 internal sealed interface FeedbackIntent : ViewIntent {
@@ -49,7 +56,7 @@ internal data class FeedbackState(
     val email: String? = null,
     val isEmailInvalid: Boolean = false,
     val isEmailReadOnly: Boolean = false,
-    val screenshot: Bitmap? = null,
+    val attachment: FeedbackAttachment? = null,
     val isSendEnabled: Boolean = false,
 ) : ViewState
 
@@ -76,8 +83,14 @@ internal class FeedbackViewModel(
         }
 
         viewModelScope.launch {
-            val uri = arguments.screenshotUri ?: return@launch
-            imageDecoder.of(uri)?.let { setState { copy(screenshot = it) } }
+            val attachment = when (arguments) {
+                is FeedbackArguments.Screenshot -> arguments.uri
+                    ?.let { imageDecoder.of(it) }
+                    ?.let(FeedbackAttachment::Screenshot)
+
+                is FeedbackArguments.Video -> FeedbackAttachment.Video(arguments.uri)
+            }
+            setState { copy(attachment = attachment) }
         }
     }
 
@@ -112,10 +125,11 @@ internal class FeedbackViewModel(
             viewModelScope.launch {
                 setState { copy(isLoading = false) }
                 val screenshot = hostAppScreenshotProvider.get().getOrNull()
-                setState { copy(screenshot = screenshot, isLoading = false) }
+                val attachment = screenshot?.let(FeedbackAttachment::Screenshot)
+                setState { copy(attachment = attachment, isLoading = false) }
             }
         } else {
-            setState { copy(screenshot = null) }
+            setState { copy(attachment = null) }
         }
     }
 
@@ -135,16 +149,22 @@ internal class FeedbackViewModel(
             appPreferences.anonymousEmail = email
         }
         setState { copy(isLoading = true, isSendEnabled = false) }
-        val feedback = Feedback(
-            deviceInfo = deviceInfoProvider.deviceInfo,
-            packageInfo = packageInfoProvider.packageInfo,
-            message = getState().feedback.orEmpty(),
-            type = getState().feedbackType,
-            email = getState().email,
-            screenshotBase64 = getState().screenshot?.asB64()
-        )
+
         viewModelScope.launch {
-            sendFeedback(feedback)
+            val baseFeedback = Feedback.Simple(
+                deviceInfo = deviceInfoProvider.deviceInfo,
+                packageInfo = packageInfoProvider.packageInfo,
+                message = getState().feedback,
+                type = getState().feedbackType,
+                email = getState().email
+            )
+            val feedback = when (val attachment = getState().attachment) {
+                is FeedbackAttachment.Video -> baseFeedback.withVideo(attachment.uri)
+                is FeedbackAttachment.Screenshot -> baseFeedback.withScreenshot(attachment.screenshot)
+                null -> baseFeedback
+            }
+            val result = sendFeedback(feedback)
+            dispatchAction(FeedbackAction.ShowFeedbackSent(result.isRight()))
             dispatchAction(FeedbackAction.Exit)
         }
     }
@@ -154,14 +174,7 @@ internal class FeedbackViewModel(
     }
 
     private fun onScreenshotModified(newScreenshot: Bitmap) {
-        setState { copy(screenshot = newScreenshot) }
-    }
-
-    private fun Bitmap.asB64(): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.NO_WRAP)
+        setState { copy(attachment = FeedbackAttachment.Screenshot(newScreenshot)) }
     }
 
     private fun String.isValidEmail(): Boolean {

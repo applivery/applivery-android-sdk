@@ -57,9 +57,7 @@ android {
 }
 
 dependencies {
-    releaseImplementation("com.applivery:applivery-sdk-no-op:4.0.0-alpha6")
-    debugImplementation("com.applivery:applivery-sdk:4.0.0-alpha6")
-    //implementation(project(":sdk:impl"))
+    implementation(project(":sdk:impl"))
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity.core)

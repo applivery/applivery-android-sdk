@@ -1,6 +1,7 @@
 package com.applivery.android.sdk.domain
 
 import android.util.Log
+import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.model.UpdateType
 import com.applivery.android.sdk.feedback.MediaPermissionGrantStatus
 import com.applivery.android.sdk.updates.UpdateInstallStep
@@ -48,8 +49,7 @@ internal class DomainLogger(
     }
 
     fun imageDecodingFailed(error: Throwable) {
-        logger.log("Image decoding failed with the following error:")
-        error.printStackTrace()
+        logger.log("Image decoding failed with the following error: ${error.stackTraceToString()}")
     }
 
     fun accelerometerNotAvailable() {
@@ -64,16 +64,36 @@ internal class DomainLogger(
         }
     }
 
-    fun errorCapturingScreenFromHostApp(errorMessage: String?) {
-        logger.log("Error capturing screen from host app: $errorMessage")
+    fun errorCapturingScreenFromHostApp(error: DomainError) {
+        logger.log("Error capturing screen from host app: ${error.log()}")
     }
 
     fun installBuildProgress(step: UpdateInstallStep) {
         logger.log("Installing build in progress: $step")
     }
 
-    fun errorInstallingBuild(errorMessage: String?) {
-        logger.log("Error installing build: $errorMessage")
+    fun errorInstallingBuild(error: DomainError) {
+        logger.log("Error installing build: ${error.log()}")
     }
 
+    fun noOverlayPermission() {
+        logger.log(
+            """
+            android.permission.SYSTEM_ALERT_WINDOW not granted. Video reporting floating button can 
+            not be shown until the permission is granted. (https://developer.android.com/reference/android/Manifest.permission#SYSTEM_ALERT_WINDOW)
+            """.trimIndent()
+        )
+    }
+
+    fun onShakeDetectedAlreadyRecording() {
+        logger.log("Shake detected while already recording")
+    }
+
+    fun videoReportingError(error: DomainError) {
+        logger.log("Unexpected error while recording screen: ${error.log()}")
+    }
+
+    private fun DomainError.log(): String {
+        return "${this::class.java.simpleName}: $message"
+    }
 }

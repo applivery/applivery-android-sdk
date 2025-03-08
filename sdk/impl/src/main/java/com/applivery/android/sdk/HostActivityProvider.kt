@@ -12,7 +12,7 @@ internal interface HostActivityProvider {
     fun start()
 }
 
-internal class HostHostActivityProvider(
+internal class HostActivityProviderImpl(
     private val application: Application
 ) : HostActivityProvider, Application.ActivityLifecycleCallbacks {
 
