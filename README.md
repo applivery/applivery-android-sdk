@@ -85,10 +85,13 @@ build types you need.
 
 ### Step 1
 
-Call `Applivery.init()` method whenever you want to start Applivery SDK, tipically in your
+Call `Applivery.init()` method whenever you want to start Applivery SDK, typically in your
 `Application.onCreate()` method:
 
  ```kotlin
+import com.applivery.android.sdk.Applivery
+import com.applivery.android.sdk.init
+...
 Applivery.init(APPLIVERY_TOKEN)
  ```
 
@@ -110,6 +113,9 @@ Once initialized the SDK you have to call proactivelly the following method in o
 new updates:
 
 ```kotlin
+import com.applivery.android.sdk.Applivery
+import com.applivery.android.sdk.getInstance
+...
 Applivery.getInstance().checkForUpdates()
 ```
 
