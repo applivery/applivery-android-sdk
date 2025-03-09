@@ -3,7 +3,7 @@ package com.applivery.android.sdk.di
 import android.app.Application
 import android.content.Context
 import com.applivery.android.sdk.HostActivityProvider
-import com.applivery.android.sdk.HostHostActivityProvider
+import com.applivery.android.sdk.HostActivityProviderImpl
 import com.applivery.android.sdk.data.api.ApiDataSource
 import com.applivery.android.sdk.data.api.service.AppliveryApiService
 import com.applivery.android.sdk.data.api.service.AppliveryDownloadService
@@ -25,6 +25,9 @@ import com.applivery.android.sdk.domain.AppPreferencesImpl
 import com.applivery.android.sdk.domain.DeviceInfoProvider
 import com.applivery.android.sdk.domain.DeviceInfoProviderImpl
 import com.applivery.android.sdk.domain.DomainLogger
+import com.applivery.android.sdk.domain.FeedbackProgressProvider
+import com.applivery.android.sdk.domain.FeedbackProgressProviderImpl
+import com.applivery.android.sdk.domain.FeedbackProgressUpdater
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.Logger
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
@@ -60,6 +63,8 @@ import com.applivery.android.sdk.feedback.ScreenshotFeedbackCheckerImpl
 import com.applivery.android.sdk.feedback.ShakeDetector
 import com.applivery.android.sdk.feedback.ShakeFeedbackChecker
 import com.applivery.android.sdk.feedback.ShakeFeedbackCheckerImpl
+import com.applivery.android.sdk.feedback.video.VideoReporter
+import com.applivery.android.sdk.feedback.video.VideoReporterImpl
 import com.applivery.android.sdk.login.LoginHandler
 import com.applivery.android.sdk.login.LoginViewModel
 import com.applivery.android.sdk.updates.AndroidBuildInstaller
@@ -174,7 +179,7 @@ internal val domainModules = module {
 internal val appModules = module {
     includes(viewModelsModule)
     factory<Application> { get<Context>() as Application }
-    singleOf(::HostHostActivityProvider).bind<HostActivityProvider>()
+    singleOf(::HostActivityProviderImpl).bind<HostActivityProvider>()
     singleOf(::UpdatesBackgroundCheckerImpl).bind<UpdatesBackgroundChecker>()
     factoryOf(::AndroidLogger).bind<Logger>()
     factoryOf(::DomainLogger)
@@ -191,4 +196,11 @@ internal val appModules = module {
     singleOf(::ScreenshotFeedbackCheckerImpl).bind<ScreenshotFeedbackChecker>()
     factoryOf(::ContentUriImageDecoderImpl).bind<ContentUriImageDecoder>()
     singleOf(::HostAppScreenshotProviderImpl).bind<HostAppScreenshotProvider>()
+    singleOf(::VideoReporterImpl).bind<VideoReporter>()
+    singleOf(::FeedbackProgressProviderImpl).binds(
+        arrayOf(
+            FeedbackProgressProvider::class,
+            FeedbackProgressUpdater::class
+        )
+    )
 }

@@ -1,6 +1,7 @@
 package com.applivery.android.sdk.feedback
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,10 +14,12 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -76,6 +79,10 @@ import com.applivery.android.sdk.presentation.viewModelIntentSender
 import com.applivery.android.sdk.ui.theme.AppliveryTheme
 import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
+import io.sanghun.compose.video.RepeatMode
+import io.sanghun.compose.video.VideoPlayer
+import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
+import io.sanghun.compose.video.uri.VideoPlayerMediaItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,14 +91,20 @@ internal fun FeedbackScreen(
     state: FeedbackState,
     intentSender: ViewModelIntentSender<FeedbackIntent>
 ) {
-    var showDrawingScreenshot by remember { mutableStateOf(false) }
+    var showAttachmentDetail by remember { mutableStateOf(false) }
     AppliveryTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 val containerColor = MaterialTheme.colorScheme.primary
                 TopAppBar(
-                    title = { Text(text = stringResource(id = R.string.applivery_name)) },
+                    title = {
+                        val titleResId = when (state.feedbackType) {
+                            FeedbackType.Feedback -> R.string.appliveryFeedbackTitleFeedback
+                            FeedbackType.Bug -> R.string.appliveryFeedbackTitleBug
+                        }
+                        Text(text = stringResource(id = titleResId))
+                    },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = containerColor,
                         titleContentColor = contentColorFor(containerColor),
@@ -199,47 +212,27 @@ internal fun FeedbackScreen(
                         }
                     }
 
-                    Row(
-                        modifier = Modifier
-                            .align(Alignment.BottomStart)
-                            .fillMaxWidth(),
-                    ) {
-                        Row(
+                    when (val attachment = state.attachment) {
+                        is FeedbackAttachment.Video -> VideoAttachmentContent(
                             modifier = Modifier
-                                .weight(1f)
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                                .align(Alignment.Bottom),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(end = 8.dp, top = 8.dp),
-                                text = stringResource(id = R.string.appliveryAttachScreenshotSwithText)
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Switch(
-                                checked = state.screenshot != null,
-                                onCheckedChange = {
-                                    intentSender.sendIntent(FeedbackIntent.AttachScreenshot(it))
-                                }
-                            )
-                        }
-                        state.screenshot?.let { bitmap ->
-                            ElevatedCard(
-                                modifier = Modifier
-                                    .padding(20.dp)
-                                    .widthIn(max = 100.dp)
-                                    .fillMaxWidth(),
-                                shape = RoundedCornerShape(size = 12.dp),
-                                onClick = { showDrawingScreenshot = true }
-                            ) {
-                                Image(
-                                    modifier = Modifier,
-                                    bitmap = bitmap.asImageBitmap(),
-                                    contentDescription = null
-                                )
-                            }
-                        }
+                                .align(Alignment.BottomStart)
+                                .fillMaxWidth(),
+                            onPreviewVideo = { showAttachmentDetail = true }
+                        )
+
+                        is FeedbackAttachment.Screenshot,
+                        null -> ScreenshotAttachmentContent(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .fillMaxWidth(),
+                            attachment = attachment as? FeedbackAttachment.Screenshot,
+                            onAttachChanged = {
+                                intentSender.sendIntent(FeedbackIntent.AttachScreenshot(it))
+                            },
+                            onEditScreenShot = { showAttachmentDetail = true }
+                        )
                     }
+
                     if (state.isLoading) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
@@ -247,20 +240,110 @@ internal fun FeedbackScreen(
             }
         )
 
-        if (showDrawingScreenshot) {
-            /*Its important to call it here so it calculate available height based on the current
-            * insets, because in the Dialog context there are no insets to consume*/
-            ScreenshotDrawCanvasDialog(
-                modifier = Modifier.availableHeight(),
-                screenshot = requireNotNull(state.screenshot),
-                onDismiss = {
-                    showDrawingScreenshot = false
-                },
-                onApply = { bitmap ->
-                    showDrawingScreenshot = false
-                    bitmap?.let { intentSender.sendIntent(FeedbackIntent.ScreenshotModified(it)) }
-                }
+        if (showAttachmentDetail) {
+            /*Its important to build the Modifier it here so it calculates available height based
+            * on the current insets, because in the Dialog context there are no insets to consume*/
+            val modifier = Modifier.availableHeight()
+            when (val attachment = state.attachment) {
+                is FeedbackAttachment.Screenshot -> ScreenshotDrawCanvasDialog(
+                    modifier = modifier,
+                    screenshot = attachment.screenshot,
+                    onDismiss = {
+                        showAttachmentDetail = false
+                    },
+                    onApply = { bitmap ->
+                        showAttachmentDetail = false
+                        bitmap?.let { intentSender.sendIntent(FeedbackIntent.ScreenshotModified(it)) }
+                    }
+                )
+
+                is FeedbackAttachment.Video -> VideoPreviewDialog(
+                    modifier = modifier.fillMaxWidth(),
+                    videoUri = attachment.uri,
+                    onDismiss = { showAttachmentDetail = false }
+                )
+
+                null -> Unit
+            }
+        }
+    }
+}
+
+@Composable
+private fun VideoAttachmentContent(
+    modifier: Modifier = Modifier,
+    onPreviewVideo: () -> Unit
+) {
+    ElevatedCard(
+        modifier = modifier
+            .padding(20.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(size = 12.dp),
+        onClick = onPreviewVideo
+    ) {
+        Row(modifier = Modifier.padding(all = 8.dp)) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_play),
+                contentDescription = null
             )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(
+                    text = stringResource(id = R.string.appliveryFeedbackVideoName),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(id = R.string.appliveryFeedbackVideoWatchPreview),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun ScreenshotAttachmentContent(
+    attachment: FeedbackAttachment.Screenshot?,
+    modifier: Modifier = Modifier,
+    onAttachChanged: (Boolean) -> Unit,
+    onEditScreenShot: () -> Unit
+) {
+    Row(modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .align(Alignment.Bottom),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.padding(end = 8.dp, top = 8.dp),
+                text = stringResource(id = R.string.appliveryAttachScreenshotSwithText)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = attachment?.screenshot != null,
+                onCheckedChange = onAttachChanged
+            )
+        }
+        attachment?.screenshot?.let { bitmap ->
+            ElevatedCard(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .widthIn(max = 100.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(size = 12.dp),
+                onClick = onEditScreenShot
+            ) {
+                Image(
+                    modifier = Modifier,
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = null
+                )
+            }
         }
     }
 }
@@ -337,6 +420,46 @@ private fun ScreenshotDrawCanvasDialog(
     }
 }
 
+@Composable
+private fun VideoPreviewDialog(
+    videoUri: Uri,
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
+) {
+    Dialog(
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false
+        ),
+        onDismissRequest = onDismiss
+    ) {
+        VideoPlayer(
+            modifier = modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .clip(RoundedCornerShape(6.dp)),
+            mediaItems = listOf(VideoPlayerMediaItem.StorageMediaItem(storageUri = videoUri)),
+            enablePip = false,
+            enablePipWhenBackPressed = false,
+            controllerConfig = VideoPlayerControllerConfig(
+                showSpeedAndPitchOverlay = false,
+                showSubtitleButton = false,
+                showCurrentTimeAndTotalTime = true,
+                showBufferingProgress = false,
+                showForwardIncrementButton = true,
+                showBackwardIncrementButton = true,
+                showBackTrackButton = false,
+                showNextTrackButton = false,
+                showRepeatModeButton = false,
+                controllerShowTimeMilliSeconds = 5_000,
+                controllerAutoShow = true,
+                showFullScreenButton = false
+            ),
+            repeatMode = RepeatMode.ONE
+        )
+    }
+}
+
 /**
  * Temporary workaround to fix WindowInsets bug on Dialogs on Android 15
  * (https://issuetracker.google.com/issues/391393405)
@@ -371,11 +494,7 @@ fun targetSdkVersion(): Int {
 private fun FeedbackScreenPreview() {
     FeedbackScreen(
         state = FeedbackState(
-            screenshot = Bitmap.createBitmap(
-                1080,
-                1920,
-                Bitmap.Config.ARGB_8888
-            )
+            attachment = FeedbackAttachment.Video(Uri.parse(""))
         ),
         intentSender = viewModelIntentSender { }
     )

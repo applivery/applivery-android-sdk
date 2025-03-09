@@ -1,15 +1,61 @@
 package com.applivery.android.sdk.domain.model
 
+import android.graphics.Bitmap
+import android.net.Uri
 import com.applivery.android.sdk.feedback.FeedbackType
 
-internal data class Feedback(
-    val deviceInfo: DeviceInfo,
-    val packageInfo: PackageInfo,
-    val message: String?,
-    val screenshotBase64: String?,
-    val type: FeedbackType,
+internal sealed interface Feedback {
+    val deviceInfo: DeviceInfo
+    val packageInfo: PackageInfo
+    val message: String?
+    val type: FeedbackType
     val email: String?
-)
+
+    data class Simple(
+        override val deviceInfo: DeviceInfo,
+        override val packageInfo: PackageInfo,
+        override val message: String?,
+        override val type: FeedbackType,
+        override val email: String?,
+    ) : Feedback {
+
+        fun withScreenshot(screenshot: Bitmap) = Screenshot(
+            deviceInfo = deviceInfo,
+            packageInfo = packageInfo,
+            message = message,
+            type = type,
+            email = email,
+            screenshot = screenshot
+        )
+
+        fun withVideo(uri: Uri) = Video(
+            deviceInfo = deviceInfo,
+            packageInfo = packageInfo,
+            message = message,
+            type = type,
+            email = email,
+            uri = uri
+        )
+    }
+
+    data class Screenshot(
+        override val deviceInfo: DeviceInfo,
+        override val packageInfo: PackageInfo,
+        override val message: String?,
+        override val type: FeedbackType,
+        override val email: String?,
+        val screenshot: Bitmap,
+    ) : Feedback
+
+    data class Video(
+        override val deviceInfo: DeviceInfo,
+        override val packageInfo: PackageInfo,
+        override val message: String?,
+        override val type: FeedbackType,
+        override val email: String?,
+        val uri: Uri,
+    ) : Feedback
+}
 
 internal data class DeviceInfo(
     val device: Device,

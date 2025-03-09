@@ -1,5 +1,7 @@
 package com.applivery.android.sdk.data.models
 
+import android.graphics.Bitmap
+import android.util.Base64
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.left
@@ -20,6 +22,7 @@ import com.applivery.android.sdk.domain.model.UnauthorizedError
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.model.UserType
 import com.applivery.android.sdk.feedback.FeedbackType
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -130,12 +133,27 @@ internal fun FeedbackType.toApi(): String {
 }
 
 internal fun Feedback.toApi(): FeedbackApi {
+    val screenshot = when (this) {
+        is Feedback.Screenshot -> "data:image/png;base64,${screenshot.asB64()}"
+        is Feedback.Simple,
+        is Feedback.Video -> null
+    }
+    val hasVideo = this is Feedback.Video
     return FeedbackApi(
         deviceInfo = deviceInfo.toApi(),
         message = message,
         packageInfo = packageInfo.toApi(),
-        screenshot = screenshotBase64?.let { "data:image/png;base64,$it" },
+        screenshot = screenshot,
+        hasVideo = hasVideo,
         type = type.toApi(),
         email = email
     )
+}
+
+@Suppress("MagicNumber")
+private fun Bitmap.asB64(): String {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+    val byteArray = byteArrayOutputStream.toByteArray()
+    return Base64.encodeToString(byteArray, Base64.NO_WRAP)
 }

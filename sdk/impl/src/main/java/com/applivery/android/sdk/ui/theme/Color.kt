@@ -23,7 +23,7 @@ internal val colorError = Color(0xFFEF4444)
 internal val colorErrorContainer = Color.White
 internal val colorOnError = colorErrorContainer
 internal val colorOnErrorContainer = colorError
-internal val colorBackground = Color.White
+internal val colorBackground = Color(0xFFF8F8F8)
 internal val colorOnBackground @Composable get() = colorResource(id = R.color.applivery_foreground_color)
 internal val colorSurface = colorBackground
 internal val colorOnSurface @Composable get() = colorOnBackground

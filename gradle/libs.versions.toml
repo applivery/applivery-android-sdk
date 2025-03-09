@@ -19,6 +19,8 @@ composeBom = "2025.01.01"
 detekt = "1.23.6"
 ackpine = "0.10.1"
 capturable = "2.1.0"
+composeVideo = "1.2.0"
+media3 = "1.5.1"
 
 [libraries]
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidCore" }
@@ -45,8 +47,12 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 ackpine-ktx = { module = "ru.solrudev.ackpine:ackpine-ktx", version.ref = "ackpine" }
 capturable = { module = "dev.shreyaspatil:capturable", version.ref = "capturable" }
+compose-video = { module = "io.sanghun:compose-video", version.ref = "composeVideo" }
 
 #Libs for convention plugin
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }

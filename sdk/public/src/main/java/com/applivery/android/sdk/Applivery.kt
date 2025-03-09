@@ -1,5 +1,6 @@
 package com.applivery.android.sdk
 
+import com.applivery.android.sdk.domain.model.ShakeFeedbackBehavior
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.user.BindUserCallback
@@ -40,7 +41,7 @@ interface Applivery {
 
     suspend fun getUser(): Result<User>
 
-    fun enableShakeFeedback()
+    fun enableShakeFeedback(behavior: ShakeFeedbackBehavior = ShakeFeedbackBehavior.Normal)
 
     fun disableShakeFeedback()
 
