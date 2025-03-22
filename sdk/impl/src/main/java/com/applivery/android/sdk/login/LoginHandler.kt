@@ -30,11 +30,14 @@ internal class LoginHandler(
                 currentDialog = AlertDialog.Builder(activity, R.style.Theme_Applivery_Dialog)
                     .setTitle(hostAppPackageInfoProvider.packageInfo.appName)
                     .setMessage(R.string.appliveryLoginRequiredText)
-                    .setCancelable(false)
                     .setOnDismissListener { currentDialog = null }
                     .setPositiveButton(R.string.appliveryLogin) { _, _ ->
                         LoginCallbacks.add(cont.toLoginCallback())
                         activity.startActivity(LoginActivity.getIntent(activity))
+                    }
+                    .setNegativeButton(R.string.appliveryLoginCancel) { _, _ ->
+                        cont.resume(LoginCanceled().left())
+                        currentDialog?.dismiss()
                     }.show()
             }
         }
