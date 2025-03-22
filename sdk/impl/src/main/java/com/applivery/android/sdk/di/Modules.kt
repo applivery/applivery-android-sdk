@@ -9,7 +9,7 @@ import com.applivery.android.sdk.data.api.service.AppliveryApiService
 import com.applivery.android.sdk.data.api.service.AppliveryDownloadService
 import com.applivery.android.sdk.data.api.service.HeadersInterceptor
 import com.applivery.android.sdk.data.api.service.ServiceBuilder
-import com.applivery.android.sdk.data.api.service.ServiceUriBuilder.buildUponTenant
+import com.applivery.android.sdk.data.api.service.ServiceUriBuilder.withTenant
 import com.applivery.android.sdk.data.api.service.SessionInterceptor
 import com.applivery.android.sdk.data.auth.SessionManager
 import com.applivery.android.sdk.data.auth.SessionManagerImpl
@@ -109,12 +109,12 @@ private val networkModule = module {
     factory(ApiServiceUrl) {
         val serviceUrl = getProperty<String>(Properties.ApiUrl)
         val tenant = getProperty<String>(Properties.AppTenant)
-        serviceUrl.buildUponTenant(tenant)
+        serviceUrl.withTenant(tenant)
     }
     factory(DownloadServiceUrl) {
         val serviceUrl = getProperty<String>(Properties.DownloadUrl)
         val tenant = getProperty<String>(Properties.AppTenant)
-        serviceUrl.buildUponTenant(tenant)
+        serviceUrl.withTenant(tenant)
     }
     factory(ApiServiceBuilder) {
         ServiceBuilder(
