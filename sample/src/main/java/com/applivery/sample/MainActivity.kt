@@ -48,19 +48,16 @@ import kotlinx.coroutines.flow.update
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var appPreferences: AppPreferences
-
     private val isUpToDate = MutableStateFlow(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        appPreferences = AppliveryApplication.appPreferences
         setContent {
             val isUpToDate by isUpToDate.collectAsState()
             var isShakeFeedbackEnabled by remember { mutableStateOf(false) }
             var isScreenshotFeedbackEnabled by remember { mutableStateOf(false) }
-            var isCheckForUpdatesBackgroundEnabled by remember { mutableStateOf(appPreferences.checkForUpdatesBackground) }
+            var isCheckForUpdatesBackgroundEnabled by remember { mutableStateOf(false) }
             var shakeFeedbackBehavior by remember { mutableStateOf(ShakeFeedbackBehavior.Normal) }
             MainScreen(
                 isUpToDate = isUpToDate,
@@ -86,7 +83,7 @@ class MainActivity : ComponentActivity() {
                     isScreenshotFeedbackEnabled = it
                 },
                 onEnableCheckForUpdatesBackground = {
-                    appPreferences.checkForUpdatesBackground = it
+                    Applivery.getInstance().setCheckForUpdatesBackground(true)
                     isCheckForUpdatesBackgroundEnabled = it
                 },
                 onCheckForUpdates = {

@@ -15,7 +15,6 @@ android {
     val androidMinSdk: Int by rootProject.extra
 
     val libraryVersion: String by rootProject.extra
-    val tenantPlaceholder = "{tenant}"
     val authSchemeSuffix = "applivery.auth"
 
     namespace = "com.applivery.android.sdk"
@@ -27,18 +26,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         buildConfigField("String", "LibraryVersion", "\"$libraryVersion\"")
-        buildConfigField("String", "TenantPlaceholder", "\"$tenantPlaceholder\"")
         buildConfigField("String", "AuthSchemeSuffix", "\"$authSchemeSuffix\"")
-        buildConfigField(
-            "String",
-            "ApiBaseUrl",
-            "\"https://sdk-api.${tenantPlaceholder}applivery.io/\""
-        )
-        buildConfigField(
-            "String",
-            "DownloadApiUrl",
-            "\"https://download-api.${tenantPlaceholder}applivery.io/\""
-        )
+        buildConfigField("String", "CustomDomain", "\"applivery.io\"")
+        buildConfigField("String", "ApiBaseUrl", "\"https://sdk-api\"")
+        buildConfigField("String", "DownloadApiUrl", "\"https://download-api\"")
         manifestPlaceholders["authSchemeSuffix"] = authSchemeSuffix
     }
 

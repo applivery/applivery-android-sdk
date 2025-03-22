@@ -40,6 +40,7 @@
 
     <string name="appliveryMustUpdateAppLocked">Sorry this App is outdated. Please, update the App to continue using it</string>
     <string name="appliveryLogin">Login</string>
+    <string name="appliveryLoginCancel">Cancel</string>
 
     <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
 
