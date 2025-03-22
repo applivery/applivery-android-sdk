@@ -8,6 +8,6 @@ class AppliveryApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Applivery.init(BuildConfig.APPLIVERY_APP_TOKEN, tenant = "applivery-danskebank.com")
+        Applivery.init(BuildConfig.APPLIVERY_APP_TOKEN)
     }
 }
