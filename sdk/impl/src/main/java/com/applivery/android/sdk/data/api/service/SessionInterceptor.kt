@@ -22,11 +22,12 @@ internal class SessionInterceptor(
         if (response.code == HttpCodeUnauthorized) {
             return synchronized(Lock) {
                 if (sessionManager.isLoggedIn) {
+                    response.close()
                     chain.proceed(request.intercept())
                 } else {
                     runBlocking { loginHandler.invoke() }.fold(
                         ifLeft = { response },
-                        ifRight = { chain.proceed(request.intercept()) }
+                        ifRight = { response.close(); chain.proceed(request.intercept()) }
                     )
                 }
             }
