@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.HostActivityProviderImpl
+import com.applivery.android.sdk.configuration.Configuration
 import com.applivery.android.sdk.data.api.ApiDataSource
 import com.applivery.android.sdk.data.api.service.AppliveryApiService
 import com.applivery.android.sdk.data.api.service.AppliveryDownloadService
@@ -30,6 +31,8 @@ import com.applivery.android.sdk.domain.FeedbackProgressProviderImpl
 import com.applivery.android.sdk.domain.FeedbackProgressUpdater
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.Logger
+import com.applivery.android.sdk.domain.PostponedUpdateLogic
+import com.applivery.android.sdk.domain.PostponedUpdateLogicImpl
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
@@ -203,4 +206,6 @@ internal val appModules = module {
             FeedbackProgressUpdater::class
         )
     )
+    factory<Configuration> { getProperty(Properties.Configuration) }
+    singleOf(::PostponedUpdateLogicImpl).bind<PostponedUpdateLogic>()
 }

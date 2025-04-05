@@ -93,6 +93,10 @@ internal class DomainLogger(
         logger.log("Unexpected error while recording screen: ${error.log()}")
     }
 
+    fun updatePostponed() {
+        logger.log("Update postponed")
+    }
+
     private fun DomainError.log(): String {
         return "${this::class.java.simpleName}: $message"
     }

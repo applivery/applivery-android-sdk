@@ -34,7 +34,7 @@ internal class UpdatesBackgroundCheckerImpl(
 
     override fun onResume(owner: LifecycleOwner) {
         if (isEnabled) {
-            coroutineScope.launch { checkUpdatesUseCase() }
+            coroutineScope.launch { checkUpdatesUseCase(forceUpdate = false) }
         }
     }
 }
