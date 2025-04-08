@@ -1,5 +1,6 @@
 package com.applivery.android.sdk
 
+import com.applivery.android.sdk.configuration.Configuration
 import com.applivery.android.sdk.di.AppliveryDiContext
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.di.Properties
@@ -29,13 +30,32 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
     private val mainScope = MainScope()
 
-    fun init(appToken: String) {
-        initialize(appToken, tenant = null)
-    }
+    fun init(
+        appToken: String,
+        tenant: String? = null,
+        configuration: Configuration = Configuration.Empty
+    ) {
+        require(appToken.isNotBlank()) { "Empty appToken received" }
 
-    fun init(appToken: String, tenant: String) {
-        require(tenant.isNotBlank()) { "Empty tenant received" }
-        initialize(appToken, tenant)
+        get<DomainLogger>().startingSdk(appToken, tenant)
+
+        AppliveryDiContext.koinApp.apply {
+            properties(
+                mapOf(
+                    Properties.AppToken to appToken,
+                    Properties.AppTenant to tenant.orEmpty(),
+                    Properties.Configuration to configuration,
+                )
+            )
+        }
+
+        /*Lets fetch the config to check if configuration is correct*/
+        mainScope.launch { get<GetAppConfigUseCase>().invoke() }
+
+        /*Initialize SDK dependent components*/
+        get<UpdatesBackgroundChecker>().start()
+        get<ShakeFeedbackChecker>().start()
+        get<ScreenshotFeedbackChecker>().start()
     }
 
     override fun isUpToDate(callback: IsUpToDateCallback) {
@@ -46,8 +66,8 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
         return get<IsUpToDateUseCase>().invoke().getOrNull() == true
     }
 
-    override fun checkForUpdates() {
-        mainScope.launch { get<CheckUpdatesUseCase>().invoke() }
+    override fun checkForUpdates(forceUpdate: Boolean) {
+        mainScope.launch { get<CheckUpdatesUseCase>().invoke(forceUpdate) }
     }
 
     override fun setCheckForUpdatesBackground(enable: Boolean) {
@@ -119,29 +139,6 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
     override fun disableScreenshotFeedback() {
         get<ScreenshotFeedbackChecker>().enable(false)
     }
-
-    private fun initialize(appToken: String, tenant: String?) {
-        require(appToken.isNotBlank()) { "Empty appToken received" }
-
-        get<DomainLogger>().startingSdk(appToken, tenant)
-
-        AppliveryDiContext.koinApp.apply {
-            properties(
-                mapOf(
-                    Properties.AppToken to appToken,
-                    Properties.AppTenant to tenant.orEmpty()
-                )
-            )
-        }
-
-        /*Lets fetch the config to check if configuration is correct*/
-        mainScope.launch { get<GetAppConfigUseCase>().invoke() }
-
-        /*Initialize SDK dependent components*/
-        get<UpdatesBackgroundChecker>().start()
-        get<ShakeFeedbackChecker>().start()
-        get<ScreenshotFeedbackChecker>().start()
-    }
 }
 
 private var sInstance: Applivery? = null
@@ -152,10 +149,10 @@ fun Applivery.Companion.getInstance(): Applivery {
     }
 }
 
-fun Applivery.Companion.init(appToken: String) {
-    sInstance = AppliverySdk().apply { init(appToken) }
-}
-
-fun Applivery.Companion.init(appToken: String, tenant: String) {
-    sInstance = AppliverySdk().apply { init(appToken, tenant) }
+fun Applivery.Companion.init(
+    appToken: String,
+    tenant: String? = null,
+    configuration: Configuration = Configuration.Empty
+) {
+    sInstance = AppliverySdk().apply { init(appToken, tenant, configuration) }
 }

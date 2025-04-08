@@ -6,4 +6,5 @@ object Properties {
     const val DownloadUrl = "downloadUrl"
     const val AppToken = "appToken"
     const val AppTenant = "appTenant"
+    const val Configuration = "configuration"
 }

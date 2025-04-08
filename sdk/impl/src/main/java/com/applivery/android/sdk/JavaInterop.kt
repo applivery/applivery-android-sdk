@@ -2,8 +2,13 @@
 
 package com.applivery.android.sdk
 
-fun init(appToken: String) = Applivery.init(appToken)
+import com.applivery.android.sdk.configuration.Configuration
 
-fun init(appToken: String, tenant: String) = Applivery.init(appToken, tenant)
+@JvmOverloads
+fun init(
+    appToken: String,
+    tenant: String? = null,
+    configuration: Configuration = Configuration.Empty
+) = Applivery.init(appToken, tenant, configuration)
 
 fun getInstance() = Applivery.getInstance()
