@@ -87,7 +87,7 @@ class MainActivity : ComponentActivity() {
                     isCheckForUpdatesBackgroundEnabled = it
                 },
                 onCheckForUpdates = {
-                    Applivery.getInstance().checkForUpdates()
+                    Applivery.getInstance().checkForUpdates(forceUpdate = it)
                 },
                 onDownloadLastBuild = {
                     Applivery.getInstance().update()
@@ -122,7 +122,7 @@ fun MainScreen(
     onEnableShakeFeedback: (Boolean) -> Unit,
     onEnableScreenshotFeedback: (Boolean) -> Unit,
     onEnableCheckForUpdatesBackground: (Boolean) -> Unit,
-    onCheckForUpdates: () -> Unit,
+    onCheckForUpdates: (Boolean) -> Unit,
     onDownloadLastBuild: () -> Unit,
     onUserClick: () -> Unit,
     onSelectShakeFeedbackBehavior: (ShakeFeedbackBehavior) -> Unit
@@ -249,9 +249,17 @@ fun MainScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp),
-                        onClick = onCheckForUpdates
+                        onClick = { onCheckForUpdates(false) }
                     ) {
                         Text(text = stringResource(id = R.string.main_view_check_for_updates))
+                    }
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        onClick = { onCheckForUpdates(true) }
+                    ) {
+                        Text(text = stringResource(id = R.string.main_view_force_check_for_updates))
                     }
                     Button(
                         modifier = Modifier

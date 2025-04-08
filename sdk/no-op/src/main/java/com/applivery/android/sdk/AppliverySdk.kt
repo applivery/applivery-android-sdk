@@ -1,5 +1,6 @@
 package com.applivery.android.sdk
 
+import com.applivery.android.sdk.configuration.Configuration
 import com.applivery.android.sdk.domain.model.ShakeFeedbackBehavior
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.updates.IsUpToDateCallback
@@ -14,7 +15,7 @@ internal class AppliverySdk : Applivery {
 
     override suspend fun isUpToDate(): Boolean = true
 
-    override fun checkForUpdates() = Unit
+    override fun checkForUpdates(forceUpdate: Boolean) = Unit
 
     override fun setCheckForUpdatesBackground(enable: Boolean) = Unit
 
@@ -65,7 +66,8 @@ private var sInstance: Applivery = AppliverySdk()
 fun Applivery.Companion.getInstance(): Applivery = sInstance
 
 @Suppress("UNUSED_PARAMETER")
-fun Applivery.Companion.init(appToken: String) = Unit
-
-@Suppress("UNUSED_PARAMETER")
-fun Applivery.Companion.init(appToken: String, tenant: String) = Unit
+fun Applivery.Companion.init(
+    appToken: String,
+    tenant: String? = null,
+    configuration: Configuration = Configuration.Empty
+) = Unit

@@ -12,7 +12,7 @@ interface Applivery {
 
     suspend fun isUpToDate(): Boolean
 
-    fun checkForUpdates()
+    fun checkForUpdates(forceUpdate: Boolean = false)
 
     fun setCheckForUpdatesBackground(enable: Boolean)
 
