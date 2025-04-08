@@ -100,6 +100,21 @@ import com.applivery.android.sdk.init
 Applivery.init(APPLIVERY_TOKEN, TENANT)
  ```
 
+#### SDK Configuration
+
+An optional `Configuration` class can be passed in `Applivery.init()` method to configure
+certain SDK behavior.
+
+```kotlin
+   val configuration = Configuration(
+    postponeDurations = listOf(
+        2.hours,
+        30.minutes,
+        5.minutes,
+    )
+)
+```
+
 #### Java Integration
 
 For Java users (version 4.0.0+), use the `AppliveryInterop` class to access the SDK functionality.
@@ -119,13 +134,25 @@ Applivery.getInstance().checkForUpdates()
 This will verify if there are newer versions of your app available on Applivery and prompt users to
 update if needed.
 
+#### Postpone updates
+
+Everytime `checkForUpdates()` is called, a prompt dialog will show up to the user if there are
+updates available. This dialog showing logic can be customized in order for users to allow
+postponing the update passing your postponing options to the `Configuration` object in the SDK
+initialization method.
+
+**NOTE:** only up to three options are supported. If you pass more than three options, the first
+ones will be used.
+
 ### Required Permissions
 
 Applivery SDK requires certain permissions to function properly. You need to request these
 permissions in your app:
 
-- POST_NOTIFICATIONS: Used to display ongoing notifications during update downloads
+- POST_NOTIFICATIONS: Used to display ongoing notifications during update downloads and screen
+  recording.
 - READ_MEDIA_IMAGES: Required to detect screenshots for the feedback feature.
+- SYSTEM_ALERT_WINDOW: Required for screen recording feedback report.
 
 Note: On Android 14+, users can grant partial access to media files. For screenshot detection to
 work properly, Applivery needs full access. Follow
@@ -173,7 +200,6 @@ where behavior is one of the following:
 
 - `ShakeFeedbackBehavior.Normal`: Opens feedback form without attachment
 - `ShakeFeedbackBehavior.Video`: Opens feedback form with screen recording attachment
-  attachment
 
 ### User Management
 
@@ -192,7 +218,8 @@ Applivery.getInstance().getUser(getUserCallback)
 
 ### Styling the UI
 
-Create a custom `applivery.xml` file in your `res/values folder to override default colors and strings:
+Create a custom `applivery.xml` file in your `res/values folder to override default colors and
+strings:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -221,18 +248,22 @@ Create a custom `applivery.xml` file in your `res/values folder to override defa
 
 ### Sample App
 
-For a complete implementation example, check [our sample app](https://github.com/applivery/applivery-android-sdk/tree/master/sample).
+For a complete implementation example,
+check [our sample app](https://github.com/applivery/applivery-android-sdk/tree/master/sample).
 
 ### Troubleshooting
 
 If you encounter issues implementing the SDK:
+
 - Verify you're using the latest SDK version
 - Ensure your APP TOKEN is correct
 - Check that permissions are properly requested in your app
 - Review Android logcat for Applivery-related logs
 
 ### Support
+
 For additional assistance:
+
 - Visit Applivery Documentation
 - Open an issue on GitHub
 - Contact Applivery Support support@applivery.com
