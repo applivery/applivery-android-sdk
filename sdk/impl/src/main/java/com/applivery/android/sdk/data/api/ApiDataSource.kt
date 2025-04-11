@@ -6,7 +6,6 @@ import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.raise.catch
 import arrow.core.raise.either
-import arrow.core.raise.ensureNotNull
 import arrow.core.right
 import com.applivery.android.sdk.data.api.service.AppliveryApiService
 import com.applivery.android.sdk.data.api.service.AppliveryDownloadService
@@ -21,6 +20,8 @@ import com.applivery.android.sdk.domain.AppPreferences
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.ensureNotNull
 import com.applivery.android.sdk.domain.model.AppConfig
+import com.applivery.android.sdk.domain.model.AppUpdateError
+import com.applivery.android.sdk.domain.model.AppUpdateError.CreateBuildFile
 import com.applivery.android.sdk.domain.model.AuthenticationUri
 import com.applivery.android.sdk.domain.model.BindUser
 import com.applivery.android.sdk.domain.model.DomainError
@@ -66,12 +67,15 @@ internal class ApiDataSource(
                 .mapNotNull { it.token }
                 .onLeft(unifiedErrorHandler::handle)
                 .bind()
-            val body = catch(
-                block = { ensureNotNull(downloadService.downloadBuild(token)) { InternalError() } },
-                catch = { raise(InternalError()) }
+            val buildStream = catch(
+                block = { downloadService.downloadBuild(token).byteStream() },
+                catch = { raise(AppUpdateError.DownloadBuild(it.stackTraceToString())) }
             )
-            val file = ensureNotNull(context.createContentFile(buildId)) { InternalError() }
-            file.write(body.byteStream()).bind()
+            val file = catch(
+                block = { context.createContentFile(buildId) },
+                catch = { raise(CreateBuildFile(it.stackTraceToString())) }
+            )
+            file.write(buildStream).bind()
         }
     }
 
