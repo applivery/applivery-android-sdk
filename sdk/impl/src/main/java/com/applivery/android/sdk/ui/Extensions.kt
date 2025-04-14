@@ -1,5 +1,6 @@
 package com.applivery.android.sdk.ui
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -16,4 +17,11 @@ internal inline fun <reified T : Parcelable> Bundle.parcelable(name: String): T?
         @Suppress("DEPRECATION")
         getParcelable(name)
     }
+}
+
+internal fun AlertDialog.Builder.configureIf(
+    condition: Boolean,
+    configure: AlertDialog.Builder.() -> AlertDialog.Builder
+): AlertDialog.Builder {
+    return if (condition) configure() else this
 }
