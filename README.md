@@ -111,9 +111,16 @@ certain SDK behavior.
         2.hours,
         30.minutes,
         5.minutes,
-    )
+    ),
+    enforceAuthentication = false
 )
 ```
+
+`postponeDurations`: List of postponing options to be shown in the dialog when an update is
+available.
+`enforceAuthentication`: If set to true and `Require authentication` option is enabled in the
+Dashboard, users will be forced to login into Applivery before using the SDK. Set it to false 
+(default) to allow users to cancel the login process.
 
 #### Java Integration
 
