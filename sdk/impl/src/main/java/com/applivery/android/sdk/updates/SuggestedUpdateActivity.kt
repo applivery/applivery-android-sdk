@@ -10,6 +10,7 @@ import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.configuration.Configuration
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.PostponedUpdateLogic
+import com.applivery.android.sdk.ui.configureIf
 import org.koin.core.component.inject
 import kotlin.time.Duration
 
@@ -31,10 +32,8 @@ internal class SuggestedUpdateActivity : SdkBaseActivity() {
             .setCancelable(false)
             .setPositiveButton(R.string.appliveryUpdate, onPositiveButtonClick())
             .setNegativeButton(R.string.appliveryCancel, onNegativeButtonClick())
-            .apply {
-                if (postponeDurations.isNotEmpty()) {
-                    setNeutralButton(R.string.appliveryPostpone, onNeutralButtonClick())
-                }
+            .configureIf(postponeDurations.isNotEmpty()) {
+                setNeutralButton(R.string.appliveryPostpone, onNeutralButtonClick())
             }
             .create()
             .show()
