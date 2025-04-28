@@ -79,10 +79,10 @@ import com.applivery.android.sdk.presentation.viewModelIntentSender
 import com.applivery.android.sdk.ui.theme.AppliveryTheme
 import dev.shreyaspatil.capturable.capturable
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
-import io.sanghun.compose.video.RepeatMode
-import io.sanghun.compose.video.VideoPlayer
-import io.sanghun.compose.video.controller.VideoPlayerControllerConfig
-import io.sanghun.compose.video.uri.VideoPlayerMediaItem
+import com.applivery.android.sdk.ui.video.RepeatMode
+import com.applivery.android.sdk.ui.video.VideoPlayer
+import com.applivery.android.sdk.ui.video.controller.VideoPlayerControllerConfig
+import com.applivery.android.sdk.ui.video.uri.VideoPlayerMediaItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

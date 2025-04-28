@@ -147,11 +147,13 @@ internal class ScreenRecorderService : Service() {
     }
 
     private fun pauseRecording() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
         mediaRecorder?.pause()
         listener.sendEvent(Event.OnPause)
     }
 
     private fun resumeRecording() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
         mediaRecorder?.resume()
         listener.sendEvent(Event.OnResume)
     }
@@ -221,6 +223,15 @@ internal class ScreenRecorderService : Service() {
         }
     }
 
+    private fun stopForegroundCompat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            @Suppress("DEPRECATION")
+            stopForeground(true)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         resetAll()
@@ -228,7 +239,7 @@ internal class ScreenRecorderService : Service() {
     }
 
     private fun resetAll() {
-        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopForegroundCompat()
         virtualDisplay?.release()
         virtualDisplay = null
         mediaRecorder?.setOnErrorListener(null)

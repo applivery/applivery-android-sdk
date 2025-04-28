@@ -1,6 +1,7 @@
 package com.applivery.android.sdk.domain
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.os.Build
 import com.applivery.android.sdk.domain.model.PackageInfo
 import android.content.pm.PackageInfo as AndroidPackageInfo
@@ -24,7 +25,7 @@ internal class AndroidHostAppPackageInfoProvider(
                 packageName = pInfo.packageName,
                 versionCode = pInfo.versionCodeCompat,
                 versionName = pInfo.versionName.orEmpty(),
-                minSdkVersion = appInfo.minSdkVersion,
+                minSdkVersion = appInfo.minSdkVersionCompat,
                 targetSdkVersion = appInfo.targetSdkVersion
             )
         }
@@ -35,6 +36,15 @@ internal class AndroidHostAppPackageInfoProvider(
                 longVersionCode
             } else {
                 versionCode.toLong()
+            }
+        }
+
+    private val ApplicationInfo.minSdkVersionCompat: Int
+        get() {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                minSdkVersion
+            } else {
+                -1
             }
         }
 
