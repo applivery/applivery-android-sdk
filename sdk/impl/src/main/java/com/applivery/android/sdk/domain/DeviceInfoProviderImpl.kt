@@ -1,7 +1,5 @@
 package com.applivery.android.sdk.domain
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
@@ -24,7 +22,7 @@ import com.applivery.android.sdk.domain.model.DeviceInfo
 import com.applivery.android.sdk.domain.model.Os
 import com.applivery.android.sdk.domain.model.RamStatus
 import com.applivery.android.sdk.domain.model.ScreenResolution
-import com.applivery.android.sdk.ui.check
+import kotlin.math.roundToInt
 
 internal interface DeviceInfoProvider {
 
@@ -74,7 +72,7 @@ internal class DeviceInfoProviderImpl(
             val batteryStatusIntent = getBatteryStatusIntent() ?: return 0
             val level = batteryStatusIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
             val scale = batteryStatusIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-            return Math.round((level / scale.toFloat()) * 100)
+            return ((level / scale.toFloat()) * 100).roundToInt()
         }
 
     private val isBatteryCharging: Boolean
@@ -90,11 +88,89 @@ internal class DeviceInfoProviderImpl(
     private val networkType: String
         get() {
             val manager = connectivityManager ?: return NETWORK_UNKNOWN
-            val current = manager.activeNetwork
-            val capabilities = manager.getNetworkCapabilities(current) ?: return NETWORK_UNKNOWN
-            if (!capabilities.isNetworkCapabilitiesValid()) return NETWORK_UNKNOWN
-            return capabilities.getNetworkType()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val network = manager.activeNetwork ?: return NETWORK_UNKNOWN
+                val capabilities = manager.getNetworkCapabilities(network) ?: return NETWORK_UNKNOWN
+
+                return when {
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> NETWORK_WIFI
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> NETWORK_ETHERNET
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                        telephonyManager?.getMobileNetworkType() ?: NETWORK_UNKNOWN
+                    }
+
+                    else -> NETWORK_UNKNOWN
+                }
+            } else @Suppress("DEPRECATION") {
+                val networkInfo = manager.activeNetworkInfo ?: return NETWORK_UNKNOWN
+                if (!networkInfo.isConnected) return NETWORK_UNKNOWN
+
+                return when (networkInfo.type) {
+                    ConnectivityManager.TYPE_WIFI -> NETWORK_WIFI
+                    ConnectivityManager.TYPE_ETHERNET -> NETWORK_ETHERNET
+                    ConnectivityManager.TYPE_MOBILE -> {
+                        telephonyManager?.getMobileNetworkType() ?: NETWORK_UNKNOWN
+                    }
+
+                    else -> NETWORK_UNKNOWN
+                }
+            }
         }
+
+    private fun TelephonyManager.getMobileNetworkType(): String {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return when (dataNetworkType) {
+                TelephonyManager.NETWORK_TYPE_GPRS,
+                TelephonyManager.NETWORK_TYPE_EDGE,
+                TelephonyManager.NETWORK_TYPE_CDMA,
+                TelephonyManager.NETWORK_TYPE_1xRTT,
+                TelephonyManager.NETWORK_TYPE_GSM -> NETWORK_2G
+
+                TelephonyManager.NETWORK_TYPE_UMTS,
+                TelephonyManager.NETWORK_TYPE_EVDO_0,
+                TelephonyManager.NETWORK_TYPE_EVDO_A,
+                TelephonyManager.NETWORK_TYPE_HSDPA,
+                TelephonyManager.NETWORK_TYPE_HSUPA,
+                TelephonyManager.NETWORK_TYPE_HSPA,
+                TelephonyManager.NETWORK_TYPE_EVDO_B,
+                TelephonyManager.NETWORK_TYPE_EHRPD,
+                TelephonyManager.NETWORK_TYPE_HSPAP,
+                TelephonyManager.NETWORK_TYPE_TD_SCDMA -> NETWORK_3G
+
+                TelephonyManager.NETWORK_TYPE_LTE,
+                TelephonyManager.NETWORK_TYPE_IWLAN -> NETWORK_4G
+
+                TelephonyManager.NETWORK_TYPE_NR -> NETWORK_5G
+                else -> NETWORK_UNKNOWN
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            return when (networkType) {
+                TelephonyManager.NETWORK_TYPE_GPRS,
+                TelephonyManager.NETWORK_TYPE_EDGE,
+                TelephonyManager.NETWORK_TYPE_CDMA,
+                TelephonyManager.NETWORK_TYPE_1xRTT,
+                TelephonyManager.NETWORK_TYPE_IDEN -> NETWORK_2G
+
+                TelephonyManager.NETWORK_TYPE_UMTS,
+                TelephonyManager.NETWORK_TYPE_EVDO_0,
+                TelephonyManager.NETWORK_TYPE_EVDO_A,
+                TelephonyManager.NETWORK_TYPE_HSDPA,
+                TelephonyManager.NETWORK_TYPE_HSUPA,
+                TelephonyManager.NETWORK_TYPE_HSPA,
+                TelephonyManager.NETWORK_TYPE_EVDO_B,
+                TelephonyManager.NETWORK_TYPE_EHRPD,
+                TelephonyManager.NETWORK_TYPE_HSPAP -> NETWORK_3G
+
+                TelephonyManager.NETWORK_TYPE_LTE -> NETWORK_4G
+
+                TelephonyManager.NETWORK_TYPE_NR -> NETWORK_5G
+
+                else -> NETWORK_UNKNOWN
+            }
+        }
+    }
 
     private val screenResolution: ScreenResolution
         get() {
@@ -164,55 +240,6 @@ internal class DeviceInfoProviderImpl(
             used = usedRam ?: return RamStatus.empty()
         )
     }
-
-    private fun NetworkCapabilities.isNetworkCapabilitiesValid(): Boolean {
-        return hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
-                (hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                        hasTransport(NetworkCapabilities.TRANSPORT_VPN) ||
-                        hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                        hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun NetworkCapabilities.getNetworkType(): String {
-        return when {
-            hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> NETWORK_WIFI
-            hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> NETWORK_ETHERNET
-            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                if (!context.check(Manifest.permission.READ_PHONE_STATE)) {
-                    return NETWORK_UNKNOWN
-                }
-                when (telephonyManager?.dataNetworkType ?: return NETWORK_UNKNOWN) {
-                    TelephonyManager.NETWORK_TYPE_GPRS,
-                    TelephonyManager.NETWORK_TYPE_EDGE,
-                    TelephonyManager.NETWORK_TYPE_CDMA,
-                    TelephonyManager.NETWORK_TYPE_1xRTT,
-                    TelephonyManager.NETWORK_TYPE_GSM -> NETWORK_2G
-
-                    TelephonyManager.NETWORK_TYPE_UMTS,
-                    TelephonyManager.NETWORK_TYPE_EVDO_0,
-                    TelephonyManager.NETWORK_TYPE_EVDO_A,
-                    TelephonyManager.NETWORK_TYPE_HSDPA,
-                    TelephonyManager.NETWORK_TYPE_HSUPA,
-                    TelephonyManager.NETWORK_TYPE_HSPA,
-                    TelephonyManager.NETWORK_TYPE_EVDO_B,
-                    TelephonyManager.NETWORK_TYPE_EHRPD,
-                    TelephonyManager.NETWORK_TYPE_HSPAP,
-                    TelephonyManager.NETWORK_TYPE_TD_SCDMA -> NETWORK_3G
-
-                    TelephonyManager.NETWORK_TYPE_LTE,
-                    TelephonyManager.NETWORK_TYPE_IWLAN -> NETWORK_4G
-
-                    TelephonyManager.NETWORK_TYPE_NR -> NETWORK_5G
-                    else -> NETWORK_UNKNOWN
-                }
-            }
-
-            else -> NETWORK_UNKNOWN
-        }
-    }
-
 
     companion object {
         private const val OS_NAME: String = "android"

@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
 import android.os.ResultReceiver
-import android.provider.Settings
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.compose.foundation.layout.padding
@@ -15,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.feedback.video.bubble.VideoReporterBubble
 import com.applivery.android.sdk.feedback.video.bubble.VideoReporterFloatingViewManager
+import com.applivery.android.sdk.ui.canDrawOverlays
 import com.applivery.android.sdk.ui.parcelable
 import kotlinx.parcelize.Parcelize
 import java.io.File
@@ -193,7 +193,7 @@ internal class ScreenRecorder(
     }
 
     private fun showOverlay() {
-        if (!Settings.canDrawOverlays(context)) {
+        if (!context.canDrawOverlays()) {
             domainLogger.noOverlayPermission()
             return
         }
@@ -207,10 +207,6 @@ internal class ScreenRecorder(
     }
 
     private fun hideOverlay() {
-        if (!Settings.canDrawOverlays(context)) {
-            domainLogger.noOverlayPermission()
-            return
-        }
         floatingViewManager.hide()
     }
 

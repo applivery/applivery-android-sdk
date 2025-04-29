@@ -13,7 +13,7 @@ allprojects {
 }
 
 val androidCompileSdk by extra { 35 }
-val androidMinSdk by extra { 24 }
+val androidMinSdk by extra { 21 }
 val androidTargetSdk by extra { 35 }
 
 val libraryGroup by extra { "com.applivery" }
