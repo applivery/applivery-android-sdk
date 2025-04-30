@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-kotlin = "2.0.0"
+kotlin = "1.9.25"
 androidCore = "1.10.0"
 lifecycle = "2.8.7"
 lifecycleProcess = "2.8.7"
@@ -17,7 +17,7 @@ startUp = "1.2.0"
 activity = "1.9.3"
 composeBom = "2025.01.01"
 detekt = "1.23.6"
-ackpine = "0.10.1"
+ackpine = "0.6.0"
 capturable = "2.1.0"
 media3 = "1.5.1"
 
@@ -62,6 +62,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 applivery-publish = { id = "com.applivery.android.sdk.publish", version = "unspecified" }

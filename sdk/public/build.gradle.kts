@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java-library")
@@ -17,8 +18,9 @@ java {
     withSourcesJar()
     withJavadocJar()
 }
-kotlin {
+
+tasks.withType<KotlinCompile> {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
