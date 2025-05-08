@@ -30,14 +30,17 @@ internal class VideoReporterImpl(
     domainLogger: DomainLogger
 ) : VideoReporter, ScreenRecorderListener {
 
-    private val outputDirectory get() = context.externalCacheDir ?: context.cacheDir
-
-    private val recorderConfig = ScreenRecorderConfig.builder()
-        .outputLocation(outputDirectory)
-        .maxDuration(MaxVideoDurationInSecods)
-        .build()
-
-    private val recorder = ScreenRecorder(context, recorderConfig, domainLogger, this)
+    private val recorder: ScreenRecorder by lazy {
+        ScreenRecorder(
+            context = context,
+            config = ScreenRecorderConfig.builder()
+                .outputLocation(context.externalCacheDir ?: context.cacheDir)
+                .maxDuration(MaxVideoDurationInSecods)
+                .build(),
+            domainLogger = domainLogger,
+            listener = this
+        )
+    }
 
     private var currentRecordingCont: CancellableContinuation<Either<DomainError, File>>? = null
 
