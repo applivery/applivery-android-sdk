@@ -15,7 +15,7 @@ import com.applivery.android.sdk.data.api.service.SessionInterceptor
 import com.applivery.android.sdk.data.auth.SessionManager
 import com.applivery.android.sdk.data.auth.SessionManagerImpl
 import com.applivery.android.sdk.data.base.JsonMapper
-import com.applivery.android.sdk.data.memory.MemoryDataSource
+import com.applivery.android.sdk.data.persistence.BuildMetadataDatastore
 import com.applivery.android.sdk.data.repository.AppliveryRepositoryImpl
 import com.applivery.android.sdk.data.repository.DownloadsRepositoryImpl
 import com.applivery.android.sdk.domain.AndroidHostAppPackageInfoProvider
@@ -138,8 +138,8 @@ private val networkModule = module {
     factoryOf(::ApiDataSource)
 }
 
-private val cacheModule = module {
-    singleOf(::MemoryDataSource)
+private val persistenceModule = module {
+    singleOf(::BuildMetadataDatastore)
 }
 
 private val useCasesModule = module {
@@ -166,7 +166,7 @@ private val viewModelsModule = module {
 
 internal val dataModules = module {
     includes(networkModule)
-    includes(cacheModule)
+    includes(persistenceModule)
 }
 
 internal val domainModules = module {

@@ -6,5 +6,5 @@ import java.io.File
 
 internal interface DownloadsRepository {
 
-    suspend fun downloadBuild(buildId: String): Either<DomainError, File>
+    suspend fun downloadBuild(buildId: String, buildVersion: Int): Either<DomainError, File>
 }

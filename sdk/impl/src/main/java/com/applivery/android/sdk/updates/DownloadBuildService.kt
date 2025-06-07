@@ -64,7 +64,6 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
                 val lastBuildFile = downloadLastBuild().bind()
                 progressSender.step.update { UpdateInstallStep.Installing }
                 buildInstaller.install(lastBuildFile).onLeft(::onInstallFailed)
-                lastBuildFile.delete()
                 progressSender.step.update { UpdateInstallStep.Done }
             }
             progressSender.step.update { UpdateInstallStep.Idle }
