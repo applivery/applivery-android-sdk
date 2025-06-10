@@ -137,7 +137,9 @@ internal inline fun <reified T : Any> dataStoreDataSource(context: Context): Dat
     }
 }
 
-internal inline fun <reified T : Any, reified K : Any> dynamicDataStoreDataSource(context: Context): AbstractDynamicDataStoreDataSource<T, K> {
+internal inline fun <reified T : Any, reified K : Any> dynamicDataStoreDataSource(
+    context: Context
+): AbstractDynamicDataStoreDataSource<T, K> {
     return object : AbstractDynamicDataStoreDataSource<T, K>(context) {
         override val typeClass: Class<T> = T::class.java
         override val keyClass: Class<K> = K::class.java
