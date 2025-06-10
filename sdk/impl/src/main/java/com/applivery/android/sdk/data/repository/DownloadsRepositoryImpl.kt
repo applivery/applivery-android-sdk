@@ -12,7 +12,6 @@ import com.applivery.android.sdk.data.persistence.BuildMetadataDs
 import com.applivery.android.sdk.data.persistence.toDs
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.ensure
-import com.applivery.android.sdk.domain.ensureNotNull
 import com.applivery.android.sdk.domain.model.BuildMetadata
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.repository.DownloadsRepository
@@ -38,7 +37,7 @@ internal class DownloadsRepositoryImpl(
 
     override suspend fun purgeDownloads(): Either<DomainError, Unit> = either {
         val currentBuildVersion = packageInfoProvider.packageInfo.versionCode
-        ensureNotNull(dataStore.getAll().firstOrNull())
+        dataStore.getAll().firstOrNull().orEmpty()
             .filter { it.version <= currentBuildVersion }
             .forEach { metadata ->
                 metadata.asFile().onRight {
