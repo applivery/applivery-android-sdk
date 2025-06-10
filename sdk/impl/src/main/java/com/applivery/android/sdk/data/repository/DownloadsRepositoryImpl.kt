@@ -4,13 +4,15 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.raise.catch
 import arrow.core.raise.either
-import arrow.core.raise.ensure
 import arrow.core.recover
 import arrow.core.toOption
 import com.applivery.android.sdk.data.api.ApiDataSource
 import com.applivery.android.sdk.data.persistence.BuildMetadataDatastore
 import com.applivery.android.sdk.data.persistence.BuildMetadataDs
 import com.applivery.android.sdk.data.persistence.toDs
+import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
+import com.applivery.android.sdk.domain.ensure
+import com.applivery.android.sdk.domain.ensureNotNull
 import com.applivery.android.sdk.domain.model.BuildMetadata
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.repository.DownloadsRepository
@@ -19,27 +21,39 @@ import java.io.File
 
 internal class DownloadsRepositoryImpl(
     private val apiDataSource: ApiDataSource,
-    private val dataStore: BuildMetadataDatastore
+    private val dataStore: BuildMetadataDatastore,
+    private val packageInfoProvider: HostAppPackageInfoProvider
 ) : DownloadsRepository {
 
     override suspend fun downloadBuild(
         buildId: String,
         buildVersion: Int
     ): Either<DomainError, File> {
-        return getFromCache(buildId).recover {
-            downloadFromApi(buildId)
+        return getDownloadFromCache(buildId).recover {
+            getDownloadFromApi(buildId)
                 .onRight { it.saveInCache(buildId, buildVersion) }
                 .bind()
         }
     }
 
-    private suspend fun getFromCache(buildId: String): Either<DomainError, File> {
+    override suspend fun purgeDownloads(): Either<DomainError, Unit> = either {
+        val currentBuildVersion = packageInfoProvider.packageInfo.versionCode
+        ensureNotNull(dataStore.getAll().firstOrNull())
+            .filter { it.version <= currentBuildVersion }
+            .forEach { metadata ->
+                metadata.asFile().onRight {
+                    runCatching { it.delete() }.onSuccess { dataStore.delete(metadata.id) }
+                }
+            }
+    }
+
+    private suspend fun getDownloadFromCache(buildId: String): Either<DomainError, File> {
         return dataStore.get(buildId).firstOrNull()?.getOrNull().toOption()
             .toEither { BuildNotFoundInCache(buildId) }
             .flatMap { it.asFile() }
     }
 
-    private suspend fun downloadFromApi(buildId: String): Either<DomainError, File> {
+    private suspend fun getDownloadFromApi(buildId: String): Either<DomainError, File> {
         return apiDataSource.downloadBuild(buildId)
     }
 
@@ -48,10 +62,10 @@ internal class DownloadsRepositoryImpl(
             block = { File(filePath) },
             catch = { raise(BuildFileCorruptedError(id)) }
         )
-        ensure(file.exists()) { BuildFileCorruptedError(id) }
-        ensure(file.isFile) { BuildFileCorruptedError(id) }
-        ensure(file.canRead()) { BuildFileCorruptedError(id) }
-        ensure(file.length() > 0) { BuildFileCorruptedError(id) }
+        ensure(file.exists())
+        ensure(file.isFile)
+        ensure(file.canRead())
+        ensure(file.length() > 0)
         file
     }
 

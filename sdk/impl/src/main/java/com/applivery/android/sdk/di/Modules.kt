@@ -51,6 +51,8 @@ import com.applivery.android.sdk.domain.usecases.GetUser
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDate
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
+import com.applivery.android.sdk.domain.usecases.PurgeDownloads
+import com.applivery.android.sdk.domain.usecases.PurgeDownloadsUseCase
 import com.applivery.android.sdk.domain.usecases.SendFeedback
 import com.applivery.android.sdk.domain.usecases.SendFeedbackUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUser
@@ -152,6 +154,7 @@ private val useCasesModule = module {
     factoryOf(::UnbindUser).bind<UnbindUserUseCase>()
     factoryOf(::GetUser).bind<GetUserUseCase>()
     factoryOf(::SendFeedback).bind<SendFeedbackUseCase>()
+    factoryOf(::PurgeDownloads).bind<PurgeDownloadsUseCase>()
 }
 
 private val repositoriesModule = module {
