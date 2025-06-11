@@ -15,7 +15,7 @@ import com.applivery.android.sdk.data.api.service.SessionInterceptor
 import com.applivery.android.sdk.data.auth.SessionManager
 import com.applivery.android.sdk.data.auth.SessionManagerImpl
 import com.applivery.android.sdk.data.base.JsonMapper
-import com.applivery.android.sdk.data.memory.MemoryDataSource
+import com.applivery.android.sdk.data.persistence.BuildMetadataDatastore
 import com.applivery.android.sdk.data.repository.AppliveryRepositoryImpl
 import com.applivery.android.sdk.data.repository.DownloadsRepositoryImpl
 import com.applivery.android.sdk.domain.AndroidHostAppPackageInfoProvider
@@ -51,6 +51,8 @@ import com.applivery.android.sdk.domain.usecases.GetUser
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDate
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
+import com.applivery.android.sdk.domain.usecases.PurgeDownloads
+import com.applivery.android.sdk.domain.usecases.PurgeDownloadsUseCase
 import com.applivery.android.sdk.domain.usecases.SendFeedback
 import com.applivery.android.sdk.domain.usecases.SendFeedbackUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUser
@@ -138,8 +140,8 @@ private val networkModule = module {
     factoryOf(::ApiDataSource)
 }
 
-private val cacheModule = module {
-    singleOf(::MemoryDataSource)
+private val persistenceModule = module {
+    singleOf(::BuildMetadataDatastore)
 }
 
 private val useCasesModule = module {
@@ -152,6 +154,7 @@ private val useCasesModule = module {
     factoryOf(::UnbindUser).bind<UnbindUserUseCase>()
     factoryOf(::GetUser).bind<GetUserUseCase>()
     factoryOf(::SendFeedback).bind<SendFeedbackUseCase>()
+    factoryOf(::PurgeDownloads).bind<PurgeDownloadsUseCase>()
 }
 
 private val repositoriesModule = module {
@@ -166,7 +169,7 @@ private val viewModelsModule = module {
 
 internal val dataModules = module {
     includes(networkModule)
-    includes(cacheModule)
+    includes(persistenceModule)
 }
 
 internal val domainModules = module {

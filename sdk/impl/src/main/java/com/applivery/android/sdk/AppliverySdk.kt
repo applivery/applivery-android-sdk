@@ -14,6 +14,7 @@ import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
 import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
+import com.applivery.android.sdk.domain.usecases.PurgeDownloadsUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
 import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
 import com.applivery.android.sdk.feedback.ShakeFeedbackChecker
@@ -51,6 +52,8 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
         /*Lets fetch the config to check if configuration is correct*/
         mainScope.launch { get<GetAppConfigUseCase>().invoke() }
+
+        mainScope.launch { get<PurgeDownloadsUseCase>().invoke() }
 
         /*Initialize SDK dependent components*/
         get<UpdatesBackgroundChecker>().start()
