@@ -55,8 +55,9 @@ private val pomConfiguration: Project.(Secrets) -> PomConfiguration = {
 
 private val repositoryConfiguration: Project.(Secrets) -> RepositoryConfiguration = { secrets ->
     val libraryVersion: String by rootProject.extra
-    val releasesUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-    val snapshotsUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+    val repositoryDomain = "https://ossrh-staging-api.central.sonatype.com"
+    val releasesUrl = "$repositoryDomain/service/local/staging/deploy/maven2/"
+    val snapshotsUrl = "$repositoryDomain/content/repositories/snapshots/"
     val repoUrl = if (libraryVersion.endsWith("SNAPSHOT")) snapshotsUrl else releasesUrl
     RepositoryConfiguration(
         name = "sonatype",
