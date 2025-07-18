@@ -29,12 +29,12 @@ internal class SuggestedUpdateActivity : SdkBaseActivity() {
         AlertDialog.Builder(this)
             .setTitle(hostAppPackageInfoProvider.packageInfo.appName)
             .setMessage(R.string.appliveryUpdateMsg)
-            .setCancelable(false)
+            .setCancelable(true)
             .setPositiveButton(R.string.appliveryUpdate, onPositiveButtonClick())
-            .setNegativeButton(R.string.appliveryCancel, onNegativeButtonClick())
             .configureIf(postponeDurations.isNotEmpty()) {
                 setNeutralButton(R.string.appliveryPostpone, onNeutralButtonClick())
             }
+            .setOnCancelListener { finish() }
             .create()
             .show()
     }
@@ -44,10 +44,6 @@ internal class SuggestedUpdateActivity : SdkBaseActivity() {
             DownloadBuildService.start(this)
             finish()
         }
-    }
-
-    private fun onNegativeButtonClick(): DialogInterface.OnClickListener {
-        return DialogInterface.OnClickListener { _, _ -> finish() }
     }
 
     private fun onNeutralButtonClick(): DialogInterface.OnClickListener {
