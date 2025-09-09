@@ -59,6 +59,7 @@
     <string name="appliveryScreenRecordingNotificationStopAction">Stop recording</string>
 
     <string name="appliveryPostponeMessage">Postpone the update for</string>
+    <string name="appliveryInsufficientStorage">Insufficient storage</string>
 
 
 </resources>

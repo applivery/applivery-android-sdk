@@ -14,5 +14,10 @@ internal sealed class AppUpdateError(message: String? = null) : DomainError(mess
     class DownloadBuild(message: String?) : AppUpdateError(message)
     class CreateBuildFile(message: String?) : AppUpdateError(message)
     class ReadBuildFile(message: String?) : AppUpdateError(message)
-    class Installation(message: String) : AppUpdateError(message)
+    class Installation(val cause: Cause, message: String?) : AppUpdateError(message) {
+        internal enum class Cause {
+            InsufficientStorage,
+            Unknown,
+        }
+    }
 }

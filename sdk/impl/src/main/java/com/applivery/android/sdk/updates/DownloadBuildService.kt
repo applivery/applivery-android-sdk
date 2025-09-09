@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import arrow.core.raise.either
@@ -11,6 +12,7 @@ import com.applivery.android.sdk.R
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
+import com.applivery.android.sdk.domain.model.AppUpdateError
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.usecases.DownloadLastBuildUseCase
 import com.applivery.android.sdk.notifications.NotificationChannels
@@ -82,6 +84,16 @@ internal class DownloadBuildService : Service(), AppliveryKoinComponent {
 
     private fun onInstallFailed(error: DomainError) {
         logger.errorInstallingBuild(error)
+        when (error) {
+            is AppUpdateError.Installation -> when (error.cause) {
+                AppUpdateError.Installation.Cause.Unknown -> Unit
+                AppUpdateError.Installation.Cause.InsufficientStorage -> Toast.makeText(
+                    this,
+                    getString(R.string.appliveryInsufficientStorage),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     companion object {
