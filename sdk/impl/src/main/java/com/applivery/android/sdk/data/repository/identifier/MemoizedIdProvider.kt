@@ -16,5 +16,4 @@ internal abstract class MemoizedIdProvider : DeviceIdProvider {
     }
 
     abstract suspend fun getActualDeviceId(): Either<DomainError, DeviceId>
-
 }
