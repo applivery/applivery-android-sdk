@@ -14,7 +14,6 @@ import ru.solrudev.ackpine.installer.PackageInstaller
 import ru.solrudev.ackpine.installer.createSession
 import ru.solrudev.ackpine.installer.parameters.InstallerType
 import ru.solrudev.ackpine.session.Failure
-import ru.solrudev.ackpine.session.Session
 import ru.solrudev.ackpine.session.SessionResult
 import ru.solrudev.ackpine.session.await
 import ru.solrudev.ackpine.session.parameters.Confirmation
@@ -39,7 +38,11 @@ internal class AndroidBuildInstaller(private val context: Context) : BuildInstal
             installerType = InstallerType.INTENT_BASED
         }
         return when (val result = session.await()) {
-            is SessionResult.Error<*> -> Installation(result.cause.message()).left()
+            is SessionResult.Error<*> -> Installation(
+                result.cause.toInstallationCause(),
+                result.cause.message()
+            ).left()
+
             is SessionResult.Success<*> -> Unit.right()
         }
     }
@@ -56,6 +59,13 @@ internal class AndroidBuildInstaller(private val context: Context) : BuildInstal
             is InstallFailure.Storage -> "Storage path: $storagePath"
             is InstallFailure.Timeout -> "Timeout"
             else -> "Unknown error"
+        }
+    }
+
+    private fun Failure.toInstallationCause(): Installation.Cause {
+        return when (this) {
+            is InstallFailure.Storage -> Installation.Cause.InsufficientStorage
+            else -> Installation.Cause.Unknown
         }
     }
 }
