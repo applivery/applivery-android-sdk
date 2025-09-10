@@ -15,11 +15,13 @@ internal class InstallationIdProvider(
 
     private val randomId get() = UUID.randomUUID().toString()
 
-    override suspend fun getDeviceId(): Either<DomainError, String> = either {
-        preferences.getString(KeyInstallationId, null).orEmpty().ifEmpty {
+    override suspend fun getDeviceId(): Either<DomainError, DeviceId> = either {
+        val installationId = preferences.getString(KeyInstallationId, null).orEmpty().ifEmpty {
             randomId.also { preferences.edit { putString(KeyInstallationId, it) } }
         }
+        DeviceId(value = installationId, type = DEVICE_ID_TYPE)
     }
 }
 
 private const val KeyInstallationId = "applivery_id_token_key"
+private const val DEVICE_ID_TYPE = "Installation"

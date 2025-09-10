@@ -14,7 +14,7 @@ internal class GsfIdProvider(private val context: Context) : MemoizedIdProvider(
 
     private val contentResolver get() = context.contentResolver
 
-    override suspend fun getActualDeviceId(): Either<DomainError, String> = either {
+    override suspend fun getActualDeviceId(): Either<DomainError, DeviceId> = either {
         catch(
             block = {
                 val gsfUri = URI_GSF_CONTENT_PROVIDER.toUri()
@@ -22,7 +22,8 @@ internal class GsfIdProvider(private val context: Context) : MemoizedIdProvider(
                 val cursor = ensureNotNull(contentResolver.query(gsfUri, null, null, params, null))
                 cursor.use { cursor ->
                     ensure(cursor.moveToFirst() && cursor.columnCount >= 2)
-                    toHexString(cursor.getString(1).toLong())
+                    val gsfId = toHexString(cursor.getString(1).toLong())
+                    DeviceId(value = ensureNotNull(gsfId), type = DEVICE_ID_TYPE)
                 }
             },
             catch = {

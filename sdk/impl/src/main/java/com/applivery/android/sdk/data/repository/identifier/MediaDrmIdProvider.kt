@@ -6,6 +6,7 @@ import android.os.Build
 import arrow.core.Either
 import arrow.core.raise.catch
 import arrow.core.raise.either
+import com.applivery.android.sdk.domain.ensureNotNull
 import com.applivery.android.sdk.domain.model.DomainError
 import java.security.MessageDigest
 import java.util.UUID
@@ -13,7 +14,7 @@ import java.util.UUID
 
 internal class MediaDrmIdProvider : MemoizedIdProvider() {
 
-    override suspend fun getActualDeviceId(): Either<DomainError, String> = either {
+    override suspend fun getActualDeviceId(): Either<DomainError, DeviceId> = either {
         catch(
             block = {
                 val widevineUUID = UUID(WIDEWINE_UUID_MOST_SIG_BITS, WIDEWINE_UUID_LEAST_SIG_BITS)
@@ -25,9 +26,11 @@ internal class MediaDrmIdProvider : MemoizedIdProvider() {
                     @Suppress("DEPRECATION")
                     drm.release()
                 }
-                val messageDigest = MessageDigest.getInstance("SHA-256")
-                messageDigest.update(drmDeviceIdBytes)
-                messageDigest.digest().toHexString()
+                val messageDigest = MessageDigest.getInstance("SHA-256").apply {
+                    update(drmDeviceIdBytes)
+                }
+                val drmId = messageDigest.digest().toHexString()
+                DeviceId(value = ensureNotNull(drmId), type = DEVICE_ID_TYPE)
             },
             catch = {
                 raise(DeviceIdNotAvailableError(DEVICE_ID_TYPE, it))

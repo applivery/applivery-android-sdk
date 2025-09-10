@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.Either.Left
 import arrow.core.Either.Right
 import com.applivery.android.sdk.data.repository.identifier.AndroidIdProvider
+import com.applivery.android.sdk.data.repository.identifier.DeviceId
 import com.applivery.android.sdk.data.repository.identifier.GsfIdProvider
 import com.applivery.android.sdk.data.repository.identifier.InstallationIdProvider
 import com.applivery.android.sdk.data.repository.identifier.MediaDrmIdProvider
@@ -17,10 +18,10 @@ internal class DeviceIdRepositoryImpl(
     private val installationIdProvider: InstallationIdProvider
 ) : DeviceIdRepository {
 
-    override suspend fun getDeviceId(): Either<DomainError, String> {
+    override suspend fun getDeviceId(): Either<DomainError, DeviceId> {
         return gsfIdProvider.getDeviceId()
-            .orElse { mediaDrmIdProvider.getDeviceId() }
             .orElse { androidIdProvider.getDeviceId() }
+            .orElse { mediaDrmIdProvider.getDeviceId() }
             .orElse { installationIdProvider.getDeviceId() }
     }
 }

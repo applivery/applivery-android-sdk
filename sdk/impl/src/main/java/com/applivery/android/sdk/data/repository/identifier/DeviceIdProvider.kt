@@ -5,7 +5,7 @@ import com.applivery.android.sdk.domain.model.DomainError
 
 internal interface DeviceIdProvider {
 
-    suspend fun getDeviceId(): Either<DomainError, String>
+    suspend fun getDeviceId(): Either<DomainError, DeviceId>
 }
 
 internal class DeviceIdNotAvailableError(type: String, cause: Throwable?) : DomainError(

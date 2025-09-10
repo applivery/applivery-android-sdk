@@ -14,15 +14,15 @@ internal class AndroidIdProvider(private val context: Context) : MemoizedIdProvi
     private val contentResolver get() = context.contentResolver
 
     @SuppressLint("HardwareIds")
-    override suspend fun getActualDeviceId(): Either<DomainError, String> = either {
+    override suspend fun getActualDeviceId(): Either<DomainError, DeviceId> = either {
         catch(
             block = {
                 val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-                ensureNotNull(id)
+                DeviceId(value = ensureNotNull(id), type = DEVICE_ID_TYPE)
             },
             catch = { raise(DeviceIdNotAvailableError(DEVICE_ID_TYPE, it)) }
         )
     }
 }
 
-private const val DEVICE_ID_TYPE = "AndroidId"
+private const val DEVICE_ID_TYPE = "Android"

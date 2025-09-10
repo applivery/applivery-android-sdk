@@ -36,10 +36,11 @@ internal class SessionInterceptor(
     }
 
     private fun Request.intercept(): Request {
-        val deviceId = runBlocking { deviceIdRepository.getDeviceId() }.getOrNull().orEmpty()
+        val deviceId = runBlocking { deviceIdRepository.getDeviceId() }.getOrNull()
         return newBuilder()
             .addHeader("Authorization", "Bearer $appToken")
-            .addHeader("x-installation-token", deviceId)
+            .addHeader("x-installation-token", deviceId?.value.orEmpty())
+            .addHeader("x-device-id-type", deviceId?.type.orEmpty())
             .apply { sessionManager.getToken().onSome { addHeader("x-sdk-auth-token", it) } }
             .build()
     }
