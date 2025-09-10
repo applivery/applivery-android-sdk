@@ -17,7 +17,12 @@ import com.applivery.android.sdk.data.auth.SessionManagerImpl
 import com.applivery.android.sdk.data.base.JsonMapper
 import com.applivery.android.sdk.data.persistence.BuildMetadataDatastore
 import com.applivery.android.sdk.data.repository.AppliveryRepositoryImpl
+import com.applivery.android.sdk.data.repository.DeviceIdRepositoryImpl
 import com.applivery.android.sdk.data.repository.DownloadsRepositoryImpl
+import com.applivery.android.sdk.data.repository.identifier.AndroidIdProvider
+import com.applivery.android.sdk.data.repository.identifier.GsfIdProvider
+import com.applivery.android.sdk.data.repository.identifier.InstallationIdProvider
+import com.applivery.android.sdk.data.repository.identifier.MediaDrmIdProvider
 import com.applivery.android.sdk.domain.AndroidHostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.AndroidLogger
 import com.applivery.android.sdk.domain.AndroidSharedPreferencesProvider
@@ -36,6 +41,7 @@ import com.applivery.android.sdk.domain.PostponedUpdateLogicImpl
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
+import com.applivery.android.sdk.domain.repository.DeviceIdRepository
 import com.applivery.android.sdk.domain.repository.DownloadsRepository
 import com.applivery.android.sdk.domain.usecases.BindUser
 import com.applivery.android.sdk.domain.usecases.BindUserUseCase
@@ -103,7 +109,7 @@ private val networkModule = module {
             addInterceptor(
                 SessionInterceptor(
                     sessionManager = get(),
-                    appPreferences = get(),
+                    deviceIdRepository = get(),
                     appToken = getProperty(Properties.AppToken),
                     loginHandler = get()
                 )
@@ -160,6 +166,11 @@ private val useCasesModule = module {
 private val repositoriesModule = module {
     factoryOf(::AppliveryRepositoryImpl).bind<AppliveryRepository>()
     factoryOf(::DownloadsRepositoryImpl).bind<DownloadsRepository>()
+    factoryOf(::DeviceIdRepositoryImpl).bind<DeviceIdRepository>()
+    singleOf(::GsfIdProvider)
+    singleOf(::MediaDrmIdProvider)
+    singleOf(::AndroidIdProvider)
+    singleOf(::InstallationIdProvider)
 }
 
 private val viewModelsModule = module {

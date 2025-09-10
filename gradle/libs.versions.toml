@@ -21,6 +21,8 @@ ackpine = "0.6.0"
 capturable = "2.1.0"
 media3 = "1.5.1"
 datastore = "1.1.7"
+coroutinesTest = "1.8.1"
+mockk = "1.13.9"
 
 [libraries]
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidCore" }
@@ -53,6 +55,8 @@ androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "medi
 ackpine-ktx = { module = "ru.solrudev.ackpine:ackpine-ktx", version.ref = "ackpine" }
 capturable = { module = "dev.shreyaspatil:capturable", version.ref = "capturable" }
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 #Libs for convention plugin
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }

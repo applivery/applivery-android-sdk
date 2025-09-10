@@ -1,7 +1,7 @@
 package com.applivery.android.sdk.data.api.service
 
 import com.applivery.android.sdk.data.auth.SessionManager
-import com.applivery.android.sdk.domain.AppPreferences
+import com.applivery.android.sdk.domain.repository.DeviceIdRepository
 import com.applivery.android.sdk.login.LoginHandler
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -11,7 +11,7 @@ import okhttp3.Response
 
 internal class SessionInterceptor(
     private val sessionManager: SessionManager,
-    private val appPreferences: AppPreferences,
+    private val deviceIdRepository: DeviceIdRepository,
     private val appToken: String,
     private val loginHandler: LoginHandler
 ) : Interceptor {
@@ -36,9 +36,10 @@ internal class SessionInterceptor(
     }
 
     private fun Request.intercept(): Request {
+        val deviceId = runBlocking { deviceIdRepository.getDeviceId() }.getOrNull().orEmpty()
         return newBuilder()
             .addHeader("Authorization", "Bearer $appToken")
-            .addHeader("x-installation-token", appPreferences.installationId)
+            .addHeader("x-installation-token", deviceId)
             .apply { sessionManager.getToken().onSome { addHeader("x-sdk-auth-token", it) } }
             .build()
     }
