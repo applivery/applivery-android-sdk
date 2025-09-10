@@ -171,8 +171,8 @@ private data class Secrets(
                 mavenCentralUsername = System.getenv("MVN_CENTRAL_USER").orEmpty(),
                 mavenCentralPassword = System.getenv("MVN_CENTRAL_PASS").orEmpty(),
                 signingKeyId = System.getenv("SIGN_KEY_ID").orEmpty(),
-                signingKey = System.getenv("SIGN_KEY_PASS").orEmpty(),
-                signingPassword = System.getenv("SIGN_KEY").orEmpty()
+                signingKey = System.getenv("SIGN_KEY").orEmpty(),
+                signingPassword = System.getenv("SIGN_KEY_PASS").orEmpty(),
             )
         }
     }
