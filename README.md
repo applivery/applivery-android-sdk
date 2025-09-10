@@ -51,8 +51,6 @@ You can get your APP TOKEN in your App -> Settings -> Integrations section.
 
 Applivery SDK is designed for non-production builds (debug builds or other testing build variants).
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/)
-
 Add the following dependency to your app's `build.gradle` file:
 
  ```kotlin
@@ -118,6 +116,7 @@ certain SDK behavior.
 
 `postponeDurations`: List of postponing options to be shown in the dialog when an update is
 available.
+
 `enforceAuthentication`: If set to true and `Require authentication` option is enabled in the
 Dashboard, users will be forced to login into Applivery before using the SDK. Set it to false 
 (default) to allow users to cancel the login process.
