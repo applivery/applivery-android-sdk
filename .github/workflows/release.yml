@@ -40,7 +40,7 @@ jobs:
           API="https://ossrh-staging-api.central.sonatype.com"
           
           # Build Bearer token from env (no output to console)
-          TOKEN="$(printf '%s:%s' "MVN_CENTRAL_USER" "MVN_CENTRAL_PASS" | base64 | tr -d '\n')"
+          TOKEN="$(printf '%s:%s' "$MVN_CENTRAL_USER" "$MVN_CENTRAL_PASS" | base64 | tr -d '\n')"
           echo "::add-mask::$TOKEN"   # mask if it ever appears in logs
           
           # 1) Search repositories
