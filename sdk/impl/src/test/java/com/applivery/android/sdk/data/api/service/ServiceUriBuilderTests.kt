@@ -1,4 +1,4 @@
-package com.applivery.android.sdk.impl
+package com.applivery.android.sdk.data.api.service
 
 import com.applivery.android.sdk.BuildConfig
 import com.applivery.android.sdk.data.api.service.ServiceUriBuilder.withTenant

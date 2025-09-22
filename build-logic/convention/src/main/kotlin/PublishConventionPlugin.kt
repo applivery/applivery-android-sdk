@@ -11,7 +11,6 @@ import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 import org.gradle.plugins.signing.SigningExtension
-import java.util.Properties
 
 private val extensionPropertyMissingError: (String) -> String = {
     "No $it was provided for SdkPublishExtension. Provide one using sdkPublish DSL"
@@ -81,7 +80,7 @@ class PublishConventionPlugin : Plugin<Project> {
                 apply("signing")
             }
             val options = extensions.create("sdkPublish", SdkPublishExtension::class)
-            val secrets = Secrets.fromPropertiesFile("local.properties")
+            val secrets = Secrets.fromEnvironment()
             afterEvaluate {
                 val artifactId = options.artifactId ?: error(artifactIdMissingError)
                 extensions.configure<PublishingExtension> {
@@ -167,19 +166,13 @@ private data class Secrets(
 ) {
 
     companion object {
-        context (Project)
-        fun fromPropertiesFile(name: String): Secrets {
-            val secretsFile = rootProject.file(name)
-            val secrets = Properties()
-            if (secretsFile.exists()) {
-                secrets.load(secretsFile.inputStream())
-            }
+        fun fromEnvironment(): Secrets {
             return Secrets(
-                mavenCentralUsername = secrets.getProperty("mavenCentralUsername").orEmpty(),
-                mavenCentralPassword = secrets.getProperty("mavenCentralPassword").orEmpty(),
-                signingKeyId = secrets.getProperty("signing.keyId").orEmpty(),
-                signingKey = secrets.getProperty("signing.key").orEmpty(),
-                signingPassword = secrets.getProperty("signing.password").orEmpty()
+                mavenCentralUsername = System.getenv("MVN_CENTRAL_USER").orEmpty(),
+                mavenCentralPassword = System.getenv("MVN_CENTRAL_PASS").orEmpty(),
+                signingKeyId = System.getenv("SIGN_KEY_ID").orEmpty(),
+                signingKey = System.getenv("SIGN_KEY").orEmpty(),
+                signingPassword = System.getenv("SIGN_KEY_PASS").orEmpty(),
             )
         }
     }

@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/*
+env:
+  MVN_CENTRAL_USER: ${{ secrets.MVN_CENTRAL_USER }}
+  MVN_CENTRAL_PASS: ${{ secrets.MVN_CENTRAL_PASS }}
+  SIGN_KEY_ID: ${{ secrets.SIGN_KEY_ID }}
+  SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
+  SIGN_KEY: ${{ secrets.SIGN_KEY }}
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Publish
+        run: ./gradlew publish
+      - name: Ensure jq is installed
+        run: |
+          if ! command -v jq >/dev/null 2>&1; then
+           sudo apt-get update
+           sudo apt-get install -y jq
+          fi
+      - name: Query Sonatype and upload
+        run: |
+          set -euo pipefail
+          
+          API="https://ossrh-staging-api.central.sonatype.com"
+          
+          # Build Bearer token from env (no output to console)
+          TOKEN="$(printf '%s:%s' "$MVN_CENTRAL_USER" "$MVN_CENTRAL_PASS" | base64 | tr -d '\n')"
+          echo "::add-mask::$TOKEN"   # mask if it ever appears in logs
+          
+          # 1) Search repositories
+          RESP="$(curl -sS -H "Authorization: Bearer $TOKEN" "$API/manual/search/repositories")"
+          
+          # 2) Extract the first key
+          KEY="$(printf '%s' "$RESP" | jq -r '.repositories[0].key // empty')"
+          if [ -z "$KEY" ]; then
+            echo "No repository key found in response:"
+            printf '%s\n' "$RESP" | jq . || printf '%s\n' "$RESP"
+            exit 1
+          fi
+          
+          echo "Uploading staging build to repository with key $KEY"
+          
+          # 3) POST upload to that repository
+          curl -sS -H "Authorization: Bearer $TOKEN" -i -X POST "$API/manual/upload/repository/$KEY"
