@@ -24,8 +24,6 @@ internal class FeedbackLauncherImpl(
     private val hostActivityProvider: HostActivityProvider,
     private val logger: DomainLogger,
     private val videoReporter: VideoReporter,
-    private val feedbackProgressUpdater: FeedbackProgressUpdater,
-    private val feedbackProgressProvider: FeedbackProgressProvider
 ) : FeedbackLauncher {
 
     var recordingJob: Job? = null
@@ -40,7 +38,6 @@ internal class FeedbackLauncherImpl(
     }
 
     override fun openFeedbackSelector() {
-        if (feedbackProgressProvider.isFeedbackInProgress) return
         val activity = hostActivityProvider.activity
         if (activity == null) {
             logger.noActivityFoundForFeedbackView()
@@ -62,8 +59,6 @@ internal class FeedbackLauncherImpl(
     }
 
     private fun onStartVideoBehavior() {
-        feedbackProgressUpdater.isFeedbackInProgress = true
-
         if (recordingJob?.isActive == true) {
             logger.onAlreadyRecording()
             return
@@ -71,10 +66,7 @@ internal class FeedbackLauncherImpl(
 
         recordingJob = coroutineScope.launch {
             videoReporter.start().fold(
-                ifLeft = {
-                    logger::videoReportingError
-                    feedbackProgressUpdater.isFeedbackInProgress = false
-                } ,
+                ifLeft = logger::videoReportingError,
                 ifRight = ::onScreenRecordingReady
             )
         }
@@ -84,7 +76,6 @@ internal class FeedbackLauncherImpl(
         val activity = hostActivityProvider.activity
         if (activity == null) {
             logger.noActivityFoundForFeedbackView()
-            feedbackProgressUpdater.isFeedbackInProgress = false
             return
         }
 
