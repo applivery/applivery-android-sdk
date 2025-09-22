@@ -9,7 +9,6 @@ import com.applivery.android.sdk.R
 import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import org.koin.core.component.inject
-import kotlin.getValue
 
 internal class FeedbackSelectorActivity : SdkBaseActivity() {
 
@@ -31,14 +30,14 @@ internal class FeedbackSelectorActivity : SdkBaseActivity() {
 
     private fun onNormalFeedbackClick(): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
-            feedbackLauncher.startFeedbackScreenshot()
+            feedbackLauncher.launchWith(behavior = FeedbackBehavior.Normal)
             finish()
         }
     }
 
     private fun onRecordingClick(): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
-            feedbackLauncher.startFeedbackVideo()
+            feedbackLauncher.launchWith(behavior = FeedbackBehavior.Video)
             finish()
         }
     }

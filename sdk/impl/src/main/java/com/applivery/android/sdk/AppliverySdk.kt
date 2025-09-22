@@ -126,7 +126,7 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
     }
 
     override fun feedbackEvent() {
-        get<FeedbackLauncher>().openFeedbackSelector()
+        get<FeedbackLauncher>().launchWith(behavior = null)
     }
 
     override fun enableScreenshotFeedback() {

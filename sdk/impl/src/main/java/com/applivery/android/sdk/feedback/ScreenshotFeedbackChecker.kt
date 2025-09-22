@@ -17,7 +17,7 @@ internal interface ScreenshotFeedbackChecker {
 
 internal class ScreenshotFeedbackCheckerImpl(
     context: Context,
-    private val logger: DomainLogger,
+    logger: DomainLogger,
     private val feedbackProgressProvider: FeedbackProgressProvider,
     private val feedbackLauncher: FeedbackLauncher
 ) : ScreenshotFeedbackChecker, DefaultLifecycleObserver {
@@ -51,6 +51,6 @@ internal class ScreenshotFeedbackCheckerImpl(
 
     private fun onScreenshotDetected(uri: Uri) {
         if (feedbackProgressProvider.isFeedbackInProgress) return
-        feedbackLauncher.startFeedbackScreenshot(uri)
+        feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri))
     }
 }

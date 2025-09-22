@@ -11,13 +11,15 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 
+internal sealed interface FeedbackBehavior {
+    data class Screenshot(val uri: Uri) : FeedbackBehavior
+    object Video : FeedbackBehavior
+    object Normal : FeedbackBehavior
+}
+
 internal interface FeedbackLauncher {
 
-    fun startFeedbackScreenshot(uri: Uri? = null)
-
-    fun startFeedbackVideo()
-
-    fun openFeedbackSelector()
+    fun launchWith(behavior: FeedbackBehavior? = null)
 }
 
 internal class FeedbackLauncherImpl(
@@ -31,37 +33,34 @@ internal class FeedbackLauncherImpl(
     var recordingJob: Job? = null
     val coroutineScope = MainScope()
 
-    override fun startFeedbackScreenshot(uri: Uri?) {
-        onStartScreenshotBehavior(uri)
-    }
-
-    override fun startFeedbackVideo() {
-        onStartVideoBehavior()
-    }
-
-    override fun openFeedbackSelector() {
+    override fun launchWith(behavior: FeedbackBehavior?) {
         if (feedbackProgressProvider.isFeedbackInProgress) return
+
         val activity = hostActivityProvider.activity
         if (activity == null) {
             logger.noActivityFoundForFeedbackView()
             return
         }
-
-        activity.startActivity(FeedbackSelectorActivity.getIntent(context = activity))
-    }
-
-    private fun onStartScreenshotBehavior(uri: Uri?) {
-        val activity = hostActivityProvider.activity
-        if (activity == null) {
-            logger.noActivityFoundForFeedbackView()
+        if (behavior == null) {
+            activity.startActivity(FeedbackSelectorActivity.getIntent(context = activity))
             return
         }
+        when (behavior) {
+            is FeedbackBehavior.Screenshot,
+            is FeedbackBehavior.Normal -> {
+                val screenShorUri = when (behavior) {
+                    is FeedbackBehavior.Screenshot -> behavior.uri
+                    else -> null
+                }
+                val arguments = FeedbackArguments.Screenshot(uri = screenShorUri)
+                activity.startActivity(FeedbackActivity.getIntent(activity, arguments))
+            }
 
-        val arguments = FeedbackArguments.Screenshot(uri = uri)
-        activity.startActivity(FeedbackActivity.getIntent(activity, arguments))
+            is FeedbackBehavior.Video -> onStartRecordingScreen()
+        }
     }
 
-    private fun onStartVideoBehavior() {
+    private fun onStartRecordingScreen() {
         feedbackProgressUpdater.isFeedbackInProgress = true
 
         if (recordingJob?.isActive == true) {
@@ -74,7 +73,7 @@ internal class FeedbackLauncherImpl(
                 ifLeft = {
                     logger::videoReportingError
                     feedbackProgressUpdater.isFeedbackInProgress = false
-                } ,
+                },
                 ifRight = ::onScreenRecordingReady
             )
         }
