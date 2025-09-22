@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.FeedbackProgressProvider
 
