@@ -16,6 +16,6 @@ fun init(
     appToken: String,
     tenant: String? = null,
     configuration: Configuration = Configuration.Empty
-) = Applivery.start(appToken, tenant, configuration)
+) = start(appToken, tenant, configuration)
 
 fun getInstance() = Applivery.getInstance()

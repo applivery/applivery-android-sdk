@@ -30,10 +30,6 @@
         android:name="android.permission.ENFORCE_UPDATE_OWNERSHIP"
         tools:node="remove" />
 
-    <uses-feature
-        android:name="android.hardware.sensor.accelerometer"
-        android:required="false" />
-
     <application>
 
         <activity

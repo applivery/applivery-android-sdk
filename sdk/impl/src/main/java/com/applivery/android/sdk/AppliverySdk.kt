@@ -165,6 +165,4 @@ fun Applivery.Companion.init(
     appToken: String,
     tenant: String? = null,
     configuration: Configuration = Configuration.Empty
-) {
-    sInstance = AppliverySdk().apply { start(appToken, tenant, configuration) }
-}
+) = start(appToken, tenant, configuration)
