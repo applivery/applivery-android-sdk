@@ -3,7 +3,7 @@ package com.applivery.sample
 import android.app.Application
 import com.applivery.android.sdk.Applivery
 import com.applivery.android.sdk.configuration.Configuration
-import com.applivery.android.sdk.init
+import com.applivery.android.sdk.start
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
@@ -19,6 +19,6 @@ class AppliveryApplication : Application() {
             ),
             enforceAuthentication = false
         )
-        Applivery.init(BuildConfig.APPLIVERY_APP_TOKEN, configuration = configuration)
+        Applivery.start(BuildConfig.APPLIVERY_APP_TOKEN, configuration = configuration)
     }
 }
