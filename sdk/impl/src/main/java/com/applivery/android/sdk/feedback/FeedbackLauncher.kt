@@ -80,5 +80,4 @@ internal class FeedbackLauncherImpl(
         val arguments = FeedbackArguments.Video(uri = Uri.fromFile(file))
         activity.startActivity(FeedbackActivity.getIntent(activity, arguments))
     }
-
 }
