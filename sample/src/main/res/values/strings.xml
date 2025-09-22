@@ -15,5 +15,5 @@
     <string name="field_required">This field is required</string>
     <string name="is_up_to_date_text_updated">Your app is updated</string>
     <string name="is_up_to_date_text_no_updated">There is a new version of your app</string>
-    <string name="open_feedback_event">Open feed back event</string>
+    <string name="open_feedback_event">Open feedback event</string>
 </resources>

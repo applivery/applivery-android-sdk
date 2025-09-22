@@ -245,7 +245,7 @@ strings:
 
     <!--Login prompt texts-->
     <string name="appliveryLogin">Login</string>
-    <string name="appliveryLoginRequiredText">Please log-in to Applivery before using this app</string>
+    <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
 
 </resources>
 ```
