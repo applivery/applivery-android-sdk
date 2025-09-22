@@ -3,8 +3,6 @@ package com.applivery.android.sdk.feedback
 import android.net.Uri
 import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.DomainLogger
-import com.applivery.android.sdk.domain.FeedbackProgressProvider
-import com.applivery.android.sdk.domain.FeedbackProgressUpdater
 import com.applivery.android.sdk.feedback.video.VideoReporter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
