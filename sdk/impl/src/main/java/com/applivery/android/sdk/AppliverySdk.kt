@@ -7,7 +7,6 @@ import com.applivery.android.sdk.di.Properties
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.asResult
 import com.applivery.android.sdk.domain.model.BindUser
-import com.applivery.android.sdk.domain.model.ShakeFeedbackBehavior
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.usecases.BindUserUseCase
 import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
@@ -16,8 +15,8 @@ import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.domain.usecases.PurgeDownloadsUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
+import com.applivery.android.sdk.feedback.FeedbackLauncher
 import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
-import com.applivery.android.sdk.feedback.ShakeFeedbackChecker
 import com.applivery.android.sdk.updates.DownloadBuildService
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
@@ -31,7 +30,7 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
     private val mainScope = MainScope()
 
-    fun init(
+    fun start(
         appToken: String,
         tenant: String? = null,
         configuration: Configuration = Configuration.Empty
@@ -57,7 +56,6 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
         /*Initialize SDK dependent components*/
         get<UpdatesBackgroundChecker>().start()
-        get<ShakeFeedbackChecker>().start()
         get<ScreenshotFeedbackChecker>().start()
     }
 
@@ -127,12 +125,8 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
         return get<GetUserUseCase>().invoke().asResult()
     }
 
-    override fun enableShakeFeedback(behavior: ShakeFeedbackBehavior) {
-        get<ShakeFeedbackChecker>().enable(behavior)
-    }
-
-    override fun disableShakeFeedback() {
-        get<ShakeFeedbackChecker>().disable()
+    override fun feedbackEvent() {
+        get<FeedbackLauncher>().openFeedbackSelector()
     }
 
     override fun enableScreenshotFeedback() {
@@ -148,14 +142,29 @@ private var sInstance: Applivery? = null
 
 fun Applivery.Companion.getInstance(): Applivery {
     return requireNotNull(sInstance) {
-        "Applivery SDK not initialized. Did you forget to call Applivery.init() ?"
+        "Applivery SDK not initialized. Did you forget to call Applivery.start() ?"
     }
 }
 
+fun Applivery.Companion.start(
+    appToken: String,
+    tenant: String? = null,
+    configuration: Configuration = Configuration.Empty
+) {
+    sInstance = AppliverySdk().apply { start(appToken, tenant, configuration) }
+}
+
+@Deprecated(
+    message = "Use start() instead of init(). This method will be removed in a future release.",
+    replaceWith = ReplaceWith(
+        expression = "start(appToken, tenant, configuration)",
+        imports = ["com.applivery.sdk.Applivery"]
+    )
+)
 fun Applivery.Companion.init(
     appToken: String,
     tenant: String? = null,
     configuration: Configuration = Configuration.Empty
 ) {
-    sInstance = AppliverySdk().apply { init(appToken, tenant, configuration) }
+    sInstance = AppliverySdk().apply { start(appToken, tenant, configuration) }
 }

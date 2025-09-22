@@ -63,17 +63,15 @@ import com.applivery.android.sdk.domain.usecases.SendFeedback
 import com.applivery.android.sdk.domain.usecases.SendFeedbackUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUser
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
-import com.applivery.android.sdk.feedback.AndroidShakeDetector
 import com.applivery.android.sdk.feedback.ContentUriImageDecoder
 import com.applivery.android.sdk.feedback.ContentUriImageDecoderImpl
+import com.applivery.android.sdk.feedback.FeedbackLauncher
+import com.applivery.android.sdk.feedback.FeedbackLauncherImpl
 import com.applivery.android.sdk.feedback.FeedbackViewModel
 import com.applivery.android.sdk.feedback.HostAppScreenshotProvider
 import com.applivery.android.sdk.feedback.HostAppScreenshotProviderImpl
 import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
 import com.applivery.android.sdk.feedback.ScreenshotFeedbackCheckerImpl
-import com.applivery.android.sdk.feedback.ShakeDetector
-import com.applivery.android.sdk.feedback.ShakeFeedbackChecker
-import com.applivery.android.sdk.feedback.ShakeFeedbackCheckerImpl
 import com.applivery.android.sdk.feedback.video.VideoReporter
 import com.applivery.android.sdk.feedback.video.VideoReporterImpl
 import com.applivery.android.sdk.login.LoginHandler
@@ -208,8 +206,6 @@ internal val appModules = module {
             UpdateInstallProgressObserver::class
         )
     )
-    factoryOf(::AndroidShakeDetector).bind<ShakeDetector>()
-    singleOf(::ShakeFeedbackCheckerImpl).bind<ShakeFeedbackChecker>()
     singleOf(::ScreenshotFeedbackCheckerImpl).bind<ScreenshotFeedbackChecker>()
     factoryOf(::ContentUriImageDecoderImpl).bind<ContentUriImageDecoder>()
     singleOf(::HostAppScreenshotProviderImpl).bind<HostAppScreenshotProvider>()
@@ -222,4 +218,5 @@ internal val appModules = module {
     )
     factory<Configuration> { getProperty(Properties.Configuration) }
     singleOf(::PostponedUpdateLogicImpl).bind<PostponedUpdateLogic>()
+    singleOf(::FeedbackLauncherImpl).bind<FeedbackLauncher>()
 }

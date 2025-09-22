@@ -78,31 +78,31 @@ builds.
 
 ### Step 1: Initialize the SDK
 
-Call `Applivery.init()` method whenever you want to start Applivery SDK, typically in your
+Call `Applivery.start()` method whenever you want to start Applivery SDK, typically in your
 `Application.onCreate()` method:
 
  ```kotlin
 import com.applivery.android.sdk.Applivery
-import com.applivery.android.sdk.init
+import com.applivery.android.sdk.start
 
 ...
-Applivery.init(APPLIVERY_TOKEN)
+Applivery.start(APPLIVERY_TOKEN)
  ```
 
 For private Applivery instances, tenants can be configured passing it as parameter in the
-`Applivery.init()` method:
+`Applivery.start()` method:
 
  ```kotlin
 import com.applivery.android.sdk.Applivery
-import com.applivery.android.sdk.init
+import com.applivery.android.sdk.start
 
 ...
-Applivery.init(APPLIVERY_TOKEN, TENANT)
+Applivery.start(APPLIVERY_TOKEN, TENANT)
  ```
 
 #### SDK Configuration
 
-An optional `Configuration` class can be passed in `Applivery.init()` method to configure
+An optional `Configuration` class can be passed in `Applivery.start()` method to configure
 certain SDK behavior.
 
 ```kotlin
@@ -196,17 +196,16 @@ Applivery.getInstance().enableScreenshotFeedback()
 Applivery.getInstance().disableScreenshotFeedback()
 ```
 
-and the shake event by using:
+and the feedback event by using:
 
 ```kotlin
-Applivery.getInstance().enableShakeFeedback(behavior)
-Applivery.getInstance().disableShakeFeedback()
+Applivery.getInstance().feedbackEvent()
 ```
 
 where behavior is one of the following:
 
-- `ShakeFeedbackBehavior.Normal`: Opens feedback form without attachment
-- `ShakeFeedbackBehavior.Video`: Opens feedback form with screen recording attachment
+- `Normal`: Opens feedback form without attachment
+- `Record screen`: Allows you to record a video and then opens the feedback form with the recording attached
 
 ### User Management
 
@@ -246,7 +245,7 @@ strings:
 
     <!--Login prompt texts-->
     <string name="appliveryLogin">Login</string>
-    <string name="appliveryLoginRequiredText">Please log-in before using this app</string>
+    <string name="appliveryLoginRequiredText">Please log-in to Applivery before using this app</string>
 
 </resources>
 ```

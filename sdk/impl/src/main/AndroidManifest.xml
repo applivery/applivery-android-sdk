@@ -50,6 +50,12 @@
             android:theme="@style/Theme.Applivery.NoActionBar.Translucent" />
 
         <activity
+            android:name=".feedback.FeedbackSelectorActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Applivery.NoActionBar.Translucent" />
+
+        <activity
             android:name=".updates.ForceUpdateActivity"
             android:exported="false"
             android:launchMode="singleTop"
