@@ -204,11 +204,9 @@ Applivery.getInstance().feedbackEvent()
 
 where behavior is one of the following:
 
-- **`Take Screenshot`**  
-  Captures a screenshot and then opens the feedback form with the image attached.
+- `Take Screenshot`: Captures a screenshot and then opens the feedback form with the image attached.
 
-- **`Record Screen`**  
-  Records a video of the screen and then opens the feedback form with the recording attached.
+- `Record Screen`: Records a video of the screen and then opens the feedback form with the recording attached.
 
 ### User Management
 
