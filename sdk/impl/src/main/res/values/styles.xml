@@ -21,5 +21,10 @@
         <item name="android:colorPrimary">@color/applivery_primary_color</item>
         <item name="android:colorAccent">@color/applivery_accent_color</item>
         <item name="android:colorForeground">@color/applivery_foreground_color</item>
+        <item name="android:buttonBarButtonStyle">@style/Widget.Applivery.Button</item>
+    </style>
+
+    <style name="Widget.Applivery.Button" parent="@android:style/Widget.Material.Button.Borderless">
+        <item name="android:textColor">@color/applivery_accent_color</item>
     </style>
 </resources>
