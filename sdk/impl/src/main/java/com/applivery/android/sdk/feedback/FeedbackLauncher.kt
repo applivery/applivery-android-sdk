@@ -3,6 +3,8 @@ package com.applivery.android.sdk.feedback
 import android.net.Uri
 import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.DomainLogger
+import com.applivery.android.sdk.domain.FeedbackProgressProvider
+import com.applivery.android.sdk.domain.FeedbackProgressUpdater
 import com.applivery.android.sdk.feedback.video.VideoReporter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -24,12 +26,16 @@ internal class FeedbackLauncherImpl(
     private val hostActivityProvider: HostActivityProvider,
     private val logger: DomainLogger,
     private val videoReporter: VideoReporter,
+    private val feedbackProgressProvider: FeedbackProgressProvider,
+    private val feedbackProgressUpdater: FeedbackProgressUpdater,
 ) : FeedbackLauncher {
 
     var recordingJob: Job? = null
     val coroutineScope = MainScope()
 
     override fun launchWith(behavior: FeedbackBehavior?) {
+        if (feedbackProgressProvider.isFeedbackInProgress) return
+
         val activity = hostActivityProvider.activity
         if (activity == null) {
             logger.noActivityFoundForFeedbackView()
@@ -55,6 +61,8 @@ internal class FeedbackLauncherImpl(
     }
 
     private fun onStartRecordingScreen() {
+        feedbackProgressUpdater.isFeedbackInProgress = true
+
         if (recordingJob?.isActive == true) {
             logger.onAlreadyRecording()
             return
@@ -62,7 +70,10 @@ internal class FeedbackLauncherImpl(
 
         recordingJob = coroutineScope.launch {
             videoReporter.start().fold(
-                ifLeft = logger::videoReportingError,
+                ifLeft = {
+                    logger::videoReportingError
+                    feedbackProgressUpdater.isFeedbackInProgress = false
+                } ,
                 ifRight = ::onScreenRecordingReady
             )
         }
@@ -72,6 +83,7 @@ internal class FeedbackLauncherImpl(
         val activity = hostActivityProvider.activity
         if (activity == null) {
             logger.noActivityFoundForFeedbackView()
+            feedbackProgressUpdater.isFeedbackInProgress = false
             return
         }
 
