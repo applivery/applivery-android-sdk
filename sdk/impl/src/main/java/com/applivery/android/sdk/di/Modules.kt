@@ -68,10 +68,12 @@ import com.applivery.android.sdk.feedback.ContentUriImageDecoderImpl
 import com.applivery.android.sdk.feedback.FeedbackLauncher
 import com.applivery.android.sdk.feedback.FeedbackLauncherImpl
 import com.applivery.android.sdk.feedback.FeedbackViewModel
-import com.applivery.android.sdk.feedback.HostAppScreenshotProvider
-import com.applivery.android.sdk.feedback.HostAppScreenshotProviderImpl
-import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
-import com.applivery.android.sdk.feedback.ScreenshotFeedbackCheckerImpl
+import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProvider
+import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProviderImpl
+import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackChecker
+import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackCheckerImpl
+import com.applivery.android.sdk.feedback.screenshot.ScreenshotFileExporter
+import com.applivery.android.sdk.feedback.screenshot.ScreenshotFileExporterImpl
 import com.applivery.android.sdk.feedback.video.VideoReporter
 import com.applivery.android.sdk.feedback.video.VideoReporterImpl
 import com.applivery.android.sdk.login.LoginHandler
@@ -219,4 +221,5 @@ internal val appModules = module {
     factory<Configuration> { getProperty(Properties.Configuration) }
     singleOf(::PostponedUpdateLogicImpl).bind<PostponedUpdateLogic>()
     singleOf(::FeedbackLauncherImpl).bind<FeedbackLauncher>()
+    singleOf(::ScreenshotFileExporterImpl).bind<ScreenshotFileExporter>()
 }

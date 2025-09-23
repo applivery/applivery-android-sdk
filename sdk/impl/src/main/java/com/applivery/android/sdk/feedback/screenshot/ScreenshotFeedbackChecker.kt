@@ -1,4 +1,4 @@
-package com.applivery.android.sdk.feedback
+package com.applivery.android.sdk.feedback.screenshot
 
 import android.content.Context
 import android.net.Uri
@@ -7,6 +7,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.FeedbackProgressProvider
+import com.applivery.android.sdk.feedback.FeedbackBehavior
+import com.applivery.android.sdk.feedback.FeedbackLauncher
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 internal interface ScreenshotFeedbackChecker {
 
@@ -23,6 +27,7 @@ internal class ScreenshotFeedbackCheckerImpl(
 ) : ScreenshotFeedbackChecker, DefaultLifecycleObserver {
 
     private var isEnabled: Boolean = false
+    private val coroutineScope = MainScope()
 
     private val screenshotObserver = ScreenshotObserver(context, logger, ::onScreenshotDetected)
 
@@ -51,6 +56,6 @@ internal class ScreenshotFeedbackCheckerImpl(
 
     private fun onScreenshotDetected(uri: Uri) {
         if (feedbackProgressProvider.isFeedbackInProgress) return
-        feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri))
+        coroutineScope.launch { feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri)) }
     }
 }

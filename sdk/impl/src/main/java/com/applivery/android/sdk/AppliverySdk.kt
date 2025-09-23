@@ -16,7 +16,7 @@ import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
 import com.applivery.android.sdk.domain.usecases.PurgeDownloadsUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
 import com.applivery.android.sdk.feedback.FeedbackLauncher
-import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
+import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackChecker
 import com.applivery.android.sdk.updates.DownloadBuildService
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.updates.UpdatesBackgroundChecker

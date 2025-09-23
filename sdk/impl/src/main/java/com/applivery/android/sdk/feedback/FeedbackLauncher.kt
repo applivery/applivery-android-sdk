@@ -10,9 +10,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 internal sealed interface FeedbackBehavior {
-    data class Screenshot(val uri: Uri) : FeedbackBehavior
+    data class Screenshot(val uri: Uri?) : FeedbackBehavior
     object Video : FeedbackBehavior
-    object Normal : FeedbackBehavior
 }
 
 internal interface FeedbackLauncher {
@@ -40,13 +39,8 @@ internal class FeedbackLauncherImpl(
             return
         }
         when (behavior) {
-            is FeedbackBehavior.Screenshot,
-            is FeedbackBehavior.Normal -> {
-                val screenShorUri = when (behavior) {
-                    is FeedbackBehavior.Screenshot -> behavior.uri
-                    else -> null
-                }
-                val arguments = FeedbackArguments.Screenshot(uri = screenShorUri)
+            is FeedbackBehavior.Screenshot -> {
+                val arguments = FeedbackArguments.Screenshot(uri = behavior.uri)
                 activity.startActivity(FeedbackActivity.getIntent(activity, arguments))
             }
 
