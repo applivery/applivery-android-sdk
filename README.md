@@ -204,8 +204,9 @@ Applivery.getInstance().feedbackEvent()
 
 where behavior is one of the following:
 
-- `Normal`: Opens feedback form without attachment
-- `Record screen`: Allows you to record a video and then opens the feedback form with the recording attached
+- `Take Screenshot`: Captures a screenshot and then opens the feedback form with the image attached.
+
+- `Record Screen`: Records a video of the screen and then opens the feedback form with the recording attached.
 
 ### User Management
 

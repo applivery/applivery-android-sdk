@@ -1,4 +1,4 @@
-package com.applivery.android.sdk.feedback
+package com.applivery.android.sdk.feedback.screenshot
 
 import android.content.Context
 import android.net.Uri
@@ -7,6 +7,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.FeedbackProgressProvider
+import com.applivery.android.sdk.feedback.FeedbackBehavior
+import com.applivery.android.sdk.feedback.FeedbackLauncher
 
 internal interface ScreenshotFeedbackChecker {
 

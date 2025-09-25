@@ -68,10 +68,10 @@ import com.applivery.android.sdk.feedback.ContentUriImageDecoderImpl
 import com.applivery.android.sdk.feedback.FeedbackLauncher
 import com.applivery.android.sdk.feedback.FeedbackLauncherImpl
 import com.applivery.android.sdk.feedback.FeedbackViewModel
-import com.applivery.android.sdk.feedback.HostAppScreenshotProvider
-import com.applivery.android.sdk.feedback.HostAppScreenshotProviderImpl
-import com.applivery.android.sdk.feedback.ScreenshotFeedbackChecker
-import com.applivery.android.sdk.feedback.ScreenshotFeedbackCheckerImpl
+import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProvider
+import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProviderImpl
+import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackChecker
+import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackCheckerImpl
 import com.applivery.android.sdk.feedback.video.VideoReporter
 import com.applivery.android.sdk.feedback.video.VideoReporterImpl
 import com.applivery.android.sdk.login.LoginHandler

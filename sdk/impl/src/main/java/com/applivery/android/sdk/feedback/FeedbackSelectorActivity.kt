@@ -5,14 +5,19 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.applivery.android.sdk.R
 import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
+import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotFormat
+import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProvider
+import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 
 internal class FeedbackSelectorActivity : SdkBaseActivity() {
 
     private val hostAppPackageInfoProvider: HostAppPackageInfoProvider by inject()
+    private val hostAppScreenshotProvider: HostAppScreenshotProvider by inject()
     private val feedbackLauncher: FeedbackLauncher by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +35,12 @@ internal class FeedbackSelectorActivity : SdkBaseActivity() {
 
     private fun onNormalFeedbackClick(): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
-            feedbackLauncher.launchWith(behavior = FeedbackBehavior.Normal)
+            lifecycleScope.launch {
+                val uri = hostAppScreenshotProvider
+                    .get(format = HostAppScreenshotFormat.AsUri)
+                    .getOrNull()
+                feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri))
+            }
             finish()
         }
     }

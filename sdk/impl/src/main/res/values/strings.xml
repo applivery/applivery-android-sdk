@@ -26,8 +26,8 @@
     <string name="appliveryFeedbackImageEditorApply">Apply</string>
     <string name="appliveryFeedbackVideoName">Video clip</string>
     <string name="appliveryFeedbackVideoWatchPreview">Watch preview</string>
-    <string name="appliveryFeedbackScreenshotEvent">Normal</string>
-    <string name="appliveryFeedbackEventDialogBody">Choose how to provide your feedback: record your screen or use the form without attachments</string>
+    <string name="appliveryFeedbackScreenshotEvent">Take Screenshot</string>
+    <string name="appliveryFeedbackEventDialogBody">Choose how you’d like to share your feedback: record your screen or take a screenshot.</string>
     <string name="appliveryFeedbackVideoEvent">Record Screen</string>
 
     <string name="appliveryCancelFeedbackButtonDesc">Cancel feedback button</string>

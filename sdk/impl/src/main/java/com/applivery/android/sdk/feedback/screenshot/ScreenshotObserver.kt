@@ -1,4 +1,4 @@
-package com.applivery.android.sdk.feedback
+package com.applivery.android.sdk.feedback.screenshot
 
 import android.content.Context
 import android.database.ContentObserver
@@ -7,6 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import com.applivery.android.sdk.domain.DomainLogger
+import com.applivery.android.sdk.feedback.MediaPermissionGrantStatus
+import com.applivery.android.sdk.feedback.MediaPermissionGrantStatusChecker
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -13,6 +13,8 @@ import com.applivery.android.sdk.domain.ensureNotNull
 import com.applivery.android.sdk.domain.model.Feedback
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.SendFeedbackUseCase
+import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotFormat
+import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProvider
 import com.applivery.android.sdk.presentation.BaseViewModel
 import com.applivery.android.sdk.presentation.ViewAction
 import com.applivery.android.sdk.presentation.ViewIntent
@@ -124,7 +126,9 @@ internal class FeedbackViewModel(
         if (attach) {
             viewModelScope.launch {
                 setState { copy(isLoading = false) }
-                val screenshot = hostAppScreenshotProvider.get().getOrNull()
+                val screenshot = hostAppScreenshotProvider
+                    .get(format = HostAppScreenshotFormat.AsBitmap)
+                    .getOrNull()
                 val attachment = screenshot?.let(FeedbackAttachment::Screenshot)
                 setState { copy(attachment = attachment, isLoading = false) }
             }
