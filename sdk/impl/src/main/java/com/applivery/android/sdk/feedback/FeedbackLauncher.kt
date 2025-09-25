@@ -70,8 +70,8 @@ internal class FeedbackLauncherImpl(
 
         recordingJob = coroutineScope.launch {
             videoReporter.start().fold(
-                ifLeft = {
-                    logger::videoReportingError
+                ifLeft = { error ->
+                    logger.videoReportingError(error)
                     feedbackProgressUpdater.isFeedbackInProgress = false
                 } ,
                 ifRight = ::onScreenRecordingReady
