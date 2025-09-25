@@ -42,17 +42,17 @@ internal class HostAppScreenshotProviderImpl(
         return withContext(Dispatchers.IO) {
             try {
                 val bitmap = captureBitmapFromRoot(activity)
-                val compressedBitMap = bitmap.toInputStream()
+                val inputStream = bitmap.toInputStream()
 
                 @Suppress("UNCHECKED_CAST")
                 when (format) {
                     is HostAppScreenshotFormat.AsBitmap -> {
-                       val decoded = BitmapFactory.decodeStream(compressedBitMap)
+                       val decoded = BitmapFactory.decodeStream(inputStream)
                        decoded.right() as Either<DomainError, T>
                     }
 
                     is HostAppScreenshotFormat.AsUri -> {
-                        compressedBitMap.asUri(context = activity) as Either<DomainError, T>
+                        inputStream.asUri(context = activity) as Either<DomainError, T>
                     }
                 }
             } catch (e: Throwable) {
