@@ -86,7 +86,7 @@ internal class HostAppScreenshotProviderImpl(
     companion object {
         private const val COMPRESSION_BITMAP_QUALITY: Int = 100
         private const val FEEDBACK_FILE_PREFIX: String = "applivery_feedback"
-        fun generateFileName(): String =
+        private fun generateFileName(): String =
             "${FEEDBACK_FILE_PREFIX}_${System.currentTimeMillis()}.jpeg"
     }
 }
