@@ -1,16 +1,21 @@
 package com.applivery.android.sdk.feedback.screenshot
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import arrow.core.Either
 import arrow.core.left
+import arrow.core.raise.either
 import arrow.core.right
 import com.applivery.android.sdk.HostActivityProvider
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.model.InternalError
+import com.applivery.android.sdk.updates.createContentFile
+import com.applivery.android.sdk.updates.getContentUriForFile
+import com.applivery.android.sdk.updates.write
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
@@ -29,7 +34,6 @@ internal interface HostAppScreenshotProvider {
 @Suppress("DEPRECATION")
 internal class HostAppScreenshotProviderImpl(
     private val hostActivityProvider: HostActivityProvider,
-    private val screenshotFileExporter: ScreenshotFileExporter,
     private val logger: DomainLogger
 ) : HostAppScreenshotProvider {
 
@@ -48,7 +52,7 @@ internal class HostAppScreenshotProviderImpl(
                     }
 
                     is HostAppScreenshotFormat.AsUri -> {
-                        screenshotFileExporter.export(compressedBitMap) as Either<DomainError, T>
+                        compressedBitMap.asUri(context = activity) as Either<DomainError, T>
                     }
                 }
             } catch (e: Throwable) {
@@ -73,7 +77,16 @@ internal class HostAppScreenshotProviderImpl(
         }
     }
 
+    private suspend fun InputStream.asUri(context: Context): Either<DomainError, Uri> = either {
+        val file = context.createContentFile(generateFileName())
+        file.write(this@asUri).bind()
+        context.getContentUriForFile(file)
+    }
+
     companion object {
         private const val COMPRESSION_BITMAP_QUALITY: Int = 100
+        private const val FEEDBACK_FILE_PREFIX: String = "applivery_feedback"
+        fun generateFileName(): String =
+            "${FEEDBACK_FILE_PREFIX}_${System.currentTimeMillis()}.jpeg"
     }
 }

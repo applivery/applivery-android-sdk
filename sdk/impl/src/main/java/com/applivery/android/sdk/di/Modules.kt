@@ -72,8 +72,6 @@ import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProvider
 import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProviderImpl
 import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackChecker
 import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackCheckerImpl
-import com.applivery.android.sdk.feedback.screenshot.ScreenshotFileExporter
-import com.applivery.android.sdk.feedback.screenshot.ScreenshotFileExporterImpl
 import com.applivery.android.sdk.feedback.video.VideoReporter
 import com.applivery.android.sdk.feedback.video.VideoReporterImpl
 import com.applivery.android.sdk.login.LoginHandler
@@ -221,5 +219,4 @@ internal val appModules = module {
     factory<Configuration> { getProperty(Properties.Configuration) }
     singleOf(::PostponedUpdateLogicImpl).bind<PostponedUpdateLogic>()
     singleOf(::FeedbackLauncherImpl).bind<FeedbackLauncher>()
-    singleOf(::ScreenshotFileExporterImpl).bind<ScreenshotFileExporter>()
 }
