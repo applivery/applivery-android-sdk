@@ -40,8 +40,8 @@ internal class FeedbackSelectorActivity : SdkBaseActivity() {
                     .get(format = HostAppScreenshotFormat.AsUri)
                     .getOrNull()
                 feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri))
+                finish()
             }
-            finish()
         }
     }
 
