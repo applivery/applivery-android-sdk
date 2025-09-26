@@ -12,18 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
@@ -40,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.applivery.android.sdk.Applivery
-import com.applivery.android.sdk.domain.model.ShakeFeedbackBehavior
 import com.applivery.android.sdk.getInstance
 import com.applivery.sample.theme.AppliveryTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,25 +49,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val isUpToDate by isUpToDate.collectAsState()
-            var isShakeFeedbackEnabled by remember { mutableStateOf(false) }
             var isScreenshotFeedbackEnabled by remember { mutableStateOf(false) }
             var isCheckForUpdatesBackgroundEnabled by remember { mutableStateOf(false) }
-            var shakeFeedbackBehavior by remember { mutableStateOf(ShakeFeedbackBehavior.Normal) }
             MainScreen(
                 isUpToDate = isUpToDate,
-                isShakeFeedbackEnabled = isShakeFeedbackEnabled,
                 isScreenshotFeedbackEnabled = isScreenshotFeedbackEnabled,
                 isCheckForUpdatesBackgroundEnabled = isCheckForUpdatesBackgroundEnabled,
-                shakeFeedbackBehavior = shakeFeedbackBehavior,
-                onEnableShakeFeedback = {
-                    if (it) {
-                        Applivery.getInstance().enableShakeFeedback(shakeFeedbackBehavior)
-                    } else {
-                        Applivery.getInstance().disableShakeFeedback()
-                    }
-                    isShakeFeedbackEnabled = it
-
-                },
                 onEnableScreenshotFeedback = {
                     if (it) {
                         Applivery.getInstance().enableScreenshotFeedback()
@@ -95,9 +76,8 @@ class MainActivity : ComponentActivity() {
                 onUserClick = {
                     UserActivity.open(this)
                 },
-                onSelectShakeFeedbackBehavior = { behavior ->
-                    Applivery.getInstance().enableShakeFeedback(behavior)
-                    shakeFeedbackBehavior = behavior
+                openFeedbackEvent = {
+                    Applivery.getInstance().feedbackEvent()
                 }
             )
         }
@@ -115,17 +95,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(
     isUpToDate: Boolean,
-    isShakeFeedbackEnabled: Boolean,
     isScreenshotFeedbackEnabled: Boolean,
     isCheckForUpdatesBackgroundEnabled: Boolean,
-    shakeFeedbackBehavior: ShakeFeedbackBehavior,
-    onEnableShakeFeedback: (Boolean) -> Unit,
     onEnableScreenshotFeedback: (Boolean) -> Unit,
     onEnableCheckForUpdatesBackground: (Boolean) -> Unit,
     onCheckForUpdates: (Boolean) -> Unit,
     onDownloadLastBuild: () -> Unit,
+    openFeedbackEvent: () -> Unit,
     onUserClick: () -> Unit,
-    onSelectShakeFeedbackBehavior: (ShakeFeedbackBehavior) -> Unit
 ) {
     AppliveryTheme {
         Scaffold(
@@ -168,61 +145,6 @@ fun MainScreen(
                         text = text
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = stringResource(id = R.string.enable_shake_feedback)
-                        )
-                        Switch(
-                            checked = isShakeFeedbackEnabled,
-                            onCheckedChange = onEnableShakeFeedback
-                        )
-                    }
-                    if (isShakeFeedbackEnabled) {
-                        val options = ShakeFeedbackBehavior.entries.toList()
-                        var expanded by remember { mutableStateOf(false) }
-
-                        ExposedDropdownMenuBox(
-                            expanded = expanded,
-                            onExpandedChange = { expanded = it },
-                        ) {
-                            TextField(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                                value = shakeFeedbackBehavior.name,
-                                onValueChange = {},
-                                readOnly = true,
-                                label = { Text("Shake feedback behavior") },
-                                trailingIcon = {
-                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                                },
-                                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                            )
-                            ExposedDropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false },
-                            ) {
-                                options.forEach { option ->
-                                    DropdownMenuItem(
-                                        text = {
-                                            Text(
-                                                text = option.name,
-                                                style = MaterialTheme.typography.bodyLarge
-                                            )
-                                        },
-                                        onClick = {
-                                            onSelectShakeFeedbackBehavior(option)
-                                            expanded = false
-                                        },
-                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                                    )
-                                }
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             modifier = Modifier.weight(1f),
@@ -269,6 +191,14 @@ fun MainScreen(
                     ) {
                         Text(text = stringResource(id = R.string.main_view_download_last_build))
                     }
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        onClick = openFeedbackEvent
+                    ) {
+                        Text(text = stringResource(id = R.string.open_feedback_event))
+                    }
                 }
             }
         )
@@ -280,16 +210,13 @@ fun MainScreen(
 private fun MainScreenPreview() {
     MainScreen(
         isUpToDate = false,
-        isShakeFeedbackEnabled = false,
         isScreenshotFeedbackEnabled = false,
         isCheckForUpdatesBackgroundEnabled = false,
-        shakeFeedbackBehavior = ShakeFeedbackBehavior.Normal,
-        onEnableShakeFeedback = {},
         onEnableScreenshotFeedback = {},
         onEnableCheckForUpdatesBackground = {},
         onCheckForUpdates = {},
         onDownloadLastBuild = {},
         onUserClick = {},
-        onSelectShakeFeedbackBehavior = {}
+        openFeedbackEvent = {}
     )
 }

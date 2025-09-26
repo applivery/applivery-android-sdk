@@ -52,10 +52,6 @@ internal class DomainLogger(
         logger.log("Image decoding failed with the following error: ${error.stackTraceToString()}")
     }
 
-    fun accelerometerNotAvailable() {
-        logger.log("Accelerometer not found. Shake feedback won't work for this device")
-    }
-
     fun updateType(updateType: UpdateType) {
         when (updateType) {
             UpdateType.ForceUpdate -> logger.log("Force update available")
@@ -85,8 +81,8 @@ internal class DomainLogger(
         )
     }
 
-    fun onShakeDetectedAlreadyRecording() {
-        logger.log("Shake detected while already recording")
+    fun onAlreadyRecording() {
+        logger.log("Screen recording already in progress")
     }
 
     fun videoReportingError(error: DomainError) {

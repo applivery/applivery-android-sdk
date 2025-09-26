@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Applivery Sdk Sample</string>
     <string name="check_for_updates_background">Check for updates background</string>
-    <string name="enable_shake_feedback">Enable shake feedback</string>
     <string name="enable_screenshot_feedback">Enable screenshot feedback</string>
     <string name="main_view_check_for_updates">Check for updates</string>
     <string name="main_view_force_check_for_updates">Check for updates (forced)</string>
@@ -16,4 +15,5 @@
     <string name="field_required">This field is required</string>
     <string name="is_up_to_date_text_updated">Your app is updated</string>
     <string name="is_up_to_date_text_no_updated">There is a new version of your app</string>
+    <string name="open_feedback_event">Open feedback event</string>
 </resources>

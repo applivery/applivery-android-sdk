@@ -30,10 +30,6 @@
         android:name="android.permission.ENFORCE_UPDATE_OWNERSHIP"
         tools:node="remove" />
 
-    <uses-feature
-        android:name="android.hardware.sensor.accelerometer"
-        android:required="false" />
-
     <application>
 
         <activity
@@ -45,6 +41,12 @@
 
         <activity
             android:name=".updates.SuggestedUpdateActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Applivery.NoActionBar.Translucent" />
+
+        <activity
+            android:name=".feedback.FeedbackSelectorActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Applivery.NoActionBar.Translucent" />

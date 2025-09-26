@@ -1,4 +1,4 @@
-name: Android CI
+name: Build & Test
 
 on:
   pull_request:
