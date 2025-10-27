@@ -3,8 +3,8 @@ name: Release
 on:
   workflow_dispatch:
   push:
-    branches:
-      - release/*
+    tags:
+      - '*'
 env:
   MVN_CENTRAL_USER: ${{ secrets.MVN_CENTRAL_USER }}
   MVN_CENTRAL_PASS: ${{ secrets.MVN_CENTRAL_PASS }}
