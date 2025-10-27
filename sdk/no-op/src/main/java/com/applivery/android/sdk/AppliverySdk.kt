@@ -61,6 +61,10 @@ internal class AppliverySdk : Applivery {
 
     override suspend fun downloadLastUpdate(): Result<CachedAppUpdate> =
         Result.failure(AppliveryNoOpError())
+
+    override fun enableDownloadLastUpdateBackground(callback: DownloadLastUpdateCallback) = Unit
+
+    override fun disableDownloadLastUpdateBackground() = Unit
 }
 
 class AppliveryNoOpError : Throwable() {

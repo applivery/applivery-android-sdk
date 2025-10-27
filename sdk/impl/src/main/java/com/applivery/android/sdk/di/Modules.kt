@@ -85,6 +85,8 @@ import com.applivery.android.sdk.updates.UpdateInstallProgressSender
 import com.applivery.android.sdk.updates.UpdateInstallProgressSenderImpl
 import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
 import com.applivery.android.sdk.updates.UpdatesBackgroundCheckerImpl
+import com.applivery.android.sdk.updates.UpdatesBackgroundDownloader
+import com.applivery.android.sdk.updates.UpdatesBackgroundDownloaderImpl
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -199,6 +201,7 @@ internal val appModules = module {
     factory<Application> { get<Context>() as Application }
     singleOf(::HostActivityProviderImpl).bind<HostActivityProvider>()
     singleOf(::UpdatesBackgroundCheckerImpl).bind<UpdatesBackgroundChecker>()
+    singleOf(::UpdatesBackgroundDownloaderImpl).bind<UpdatesBackgroundDownloader>()
     factoryOf(::AndroidLogger).bind<Logger>()
     factoryOf(::DomainLogger)
     singleOf(::LoginHandler)

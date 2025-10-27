@@ -1,7 +1,6 @@
 package com.applivery.android.sdk
 
 import com.applivery.android.sdk.configuration.Configuration
-import com.applivery.android.sdk.data.models.CachedAppUpdateFactory
 import com.applivery.android.sdk.di.AppliveryDiContext
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.di.Properties
@@ -9,8 +8,6 @@ import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.asResult
 import com.applivery.android.sdk.domain.model.BindUser
 import com.applivery.android.sdk.domain.model.CachedAppUpdate
-import com.applivery.android.sdk.domain.model.NoVersionToUpdate
-import com.applivery.android.sdk.domain.model.NoVersionToUpdateError
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.usecases.BindUserUseCase
 import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
@@ -22,11 +19,12 @@ import com.applivery.android.sdk.domain.usecases.PurgeDownloadsUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
 import com.applivery.android.sdk.feedback.FeedbackLauncher
 import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackChecker
-import com.applivery.android.sdk.updates.BuildDownloadParams
 import com.applivery.android.sdk.updates.DownloadBuildService
 import com.applivery.android.sdk.updates.DownloadLastUpdateCallback
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
+import com.applivery.android.sdk.updates.UpdatesBackgroundDownloader
+import com.applivery.android.sdk.updates.asCachedAppUpdateResult
 import com.applivery.android.sdk.user.BindUserCallback
 import com.applivery.android.sdk.user.GetUserCallback
 import kotlinx.coroutines.MainScope
@@ -64,6 +62,7 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
         /*Initialize SDK dependent components*/
         get<UpdatesBackgroundChecker>().start()
         get<ScreenshotFeedbackChecker>().start()
+        get<UpdatesBackgroundDownloader>().start()
     }
 
     override fun isUpToDate(callback: IsUpToDateCallback) {
@@ -79,7 +78,8 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
     }
 
     override fun setCheckForUpdatesBackground(enable: Boolean) {
-        get<UpdatesBackgroundChecker>().enableCheckForUpdatesBackground(enable)
+        get<UpdatesBackgroundChecker>().enable(enable)
+        get<UpdatesBackgroundDownloader>().disable()
     }
 
     override fun getCheckForUpdatesBackground(): Boolean {
@@ -154,22 +154,16 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
     }
 
     override suspend fun downloadLastUpdate(): Result<CachedAppUpdate> {
-        return get<DownloadLastBuildUseCase>().invoke().fold(
-            ifLeft = { error ->
-                val error = when (error) {
-                    is NoVersionToUpdateError -> NoVersionToUpdate()
-                    else -> Throwable(error.message)
-                }
-                Result.failure(error)
-            },
-            ifRight = { build ->
-                val cachedAppUpdate = CachedAppUpdateFactory.from(build) {
-                    val params = BuildDownloadParams(build.id, build.version)
-                    DownloadBuildService.start(context = get(), params = params)
-                }
-                Result.success(cachedAppUpdate)
-            }
-        )
+        return get<DownloadLastBuildUseCase>().invoke().asCachedAppUpdateResult(context = get())
+    }
+
+    override fun enableDownloadLastUpdateBackground(callback: DownloadLastUpdateCallback) {
+        get<UpdatesBackgroundDownloader>().enable(callback)
+        get<UpdatesBackgroundChecker>().enable(false)
+    }
+
+    override fun disableDownloadLastUpdateBackground() {
+        get<UpdatesBackgroundDownloader>().disable()
     }
 }
 

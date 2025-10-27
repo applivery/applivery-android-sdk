@@ -39,14 +39,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
 import com.applivery.android.sdk.Applivery
 import com.applivery.android.sdk.domain.model.CachedAppUpdate
 import com.applivery.android.sdk.getInstance
+import com.applivery.android.sdk.updates.DownloadLastUpdateCallback
 import com.applivery.sample.theme.AppliveryTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -60,12 +58,32 @@ class MainActivity : ComponentActivity() {
             val isUpToDate by isUpToDate.collectAsState()
             var isScreenshotFeedbackEnabled by remember { mutableStateOf(false) }
             var isCheckForUpdatesBackgroundEnabled by remember { mutableStateOf(false) }
+            var isDownloadUpdatesBackgroundEnabled by remember { mutableStateOf(false) }
             var isLoading by remember { mutableStateOf(false) }
             var cachedAppUpdate by remember { mutableStateOf<CachedAppUpdate?>(null) }
+            val downloadCallback = remember(context) {
+                object : DownloadLastUpdateCallback {
+                    override fun onSuccess(update: CachedAppUpdate) {
+                        isLoading = false
+                        cachedAppUpdate = update
+                    }
+
+                    override fun onError(error: Throwable) {
+                        isLoading = false
+                        Toast.makeText(
+                            context,
+                            "Error downloading update",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        error.printStackTrace()
+                    }
+                }
+            }
             MainScreen(
                 isUpToDate = isUpToDate,
                 isScreenshotFeedbackEnabled = isScreenshotFeedbackEnabled,
                 isCheckForUpdatesBackgroundEnabled = isCheckForUpdatesBackgroundEnabled,
+                isDownloadUpdatesBackgroundEnabled = isDownloadUpdatesBackgroundEnabled,
                 isLoading = isLoading,
                 cachedAppUpdate = cachedAppUpdate,
                 onEnableScreenshotFeedback = {
@@ -77,8 +95,18 @@ class MainActivity : ComponentActivity() {
                     isScreenshotFeedbackEnabled = it
                 },
                 onEnableCheckForUpdatesBackground = {
-                    Applivery.getInstance().setCheckForUpdatesBackground(true)
+                    Applivery.getInstance().setCheckForUpdatesBackground(it)
                     isCheckForUpdatesBackgroundEnabled = it
+                    isDownloadUpdatesBackgroundEnabled = isDownloadUpdatesBackgroundEnabled && !it
+                },
+                onEnableDownloadUpdatesBackground = {
+                    if (it) {
+                        Applivery.getInstance().enableDownloadLastUpdateBackground(downloadCallback)
+                    } else {
+                        Applivery.getInstance().disableDownloadLastUpdateBackground()
+                    }
+                    isDownloadUpdatesBackgroundEnabled = it
+                    isCheckForUpdatesBackgroundEnabled = isCheckForUpdatesBackgroundEnabled && !it
                 },
                 onCheckForUpdates = {
                     Applivery.getInstance().checkForUpdates(forceUpdate = it)
@@ -94,34 +122,18 @@ class MainActivity : ComponentActivity() {
                 },
                 onDownloadLastBuild = {
                     isLoading = true
-                    lifecycleScope.launch {
-                        Applivery.getInstance().downloadLastUpdate().fold(
-                            onSuccess = { update ->
-                                isLoading = false
-                                cachedAppUpdate = update
-                            },
-                            onFailure = {
-                                isLoading = false
-                                Toast.makeText(
-                                    context,
-                                    "Error downloading update",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                it.printStackTrace()
-                            }
-                        )
-                    }
+                    Applivery.getInstance().downloadLastUpdate(downloadCallback)
                 }
             )
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        Applivery.getInstance().isUpToDate { upToDate ->
-            isUpToDate.update { upToDate }
-        }
-    }
+    /*
+        override fun onResume() {
+            super.onResume()
+            Applivery.getInstance().isUpToDate { upToDate ->
+                isUpToDate.update { upToDate }
+            }
+        }*/
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -130,10 +142,12 @@ fun MainScreen(
     isUpToDate: Boolean,
     isScreenshotFeedbackEnabled: Boolean,
     isCheckForUpdatesBackgroundEnabled: Boolean,
+    isDownloadUpdatesBackgroundEnabled: Boolean,
     isLoading: Boolean,
     cachedAppUpdate: CachedAppUpdate?,
     onEnableScreenshotFeedback: (Boolean) -> Unit,
     onEnableCheckForUpdatesBackground: (Boolean) -> Unit,
+    onEnableDownloadUpdatesBackground: (Boolean) -> Unit,
     onCheckForUpdates: (Boolean) -> Unit,
     onUpdateLastBuild: () -> Unit,
     openFeedbackEvent: () -> Unit,
@@ -202,6 +216,17 @@ fun MainScreen(
                             Switch(
                                 checked = isCheckForUpdatesBackgroundEnabled,
                                 onCheckedChange = onEnableCheckForUpdatesBackground
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                modifier = Modifier.weight(1f),
+                                text = stringResource(id = R.string.download_updates_background)
+                            )
+                            Switch(
+                                checked = isDownloadUpdatesBackgroundEnabled,
+                                onCheckedChange = onEnableDownloadUpdatesBackground
                             )
                         }
                         Spacer(modifier = Modifier.height(16.dp))
@@ -287,6 +312,7 @@ private fun MainScreenPreview() {
         isUpToDate = false,
         isScreenshotFeedbackEnabled = false,
         isCheckForUpdatesBackgroundEnabled = false,
+        isDownloadUpdatesBackgroundEnabled = false,
         isLoading = false,
         cachedAppUpdate = null,
         onEnableScreenshotFeedback = {},
@@ -295,6 +321,7 @@ private fun MainScreenPreview() {
         onDownloadLastBuild = {},
         onUserClick = {},
         openFeedbackEvent = {},
-        onUpdateLastBuild = {}
+        onUpdateLastBuild = {},
+        onEnableDownloadUpdatesBackground = {}
     )
 }

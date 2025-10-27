@@ -52,5 +52,9 @@ interface Applivery {
 
     suspend fun downloadLastUpdate(): Result<CachedAppUpdate>
 
+    fun enableDownloadLastUpdateBackground(callback: DownloadLastUpdateCallback)
+
+    fun disableDownloadLastUpdateBackground()
+
     companion object
 }
