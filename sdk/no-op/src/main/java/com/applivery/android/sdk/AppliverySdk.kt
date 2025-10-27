@@ -1,7 +1,9 @@
 package com.applivery.android.sdk
 
 import com.applivery.android.sdk.configuration.Configuration
+import com.applivery.android.sdk.domain.model.CachedAppUpdate
 import com.applivery.android.sdk.domain.model.User
+import com.applivery.android.sdk.updates.DownloadLastUpdateCallback
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.user.BindUserCallback
 import com.applivery.android.sdk.user.GetUserCallback
@@ -52,6 +54,13 @@ internal class AppliverySdk : Applivery {
     override fun enableScreenshotFeedback() = Unit
 
     override fun disableScreenshotFeedback() = Unit
+
+    override fun downloadLastUpdate(callback: DownloadLastUpdateCallback) {
+        callback.onError(AppliveryNoOpError())
+    }
+
+    override suspend fun downloadLastUpdate(): Result<CachedAppUpdate> =
+        Result.failure(AppliveryNoOpError())
 }
 
 class AppliveryNoOpError : Throwable() {

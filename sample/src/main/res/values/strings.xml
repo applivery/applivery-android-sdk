@@ -14,6 +14,8 @@
     <string name="tags">Tags</string>
     <string name="field_required">This field is required</string>
     <string name="is_up_to_date_text_updated">Your app is updated</string>
-    <string name="is_up_to_date_text_no_updated">There is a new version of your app</string>
+    <string name="is_up_to_date_text_no_updated">There is a new version of your app!</string>
     <string name="open_feedback_event">Open feedback event</string>
+    <string name="main_view_update_last_build">Download and install last build</string>
+    <string name="main_view_install_last_build">Install last cached build: %s</string>
 </resources>

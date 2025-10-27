@@ -47,6 +47,8 @@ import com.applivery.android.sdk.domain.usecases.BindUser
 import com.applivery.android.sdk.domain.usecases.BindUserUseCase
 import com.applivery.android.sdk.domain.usecases.CheckUpdates
 import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
+import com.applivery.android.sdk.domain.usecases.DownloadBuild
+import com.applivery.android.sdk.domain.usecases.DownloadBuildUseCase
 import com.applivery.android.sdk.domain.usecases.DownloadLastBuild
 import com.applivery.android.sdk.domain.usecases.DownloadLastBuildUseCase
 import com.applivery.android.sdk.domain.usecases.GetAppConfig
@@ -154,6 +156,7 @@ private val useCasesModule = module {
     factoryOf(::GetAppConfig).bind<GetAppConfigUseCase>()
     factoryOf(::CheckUpdates).bind<CheckUpdatesUseCase>()
     factoryOf(::DownloadLastBuild).bind<DownloadLastBuildUseCase>()
+    factoryOf(::DownloadBuild).bind<DownloadBuildUseCase>()
     factoryOf(::BindUser).bind<BindUserUseCase>()
     factoryOf(::UnbindUser).bind<UnbindUserUseCase>()
     factoryOf(::GetUser).bind<GetUserUseCase>()

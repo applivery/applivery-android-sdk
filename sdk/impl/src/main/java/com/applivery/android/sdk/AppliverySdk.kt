@@ -1,15 +1,20 @@
 package com.applivery.android.sdk
 
 import com.applivery.android.sdk.configuration.Configuration
+import com.applivery.android.sdk.data.models.CachedAppUpdateFactory
 import com.applivery.android.sdk.di.AppliveryDiContext
 import com.applivery.android.sdk.di.AppliveryKoinComponent
 import com.applivery.android.sdk.di.Properties
 import com.applivery.android.sdk.domain.DomainLogger
 import com.applivery.android.sdk.domain.asResult
 import com.applivery.android.sdk.domain.model.BindUser
+import com.applivery.android.sdk.domain.model.CachedAppUpdate
+import com.applivery.android.sdk.domain.model.NoVersionToUpdate
+import com.applivery.android.sdk.domain.model.NoVersionToUpdateError
 import com.applivery.android.sdk.domain.model.User
 import com.applivery.android.sdk.domain.usecases.BindUserUseCase
 import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
+import com.applivery.android.sdk.domain.usecases.DownloadLastBuildUseCase
 import com.applivery.android.sdk.domain.usecases.GetAppConfigUseCase
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.IsUpToDateUseCase
@@ -17,7 +22,9 @@ import com.applivery.android.sdk.domain.usecases.PurgeDownloadsUseCase
 import com.applivery.android.sdk.domain.usecases.UnbindUserUseCase
 import com.applivery.android.sdk.feedback.FeedbackLauncher
 import com.applivery.android.sdk.feedback.screenshot.ScreenshotFeedbackChecker
+import com.applivery.android.sdk.updates.BuildDownloadParams
 import com.applivery.android.sdk.updates.DownloadBuildService
+import com.applivery.android.sdk.updates.DownloadLastUpdateCallback
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
 import com.applivery.android.sdk.user.BindUserCallback
@@ -135,6 +142,34 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
 
     override fun disableScreenshotFeedback() {
         get<ScreenshotFeedbackChecker>().enable(false)
+    }
+
+    override fun downloadLastUpdate(callback: DownloadLastUpdateCallback) {
+        mainScope.launch {
+            downloadLastUpdate().fold(
+                onSuccess = { callback.onSuccess(it) },
+                onFailure = { callback.onError(it) }
+            )
+        }
+    }
+
+    override suspend fun downloadLastUpdate(): Result<CachedAppUpdate> {
+        return get<DownloadLastBuildUseCase>().invoke().fold(
+            ifLeft = { error ->
+                val error = when (error) {
+                    is NoVersionToUpdateError -> NoVersionToUpdate()
+                    else -> Throwable(error.message)
+                }
+                Result.failure(error)
+            },
+            ifRight = { build ->
+                val cachedAppUpdate = CachedAppUpdateFactory.from(build) {
+                    val params = BuildDownloadParams(build.id, build.version)
+                    DownloadBuildService.start(context = get(), params = params)
+                }
+                Result.success(cachedAppUpdate)
+            }
+        )
     }
 }
 
