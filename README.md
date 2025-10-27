@@ -1,7 +1,7 @@
 ![Applivery Logo](https://www.applivery.com/wp-content/uploads/2021/08/logo-dark-app.svg)
 
 ![Android CI](https://github.com/applivery/applivery-android-sdk/workflows/Android%20CI/badge.svg)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.applivery/applivery-sdk)](https://mvnrepository.com/artifact/com.applivery/applivery-sdk)
 
 Framework to support [Applivery.com Mobile App distribution](http://www.applivery.com) for Android
 Apps.
@@ -50,8 +50,6 @@ You can get your APP TOKEN in your App -> Settings -> Integrations section.
 ## SDK Installation
 
 Applivery SDK is designed for non-production builds (debug builds or other testing build variants).
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.applivery/applivery-sdk/)
 
 Add the following dependency to your app's `build.gradle` file:
 
@@ -118,6 +116,7 @@ certain SDK behavior.
 
 `postponeDurations`: List of postponing options to be shown in the dialog when an update is
 available.
+
 `enforceAuthentication`: If set to true and `Require authentication` option is enabled in the
 Dashboard, users will be forced to login into Applivery before using the SDK. Set it to false 
 (default) to allow users to cancel the login process.
