@@ -25,6 +25,7 @@ import com.applivery.android.sdk.data.repository.identifier.InstallationIdProvid
 import com.applivery.android.sdk.data.repository.identifier.MediaDrmIdProvider
 import com.applivery.android.sdk.domain.AndroidHostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.AndroidLogger
+import com.applivery.android.sdk.domain.AndroidScreenRouter
 import com.applivery.android.sdk.domain.AndroidSharedPreferencesProvider
 import com.applivery.android.sdk.domain.AppPreferences
 import com.applivery.android.sdk.domain.AppPreferencesImpl
@@ -38,6 +39,7 @@ import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.Logger
 import com.applivery.android.sdk.domain.PostponedUpdateLogic
 import com.applivery.android.sdk.domain.PostponedUpdateLogicImpl
+import com.applivery.android.sdk.domain.ScreenRouter
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
@@ -225,4 +227,5 @@ internal val appModules = module {
     factory<Configuration> { getProperty(Properties.Configuration) }
     singleOf(::PostponedUpdateLogicImpl).bind<PostponedUpdateLogic>()
     singleOf(::FeedbackLauncherImpl).bind<FeedbackLauncher>()
+    factoryOf(::AndroidScreenRouter).bind<ScreenRouter>()
 }
