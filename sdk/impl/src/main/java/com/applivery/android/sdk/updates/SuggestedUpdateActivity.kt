@@ -41,7 +41,7 @@ internal class SuggestedUpdateActivity : SdkBaseActivity() {
 
     private fun onPositiveButtonClick(): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
-            DownloadBuildService.start(this)
+            DownloadBuildService.start(context = this, action = sdkConfiguration.downloadAction)
             finish()
         }
     }

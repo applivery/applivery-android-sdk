@@ -1,8 +1,8 @@
 package com.applivery.android.sdk.feedback
 
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Parcelable
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import arrow.core.flatMap
 import arrow.core.raise.either
@@ -27,13 +27,13 @@ private val EmailRegex =
 
 internal sealed interface FeedbackArguments : Parcelable {
 
-    val uri: Uri?
+    val uri: String?
 
     @Parcelize
-    class Screenshot(override val uri: Uri? = null) : FeedbackArguments
+    class Screenshot(override val uri: String? = null) : FeedbackArguments
 
     @Parcelize
-    class Video(override val uri: Uri) : FeedbackArguments
+    class Video(override val uri: String) : FeedbackArguments
 }
 
 internal sealed interface FeedbackAction : ViewAction {
@@ -87,10 +87,10 @@ internal class FeedbackViewModel(
         viewModelScope.launch {
             val attachment = when (arguments) {
                 is FeedbackArguments.Screenshot -> arguments.uri
-                    ?.let { imageDecoder.of(it) }
+                    ?.let { imageDecoder.of(it.toUri()) }
                     ?.let(FeedbackAttachment::Screenshot)
 
-                is FeedbackArguments.Video -> FeedbackAttachment.Video(arguments.uri)
+                is FeedbackArguments.Video -> FeedbackAttachment.Video(arguments.uri.toUri())
             }
             setState { copy(attachment = attachment) }
         }

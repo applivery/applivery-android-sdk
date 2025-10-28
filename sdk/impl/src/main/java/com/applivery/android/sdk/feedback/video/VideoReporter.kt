@@ -2,6 +2,7 @@ package com.applivery.android.sdk.feedback.video
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
@@ -19,7 +20,7 @@ import kotlin.coroutines.resume
 
 internal interface VideoReporter {
 
-    suspend fun start(): Either<DomainError, File>
+    suspend fun start(): Either<DomainError, String>
 
     suspend fun stop()
 }
@@ -42,9 +43,9 @@ internal class VideoReporterImpl(
         )
     }
 
-    private var currentRecordingCont: CancellableContinuation<Either<DomainError, File>>? = null
+    private var currentRecordingCont: CancellableContinuation<Either<DomainError, String>>? = null
 
-    override suspend fun start(): Either<DomainError, File> {
+    override suspend fun start(): Either<DomainError, String> {
         val activity = hostActivityProvider.activity ?: return InternalError().left()
         val mediaPermissionResult = activity.requestMediaPermission()
         if (mediaPermissionResult.resultCode != Activity.RESULT_OK) return InternalError().left()
@@ -67,7 +68,7 @@ internal class VideoReporterImpl(
             continuation.resume(InternalError().left())
             return
         }
-        continuation.resume(file.right())
+        continuation.resume(Uri.fromFile(file).toString().right())
         currentRecordingCont = null
     }
 

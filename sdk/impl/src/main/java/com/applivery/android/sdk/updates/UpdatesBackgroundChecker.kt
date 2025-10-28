@@ -13,7 +13,7 @@ internal interface UpdatesBackgroundChecker {
 
     fun start()
 
-    fun enableCheckForUpdatesBackground(enable: Boolean)
+    fun enable(enable: Boolean)
 }
 
 internal class UpdatesBackgroundCheckerImpl(
@@ -28,7 +28,7 @@ internal class UpdatesBackgroundCheckerImpl(
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     }
 
-    override fun enableCheckForUpdatesBackground(enable: Boolean) {
+    override fun enable(enable: Boolean) {
         isEnabled = enable
     }
 

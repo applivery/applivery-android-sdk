@@ -10,6 +10,8 @@ internal class SubscriptionError : DeveloperError()
 internal class InternalError(message: String? = null) : DomainError(message)
 internal class FileWriteError(message: String? = null) : DomainError(message)
 
+internal class NoVersionToUpdateError : DomainError()
+
 internal sealed class AppUpdateError(message: String? = null) : DomainError(message) {
     class DownloadBuild(message: String?) : AppUpdateError(message)
     class CreateBuildFile(message: String?) : AppUpdateError(message)

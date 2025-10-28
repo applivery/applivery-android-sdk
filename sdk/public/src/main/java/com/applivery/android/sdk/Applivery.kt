@@ -1,6 +1,8 @@
 package com.applivery.android.sdk
 
+import com.applivery.android.sdk.domain.model.CachedAppUpdate
 import com.applivery.android.sdk.domain.model.User
+import com.applivery.android.sdk.updates.DownloadLastUpdateCallback
 import com.applivery.android.sdk.updates.IsUpToDateCallback
 import com.applivery.android.sdk.user.BindUserCallback
 import com.applivery.android.sdk.user.GetUserCallback
@@ -45,6 +47,14 @@ interface Applivery {
     fun enableScreenshotFeedback()
 
     fun disableScreenshotFeedback()
+
+    fun downloadLastUpdate(callback: DownloadLastUpdateCallback)
+
+    suspend fun downloadLastUpdate(): Result<CachedAppUpdate>
+
+    fun enableDownloadLastUpdateBackground(callback: DownloadLastUpdateCallback)
+
+    fun disableDownloadLastUpdateBackground()
 
     companion object
 }

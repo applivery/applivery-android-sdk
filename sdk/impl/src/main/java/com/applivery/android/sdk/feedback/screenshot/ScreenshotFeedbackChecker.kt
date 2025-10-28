@@ -53,6 +53,6 @@ internal class ScreenshotFeedbackCheckerImpl(
 
     private fun onScreenshotDetected(uri: Uri) {
         if (feedbackProgressProvider.isFeedbackInProgress) return
-        feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri))
+        feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri.toString()))
     }
 }

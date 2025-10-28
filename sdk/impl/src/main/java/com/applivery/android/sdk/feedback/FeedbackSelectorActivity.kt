@@ -39,7 +39,7 @@ internal class FeedbackSelectorActivity : SdkBaseActivity() {
                 val uri = hostAppScreenshotProvider
                     .get(format = HostAppScreenshotFormat.AsUri)
                     .getOrNull()
-                feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri))
+                feedbackLauncher.launchWith(behavior = FeedbackBehavior.Screenshot(uri.toString()))
                 finish()
             }
         }

@@ -17,8 +17,8 @@ android {
         minSdk = androidMinSdk
         targetSdk = androidTargetSdk
 
-        versionCode = 3
-        versionName = "3.0.0"
+        versionCode = 1
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "APPLIVERY_APP_TOKEN", "\"aSit8GaQHxa_sXkg-dR7IvRf\"")
