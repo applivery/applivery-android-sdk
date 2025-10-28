@@ -110,7 +110,8 @@ certain SDK behavior.
         30.minutes,
         5.minutes,
     ),
-    enforceAuthentication = false
+    enforceAuthentication = false,
+    downloadAction = BuildDownloadAction.IMMEDIATE
 )
 ```
 
@@ -118,8 +119,14 @@ certain SDK behavior.
 available.
 
 `enforceAuthentication`: If set to true and `Require authentication` option is enabled in the
-Dashboard, users will be forced to login into Applivery before using the SDK. Set it to false 
+Dashboard, users will be forced to login into Applivery before using the SDK. Set it to false
 (default) to allow users to cancel the login process.
+
+`downloadAction`: Defines what action to take once an update is downloaded. Possible values are:
+
+- `IMMEDIATE`: The update will be installed as soon as the download is complete.
+- `DEFERRED`: The installation will be deferred until the user decides to install it (A notification
+  with Install action will be shown once the download is finished).
 
 #### Java Integration
 
@@ -179,8 +186,37 @@ Applivery.getInstance().checkForUpdates()
 
 // Enable automatic update checks when app returns from background
 Applivery.getInstance().setCheckForUpdatesBackground(true)
+```
 
-// Trigger immediate download of the latest version
+Handle updates download without installing them immediately:
+
+```kotlin
+val downloadCallback = object : DownloadLastUpdateCallback {
+    override fun onSuccess(update: CachedAppUpdate) {
+        //Update is downloaded and cached, now you can install it manually
+        update.install()
+    }
+
+    override fun onError(error: Throwable) {
+        //Handle error
+    }
+}
+// Download the latest update without installing it
+Applivery.getInstance().downloadLastUpdate(downloadCallback)
+
+// Enable automatic download of the latest update when app returns from background
+Applivery.getInstance().enableDownloadLastUpdateBackground(downloadCallback)
+```
+
+**NOTE:** enableDownloadLastUpdateBackground and setCheckForUpdatesBackground are mutually
+exclusive.
+Only one of them can be enabled at the same time so enabling one will disable the other.
+
+Trigger immediate download of the latest version.
+
+```kotlin
+// Installation behavior will follow the configured
+// downloadAction in the SDK Configuration.
 Applivery.getInstance().update()
 ```
 
@@ -205,7 +241,8 @@ where behavior is one of the following:
 
 - `Take Screenshot`: Captures a screenshot and then opens the feedback form with the image attached.
 
-- `Record Screen`: Records a video of the screen and then opens the feedback form with the recording attached.
+- `Record Screen`: Records a video of the screen and then opens the feedback form with the recording
+  attached.
 
 ### User Management
 
