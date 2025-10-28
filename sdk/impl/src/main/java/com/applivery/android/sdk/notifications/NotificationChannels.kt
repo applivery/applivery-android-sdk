@@ -25,10 +25,9 @@ fun Context.createNotificationChannel(channel: NotificationChannels) {
         )
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val importance = NotificationManager.IMPORTANCE_HIGH
         val notificationChannel = NotificationChannel(channel.id, name, importance).apply {
-            setSound(null, null)
-            enableVibration(false)
+            enableVibration(true)
             setDescription(description)
         }
         NotificationManagerCompat.from(this).createNotificationChannel(notificationChannel)

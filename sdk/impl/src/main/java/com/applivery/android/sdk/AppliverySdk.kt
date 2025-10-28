@@ -87,7 +87,8 @@ internal class AppliverySdk : Applivery, AppliveryKoinComponent {
     }
 
     override fun update() {
-        DownloadBuildService.start(context = get())
+        val downloadAction = get<Configuration>().downloadAction
+        DownloadBuildService.start(context = get(), action = downloadAction)
     }
 
     override fun bindUser(

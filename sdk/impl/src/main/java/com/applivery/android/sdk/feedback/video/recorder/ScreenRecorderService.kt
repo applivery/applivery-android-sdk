@@ -86,7 +86,7 @@ internal class ScreenRecorderService : Service() {
         ).build()
 
         val notification = NotificationCompat.Builder(this, notificationChannel.id)
-            .setSmallIcon(R.drawable.ic_applivery_blue)
+            .setSmallIcon(R.drawable.ic_applivery_logo)
             .setContentTitle(getString(R.string.appliveryScreenRecordingNotificationTitle))
             .setContentText(getString(R.string.appliveryScreenRecordingNotificationDescription))
             .addAction(stopAction)

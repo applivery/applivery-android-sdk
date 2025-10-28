@@ -45,6 +45,7 @@ import com.applivery.android.sdk.getInstance
 import com.applivery.android.sdk.updates.DownloadLastUpdateCallback
 import com.applivery.sample.theme.AppliveryTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 class MainActivity : ComponentActivity() {
 
@@ -127,13 +128,13 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
-    /*
-        override fun onResume() {
-            super.onResume()
-            Applivery.getInstance().isUpToDate { upToDate ->
-                isUpToDate.update { upToDate }
-            }
-        }*/
+
+    override fun onResume() {
+        super.onResume()
+        Applivery.getInstance().isUpToDate { upToDate ->
+            isUpToDate.update { upToDate }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
