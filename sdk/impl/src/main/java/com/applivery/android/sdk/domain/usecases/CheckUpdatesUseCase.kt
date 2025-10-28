@@ -26,11 +26,11 @@ internal class CheckUpdates(
     override suspend fun invoke(forceUpdate: Boolean) {
         val config = repository.getConfig().getOrNull() ?: return
         when (config.toUpdateType().also(logger::updateType)) {
-            UpdateType.ForceUpdate -> screenRouter.navigateToForceUpdateScreen()
+            UpdateType.ForceUpdate -> screenRouter.toForceUpdateScreen()
 
             UpdateType.SuggestedUpdate -> {
                 if (forceUpdate || !postponedUpdateLogic.isUpdatePostponed()) {
-                    screenRouter.navigateToSuggestedUpdateScreen()
+                    screenRouter.toSuggestedUpdateScreen()
                 } else {
                     logger.updatePostponed()
                 }

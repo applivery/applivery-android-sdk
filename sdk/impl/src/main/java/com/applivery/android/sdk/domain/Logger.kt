@@ -44,10 +44,6 @@ internal class DomainLogger(
         }
     }
 
-    fun noActivityFoundForFeedbackView() {
-        logger.log("No Activity found in foreground to launch feedback view")
-    }
-
     fun imageDecodingFailed(error: Throwable) {
         logger.log("Image decoding failed with the following error: ${error.stackTraceToString()}")
     }

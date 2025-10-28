@@ -8,15 +8,13 @@ import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.PostponedUpdateLogic
 import com.applivery.android.sdk.domain.ScreenRouter
 import com.applivery.android.sdk.domain.model.AppConfig
-import com.applivery.android.sdk.domain.model.UnauthorizedError
+import com.applivery.android.sdk.domain.model.InternalError
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
 import com.applivery.android.sdk.fakes.FakeLogger
 import io.mockk.Called
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -28,7 +26,7 @@ class CheckUpdatesUseCaseTests {
     @Test
     fun `Given no config available then no more interactions are made`() = runTest {
         val repository = mockk<AppliveryRepository> {
-            coEvery { getConfig() } returns UnauthorizedError().left()
+            coEvery { getConfig() } returns InternalError().left()
         }
         val screenRouter = mockk<ScreenRouter>()
         val hostActivityProvider = mockk<HostActivityProvider>()
@@ -109,7 +107,7 @@ class CheckUpdatesUseCaseTests {
                 coEvery { getConfig() } returns config.right()
             }
             val screenRouter = mockk<ScreenRouter> {
-                every { navigateToForceUpdateScreen() } just Runs
+                every { toForceUpdateScreen() } returns true
             }
             val logger = DomainLogger(FakeLogger())
             val postponedUpdateLogic = mockk<PostponedUpdateLogic>()
@@ -129,7 +127,7 @@ class CheckUpdatesUseCaseTests {
 
             checkUpdatesUseCase(forceUpdate = false)
 
-            verify { screenRouter.navigateToForceUpdateScreen() }
+            verify { screenRouter.toForceUpdateScreen() }
         }
 
     @Test
@@ -185,7 +183,7 @@ class CheckUpdatesUseCaseTests {
                 coEvery { getConfig() } returns config.right()
             }
             val screenRouter = mockk<ScreenRouter> {
-                every { navigateToSuggestedUpdateScreen() } just Runs
+                every { toSuggestedUpdateScreen() } returns true
             }
             val logger = DomainLogger(FakeLogger())
             val postponedUpdateLogic = mockk<PostponedUpdateLogic> {
@@ -207,7 +205,7 @@ class CheckUpdatesUseCaseTests {
 
             checkUpdatesUseCase(forceUpdate = false)
 
-            verify { screenRouter.navigateToSuggestedUpdateScreen() }
+            verify { screenRouter.toSuggestedUpdateScreen() }
         }
 
     @Test
@@ -267,7 +265,7 @@ class CheckUpdatesUseCaseTests {
                 coEvery { getConfig() } returns config.right()
             }
             val screenRouter = mockk<ScreenRouter> {
-                every { navigateToSuggestedUpdateScreen() } just Runs
+                every { toSuggestedUpdateScreen() } returns true
             }
             val logger = DomainLogger(FakeLogger())
             val postponedUpdateLogic = mockk<PostponedUpdateLogic> {
@@ -289,6 +287,6 @@ class CheckUpdatesUseCaseTests {
 
             checkUpdatesUseCase(forceUpdate = true)
 
-            verify { screenRouter.navigateToSuggestedUpdateScreen() }
+            verify { screenRouter.toSuggestedUpdateScreen() }
         }
 }
