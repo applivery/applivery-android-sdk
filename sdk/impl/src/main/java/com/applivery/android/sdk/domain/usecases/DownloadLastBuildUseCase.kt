@@ -5,22 +5,20 @@ import arrow.core.raise.either
 import com.applivery.android.sdk.domain.model.BuildMetadata
 import com.applivery.android.sdk.domain.model.DomainError
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
-import com.applivery.android.sdk.domain.repository.DownloadsRepository
-import java.io.File
 
 internal interface DownloadLastBuildUseCase {
 
-    suspend operator fun invoke(): Either<DomainError, File>
+    suspend operator fun invoke(): Either<DomainError, BuildMetadata>
 }
 
 internal class DownloadLastBuild(
     private val appliveryRepository: AppliveryRepository,
-    private val downloadsRepository: DownloadsRepository
+    private val downloadBuildUseCase: DownloadBuildUseCase
 ) : DownloadLastBuildUseCase {
 
-    override suspend fun invoke(): Either<DomainError, File> = either {
+    override suspend fun invoke(): Either<DomainError, BuildMetadata> = either {
         val config = appliveryRepository.getConfig().bind()
-        downloadsRepository.downloadBuild(config.lastBuildId, config.lastBuildVersion).bind()
+        downloadBuildUseCase(config.lastBuildId, config.lastBuildVersion).bind()
     }
 }
 

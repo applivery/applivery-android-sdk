@@ -25,6 +25,7 @@ import com.applivery.android.sdk.data.repository.identifier.InstallationIdProvid
 import com.applivery.android.sdk.data.repository.identifier.MediaDrmIdProvider
 import com.applivery.android.sdk.domain.AndroidHostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.AndroidLogger
+import com.applivery.android.sdk.domain.AndroidScreenRouter
 import com.applivery.android.sdk.domain.AndroidSharedPreferencesProvider
 import com.applivery.android.sdk.domain.AppPreferences
 import com.applivery.android.sdk.domain.AppPreferencesImpl
@@ -38,6 +39,7 @@ import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.domain.Logger
 import com.applivery.android.sdk.domain.PostponedUpdateLogic
 import com.applivery.android.sdk.domain.PostponedUpdateLogicImpl
+import com.applivery.android.sdk.domain.ScreenRouter
 import com.applivery.android.sdk.domain.SharedPreferencesProvider
 import com.applivery.android.sdk.domain.UnifiedErrorHandler
 import com.applivery.android.sdk.domain.repository.AppliveryRepository
@@ -47,6 +49,8 @@ import com.applivery.android.sdk.domain.usecases.BindUser
 import com.applivery.android.sdk.domain.usecases.BindUserUseCase
 import com.applivery.android.sdk.domain.usecases.CheckUpdates
 import com.applivery.android.sdk.domain.usecases.CheckUpdatesUseCase
+import com.applivery.android.sdk.domain.usecases.DownloadBuild
+import com.applivery.android.sdk.domain.usecases.DownloadBuildUseCase
 import com.applivery.android.sdk.domain.usecases.DownloadLastBuild
 import com.applivery.android.sdk.domain.usecases.DownloadLastBuildUseCase
 import com.applivery.android.sdk.domain.usecases.GetAppConfig
@@ -83,6 +87,8 @@ import com.applivery.android.sdk.updates.UpdateInstallProgressSender
 import com.applivery.android.sdk.updates.UpdateInstallProgressSenderImpl
 import com.applivery.android.sdk.updates.UpdatesBackgroundChecker
 import com.applivery.android.sdk.updates.UpdatesBackgroundCheckerImpl
+import com.applivery.android.sdk.updates.UpdatesBackgroundDownloader
+import com.applivery.android.sdk.updates.UpdatesBackgroundDownloaderImpl
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -154,6 +160,7 @@ private val useCasesModule = module {
     factoryOf(::GetAppConfig).bind<GetAppConfigUseCase>()
     factoryOf(::CheckUpdates).bind<CheckUpdatesUseCase>()
     factoryOf(::DownloadLastBuild).bind<DownloadLastBuildUseCase>()
+    factoryOf(::DownloadBuild).bind<DownloadBuildUseCase>()
     factoryOf(::BindUser).bind<BindUserUseCase>()
     factoryOf(::UnbindUser).bind<UnbindUserUseCase>()
     factoryOf(::GetUser).bind<GetUserUseCase>()
@@ -196,6 +203,7 @@ internal val appModules = module {
     factory<Application> { get<Context>() as Application }
     singleOf(::HostActivityProviderImpl).bind<HostActivityProvider>()
     singleOf(::UpdatesBackgroundCheckerImpl).bind<UpdatesBackgroundChecker>()
+    singleOf(::UpdatesBackgroundDownloaderImpl).bind<UpdatesBackgroundDownloader>()
     factoryOf(::AndroidLogger).bind<Logger>()
     factoryOf(::DomainLogger)
     singleOf(::LoginHandler)
@@ -219,4 +227,5 @@ internal val appModules = module {
     factory<Configuration> { getProperty(Properties.Configuration) }
     singleOf(::PostponedUpdateLogicImpl).bind<PostponedUpdateLogic>()
     singleOf(::FeedbackLauncherImpl).bind<FeedbackLauncher>()
+    factoryOf(::AndroidScreenRouter).bind<ScreenRouter>()
 }

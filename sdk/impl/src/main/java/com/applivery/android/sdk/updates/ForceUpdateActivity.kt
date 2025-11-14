@@ -29,8 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.R
+import com.applivery.android.sdk.SdkBaseActivity
 import com.applivery.android.sdk.domain.HostAppPackageInfoProvider
 import com.applivery.android.sdk.ui.theme.AppliveryTheme
 import org.koin.core.component.inject
