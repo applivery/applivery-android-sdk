@@ -14,7 +14,7 @@ import ru.solrudev.ackpine.installer.PackageInstaller
 import ru.solrudev.ackpine.installer.createSession
 import ru.solrudev.ackpine.installer.parameters.InstallerType
 import ru.solrudev.ackpine.session.Failure
-import ru.solrudev.ackpine.session.SessionResult
+import ru.solrudev.ackpine.session.Session
 import ru.solrudev.ackpine.session.await
 import ru.solrudev.ackpine.session.parameters.Confirmation
 import java.io.File
@@ -38,12 +38,12 @@ internal class AndroidBuildInstaller(private val context: Context) : BuildInstal
             installerType = InstallerType.INTENT_BASED
         }
         return when (val result = session.await()) {
-            is SessionResult.Error<*> -> Installation(
-                result.cause.toInstallationCause(),
-                result.cause.message()
+            is Session.State.Failed<*> -> Installation(
+                result.failure.toInstallationCause(),
+                result.failure.message()
             ).left()
 
-            is SessionResult.Success<*> -> Unit.right()
+            is Session.State.Succeeded -> Unit.right()
         }
     }
 
