@@ -10,7 +10,7 @@ plugins {
 
 subprojects {
     apply(plugin = rootProject.libs.plugins.detekt.get().pluginId)
-    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension>{
+    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
         config.setFrom("$rootDir/default-detekt-config.yml")
 
     }
@@ -21,5 +21,5 @@ val androidMinSdk by extra { 21 }
 val androidTargetSdk by extra { 36 }
 
 val libraryGroup by extra { "com.applivery" }
-val libraryVersion by extra { "4.9.0-RC1" }
+val libraryVersion by extra { "5.0.0-RC1" }
 
