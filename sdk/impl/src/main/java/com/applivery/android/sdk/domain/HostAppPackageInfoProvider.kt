@@ -35,6 +35,7 @@ internal class AndroidHostAppPackageInfoProvider(
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 longVersionCode
             } else {
+                @Suppress("DEPRECATION")
                 versionCode.toLong()
             }
         }

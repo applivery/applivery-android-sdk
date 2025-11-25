@@ -5,16 +5,21 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.compose) apply false
 }
 
-allprojects {
-    apply(from = "$rootDir/detekt.gradle")
+subprojects {
+    apply(plugin = rootProject.libs.plugins.detekt.get().pluginId)
+    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
+        config.setFrom("$rootDir/default-detekt-config.yml")
+
+    }
 }
 
-val androidCompileSdk by extra { 35 }
+val androidCompileSdk by extra { 36 }
 val androidMinSdk by extra { 21 }
-val androidTargetSdk by extra { 35 }
+val androidTargetSdk by extra { 36 }
 
 val libraryGroup by extra { "com.applivery" }
-val libraryVersion by extra { "4.9.0" }
+val libraryVersion by extra { "5.0.0-RC1" }
 
