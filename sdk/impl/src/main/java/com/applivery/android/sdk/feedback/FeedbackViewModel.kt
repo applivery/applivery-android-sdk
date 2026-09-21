@@ -13,8 +13,6 @@ import com.applivery.android.sdk.domain.ensureNotNull
 import com.applivery.android.sdk.domain.model.Feedback
 import com.applivery.android.sdk.domain.usecases.GetUserUseCase
 import com.applivery.android.sdk.domain.usecases.SendFeedbackUseCase
-import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotFormat
-import com.applivery.android.sdk.feedback.screenshot.HostAppScreenshotProvider
 import com.applivery.android.sdk.presentation.BaseViewModel
 import com.applivery.android.sdk.presentation.ViewAction
 import com.applivery.android.sdk.presentation.ViewIntent
@@ -59,6 +57,7 @@ internal data class FeedbackState(
     val isEmailInvalid: Boolean = false,
     val isEmailReadOnly: Boolean = false,
     val attachment: FeedbackAttachment? = null,
+    val canAttachScreenshot: Boolean = false,
     val isSendEnabled: Boolean = false,
 ) : ViewState
 
@@ -69,11 +68,14 @@ internal class FeedbackViewModel(
     private val appPreferences: AppPreferences,
     private val sendFeedback: SendFeedbackUseCase,
     private val deviceInfoProvider: DeviceInfoProvider,
-    private val packageInfoProvider: HostAppPackageInfoProvider,
-    private val hostAppScreenshotProvider: HostAppScreenshotProvider
+    private val packageInfoProvider: HostAppPackageInfoProvider
 ) : BaseViewModel<FeedbackState, FeedbackIntent, FeedbackAction>() {
 
     override val initialViewState: FeedbackState = FeedbackState()
+
+    // The host app can't be captured from here (this screen covers it), so the screenshot
+    // taken before opening the feedback screen is kept to restore it when re-attached
+    private var lastScreenshot: Bitmap? = null
 
     override fun load() {
         viewModelScope.launch {
@@ -88,11 +90,12 @@ internal class FeedbackViewModel(
             val attachment = when (arguments) {
                 is FeedbackArguments.Screenshot -> arguments.uri
                     ?.let { imageDecoder.of(it.toUri()) }
+                    ?.also { lastScreenshot = it }
                     ?.let(FeedbackAttachment::Screenshot)
 
                 is FeedbackArguments.Video -> FeedbackAttachment.Video(arguments.uri.toUri())
             }
-            setState { copy(attachment = attachment) }
+            setState { copy(attachment = attachment, canAttachScreenshot = lastScreenshot != null) }
         }
     }
 
@@ -123,18 +126,8 @@ internal class FeedbackViewModel(
     }
 
     private fun onAttachScreenshot(attach: Boolean) {
-        if (attach) {
-            viewModelScope.launch {
-                setState { copy(isLoading = false) }
-                val screenshot = hostAppScreenshotProvider
-                    .get(format = HostAppScreenshotFormat.AsBitmap)
-                    .getOrNull()
-                val attachment = screenshot?.let(FeedbackAttachment::Screenshot)
-                setState { copy(attachment = attachment, isLoading = false) }
-            }
-        } else {
-            setState { copy(attachment = null) }
-        }
+        val attachment = lastScreenshot?.takeIf { attach }?.let(FeedbackAttachment::Screenshot)
+        setState { copy(attachment = attachment) }
     }
 
     private fun checkInputs() {
@@ -178,6 +171,7 @@ internal class FeedbackViewModel(
     }
 
     private fun onScreenshotModified(newScreenshot: Bitmap) {
+        lastScreenshot = newScreenshot
         setState { copy(attachment = FeedbackAttachment.Screenshot(newScreenshot)) }
     }
 

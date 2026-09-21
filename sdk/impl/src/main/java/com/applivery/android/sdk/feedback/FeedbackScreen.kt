@@ -226,6 +226,7 @@ internal fun FeedbackScreen(
                                 .align(Alignment.BottomStart)
                                 .fillMaxWidth(),
                             attachment = attachment as? FeedbackAttachment.Screenshot,
+                            canAttach = state.canAttachScreenshot,
                             onAttachChanged = {
                                 intentSender.sendIntent(FeedbackIntent.AttachScreenshot(it))
                             },
@@ -307,6 +308,7 @@ private fun VideoAttachmentContent(
 @Composable
 private fun ScreenshotAttachmentContent(
     attachment: FeedbackAttachment.Screenshot?,
+    canAttach: Boolean,
     modifier: Modifier = Modifier,
     onAttachChanged: (Boolean) -> Unit,
     onEditScreenShot: () -> Unit
@@ -326,7 +328,8 @@ private fun ScreenshotAttachmentContent(
             Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = attachment?.screenshot != null,
-                onCheckedChange = onAttachChanged
+                onCheckedChange = onAttachChanged,
+                enabled = canAttach
             )
         }
         attachment?.screenshot?.let { bitmap ->
