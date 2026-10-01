@@ -12,9 +12,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -39,7 +37,7 @@ class FeedbackViewModelTests : BaseUnitTest() {
         viewModel.load()
 
         assertEquals(FeedbackAttachment.Screenshot(screenshot), viewModel.getState().attachment)
-        assertTrue(viewModel.getState().canAttachScreenshot)
+        assertEquals(ScreenshotStatus.Available, viewModel.getState().screenshotStatus)
 
         viewModel.sendIntent(FeedbackIntent.AttachScreenshot(false))
         assertNull(viewModel.getState().attachment)
@@ -64,9 +62,11 @@ class FeedbackViewModelTests : BaseUnitTest() {
     @Test
     fun `Given no screenshot then it can not be attached`() {
         val viewModel = createViewModel(uri = null, decoded = null)
+        assertEquals(ScreenshotStatus.Loading, viewModel.getState().screenshotStatus)
+
         viewModel.load()
 
-        assertFalse(viewModel.getState().canAttachScreenshot)
+        assertEquals(ScreenshotStatus.Unavailable, viewModel.getState().screenshotStatus)
 
         viewModel.sendIntent(FeedbackIntent.AttachScreenshot(true))
         assertNull(viewModel.getState().attachment)

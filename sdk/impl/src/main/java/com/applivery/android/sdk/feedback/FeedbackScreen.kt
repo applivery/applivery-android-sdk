@@ -226,7 +226,7 @@ internal fun FeedbackScreen(
                                 .align(Alignment.BottomStart)
                                 .fillMaxWidth(),
                             attachment = attachment as? FeedbackAttachment.Screenshot,
-                            canAttach = state.canAttachScreenshot,
+                            status = state.screenshotStatus,
                             onAttachChanged = {
                                 intentSender.sendIntent(FeedbackIntent.AttachScreenshot(it))
                             },
@@ -308,29 +308,37 @@ private fun VideoAttachmentContent(
 @Composable
 private fun ScreenshotAttachmentContent(
     attachment: FeedbackAttachment.Screenshot?,
-    canAttach: Boolean,
+    status: ScreenshotStatus,
     modifier: Modifier = Modifier,
     onAttachChanged: (Boolean) -> Unit,
     onEditScreenShot: () -> Unit
 ) {
     Row(modifier = modifier) {
-        Row(
+        Column(
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .align(Alignment.Bottom),
-            verticalAlignment = Alignment.CenterVertically
+                .align(Alignment.Bottom)
         ) {
-            Text(
-                modifier = Modifier.padding(end = 8.dp, top = 8.dp),
-                text = stringResource(id = R.string.appliveryAttachScreenshotSwithText)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Switch(
-                checked = attachment?.screenshot != null,
-                onCheckedChange = onAttachChanged,
-                enabled = canAttach
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    modifier = Modifier.padding(end = 8.dp, top = 8.dp),
+                    text = stringResource(id = R.string.appliveryAttachScreenshotSwithText)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Switch(
+                    checked = attachment?.screenshot != null,
+                    onCheckedChange = onAttachChanged,
+                    enabled = status == ScreenshotStatus.Available
+                )
+            }
+            if (status == ScreenshotStatus.Unavailable) {
+                Text(
+                    text = stringResource(id = R.string.appliveryScreenshotCaptureFailed),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         }
         attachment?.screenshot?.let { bitmap ->
             ElevatedCard(

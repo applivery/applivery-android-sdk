@@ -57,7 +57,7 @@ internal data class FeedbackState(
     val isEmailInvalid: Boolean = false,
     val isEmailReadOnly: Boolean = false,
     val attachment: FeedbackAttachment? = null,
-    val canAttachScreenshot: Boolean = false,
+    val screenshotStatus: ScreenshotStatus = ScreenshotStatus.Loading,
     val isSendEnabled: Boolean = false,
 ) : ViewState
 
@@ -95,7 +95,12 @@ internal class FeedbackViewModel(
 
                 is FeedbackArguments.Video -> FeedbackAttachment.Video(arguments.uri.toUri())
             }
-            setState { copy(attachment = attachment, canAttachScreenshot = lastScreenshot != null) }
+            val status = if (lastScreenshot != null) {
+                ScreenshotStatus.Available
+            } else {
+                ScreenshotStatus.Unavailable
+            }
+            setState { copy(attachment = attachment, screenshotStatus = status) }
         }
     }
 
