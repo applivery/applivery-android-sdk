@@ -1,5 +1,6 @@
 package com.applivery.android.sdk.domain
 
+import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
@@ -22,6 +23,7 @@ import com.applivery.android.sdk.domain.model.DeviceInfo
 import com.applivery.android.sdk.domain.model.Os
 import com.applivery.android.sdk.domain.model.RamStatus
 import com.applivery.android.sdk.domain.model.ScreenResolution
+import com.applivery.android.sdk.ui.check
 import kotlin.math.roundToInt
 
 internal interface DeviceInfoProvider {
@@ -118,8 +120,14 @@ internal class DeviceInfoProviderImpl(
             }
         }
 
+    private val canReadNetworkType: Boolean
+        get() = context.check(Manifest.permission.READ_PHONE_STATE) ||
+            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                context.check(Manifest.permission.READ_BASIC_PHONE_STATE))
+
     private fun TelephonyManager.getMobileNetworkType(): String {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (!canReadNetworkType) return NETWORK_UNKNOWN
             return when (dataNetworkType) {
                 TelephonyManager.NETWORK_TYPE_GPRS,
                 TelephonyManager.NETWORK_TYPE_EDGE,
