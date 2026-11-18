@@ -5,12 +5,6 @@ on:
   push:
     tags:
       - '*'
-env:
-  MVN_CENTRAL_USER: ${{ secrets.MVN_CENTRAL_USER }}
-  MVN_CENTRAL_PASS: ${{ secrets.MVN_CENTRAL_PASS }}
-  SIGN_KEY_ID: ${{ secrets.SIGN_KEY_ID }}
-  SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
-  SIGN_KEY: ${{ secrets.SIGN_KEY }}
 
 jobs:
   build:
@@ -26,6 +20,12 @@ jobs:
           distribution: 'temurin'
           cache: gradle
       - name: Publish
+        env:
+          MVN_CENTRAL_USER: ${{ secrets.MVN_CENTRAL_USER }}
+          MVN_CENTRAL_PASS: ${{ secrets.MVN_CENTRAL_PASS }}
+          SIGN_KEY_ID: ${{ secrets.SIGN_KEY_ID }}
+          SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
+          SIGN_KEY: ${{ secrets.SIGN_KEY }}
         run: ./gradlew publish
       - name: Ensure jq is installed
         run: |
@@ -34,6 +34,9 @@ jobs:
            sudo apt-get install -y jq
           fi
       - name: Query Sonatype and upload
+        env:
+          MVN_CENTRAL_USER: ${{ secrets.MVN_CENTRAL_USER }}
+          MVN_CENTRAL_PASS: ${{ secrets.MVN_CENTRAL_PASS }}
         run: |
           set -euo pipefail
           
